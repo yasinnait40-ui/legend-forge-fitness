@@ -5,17 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * AETHORA design system — dark fantasy RPG.
+ * Palette: midnight indigo depths, antique gold, arcane blue, ember orange.
+ * All colors use oklch. Components must use these semantic tokens only.
  */
 
 @theme inline {
@@ -59,77 +51,107 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-stat-strength: var(--stat-strength);
+  --color-stat-endurance: var(--stat-endurance);
+  --color-stat-agility: var(--stat-agility);
+  --color-stat-vitality: var(--stat-vitality);
+  --color-stat-recovery: var(--stat-recovery);
+  --color-rarity-common: var(--rarity-common);
+  --color-rarity-uncommon: var(--rarity-uncommon);
+  --color-rarity-rare: var(--rarity-rare);
+  --color-rarity-epic: var(--rarity-epic);
+  --color-rarity-legendary: var(--rarity-legendary);
+  --font-display: "Cinzel", "Georgia", serif;
+  --font-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --radius: 0.75rem;
+  --nav-h: 4.5rem;
+  --background: oklch(0.125 0.02 285);
+  --foreground: oklch(0.93 0.02 95);
+  --card: oklch(0.165 0.022 283);
+  --card-foreground: oklch(0.93 0.02 95);
+  --popover: oklch(0.155 0.02 283);
+  --popover-foreground: oklch(0.93 0.02 95);
+  --primary: oklch(0.78 0.12 88);
+  --primary-foreground: oklch(0.17 0.03 280);
+  --secondary: oklch(0.22 0.025 283);
+  --secondary-foreground: oklch(0.9 0.02 95);
+  --muted: oklch(0.21 0.02 283);
+  --muted-foreground: oklch(0.68 0.025 85);
+  --accent: oklch(0.6 0.14 258);
+  --accent-foreground: oklch(0.95 0.02 95);
+  --destructive: oklch(0.62 0.2 25);
+  --destructive-foreground: oklch(0.95 0.02 95);
+  --border: oklch(0.78 0.1 88 / 16%);
+  --input: oklch(0.78 0.1 88 / 24%);
+  --ring: oklch(0.78 0.12 88);
+  --chart-1: oklch(0.78 0.12 88);
+  --chart-2: oklch(0.6 0.14 258);
+  --chart-3: oklch(0.7 0.18 50);
+  --chart-4: oklch(0.72 0.11 200);
+  --chart-5: oklch(0.65 0.14 305);
+  --sidebar: oklch(0.16 0.02 283);
+  --sidebar-foreground: oklch(0.93 0.02 95);
+  --sidebar-primary: oklch(0.78 0.12 88);
+  --sidebar-primary-foreground: oklch(0.17 0.03 280);
+  --sidebar-accent: oklch(0.22 0.025 283);
+  --sidebar-accent-foreground: oklch(0.93 0.02 95);
+  --sidebar-border: oklch(0.78 0.1 88 / 16%);
+  --sidebar-ring: oklch(0.78 0.12 88);
+  /* Stat hues */
+  --stat-strength: oklch(0.72 0.18 48);
+  --stat-endurance: oklch(0.74 0.11 200);
+  --stat-agility: oklch(0.76 0.13 160);
+  --stat-vitality: oklch(0.8 0.12 92);
+  --stat-recovery: oklch(0.66 0.14 305);
+  /* Rarity hues */
+  --rarity-common: oklch(0.72 0.015 260);
+  --rarity-uncommon: oklch(0.74 0.13 155);
+  --rarity-rare: oklch(0.68 0.14 255);
+  --rarity-epic: oklch(0.62 0.19 310);
+  --rarity-legendary: oklch(0.8 0.13 88);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --background: oklch(0.125 0.02 285);
+  --foreground: oklch(0.93 0.02 95);
+  --card: oklch(0.165 0.022 283);
+  --card-foreground: oklch(0.93 0.02 95);
+  --popover: oklch(0.155 0.02 283);
+  --popover-foreground: oklch(0.93 0.02 95);
+  --primary: oklch(0.78 0.12 88);
+  --primary-foreground: oklch(0.17 0.03 280);
+  --secondary: oklch(0.22 0.025 283);
+  --secondary-foreground: oklch(0.9 0.02 95);
+  --muted: oklch(0.21 0.02 283);
+  --muted-foreground: oklch(0.68 0.025 85);
+  --accent: oklch(0.6 0.14 258);
+  --accent-foreground: oklch(0.95 0.02 95);
+  --destructive: oklch(0.62 0.2 25);
+  --destructive-foreground: oklch(0.95 0.02 95);
+  --border: oklch(0.78 0.1 88 / 16%);
+  --input: oklch(0.78 0.1 88 / 24%);
+  --ring: oklch(0.78 0.12 88);
+  --sidebar: oklch(0.16 0.02 283);
+  --sidebar-foreground: oklch(0.93 0.02 95);
+  --sidebar-primary: oklch(0.78 0.12 88);
+  --sidebar-primary-foreground: oklch(0.17 0.03 280);
+  --sidebar-accent: oklch(0.22 0.025 283);
+  --sidebar-accent-foreground: oklch(0.93 0.02 95);
+  --sidebar-border: oklch(0.78 0.1 88 / 16%);
+  --sidebar-ring: oklch(0.78 0.12 88);
+  --stat-strength: oklch(0.72 0.18 48);
+  --stat-endurance: oklch(0.74 0.11 200);
+  --stat-agility: oklch(0.76 0.13 160);
+  --stat-vitality: oklch(0.8 0.12 92);
+  --stat-recovery: oklch(0.66 0.14 305);
+  --rarity-common: oklch(0.72 0.015 260);
+  --rarity-uncommon: oklch(0.74 0.13 155);
+  --rarity-rare: oklch(0.68 0.14 255);
+  --rarity-epic: oklch(0.62 0.19 310);
+  --rarity-legendary: oklch(0.8 0.13 88);
 }
 
 @layer base {
@@ -137,8 +159,325 @@
     border-color: var(--color-border);
   }
 
+  html {
+    color-scheme: dark;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 45%, transparent);
+  }
+}
+
+/* ---------- Fantasy UI primitives ---------- */
+
+.rune-panel {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in oklab, var(--primary) 32%, transparent);
+  outline: 1px solid color-mix(in oklab, var(--primary) 12%, transparent);
+  outline-offset: 3px;
+  background: color-mix(in oklab, var(--background) 62%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 10px 34px rgb(0 0 0 / 0.5),
+    inset 0 0 26px color-mix(in oklab, var(--accent) 7%, transparent);
+}
+
+.rune-panel-soft {
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
+  background: color-mix(in oklab, var(--background) 48%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.text-glow-gold {
+  text-shadow:
+    0 0 14px color-mix(in oklab, var(--primary) 55%, transparent),
+    0 2px 22px rgb(0 0 0 / 0.7);
+}
+
+.text-glow-arcane {
+  text-shadow:
+    0 0 16px color-mix(in oklab, var(--accent) 65%, transparent),
+    0 2px 22px rgb(0 0 0 / 0.7);
+}
+
+/* Section heading with flanking engraved lines */
+.rune-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.rune-heading::before,
+.rune-heading::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--primary) 55%, transparent),
+    transparent
+  );
+}
+
+/* Buttons */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary-foreground);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 100%, white 10%),
+    color-mix(in oklab, var(--primary) 80%, black 20%)
+  );
+  box-shadow:
+    0 0 20px color-mix(in oklab, var(--primary) 32%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+  transition:
+    filter 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.btn-gold:hover {
+  filter: brightness(1.1);
+  box-shadow:
+    0 0 30px color-mix(in oklab, var(--primary) 48%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+.btn-gold:active {
+  transform: translateY(1px) scale(0.99);
+}
+.btn-gold:disabled {
+  opacity: 0.55;
+  cursor: default;
+  filter: none;
+}
+
+.btn-rune-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, var(--primary) 45%, transparent);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: color-mix(in oklab, var(--background) 45%, transparent);
+  backdrop-filter: blur(10px);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.btn-rune-ghost:hover {
+  background: color-mix(in oklab, var(--primary) 14%, transparent);
+  box-shadow: 0 0 22px color-mix(in oklab, var(--primary) 25%, transparent);
+}
+
+/* Reward / info chip */
+.rune-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+/* XP / stat bars */
+.bar-track {
+  position: relative;
+  height: 0.55rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--background) 70%, black 30%);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+.bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bar-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.35), transparent 55%);
+}
+
+/* ---------- Magic effects ---------- */
+
+.ember {
+  position: absolute;
+  bottom: -2rem;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--primary) 90%, white 10%),
+    color-mix(in oklab, var(--primary) 40%, transparent) 70%
+  );
+  box-shadow: 0 0 8px 2px color-mix(in oklab, var(--primary) 45%, transparent);
+  opacity: 0;
+  animation: ember-rise linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes ember-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(-108vh) translateX(2.2rem) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+.float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+/* Rotating rune ring used while the Arcane Guide weaves an answer */
+.rune-ring {
+  position: relative;
+  border-radius: 999px;
+  border: 1px dashed color-mix(in oklab, var(--accent) 70%, transparent);
+  animation: rune-spin 9s linear infinite;
+}
+.rune-ring::before {
+  content: "✦";
+  position: absolute;
+  top: -0.6em;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent);
+}
+.rune-ring-reverse {
+  animation: rune-spin-reverse 14s linear infinite;
+  border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+}
+.rune-ring-reverse::before {
+  content: "✧";
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--primary);
+}
+
+@keyframes rune-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rune-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* Chat bubbles of the Arcane Library */
+.scroll-bubble-guide {
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+  background: color-mix(in oklab, var(--accent) 12%, var(--background) 70%);
+  backdrop-filter: blur(8px);
+}
+.scroll-bubble-user {
+  border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+  border: 1px solid color-mix(in oklab, var(--primary) 40%, transparent);
+  background: color-mix(in oklab, var(--primary) 14%, var(--background) 70%);
+  backdrop-filter: blur(8px);
+}
+
+/* Thin fantasy scrollbar */
+.fancy-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--primary) 40%, transparent) transparent;
+}
+.fancy-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.fancy-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--primary) 40%, transparent);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ember,
+  .glow-pulse,
+  .float-slow,
+  .rune-ring,
+  .rune-ring-reverse {
+    animation: none;
   }
 }
