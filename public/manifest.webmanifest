@@ -1,0 +1,25 @@
+{
+  "name": "AETHORA — Forge Your Legend",
+  "short_name": "AETHORA",
+  "description": "A cinematic fantasy fitness RPG. Every workout becomes a quest, every goal gives XP, and the Arcane Guide leads your journey.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0b18",
+  "theme_color": "#0d0b18",
+  "icons": [
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
