@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AchievementsRouteImport } from './routes/achievements'
+import { Route as CharacterRouteImport } from './routes/character'
+import { Route as GuideRouteImport } from './routes/guide'
+import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as QuestsRouteImport } from './routes/quests'
+import { Route as TrialsRouteImport } from './routes/trials'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AchievementsRoute = AchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CharacterRoute = CharacterRouteImport.update({
+  id: '/character',
+  path: '/character',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuideRoute = GuideRouteImport.update({
+  id: '/guide',
+  path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestsRoute = QuestsRouteImport.update({
+  id: '/quests',
+  path: '/quests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrialsRoute = TrialsRouteImport.update({
+  id: '/trials',
+  path: '/trials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
+  '/character': typeof CharacterRoute
+  '/guide': typeof GuideRoute
+  '/progress': typeof ProgressRoute
+  '/quests': typeof QuestsRoute
+  '/trials': typeof TrialsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
+  '/character': typeof CharacterRoute
+  '/guide': typeof GuideRoute
+  '/progress': typeof ProgressRoute
+  '/quests': typeof QuestsRoute
+  '/trials': typeof TrialsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
+  '/character': typeof CharacterRoute
+  '/guide': typeof GuideRoute
+  '/progress': typeof ProgressRoute
+  '/quests': typeof QuestsRoute
+  '/trials': typeof TrialsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/achievements'
+    | '/character'
+    | '/guide'
+    | '/progress'
+    | '/quests'
+    | '/trials'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/achievements'
+    | '/character'
+    | '/guide'
+    | '/progress'
+    | '/quests'
+    | '/trials'
+  id:
+    | '__root__'
+    | '/'
+    | '/achievements'
+    | '/character'
+    | '/guide'
+    | '/progress'
+    | '/quests'
+    | '/trials'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AchievementsRoute: typeof AchievementsRoute
+  CharacterRoute: typeof CharacterRoute
+  GuideRoute: typeof GuideRoute
+  ProgressRoute: typeof ProgressRoute
+  QuestsRoute: typeof QuestsRoute
+  TrialsRoute: typeof TrialsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/achievements': {
+      id: '/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AchievementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/character': {
+      id: '/character'
+      path: '/character'
+      fullPath: '/character'
+      preLoaderRoute: typeof CharacterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guide': {
+      id: '/guide'
+      path: '/guide'
+      fullPath: '/guide'
+      preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quests': {
+      id: '/quests'
+      path: '/quests'
+      fullPath: '/quests'
+      preLoaderRoute: typeof QuestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trials': {
+      id: '/trials'
+      path: '/trials'
+      fullPath: '/trials'
+      preLoaderRoute: typeof TrialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AchievementsRoute: AchievementsRoute,
+  CharacterRoute: CharacterRoute,
+  GuideRoute: GuideRoute,
+  ProgressRoute: ProgressRoute,
+  QuestsRoute: QuestsRoute,
+  TrialsRoute: TrialsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
