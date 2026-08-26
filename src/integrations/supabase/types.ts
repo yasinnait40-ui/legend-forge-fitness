@@ -14,7 +14,126 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      character_stats: {
+        Row: {
+          agility: number
+          best_streak: number
+          endurance: number
+          last_active_date: string | null
+          recovery: number
+          streak: number
+          strength: number
+          updated_at: string
+          user_id: string
+          vitality: number
+          xp: number
+        }
+        Insert: {
+          agility?: number
+          best_streak?: number
+          endurance?: number
+          last_active_date?: string | null
+          recovery?: number
+          streak?: number
+          strength?: number
+          updated_at?: string
+          user_id: string
+          vitality?: number
+          xp?: number
+        }
+        Update: {
+          agility?: number
+          best_streak?: number
+          endurance?: number
+          last_active_date?: string | null
+          recovery?: number
+          streak?: number
+          strength?: number
+          updated_at?: string
+          user_id?: string
+          vitality?: number
+          xp?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      quest_completions: {
+        Row: {
+          created_at: string
+          id: string
+          quest_date: string
+          quest_id: string
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          quest_date?: string
+          quest_id: string
+          user_id: string
+          xp_earned?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          quest_date?: string
+          quest_id?: string
+          user_id?: string
+          xp_earned?: number
+        }
+        Relationships: []
+      }
+      workout_logs: {
+        Row: {
+          completed_at: string
+          id: string
+          trial_id: string
+          trial_name: string
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          trial_id: string
+          trial_name: string
+          user_id: string
+          xp_earned?: number
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          trial_id?: string
+          trial_name?: string
+          user_id?: string
+          xp_earned?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
