@@ -3,6 +3,8 @@ import { Flame, ScrollText, Sparkles, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.jpg";
 import arcaneWarrior from "@/assets/arcane-warrior.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { MonetagAdSlot } from "@/components/MonetagAdSlot";
+
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, useGame } from "@/lib/game-store";
