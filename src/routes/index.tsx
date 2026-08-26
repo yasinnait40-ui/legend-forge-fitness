@@ -12,19 +12,32 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AETHORA — Forge Your Legend | Fantasy Fitness RPG" },
+      { title: "Aethora - Fantasy Fitness RPG & Workout Game" },
       {
         name: "description",
         content:
-          "A warrior stands above the moonlit kingdom of AETHORA. Begin daily quests, conquer training trials, earn XP and forge your legend.",
+          "Turn your daily workouts, gym routines, and fitness journey into an epic fantasy RPG adventure. Level up your character stats, complete daily quests, and forge your legend with Aethora.",
       },
-      { property: "og:title", content: "AETHORA — Forge Your Legend" },
+      {
+        name: "keywords",
+        content:
+          "fitness rpg, workout game, gamified fitness, gym rpg, aethora, arcane warrior, fitness quest, level up fitness",
+      },
+      { name: "author", content: "Hakari" },
+      { property: "og:title", content: "Aethora - Fantasy Fitness RPG & Workout Game" },
       {
         property: "og:description",
-        content: "A cinematic fantasy fitness RPG. Every workout becomes a quest.",
+        content:
+          "Turn your daily workouts into a fantasy RPG adventure. Level up your stats and complete quests.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Aethora - Fantasy Fitness RPG & Workout Game" },
+      {
+        name: "twitter:description",
+        content: "Turn your daily workouts into a fantasy RPG adventure.",
+      },
+
     ],
   }),
   component: HomePage,
