@@ -174,6 +174,9 @@ function HomePage() {
           </span>
         </Link>
       </div>
+
+      <MonetagAdSlot />
     </RealmScreen>
+
   );
 }
