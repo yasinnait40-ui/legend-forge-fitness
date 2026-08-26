@@ -33,7 +33,7 @@ export const Route = createFileRoute("/trials")({
 function TrialsPage() {
   const game = useGame();
   const done = trialsDoneToday(game);
-  const [openId, setOpenId] = useState<string | null>(TRIALS[0].id);
+  const [openId, setOpenId] = useState<string | null>(TRIALS[0]?.id ?? null);
 
   function handleComplete(t: Trial) {
     const result = completeTrial(t.id, t.name, t.xp, t.stats);

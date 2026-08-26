@@ -58,8 +58,8 @@ function StatConstellation({ stats }: { stats: Record<StatKey, number> }) {
     angles.map((a) => polar(cx, cy, r * scale, a).join(",")).join(" ");
 
   const valuePoints = STAT_ORDER.map((s, i) => {
-    const scale = Math.max(0.08, stats[s] / STAT_CAP);
-    return polar(cx, cy, r * scale, angles[i]).join(",");
+    const scale = Math.max(0.08, (stats[s] ?? 0) / STAT_CAP);
+    return polar(cx, cy, r * scale, angles[i] ?? 0).join(",");
   }).join(" ");
 
   return (
@@ -95,12 +95,12 @@ function StatConstellation({ stats }: { stats: Record<StatKey, number> }) {
         style={{ filter: "drop-shadow(0 0 8px color-mix(in oklab, var(--primary) 60%, transparent))" }}
       />
       {STAT_ORDER.map((s, i) => {
-        const scale = Math.max(0.08, stats[s] / STAT_CAP);
-        const [x, y] = polar(cx, cy, r * scale, angles[i]);
+        const scale = Math.max(0.08, (stats[s] ?? 0) / STAT_CAP);
+        const [x, y] = polar(cx, cy, r * scale, angles[i] ?? 0);
         return <circle key={s} cx={x} cy={y} r="3" fill="var(--primary)" />;
       })}
       {STAT_ORDER.map((s, i) => {
-        const [x, y] = polar(cx, cy, r + 17, angles[i]);
+        const [x, y] = polar(cx, cy, r + 17, angles[i] ?? 0);
         return (
           <text
             key={s}
@@ -125,7 +125,7 @@ function StatConstellation({ stats }: { stats: Record<StatKey, number> }) {
 
 function formatChronicleDate(date: string): string {
   const [y, m, d] = date.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+  return new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1).toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
   });
@@ -140,7 +140,7 @@ function ProgressPage() {
     const d = new Date(Date.now() - i * 86400000);
     const key = todayKey(d);
     const entry = game.activityLog.find((e) => e.date === key);
-    week.push({ label: DAY_LETTERS[d.getDay()], xp: entry?.xp ?? 0, isToday: i === 0 });
+    week.push({ label: DAY_LETTERS[d.getDay()] ?? "", xp: entry?.xp ?? 0, isToday: i === 0 });
   }
   const maxXp = Math.max(50, ...week.map((w) => w.xp));
 

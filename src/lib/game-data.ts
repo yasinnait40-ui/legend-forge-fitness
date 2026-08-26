@@ -56,7 +56,7 @@ export const TITLES: { min: number; title: string }[] = [
 
 export function titleForLevel(level: number): string {
   for (const t of TITLES) if (level >= t.min) return t.title;
-  return TITLES[TITLES.length - 1].title;
+  return TITLES[TITLES.length - 1]?.title ?? "Wanderer of the Wilds";
 }
 
 /* ---------------- Daily quests ---------------- */

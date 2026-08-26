@@ -74,31 +74,37 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "AETHORA — Forge Your Legend | Fantasy Fitness RPG" },
+      { title: "Aethora - Fantasy Fitness RPG & Workout Game" },
       {
         name: "description",
         content:
-          "Enter AETHORA, a cinematic fantasy fitness RPG. Every workout becomes a quest, every goal earns XP, and the Arcane Guide — an ancient wizard — mentors your journey.",
+          "Turn your daily workouts, gym routines, and fitness journey into an epic fantasy RPG adventure. Level up your character stats, complete daily quests, and forge your legend with Aethora.",
       },
-      { name: "author", content: "AETHORA" },
+      {
+        name: "keywords",
+        content:
+          "fitness rpg, workout game, gamified fitness, gym rpg, aethora, arcane warrior, fitness quest, level up fitness",
+      },
+      { name: "author", content: "Hakari" },
       { name: "theme-color", content: "#0d0b18" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "AETHORA" },
-      { property: "og:title", content: "AETHORA — Forge Your Legend" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "Aethora - Fantasy Fitness RPG & Workout Game" },
       {
         property: "og:description",
         content:
-          "A cinematic fantasy fitness RPG. Quests, trials, XP, levels, achievements — guided by an ancient wizard.",
+          "Turn your daily workouts into a fantasy RPG adventure. Level up your stats and complete quests.",
       },
-      { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AETHORA — Forge Your Legend" },
+      { name: "twitter:title", content: "Aethora - Fantasy Fitness RPG & Workout Game" },
       {
         name: "twitter:description",
-        content: "A cinematic fantasy fitness RPG. Every workout becomes a quest.",
+        content: "Turn your daily workouts into a fantasy RPG adventure.",
       },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },
