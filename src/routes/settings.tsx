@@ -22,6 +22,9 @@ export const Route = createFileRoute("/settings")({
 const LANGUAGES = [
   { code: "en", label: "English" },
   { code: "ar", label: "العربية" },
+  { code: "ja", label: "日本語" },
+  { code: "es", label: "Español" },
+  { code: "fr", label: "Français" },
 ];
 
 function SettingsPage() {
