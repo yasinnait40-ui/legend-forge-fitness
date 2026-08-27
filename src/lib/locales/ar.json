@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "quests": "المهام",
+    "trials": "التجارب",
+    "legend": "الأسطورة",
+    "guide": "الدليل",
+    "hero": "البطل",
+    "settings": "الإعدادات"
+  },
+  "home": {
+    "title": "أيثورا",
+    "subtitle": "اصنع أسطورتك",
+    "level": "المستوى",
+    "experience": "الخبرة",
+    "attributes": "الصفات",
+    "strength": "القوة",
+    "endurance": "التحمل",
+    "agility": "الرشاقة",
+    "vitality": "الحيوية",
+    "recovery": "التعافي",
+    "dayFlame": "شعلة اليوم",
+    "dailyQuests": "المهام اليومية",
+    "beginTrials": "ابدأ تجارب اليوم",
+    "consultGuide": "استشر الدليل السحري"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "sound": "الصوت",
+    "soundEffects": "المؤثرات الصوتية",
+    "volume": "مستوى الصوت",
+    "language": "اللغة",
+    "notifications": "الإشعارات",
+    "about": "حول التطبيق"
+  }
+}
