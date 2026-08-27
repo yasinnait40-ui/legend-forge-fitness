@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flame, ScrollText, Sparkles, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.jpg";
@@ -10,6 +11,7 @@ import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, useGame } from "@/lib/game-store";
 import { levelProgress, titleForLevel, QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,7 +51,7 @@ function HomePage() {
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
-
+const { t } = useTranslation();
   return (
     <RealmScreen
       image={homeKingdom}
@@ -64,10 +66,10 @@ function HomePage() {
           The Realm of
         </p>
         <h1 className="text-glow-gold font-display mt-2 text-[3.2rem] font-black leading-none tracking-[0.1em] text-primary">
-          AETHORA
+          {t("home.title")}
         </h1>
         <p className="font-display mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.42em] text-foreground/90">
-          Forge Your Legend
+          {t("home.subtitle")}
         </p>
       </header>
 
@@ -93,7 +95,7 @@ function HomePage() {
           </div>
           <div className="shrink-0 text-right">
             <p className="font-display text-[0.58rem] uppercase tracking-[0.28em] text-muted-foreground">
-              Level
+              {t("home.level")}
             </p>
             <p className="text-glow-gold font-display text-3xl font-black text-primary">{level}</p>
           </div>
@@ -101,7 +103,7 @@ function HomePage() {
         <div className="mt-4">
           <div className="mb-1 flex items-baseline justify-between">
             <span className="font-display text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground">
-              Experience
+              {t("home.experience")}
             </span>
             <span className="font-display text-xs font-bold text-primary">
               {intoLevel} / {needed} XP
@@ -121,7 +123,7 @@ function HomePage() {
         </div>
       </RunePanel>
 
-      {/* Attributes */}
+      {/* {t("home.attributes")} */}
       <RunePanel className="mt-4">
         <RuneHeading>Attributes</RuneHeading>
         <div className="mt-3 space-y-3">
@@ -144,7 +146,7 @@ function HomePage() {
           />
           <p className="font-display mt-1 text-2xl font-black">{game.streak}</p>
           <p className="text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
-            Day Flame
+            {t("home.dayFlame")}
           </p>
         </RunePanel>
         <Link to="/quests" className="block">
@@ -155,7 +157,7 @@ function HomePage() {
               <span className="text-sm text-muted-foreground">/{QUESTS.length}</span>
             </p>
             <p className="text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
-              Daily Quests
+              {t("home.dailyQuests")}
             </p>
           </RunePanel>
         </Link>
@@ -165,12 +167,12 @@ function HomePage() {
       <div className="mt-5 space-y-3">
         <Link to="/trials" className="block">
           <span className="btn-gold">
-            <Swords className="h-4 w-4" /> Begin Today's Trials
+            <Swords className="h-4 w-4" /> {t("home.beginTrials")}
           </span>
         </Link>
         <Link to="/guide" className="block">
           <span className="btn-rune-ghost">
-            <Sparkles className="h-4 w-4" /> Consult the Arcane Guide
+            <Sparkles className="h-4 w-4" /> {t("home.consultGuide")}
           </span>
         </Link>
       </div>
