@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "quests": "クエスト",
+    "trials": "試練",
+    "legend": "伝説",
+    "guide": "ガイド",
+    "hero": "英雄",
+    "settings": "設定"
+  },
+  "home": {
+    "title": "アエソラ",
+    "subtitle": "汝の伝説を鍛えよ",
+    "level": "レベル",
+    "experience": "経験値",
+    "attributes": "属性",
+    "strength": "筋力",
+    "endurance": "持久力",
+    "agility": "敏捷性",
+    "vitality": "生命力",
+    "recovery": "回復力",
+    "dayFlame": "日々の炎",
+    "dailyQuests": "デイリークエスト",
+    "beginTrials": "今日の試練を始める",
+    "consultGuide": "秘術の書を開く"
+  },
+  "settings": {
+    "title": "設定",
+    "sound": "サウンド",
+    "soundEffects": "効果音",
+    "volume": "音量",
+    "language": "言語",
+    "notifications": "通知",
+    "about": "このアプリについて"
+  }
+}
