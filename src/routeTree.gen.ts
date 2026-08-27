@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AchievementsRouteImport } from './routes/achievements'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CharacterRouteImport } from './routes/character'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ProgressRouteImport } from './routes/progress'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const AchievementsRoute = AchievementsRouteImport.update({
   id: '/achievements',
   path: '/achievements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CharacterRoute = CharacterRouteImport.update({
@@ -56,6 +62,7 @@ const TrialsRoute = TrialsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
+  '/auth': typeof AuthRoute
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
   '/progress': typeof ProgressRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
+  '/auth': typeof AuthRoute
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
   '/progress': typeof ProgressRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
+  '/auth': typeof AuthRoute
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
   '/progress': typeof ProgressRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/achievements'
+    | '/auth'
     | '/character'
     | '/guide'
     | '/progress'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/achievements'
+    | '/auth'
     | '/character'
     | '/guide'
     | '/progress'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/achievements'
+    | '/auth'
     | '/character'
     | '/guide'
     | '/progress'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AchievementsRoute: typeof AchievementsRoute
+  AuthRoute: typeof AuthRoute
   CharacterRoute: typeof CharacterRoute
   GuideRoute: typeof GuideRoute
   ProgressRoute: typeof ProgressRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/achievements'
       fullPath: '/achievements'
       preLoaderRoute: typeof AchievementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/character': {
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AchievementsRoute: AchievementsRoute,
+  AuthRoute: AuthRoute,
   CharacterRoute: CharacterRoute,
   GuideRoute: GuideRoute,
   ProgressRoute: ProgressRoute,

@@ -6,6 +6,8 @@ import {
   Gem,
   Heart,
   Lock,
+  LogIn,
+  LogOut,
   Moon,
   Orbit,
   RotateCcw,
@@ -24,6 +26,9 @@ import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { equipItem, resetLegend, useGame } from "@/lib/game-store";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { stopCloudSync } from "@/lib/cloud-sync";
 import {
   EQUIPMENT,
   levelFromXp,
@@ -75,6 +80,7 @@ const SLOTS: EquipSlot[] = ["weapon", "armor", "relic"];
 
 function CharacterPage() {
   const game = useGame();
+  const { user } = useAuth();
   const level = levelFromXp(game.xp);
   const { intoLevel, needed, ratio } = levelProgress(game.xp);
 
@@ -215,6 +221,41 @@ function CharacterPage() {
           </div>
         </RunePanel>
       </Link>
+
+      {/* Cloud binding */}
+      <RunePanel className="mt-4">
+        <RuneHeading>Arcane Archives</RuneHeading>
+        {user ? (
+          <>
+            <p className="mt-3 text-sm">
+              Bound as <span className="text-primary">{user.email}</span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Your XP, attributes and streaks are mirrored to the cloud.
+            </p>
+            <button
+              className="btn-rune-ghost mt-3"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                stopCloudSync();
+                toast("Your oath is released — progress stays on this device.");
+              }}
+            >
+              <LogOut className="h-4 w-4" /> Release the Oath
+            </button>
+          </>
+        ) : (
+          <>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Your legend lives only on this device. Swear an oath at the Oath Stone to sync it
+              across the realms.
+            </p>
+            <Link to="/auth" className="btn-gold mt-3">
+              <LogIn className="h-4 w-4" /> Bind My Legend
+            </Link>
+          </>
+        )}
+      </RunePanel>
 
       <button
         className="btn-rune-ghost mt-6"

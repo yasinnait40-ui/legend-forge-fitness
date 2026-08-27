@@ -56,11 +56,27 @@ const STORAGE_KEY = "aethora-legend-v1";
 let state: GameState = DEFAULT_STATE;
 const listeners = new Set<() => void>();
 
+export type CommitObserver = (prev: GameState, next: GameState) => void;
+const observers = new Set<CommitObserver>();
+
+/** Observe every committed change (used by cloud sync). Returns an unsubscribe fn. */
+export function observeCommits(fn: CommitObserver): () => void {
+  observers.add(fn);
+  return () => {
+    observers.delete(fn);
+  };
+}
+
+export function getGameState(): GameState {
+  return state;
+}
+
 function emit() {
   listeners.forEach((l) => l());
 }
 
 function commit(next: GameState) {
+  const prev = state;
   state = next;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -68,6 +84,20 @@ function commit(next: GameState) {
     // storage unavailable — keep in-memory state
   }
   emit();
+  observers.forEach((o) => o(prev, next));
+}
+
+/** Replace local state wholesale (used when the cloud legend is ahead). */
+export function replaceGameState(next: GameState, notifyObservers = false) {
+  const prev = state;
+  state = next;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // ignore
+  }
+  emit();
+  if (notifyObservers) observers.forEach((o) => o(prev, next));
 }
 
 /** Load persisted legend from localStorage. Call once on the client after mount. */
