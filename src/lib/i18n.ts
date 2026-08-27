@@ -6,6 +6,9 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import en from "./locales/en.json";
 import ar from "./locales/ar.json";
+import ja from "./locales/ja.json";
+import es from "./locales/es.json";
+import fr from "./locales/fr.json";
 
 export const RTL_LANGUAGES = ["ar"];
 
@@ -16,6 +19,9 @@ i18n
     resources: {
       en: { translation: en },
       ar: { translation: ar },
+      ja: { translation: ja },
+      es: { translation: es },
+      fr: { translation: fr },
     },
     fallbackLng: "en",
     interpolation: { escapeValue: false },
