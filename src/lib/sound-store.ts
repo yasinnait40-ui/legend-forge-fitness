@@ -1,6 +1,4 @@
 // src/lib/sound-store.ts
-// Matches the exact pattern of game-store.ts (useSyncExternalStore + localStorage,
-// no external state library).
 
 import { useSyncExternalStore } from "react";
 
@@ -28,13 +26,11 @@ function commit(next: SoundState) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
-    // storage unavailable — keep in-memory state
+    // storage unavailable
   }
   emit();
 }
 
-/** Load persisted sound settings from localStorage. Call once on the client after mount
- *  (same place/timing as hydrateGameStore() in game-store.ts). */
 export function hydrateSoundStore() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -44,7 +40,7 @@ export function hydrateSoundStore() {
       emit();
     }
   } catch {
-    // corrupted save — start fresh
+    // corrupted save
   }
 }
 
@@ -71,4 +67,21 @@ export function useSound(): SoundState {
     () => state,
     () => DEFAULT_SOUND_STATE,
   );
+}
+
+// Sound files must be placed in /public/sounds/ with these exact names:
+export const SOUND_FILES = {
+  questComplete: "/sounds/quest-complete.mp3",
+  levelUp: "/sounds/level-up.mp3",
+} as const;
+
+export type SoundKey = keyof typeof SOUND_FILES;
+
+export function playSound(key: SoundKey) {
+  if (state.muted) return;
+  const audio = new Audio(SOUND_FILES[key]);
+  audio.volume = state.volume;
+  audio.play().catch(() => {
+    // playback blocked (e.g. autoplay policy) — ignore silently
+  });
 }
