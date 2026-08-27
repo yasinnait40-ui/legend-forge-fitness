@@ -16,6 +16,7 @@ import { completeQuest, questsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
 import { playSound } from "@/lib/sound-store";
 import { QUESTS, STAT_LABELS, type Quest, type StatKey } from "@/lib/game-data";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/quests")({
   head: () => ({
@@ -48,8 +49,8 @@ const QUEST_ICONS = {
 } as const;
 
 function QuestsPage() {
+  const { t } = useTranslation();
   const game = useGame();
-  const done = questsDoneToday(game);
 
   function handleComplete(q: Quest) {
     const result = completeQuest(q.id, q.xp, q.stats);
@@ -66,12 +67,12 @@ function QuestsPage() {
       imagePosition="center 22%"
     >
       <header className="pt-10 text-center">
-        <RuneHeading>The Guild Hall</RuneHeading>
+        <RuneHeading>{t("quests.guildHall", "The Guild Hall")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
-          The Quest Board
+          {t("quests.title", "The Quest Board")}
         </h1>
         <p className="mt-2 text-xs tracking-wide text-muted-foreground">
-          New contracts are pinned at dawn. Sealed quests renew tomorrow.
+          {t("quests.subtitle", "New contracts are pinned at dawn. Sealed quests renew tomorrow.")}
         </p>
       </header>
 
@@ -121,9 +122,7 @@ function QuestsPage() {
                     </span>
                   </div>
                 ) : (
-                  <button className="btn-gold" onClick={() => handleComplete(q)}>
-                    Mark Complete
-                  </button>
+                  {t("quests.markComplete", "Mark Complete")﴿
                 )}
               </div>
             </RunePanel>
