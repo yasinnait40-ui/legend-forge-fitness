@@ -36,7 +36,7 @@ function SettingsPage() {
       <header className="pt-10 text-center">
         <RuneHeading>{t("settings.title", "Settings")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-center">
-          Preferences
+          {t("settings.title")}
         </h1>
       </header>
 
@@ -56,7 +56,7 @@ function SettingsPage() {
             />
           </div>
           <button onClick={toggleMuted} className="text-xs px-3 py-1 rounded-full border-2">
-            {muted ? "Unmute" : "Mute"}
+            {muted ? t("settings.unmute", "Unmute") : t("settings.mute", "Mute")}
           </button>
         </RunePanel>
 
