@@ -15,7 +15,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
 import { hydrateGameStore } from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
-import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
+import { startCloudSync, stopCloudSync } from "../lib/cloud-sync"; import "../lib/i18n";
+import { hydrateSoundStore } from "../lib/sound-store";
 
 function NotFoundComponent() {
   return (
@@ -146,6 +147,7 @@ function RootComponent() {
 
   useEffect(() => {
     hydrateGameStore();
+    hydrateSoundStore();
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
