@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Castle, ScrollText, Swords, Telescope, UserRound, WandSparkles } from "lucide-react";
+import { Castle, ScrollText, Swords, Telescope, UserRound, WandSparkles, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
@@ -9,6 +9,7 @@ const ITEMS = [
   { to: "/progress", label: "Legend", icon: Telescope, exact: false },
   { to: "/guide", label: "Guide", icon: WandSparkles, exact: false },
   { to: "/character", label: "Hero", icon: UserRound, exact: false },
+  { to: "/settings", label: "Settings", icon: Settings, exact: false },
 ] as const;
 
 export function BottomNav() {
