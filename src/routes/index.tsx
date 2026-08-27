@@ -12,6 +12,7 @@ import { questsDoneToday, useGame } from "@/lib/game-store";
 import { levelProgress, titleForLevel, QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,6 +49,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const { t } = useTranslation();
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
