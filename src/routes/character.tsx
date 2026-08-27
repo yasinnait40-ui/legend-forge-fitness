@@ -6,6 +6,8 @@ import {
   Gem,
   Heart,
   Lock,
+  LogIn,
+  LogOut,
   Moon,
   Orbit,
   RotateCcw,
@@ -24,6 +26,9 @@ import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { equipItem, resetLegend, useGame } from "@/lib/game-store";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { stopCloudSync } from "@/lib/cloud-sync";
 import {
   EQUIPMENT,
   levelFromXp,
@@ -75,6 +80,7 @@ const SLOTS: EquipSlot[] = ["weapon", "armor", "relic"];
 
 function CharacterPage() {
   const game = useGame();
+  const { user } = useAuth();
   const level = levelFromXp(game.xp);
   const { intoLevel, needed, ratio } = levelProgress(game.xp);
 
