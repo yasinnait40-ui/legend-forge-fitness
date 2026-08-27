@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "quests": "Quêtes",
+    "trials": "Épreuves",
+    "legend": "Légende",
+    "guide": "Guide",
+    "hero": "Héros",
+    "settings": "Paramètres"
+  },
+  "home": {
+    "title": "AETHORA",
+    "subtitle": "Forgez Votre Légende",
+    "level": "Niveau",
+    "experience": "Expérience",
+    "attributes": "Attributs",
+    "strength": "Force",
+    "endurance": "Endurance",
+    "agility": "Agilité",
+    "vitality": "Vitalité",
+    "recovery": "Récupération",
+    "dayFlame": "Flamme du Jour",
+    "dailyQuests": "Quêtes Quotidiennes",
+    "beginTrials": "Commencer les Épreuves du Jour",
+    "consultGuide": "Consulter le Guide Arcanique"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "sound": "Son",
+    "soundEffects": "Effets Sonores",
+    "volume": "Volume",
+    "language": "Langue",
+    "notifications": "Notifications",
+    "about": "À Propos"
+  }
+}
