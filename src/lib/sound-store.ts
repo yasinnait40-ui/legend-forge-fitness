@@ -69,19 +69,46 @@ export function useSound(): SoundState {
   );
 }
 
-// Sound files must be placed in /public/sounds/ with these exact names:
-export const SOUND_FILES = {
-  questComplete: "/sounds/quest-complete.mp3",
-  levelUp: "/sounds/level-up.mp3",
-} as const;
+// Synthesized sounds — no audio files needed.
+let audioCtx: AudioContext | null = null;
+function getCtx(): AudioContext {
+  if (!audioCtx) audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  return audioCtx;
+}
 
-export type SoundKey = keyof typeof SOUND_FILES;
+function tone(freq: number, start: number, duration: number, ctx: AudioContext, gainNode: GainNode, type: OscillatorType = "sine") {
+  const osc = ctx.createOscillator();
+  const env = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  env.gain.setValueAtTime(0, ctx.currentTime + start);
+  env.gain.linearRampToValueAtTime(0.5, ctx.currentTime + start + 0.02);
+  env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + duration);
+  osc.connect(env);
+  env.connect(gainNode);
+  osc.start(ctx.currentTime + start);
+  osc.stop(ctx.currentTime + start + duration);
+}
+
+export type SoundKey = "questComplete" | "levelUp";
 
 export function playSound(key: SoundKey) {
   if (state.muted) return;
-  const audio = new Audio(SOUND_FILES[key]);
-  audio.volume = state.volume;
-  audio.play().catch(() => {
-    // playback blocked (e.g. autoplay policy) — ignore silently
-  });
-}
+  const ctx = getCtx();
+  const master = ctx.createGain();
+  master.gain.value = state.volume;
+  master.connect(ctx.destination);
+
+  if (key === "questComplete") {
+    // Gentle bright chime: C5 -> E5 -> G5
+    tone(523.25, 0, 0.5, ctx, master);
+    tone(659.25, 0.08, 0.5, ctx, master);
+    tone(783.99, 0.16, 0.6, ctx, master);
+  } else if (key === "levelUp") {
+    // Ascending angelic fanfare
+    tone(523.25, 0, 0.35, ctx, master);
+    tone(659.25, 0.15, 0.35, ctx, master);
+    tone(783.99, 0.3, 0.35, ctx, master);
+    tone(1046.5, 0.45, 0.9, ctx, master, "triangle");
+  }
+         }
