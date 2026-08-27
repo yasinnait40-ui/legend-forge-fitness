@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "Home",
+    "quests": "Quests",
+    "trials": "Trials",
+    "legend": "Legend",
+    "guide": "Guide",
+    "hero": "Hero",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "AETHORA",
+    "subtitle": "Forge Your Legend",
+    "level": "Level",
+    "experience": "Experience",
+    "attributes": "Attributes",
+    "strength": "Strength",
+    "endurance": "Endurance",
+    "agility": "Agility",
+    "vitality": "Vitality",
+    "recovery": "Recovery",
+    "dayFlame": "Day Flame",
+    "dailyQuests": "Daily Quests",
+    "beginTrials": "Begin Today's Trials",
+    "consultGuide": "Consult the Arcane Guide"
+  },
+  "settings": {
+    "title": "Settings",
+    "sound": "Sound",
+    "soundEffects": "Sound Effects",
+    "volume": "Volume",
+    "language": "Language",
+    "notifications": "Notifications",
+    "about": "About"
+  }
+}
