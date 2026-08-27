@@ -14,6 +14,7 @@ import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeQuest, questsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
+import { playSound } from "@/lib/sound-store";
 import { QUESTS, STAT_LABELS, type Quest, type StatKey } from "@/lib/game-data";
 
 export const Route = createFileRoute("/quests")({
@@ -52,7 +53,10 @@ function QuestsPage() {
 
   function handleComplete(q: Quest) {
     const result = completeQuest(q.id, q.xp, q.stats);
-    if (result) announceRewards(result, `${q.name} — sealed`);
+    if (result) {
+      playSound(result.leveledUp ? "levelUp" : "questComplete");
+      announceRewards(result, `${q.name} — sealed`);
+    }
   }
 
   return (
