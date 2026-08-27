@@ -14,6 +14,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
 import { hydrateGameStore } from "../lib/game-store";
+import { supabase } from "@/integrations/supabase/client";
+import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 
 function NotFoundComponent() {
   return (
