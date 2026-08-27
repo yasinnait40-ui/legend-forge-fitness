@@ -216,6 +216,41 @@ function CharacterPage() {
         </RunePanel>
       </Link>
 
+      {/* Cloud binding */}
+      <RunePanel className="mt-4">
+        <RuneHeading>Arcane Archives</RuneHeading>
+        {user ? (
+          <>
+            <p className="mt-3 text-sm">
+              Bound as <span className="text-primary">{user.email}</span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Your XP, attributes and streaks are mirrored to the cloud.
+            </p>
+            <button
+              className="btn-rune-ghost mt-3"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                stopCloudSync();
+                toast("Your oath is released — progress stays on this device.");
+              }}
+            >
+              <LogOut className="h-4 w-4" /> Release the Oath
+            </button>
+          </>
+        ) : (
+          <>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Your legend lives only on this device. Swear an oath at the Oath Stone to sync it
+              across the realms.
+            </p>
+            <Link to="/auth" className="btn-gold mt-3">
+              <LogIn className="h-4 w-4" /> Bind My Legend
+            </Link>
+          </>
+        )}
+      </RunePanel>
+
       <button
         className="btn-rune-ghost mt-6"
         onClick={() => {
