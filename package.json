@@ -15,7 +15,9 @@
     "rolldown": "1.2.1"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "^5.2.2", "i18next": "^24.2.1",
+    "react-i18next": "^15.4.0",
+    "i18next-browser-languagedetector": "^8.0.2",
     "@lovable.dev/cloud-auth-js": "^1.0.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
