@@ -6,6 +6,7 @@ import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeTrial, trialsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
+import { playSound } from "@/lib/sound-store";
 import { TRIALS, STAT_LABELS, type StatKey, type Trial } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
 
@@ -37,7 +38,10 @@ function TrialsPage() {
 
   function handleComplete(t: Trial) {
     const result = completeTrial(t.id, t.name, t.xp, t.stats);
-    if (result) announceRewards(result, `${t.name} — conquered`);
+    if (result) {
+      playSound(result.leveledUp ? "levelUp" : "questComplete");
+      announceRewards(result, `${t.name} — conquered`);
+    }
   }
 
   return (
