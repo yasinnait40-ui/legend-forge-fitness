@@ -1,0 +1,189 @@
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { LogIn, Sparkles, UserPlus } from "lucide-react";
+import { toast } from "sonner";
+import guildHall from "@/assets/guild-hall.jpg";
+import { RealmScreen } from "@/components/RealmScreen";
+import { RunePanel, RuneHeading } from "@/components/RunePanel";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
+import { cn } from "@/lib/utils";
+
+export const Route = createFileRoute("/auth")({
+  head: () => ({
+    meta: [
+      { title: "The Oath Stone — Sign In | AETHORA" },
+      {
+        name: "description",
+        content:
+          "Swear your oath to bind your legend to the cloud. Sign in or create an account so your XP, stats, quests and streaks follow you to any device.",
+      },
+      { property: "og:title", content: "The Oath Stone — Sign In | AETHORA" },
+      {
+        property: "og:description",
+        content: "Bind your AETHORA legend to the cloud and never lose your progress.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: AuthPage,
+});
+
+function AuthPage() {
+  const navigate = useNavigate();
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => {
+      if (data.session) void navigate({ to: "/", replace: true });
+    });
+  }, [navigate]);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: window.location.origin },
+        });
+        if (error) throw error;
+        if (data.session) {
+          toast.success("Your oath is sworn — welcome, warrior.");
+          void navigate({ to: "/", replace: true });
+        } else {
+          toast("A sealed scroll awaits", {
+            description: "Check your email and confirm to complete your oath.",
+          });
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("The gates open — welcome back.");
+        void navigate({ to: "/", replace: true });
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "The oath stone rejected you.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function onGoogle() {
+    try {
+      await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Google sign-in failed.");
+    }
+  }
+
+  return (
+    <RealmScreen
+      image={guildHall}
+      alt="A candlelit guild hall of ancient stone where oaths are sworn"
+      imagePosition="center 35%"
+      veil="strong"
+    >
+      <header className="pt-12 text-center">
+        <RuneHeading>The Oath Stone</RuneHeading>
+        <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
+          {mode === "signin" ? "Return, Warrior" : "Swear Your Oath"}
+        </h1>
+        <p className="mx-auto mt-2 max-w-xs text-sm text-muted-foreground">
+          Bind your legend to the arcane archives so your XP, stats and streaks follow you
+          everywhere.
+        </p>
+      </header>
+
+      <RunePanel className="mt-6">
+        <div className="mb-4 flex gap-2">
+          {(["signin", "signup"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => setMode(m)}
+              className={cn(
+                "font-display flex-1 rounded-md border px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] transition-all",
+                mode === m
+                  ? "border-primary/60 bg-primary/10 text-primary shadow-[0_0_16px_color-mix(in_oklab,var(--primary)_22%,transparent)]"
+                  : "border-border/60 text-muted-foreground hover:border-primary/40",
+              )}
+            >
+              {m === "signin" ? "Sign In" : "Create"}
+            </button>
+          ))}
+        </div>
+
+        <form onSubmit={onSubmit} className="space-y-3">
+          <label className="block">
+            <span className="font-display text-[0.6rem] uppercase tracking-[0.24em] text-muted-foreground">
+              Raven Address
+            </span>
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="warrior@aethora.realm"
+              className="mt-1 w-full rounded-md border border-border/70 bg-background/60 px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary/60"
+            />
+          </label>
+          <label className="block">
+            <span className="font-display text-[0.6rem] uppercase tracking-[0.24em] text-muted-foreground">
+              Secret Sigil
+            </span>
+            <input
+              type="password"
+              required
+              minLength={6}
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="mt-1 w-full rounded-md border border-border/70 bg-background/60 px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary/60"
+            />
+          </label>
+
+          <button type="submit" disabled={busy} className="btn-gold mt-2 disabled:opacity-60">
+            {mode === "signin" ? (
+              <>
+                <LogIn className="h-4 w-4" /> Enter the Realm
+              </>
+            ) : (
+              <>
+                <UserPlus className="h-4 w-4" /> Forge My Legend
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="my-4 flex items-center gap-3">
+          <span className="h-px flex-1 bg-border/60" />
+          <span className="font-display text-[0.56rem] uppercase tracking-[0.26em] text-muted-foreground">
+            or
+          </span>
+          <span className="h-px flex-1 bg-border/60" />
+        </div>
+
+        <button type="button" onClick={onGoogle} className="btn-rune-ghost">
+          <Sparkles className="h-4 w-4" /> Continue with Google
+        </button>
+      </RunePanel>
+
+      <p className="mt-4 text-center text-xs text-muted-foreground">
+        Not ready to swear?{" "}
+        <Link to="/" className="text-primary underline-offset-4 hover:underline">
+          Wander on without binding
+        </Link>{" "}
+        — progress stays on this device only.
+      </p>
+    </RealmScreen>
+  );
+}
