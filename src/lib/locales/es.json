@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "quests": "Misiones",
+    "trials": "Pruebas",
+    "legend": "Leyenda",
+    "guide": "Guía",
+    "hero": "Héroe",
+    "settings": "Ajustes"
+  },
+  "home": {
+    "title": "AETHORA",
+    "subtitle": "Forja Tu Leyenda",
+    "level": "Nivel",
+    "experience": "Experiencia",
+    "attributes": "Atributos",
+    "strength": "Fuerza",
+    "endurance": "Resistencia",
+    "agility": "Agilidad",
+    "vitality": "Vitalidad",
+    "recovery": "Recuperación",
+    "dayFlame": "Llama del Día",
+    "dailyQuests": "Misiones Diarias",
+    "beginTrials": "Comenzar las Pruebas de Hoy",
+    "consultGuide": "Consultar la Guía Arcana"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "sound": "Sonido",
+    "soundEffects": "Efectos de Sonido",
+    "volume": "Volumen",
+    "language": "Idioma",
+    "notifications": "Notificaciones",
+    "about": "Acerca de"
+  }
+}
