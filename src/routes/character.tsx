@@ -98,7 +98,6 @@ function CharacterPage() {
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
           {t("character.title", "Your Hero")}
         </h1>
-        </h1>
       </header>
 
       {/* Portrait */}
