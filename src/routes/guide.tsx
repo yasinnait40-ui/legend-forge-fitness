@@ -5,6 +5,7 @@ import arcaneLibrary from "@/assets/arcane-library.jpg";
 import { Particles } from "@/components/Particles";
 import { consultArcaneGuide } from "@/lib/arcane.functions";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/guide")({
   head: () => ({
@@ -48,6 +49,7 @@ const SUGGESTED_PROMPTS = [
 const CHAT_KEY = "aethora-arcane-chat-v1";
 
 function GuidePage() {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -158,10 +160,11 @@ function GuidePage() {
         <div className="mx-auto flex max-w-lg items-start justify-between px-4 pt-6">
           <div>
             <p className="font-display text-[0.55rem] font-semibold uppercase tracking-[0.4em] text-accent">
-              The Grand Library
+              {t("guide.grandLibrary", "The Grand Library")}
             </p>
             <h1 className="text-glow-arcane font-display mt-1 text-2xl font-black tracking-[0.06em] text-foreground">
-              The Arcane Guide
+              {t("guide.title", {t("guide.title", "The Arcane Guide")}
+            </h1>
             </h1>
           </div>
           <button
@@ -171,7 +174,7 @@ function GuidePage() {
           >
             <RotateCcw className="h-3.5 w-3.5 text-primary" />
             <span className="font-display text-[0.58rem] font-bold uppercase tracking-[0.16em] text-primary">
-              New Tale
+              {t("guide.newTale", "New Tale")}
             </span>
           </button>
         </div>
@@ -277,7 +280,7 @@ function GuidePage() {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask the Arcane Guide…"
             maxLength={1000}
-            className="h-12 flex-1 rounded-lg border border-input bg-background/70 px-4 text-sm text-foreground backdrop-blur-md placeholder:text-muted-foreground focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
+            className="h-12 flex-1 rounded-lg border border-input bg-background/70 px-4 text-sm text-foreground backdrop-blur-md placeholder={t("guide.askPlaceholder", "Ask the Arcane Guide…")} focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
           />
           <button
             type="submit"
