@@ -51,7 +51,7 @@ const QUEST_ICONS = {
 function QuestsPage() {
   const { t } = useTranslation();
   const game = useGame();
-  const questsDone = questsDoneToday();
+  const questsDone = questsDoneToday(game);
 
   function handleComplete(q: Quest) {
     const result = completeQuest(q.id, q.xp, q.stats);
