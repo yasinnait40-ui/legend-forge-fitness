@@ -7,14 +7,6 @@ import { useTranslation } from "react-i18next";
 import hallOfLegends from "@/assets/hall-of-legends.jpg";
 
 export const Route = createFileRoute("/settings")({
-  head: () => ({
-    meta: [
-      { title: "Settings | AETHORA" },
-      { name: "description", content: "Adjust sound, language and preferences for your Aethora journey." },
-      { property: "og:title", content: "Settings | AETHORA" },
-      { property: "og:type", content: "website" },
-    ],
-  }),
   component: SettingsPage,
 });
 
@@ -30,17 +22,10 @@ function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { muted, volume } = useSound();
 
-  function handleLanguageChange(code: string) {
-    i18n.changeLanguage(code);
-  }
-
   return (
     <RealmScreen image={hallOfLegends} alt="A quiet chamber of runes and scrolls" imagePosition="center 25%">
       <header className="pt-10 text-center">
         <RuneHeading>{t("settings.title", "Settings")}</RuneHeading>
-        <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-center">
-          {t("settings.title", "Settings")}
-        </h1>
       </header>
 
       <div className="mt-6 space-y-3">
@@ -59,7 +44,7 @@ function SettingsPage() {
             />
           </div>
           <button type="button" onClick={toggleMuted} className="text-xs px-3 py-1 rounded-full border-2">
-            {muted ? t("settings.unmute", "Unmute") : t("settings.mute", "Mute")}
+            {muted ? "Unmute" : "Mute"}
           </button>
         </RunePanel>
 
@@ -72,10 +57,8 @@ function SettingsPage() {
                 <button
                   type="button"
                   key={l.code}
-                  onClick={() => handleLanguageChange(l.code)}
-                  className={`text-xs px-3 py-1 rounded-full border-2 ${
-                    i18n.language === l.code ? "opacity-100 border-primary" : "opacity-55"
-                  }`}
+                  onClick={() => i18n.changeLanguage(l.code)}
+                  className="text-xs px-3 py-1 rounded-full border-2"
                 >
                   {l.label}
                 </button>
