@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, ChevronDown, Clock, Star } from "lucide-react";
@@ -14,7 +15,7 @@ import { useTranslation } from "react-i18next";
 export const Route = createFileRoute("/trials")({
   head: () => ({
     meta: [
-      { title: "Training Trials — {t("trials.title", "Trials of the Arena")} | AETHORA" },
+      { title: "Training Trials — Workouts of the Arena | AETHORA" },
       {
         name: "description",
         content:
@@ -38,11 +39,11 @@ function TrialsPage() {
   const done = trialsDoneToday(game);
   const [openId, setOpenId] = useState<string | null>(TRIALS[0]?.id ?? null);
 
-  function handleComplete(t: Trial) {
-    const result = completeTrial(t.id, t.name, t.xp, t.stats);
+  function handleComplete(trial: Trial) {
+    const result = completeTrial(trial.id, trial.name, trial.xp, trial.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
-      announceRewards(result, `${t.name} — conquered`);
+      announceRewards(result, `${trial.name} — conquered`);
     }
   }
 
@@ -57,32 +58,33 @@ function TrialsPage() {
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
           {t("trials.title", "Trials of the Arena")}
         </h1>
-        {t("trials.subtitle", "Step into the rune circle. Each trial lists its rites — complete them all.")}
+        <p className="mt-2 text-xs tracking-wide text-muted-foreground">
+          {t("trials.subtitle", "Step into the rune circle. Each trial lists its rites — complete them all.")}
         </p>
       </header>
 
       <div className="mt-6 space-y-4">
-        {TRIALS.map((t) => {
-          const isDone = done.includes(t.id);
-          const open = openId === t.id;
+        {TRIALS.map((trial) => {
+          const isDone = done.includes(trial.id);
+          const open = openId === trial.id;
           return (
-            <RunePanel key={t.id} className={cn(isDone && "border-primary/50")}>
+            <RunePanel key={trial.id} className={cn(isDone && "border-primary/50")}>
               <button
                 className="flex w-full items-start justify-between gap-3 text-left"
-                onClick={() => setOpenId(open ? null : t.id)}
+                onClick={() => setOpenId(open ? null : trial.id)}
                 aria-expanded={open}
               >
                 <div className="min-w-0">
-                  <h3 className="font-display text-base font-bold tracking-[0.05em]">{t.name}</h3>
-                  <p className="mt-0.5 text-xs italic text-muted-foreground">{t.epithet}</p>
+                  <h3 className="font-display text-base font-bold tracking-[0.05em]">{trial.name}</h3>
+                  <p className="mt-0.5 text-xs italic text-muted-foreground">{trial.epithet}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <span className="flex" aria-label={`Difficulty ${t.difficulty} of 5`}>
+                    <span className="flex" aria-label={`Difficulty ${trial.difficulty} of 5`}>
                       {Array.from({ length: 5 }, (_, i) => (
                         <Star
                           key={i}
                           className={cn(
                             "h-3.5 w-3.5",
-                            i < t.difficulty
+                            i < trial.difficulty
                               ? "fill-primary text-primary drop-shadow-[0_0_6px_var(--primary)]"
                               : "text-muted-foreground/40",
                           )}
@@ -90,7 +92,7 @@ function TrialsPage() {
                       ))}
                     </span>
                     <span className="rune-chip">
-                      <Clock className="h-3 w-3" /> {t.minutes} min
+                      <Clock className="h-3 w-3" /> {trial.minutes} min
                     </span>
                   </div>
                 </div>
@@ -108,7 +110,7 @@ function TrialsPage() {
                     {t("trials.rites", "Rites of the Trial")}
                   </p>
                   <div className="space-y-2">
-                    {t.exercises.map((ex, i) => (
+                    {trial.exercises.map((ex, i) => (
                       <div
                         key={i}
                         className="flex items-center justify-between gap-3 rounded-md border border-border/60 bg-background/55 px-3 py-2"
@@ -124,8 +126,8 @@ function TrialsPage() {
                     ))}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-1.5">
-                    <span className="rune-chip text-primary">+{t.xp} XP</span>
-                    {Object.entries(t.stats).map(([k, v]) => (
+                    <span className="rune-chip text-primary">+{trial.xp} XP</span>
+                    {Object.entries(trial.stats).map(([k, v]) => (
                       <span key={k} className="rune-chip" style={{ color: `var(--stat-${k})` }}>
                         +{v} {STAT_LABELS[k as StatKey]}
                       </span>
@@ -140,7 +142,14 @@ function TrialsPage() {
                         </span>
                       </div>
                     ) : (
-                      {t("trials.completeTrial", "Complete Trial")}
+                      <button
+                        onClick={() => handleComplete(trial)}
+                        className="flex w-full items-center justify-center gap-2 rounded-md border border-primary/40 bg-primary/10 py-2.5 transition hover:bg-primary/20"
+                      >
+                        <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em] text-primary">
+                          {t("trials.completeTrial", "Complete Trial")}
+                        </span>
+                      </button>
                     )}
                   </div>
                 </div>
