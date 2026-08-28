@@ -12,6 +12,7 @@ import {
   STAT_LABELS,
   type StatKey,
 } from "@/lib/game-data";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/progress")({
   head: () => ({
@@ -132,6 +133,7 @@ function formatChronicleDate(date: string): string {
 }
 
 function ProgressPage() {
+  const { t } = useTranslation();
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
 
@@ -151,7 +153,7 @@ function ProgressPage() {
       imagePosition="center 35%"
     >
       <header className="pt-10 text-center">
-        <RuneHeading>The Observatory</RuneHeading>
+        <RuneHeading>{t("progress.observatory", "The Observatory")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
           Your Legend
         </h1>
@@ -165,13 +167,13 @@ function ProgressPage() {
         <div className="flex items-center justify-between">
           <div>
             <p className="font-display text-[0.6rem] uppercase tracking-[0.28em] text-muted-foreground">
-              Current Level
+              {t("progress.currentLevel", "Current Level")}
             </p>
             <p className="text-glow-gold font-display text-4xl font-black text-primary">{level}</p>
           </div>
           <div className="text-right">
             <p className="font-display text-[0.6rem] uppercase tracking-[0.28em] text-muted-foreground">
-              Next Ascension
+              {t("progress.nextAscension", "Next Ascension")}
             </p>
             <p className="font-display text-sm font-bold">
               {intoLevel} / {needed} XP
@@ -193,7 +195,7 @@ function ProgressPage() {
 
       {/* Weekly activity */}
       <RunePanel className="mt-4">
-        <RuneHeading>Weekly Conquests</RuneHeading>
+        <RuneHeading>{t("progress.weeklyConquests", "Weekly Conquests")}</RuneHeading>
         <div className="mt-4 flex h-28 items-end justify-between gap-2">
           {week.map((d, i) => (
             <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
@@ -230,7 +232,7 @@ function ProgressPage() {
 
       {/* Stat constellation */}
       <RunePanel className="mt-4">
-        <RuneHeading>Stat Constellation</RuneHeading>
+        <RuneHeading>{t("progress.statConstellation", "Stat Constellation")}</RuneHeading>
         <div className="mt-2">
           <StatConstellation stats={game.stats} />
         </div>
