@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Volume2, VolumeX, Languages } from "lucide-react";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { useSound, toggleMuted, setVolume } from "@/lib/sound-store";
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import hallOfLegends from "@/assets/hall-of-legends.jpg";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -19,8 +22,16 @@ const LANGUAGES = [
 ];
 
 function SettingsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { muted, volume } = useSound();
+  const [, forceUpdate] = useState(0);
+  const currentLang = i18n.language?.split("-")[0] ?? "en";
+
+  function changeLang(code: string) {
+    i18n.changeLanguage(code).then(() => {
+      forceUpdate((n) => n + 1);
+    });
+  }
 
   return (
     <RealmScreen
@@ -48,13 +59,13 @@ function SettingsPage() {
               value={volume * 100}
               disabled={muted}
               onChange={(e) => setVolume(Number(e.target.value) / 100)}
-              className="w-full mt-2"
+              className="mt-2 w-full"
             />
           </div>
           <button
             type="button"
             onClick={toggleMuted}
-            className="text-xs px-3 py-1 rounded-full border-2"
+            className="rounded-full border-2 px-3 py-1 text-xs"
           >
             {muted ? "Unmute" : "Mute"}
           </button>
@@ -64,13 +75,18 @@ function SettingsPage() {
           <Languages className="h-6 w-6 shrink-0" />
           <div className="flex-1">
             <p className="font-semibold">{t("settings.language", "Language")}</p>
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               {LANGUAGES.map((l) => (
                 <button
                   type="button"
                   key={l.code}
-                  onClick={() => i18n.changeLanguage(l.code)}
-                  className="text-xs px-3 py-1 rounded-full border-2"
+                  onClick={() => changeLang(l.code)}
+                  className={cn(
+                    "rounded-full border-2 px-3 py-1 text-xs transition-all duration-200",
+                    currentLang === l.code
+                      ? "border-primary bg-primary/15 font-bold text-primary shadow-[0_0_12px_color-mix(in_oklab,var(--primary)_30%,transparent)]"
+                      : "border-border text-muted-foreground hover:border-primary/50",
+                  )}
                 >
                   {l.label}
                 </button>
