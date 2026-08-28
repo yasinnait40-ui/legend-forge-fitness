@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, ChevronDown, Clock, Star } from "lucide-react";
@@ -59,7 +58,10 @@ function TrialsPage() {
           {t("trials.title", "Trials of the Arena")}
         </h1>
         <p className="mt-2 text-xs tracking-wide text-muted-foreground">
-          {t("trials.subtitle", "Step into the rune circle. Each trial lists its rites — complete them all.")}
+          {t(
+            "trials.subtitle",
+            "Step into the rune circle. Each trial lists its rites — complete them all.",
+          )}
         </p>
       </header>
 
@@ -75,7 +77,9 @@ function TrialsPage() {
                 aria-expanded={open}
               >
                 <div className="min-w-0">
-                  <h3 className="font-display text-base font-bold tracking-[0.05em]">{trial.name}</h3>
+                  <h3 className="font-display text-base font-bold tracking-[0.05em]">
+                    {trial.name}
+                  </h3>
                   <p className="mt-0.5 text-xs italic text-muted-foreground">{trial.epithet}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <span className="flex" aria-label={`Difficulty ${trial.difficulty} of 5`}>

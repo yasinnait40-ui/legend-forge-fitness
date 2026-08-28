@@ -201,7 +201,10 @@ function GuidePage() {
       >
         <div className="space-y-3">
           {messages.map((m, i) => (
-            <div key={i} className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}>
+            <div
+              key={i}
+              className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}
+            >
               <div
                 className={cn(
                   "max-w-[86%] px-3.5 py-2.5",

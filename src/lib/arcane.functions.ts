@@ -8,9 +8,7 @@ const messageSchema = z.object({
 });
 
 export const consultArcaneGuide = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
-    z.object({ messages: z.array(messageSchema).min(1).max(40) }).parse(data),
-  )
+  .validator((data) => z.object({ messages: z.array(messageSchema).min(1).max(40) }).parse(data))
   .handler(async ({ data }) => {
     const apiKey = process.env["GEMINI_API_KEY"];
     if (!apiKey) {

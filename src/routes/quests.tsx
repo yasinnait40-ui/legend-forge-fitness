@@ -96,11 +96,7 @@ function QuestsPage() {
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <span className="rune-chip text-primary">+{q.xp} XP</span>
                     {Object.entries(q.stats).map(([k, v]) => (
-                      <span
-                        key={k}
-                        className="rune-chip"
-                        style={{ color: `var(--stat-${k})` }}
-                      >
+                      <span key={k} className="rune-chip" style={{ color: `var(--stat-${k})` }}>
                         +{v} {STAT_LABELS[k as StatKey]}
                       </span>
                     ))}

@@ -69,9 +69,12 @@ function AchievementsPage() {
         <RuneHeading>{t("achievements.hallOfLegends", "Hall of Legends")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
           {t("achievements.title", "Honors & Relics")}
-            </h1>
+        </h1>
         <p className="mt-2 text-xs tracking-wide text-muted-foreground">
-          {t("achievements.honorsClaimed", "{{count}} of {{total}} honors claimed", { count: unlockedCount, total: ACHIEVEMENTS.length })}
+          {t("achievements.honorsClaimed", "{{count}} of {{total}} honors claimed", {
+            count: unlockedCount,
+            total: ACHIEVEMENTS.length,
+          })}
         </p>
       </header>
 

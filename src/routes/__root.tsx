@@ -15,7 +15,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
 import { hydrateGameStore } from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
-import { startCloudSync, stopCloudSync } from "../lib/cloud-sync"; import "../lib/i18n";
+import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
+import "../lib/i18n";
 import { hydrateSoundStore } from "../lib/sound-store";
 
 function NotFoundComponent() {
@@ -23,7 +24,9 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="font-display text-7xl font-bold text-primary">404</h1>
-        <h2 className="font-display mt-4 text-xl font-semibold text-foreground">Lost in the mist</h2>
+        <h2 className="font-display mt-4 text-xl font-semibold text-foreground">
+          Lost in the mist
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           This path does not exist in the realm of Aethora — or it has long crumbled to ruin.
         </p>
@@ -107,7 +110,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "twitter:description",
         content: "Turn your daily workouts into a fantasy RPG adventure.",
       },
-
     ],
     links: [
       { rel: "stylesheet", href: appCss },

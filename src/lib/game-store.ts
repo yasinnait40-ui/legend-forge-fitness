@@ -1,10 +1,5 @@
 import { useSyncExternalStore } from "react";
-import {
-  ACHIEVEMENTS,
-  levelFromXp,
-  STAT_CAP,
-  type StatKey,
-} from "./game-data";
+import { ACHIEVEMENTS, levelFromXp, STAT_CAP, type StatKey } from "./game-data";
 
 export interface WorkoutLogEntry {
   date: string;
@@ -181,9 +176,9 @@ function applyAward(
   next.activityLog = next.activityLog.slice(-60);
 
   // Achievements.
-  const unlocked = ACHIEVEMENTS.filter((a) => !next.achievements.includes(a.id) && a.test(next)).map(
-    (a) => a.id,
-  );
+  const unlocked = ACHIEVEMENTS.filter(
+    (a) => !next.achievements.includes(a.id) && a.test(next),
+  ).map((a) => a.id);
   next.achievements = [...next.achievements, ...unlocked];
 
   const newLevel = levelFromXp(next.xp);
@@ -218,7 +213,9 @@ export function completeTrial(
   const working: GameState = {
     ...state,
     trialsToday: { date: todayKey(), ids: [...trialsDoneToday(state), trialId] },
-    trialsEver: state.trialsEver.includes(trialId) ? state.trialsEver : [...state.trialsEver, trialId],
+    trialsEver: state.trialsEver.includes(trialId)
+      ? state.trialsEver
+      : [...state.trialsEver, trialId],
     totalTrials: state.totalTrials + 1,
     workoutLog: [...state.workoutLog, { date: todayKey(), name, xp }].slice(-30),
   };

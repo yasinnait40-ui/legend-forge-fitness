@@ -80,9 +80,7 @@ function logNewCompletions(userId: string, prev: GameState, next: GameState) {
   if (newQuests.length) {
     void supabase
       .from("quest_completions")
-      .insert(
-        newQuests.map((id) => ({ user_id: userId, quest_id: id, xp_earned: 0 })) as never,
-      )
+      .insert(newQuests.map((id) => ({ user_id: userId, quest_id: id, xp_earned: 0 })) as never)
       .then(({ error }) => error && console.error("[cloud-sync] quest log failed", error.message));
   }
 

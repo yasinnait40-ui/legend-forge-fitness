@@ -1,5 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Castle, ScrollText, Swords, Telescope, UserRound, WandSparkles, Settings } from "lucide-react";
+import {
+  Castle,
+  ScrollText,
+  Swords,
+  Telescope,
+  UserRound,
+  WandSparkles,
+  Settings,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
@@ -35,9 +43,7 @@ export function BottomNav() {
                 <span
                   className={cn(
                     "absolute top-0 h-0.5 w-8 rounded-full transition-all duration-300",
-                    active
-                      ? "bg-primary shadow-[0_0_12px_var(--primary)]"
-                      : "bg-transparent",
+                    active ? "bg-primary shadow-[0_0_12px_var(--primary)]" : "bg-transparent",
                   )}
                 />
                 <Icon

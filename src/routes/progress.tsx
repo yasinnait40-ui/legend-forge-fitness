@@ -64,7 +64,12 @@ function StatConstellation({ stats }: { stats: Record<StatKey, number> }) {
   }).join(" ");
 
   return (
-    <svg viewBox="0 0 220 210" className="mx-auto w-full max-w-[300px]" role="img" aria-label="Stat constellation radar chart">
+    <svg
+      viewBox="0 0 220 210"
+      className="mx-auto w-full max-w-[300px]"
+      role="img"
+      aria-label="Stat constellation radar chart"
+    >
       {[0.33, 0.66, 1].map((s) => (
         <polygon
           key={s}
@@ -93,7 +98,9 @@ function StatConstellation({ stats }: { stats: Record<StatKey, number> }) {
         fill="color-mix(in oklab, var(--primary) 26%, transparent)"
         stroke="var(--primary)"
         strokeWidth="1.6"
-        style={{ filter: "drop-shadow(0 0 8px color-mix(in oklab, var(--primary) 60%, transparent))" }}
+        style={{
+          filter: "drop-shadow(0 0 8px color-mix(in oklab, var(--primary) 60%, transparent))",
+        }}
       />
       {STAT_ORDER.map((s, i) => {
         const scale = Math.max(0.08, (stats[s] ?? 0) / STAT_CAP);

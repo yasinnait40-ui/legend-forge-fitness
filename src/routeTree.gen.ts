@@ -16,6 +16,7 @@ import { Route as CharacterRouteImport } from './routes/character'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as QuestsRouteImport } from './routes/quests'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TrialsRouteImport } from './routes/trials'
 
 const IndexRoute = IndexRouteImport.update({
@@ -53,6 +54,11 @@ const QuestsRoute = QuestsRouteImport.update({
   path: '/quests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrialsRoute = TrialsRouteImport.update({
   id: '/trials',
   path: '/trials',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/settings': typeof SettingsRoute
   '/trials': typeof TrialsRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/guide': typeof GuideRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/settings': typeof SettingsRoute
   '/trials': typeof TrialsRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/settings': typeof SettingsRoute
   '/trials': typeof TrialsRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/guide'
     | '/progress'
     | '/quests'
+    | '/settings'
     | '/trials'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/guide'
     | '/progress'
     | '/quests'
+    | '/settings'
     | '/trials'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/guide'
     | '/progress'
     | '/quests'
+    | '/settings'
     | '/trials'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   ProgressRoute: typeof ProgressRoute
   QuestsRoute: typeof QuestsRoute
+  SettingsRoute: typeof SettingsRoute
   TrialsRoute: typeof TrialsRoute
 }
 
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trials': {
       id: '/trials'
       path: '/trials'
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuideRoute: GuideRoute,
   ProgressRoute: ProgressRoute,
   QuestsRoute: QuestsRoute,
+  SettingsRoute: SettingsRoute,
   TrialsRoute: TrialsRoute,
 }
 export const routeTree = rootRouteImport

@@ -23,14 +23,22 @@ function SettingsPage() {
   const { muted, volume } = useSound();
 
   return (
-    <RealmScreen image={hallOfLegends} alt="A quiet chamber of runes and scrolls" imagePosition="center 25%">
+    <RealmScreen
+      image={hallOfLegends}
+      alt="A quiet chamber of runes and scrolls"
+      imagePosition="center 25%"
+    >
       <header className="pt-10 text-center">
         <RuneHeading>{t("settings.title", "Settings")}</RuneHeading>
       </header>
 
       <div className="mt-6 space-y-3">
         <RunePanel className="flex items-center gap-4">
-          {muted ? <VolumeX className="h-6 w-6 shrink-0" /> : <Volume2 className="h-6 w-6 shrink-0" />}
+          {muted ? (
+            <VolumeX className="h-6 w-6 shrink-0" />
+          ) : (
+            <Volume2 className="h-6 w-6 shrink-0" />
+          )}
           <div className="flex-1">
             <p className="font-semibold">{t("settings.soundEffects", "Sound Effects")}</p>
             <input
@@ -43,7 +51,11 @@ function SettingsPage() {
               className="w-full mt-2"
             />
           </div>
-          <button type="button" onClick={toggleMuted} className="text-xs px-3 py-1 rounded-full border-2">
+          <button
+            type="button"
+            onClick={toggleMuted}
+            className="text-xs px-3 py-1 rounded-full border-2"
+          >
             {muted ? "Unmute" : "Mute"}
           </button>
         </RunePanel>

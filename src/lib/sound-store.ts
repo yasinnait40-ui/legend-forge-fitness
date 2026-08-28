@@ -72,11 +72,23 @@ export function useSound(): SoundState {
 // Synthesized sounds — no audio files needed.
 let audioCtx: AudioContext | null = null;
 function getCtx(): AudioContext {
-  if (!audioCtx) audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  if (!audioCtx) {
+    const Ctor =
+      window.AudioContext ??
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    audioCtx = new Ctor();
+  }
   return audioCtx;
 }
 
-function tone(freq: number, start: number, duration: number, ctx: AudioContext, gainNode: GainNode, type: OscillatorType = "sine") {
+function tone(
+  freq: number,
+  start: number,
+  duration: number,
+  ctx: AudioContext,
+  gainNode: GainNode,
+  type: OscillatorType = "sine",
+) {
   const osc = ctx.createOscillator();
   const env = ctx.createGain();
   osc.type = type;
@@ -111,4 +123,4 @@ export function playSound(key: SoundKey) {
     tone(783.99, 0.3, 0.35, ctx, master);
     tone(1046.5, 0.45, 0.9, ctx, master, "triangle");
   }
-         }
+}
