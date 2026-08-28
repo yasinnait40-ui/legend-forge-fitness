@@ -96,7 +96,7 @@ function TrialsPage() {
                       ))}
                     </span>
                     <span className="rune-chip">
-                      <Clock className="h-3 w-3" /> {trial.minutes} min
+                      <Clock className="h-3 w-3" /> {trial.minutes} {t("trials.minutes", "min")}
                     </span>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ function TrialsPage() {
                       <div className="flex items-center justify-center gap-2 rounded-md border border-primary/45 bg-primary/10 py-2.5">
                         <Check className="h-4 w-4 text-primary" />
                         <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-primary">
-                          Conquered Today
+                          {t("trials.conqueredToday", "Conquered Today")}
                         </span>
                       </div>
                     ) : (

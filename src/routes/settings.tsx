@@ -67,7 +67,7 @@ function SettingsPage() {
             onClick={toggleMuted}
             className="rounded-full border-2 px-3 py-1 text-xs"
           >
-            {muted ? "Unmute" : "Mute"}
+            {muted ? t("settings.unmute", "Unmute") : t("settings.mute", "Mute")}
           </button>
         </RunePanel>
 

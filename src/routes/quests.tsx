@@ -108,14 +108,14 @@ function QuestsPage() {
                   <div className="flex items-center justify-center gap-2 rounded-md border border-primary/45 bg-primary/10 py-2.5">
                     <Check className="h-4 w-4 text-primary" />
                     <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-primary">
-                      Sealed
+                      {t("quests.sealed", "Sealed")}
                     </span>
                   </div>
                 ) : q.auto ? (
                   <div className="flex items-center justify-center gap-2 rounded-md border border-border py-2.5 text-muted-foreground">
                     <Swords className="h-4 w-4" />
                     <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em]">
-                      Conquer a trial to seal
+                      {t("quests.conquerToSeal", "Conquer a trial to seal")}
                     </span>
                   </div>
                 ) : (
@@ -135,7 +135,7 @@ function QuestsPage() {
       </div>
 
       <p className="mt-6 text-center text-[0.68rem] italic tracking-wide text-muted-foreground">
-        The board renews at midnight, traveler.
+        {t("quests.renewNote", "The board renews at midnight, traveler.")}
       </p>
     </RealmScreen>
   );
