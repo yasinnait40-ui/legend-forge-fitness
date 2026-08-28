@@ -1,4 +1,3 @@
-// src/routes/settings.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import { Volume2, VolumeX, Languages } from "lucide-react";
 import { RealmScreen } from "@/components/RealmScreen";
@@ -31,12 +30,16 @@ function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { muted, volume } = useSound();
 
+  function handleLanguageChange(code: string) {
+    i18n.changeLanguage(code);
+  }
+
   return (
     <RealmScreen image={hallOfLegends} alt="A quiet chamber of runes and scrolls" imagePosition="center 25%">
       <header className="pt-10 text-center">
         <RuneHeading>{t("settings.title", "Settings")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-center">
-          {t("settings.title")}
+          {t("settings.title", "Settings")}
         </h1>
       </header>
 
@@ -55,7 +58,7 @@ function SettingsPage() {
               className="w-full mt-2"
             />
           </div>
-          <button onClick={toggleMuted} className="text-xs px-3 py-1 rounded-full border-2">
+          <button type="button" onClick={toggleMuted} className="text-xs px-3 py-1 rounded-full border-2">
             {muted ? t("settings.unmute", "Unmute") : t("settings.mute", "Mute")}
           </button>
         </RunePanel>
@@ -64,13 +67,14 @@ function SettingsPage() {
           <Languages className="h-6 w-6 shrink-0" />
           <div className="flex-1">
             <p className="font-semibold">{t("settings.language", "Language")}</p>
-            <div className="flex gap-2 mt-2">
+            <div className="flex flex-wrap gap-2 mt-2">
               {LANGUAGES.map((l) => (
                 <button
+                  type="button"
                   key={l.code}
-                  onClick={() => i18n.changeLanguage(l.code)}
+                  onClick={() => handleLanguageChange(l.code)}
                   className={`text-xs px-3 py-1 rounded-full border-2 ${
-                    i18n.language === l.code ? "opacity-100" : "opacity-55"
+                    i18n.language === l.code ? "opacity-100 border-primary" : "opacity-55"
                   }`}
                 >
                   {l.label}
