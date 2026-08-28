@@ -11,8 +11,7 @@ import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, useGame } from "@/lib/game-store";
 import { levelProgress, titleForLevel, QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,7 +53,7 @@ function HomePage() {
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
 const { t } = useTranslation();
-  return (
+
     <RealmScreen
       image={homeKingdom}
       alt="A warrior on a cliff overlooking the moonlit magical kingdom of Aethora"
