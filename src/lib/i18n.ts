@@ -33,12 +33,17 @@ i18n
   });
 
 export function applyDirection(lang: string) {
+  if (typeof document === "undefined") return;
   const dir = RTL_LANGUAGES.includes(lang) ? "rtl" : "ltr";
   document.documentElement.dir = dir;
   document.documentElement.lang = lang;
 }
 
 i18n.on("languageChanged", applyDirection);
-applyDirection(i18n.language);
+
+// Only run on client side
+if (typeof window !== "undefined") {
+  applyDirection(i18n.language);
+}
 
 export default i18n;
