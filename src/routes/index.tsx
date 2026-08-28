@@ -52,7 +52,7 @@ function HomePage() {
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
-const { t } = useTranslation();
+
 
     <RealmScreen
       image={homeKingdom}
