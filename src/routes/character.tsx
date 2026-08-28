@@ -39,6 +39,7 @@ import {
   type EquipSlot,
 } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/character")({
   head: () => ({
@@ -79,6 +80,7 @@ const EQUIP_ICONS = {
 const SLOTS: EquipSlot[] = ["weapon", "armor", "relic"];
 
 function CharacterPage() {
+  const { t } = useTranslation();
   const game = useGame();
   const { user } = useAuth();
   const level = levelFromXp(game.xp);
@@ -92,9 +94,10 @@ function CharacterPage() {
       veil="soft"
     >
       <header className="pt-10 text-center">
-        <RuneHeading>The Warrior's Chamber</RuneHeading>
+        <RuneHeading>{t("character.warriorsChamber", "The Warrior's Chamber")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
-          Your Hero
+          {t("character.title", "Your Hero")}
+        </h1>
         </h1>
       </header>
 
@@ -270,7 +273,7 @@ function CharacterPage() {
           }
         }}
       >
-        <RotateCcw className="h-4 w-4" /> Begin Anew
+        <RotateCcw className="h-4 w-4" /> {t("character.beginAnew", "Begin Anew")}
       </button>
     </RealmScreen>
   );
