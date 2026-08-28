@@ -67,7 +67,7 @@ function GuidePage() {
         if (Array.isArray(parsed) && parsed.length > 0) setMessages(parsed);
       }
     } catch {
-      // corrupted scroll — start a fresh conversation
+      // corrupted — start a fresh conversation
     }
     setLoaded(true);
   }, []);
@@ -163,8 +163,7 @@ function GuidePage() {
               {t("guide.grandLibrary", "The Grand Library")}
             </p>
             <h1 className="text-glow-arcane font-display mt-1 text-2xl font-black tracking-[0.06em] text-foreground">
-              {t("guide.title", {t("guide.title", "The Arcane Guide")}
-            </h1>
+              {t("guide.title", "The Arcane Guide")}
             </h1>
           </div>
           <button
@@ -278,9 +277,9 @@ function GuidePage() {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask the Arcane Guide…"
+            placeholder={t("guide.askPlaceholder", "Ask the Arcane Guide…")}
             maxLength={1000}
-            className="h-12 flex-1 rounded-lg border border-input bg-background/70 px-4 text-sm text-foreground backdrop-blur-md placeholder={t("guide.askPlaceholder", "Ask the Arcane Guide…")} focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
+            className="h-12 flex-1 rounded-lg border border-input bg-background/70 px-4 text-sm text-foreground backdrop-blur-md placeholder:text-muted-foreground focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary/50"
           />
           <button
             type="submit"
