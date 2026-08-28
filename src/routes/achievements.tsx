@@ -18,6 +18,7 @@ import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { useGame } from "@/lib/game-store";
 import { ACHIEVEMENTS, RARITY_LABELS } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/achievements")({
   head: () => ({
@@ -54,6 +55,7 @@ const ACHIEVEMENT_ICONS = {
 } as const;
 
 function AchievementsPage() {
+  const { t } = useTranslation();
   const game = useGame();
   const unlockedCount = ACHIEVEMENTS.filter((a) => game.achievements.includes(a.id)).length;
 
@@ -64,12 +66,12 @@ function AchievementsPage() {
       imagePosition="center 25%"
     >
       <header className="pt-10 text-center">
-        <RuneHeading>Hall of Legends</RuneHeading>
+        <RuneHeading>{t("achievements.hallOfLegends", "Hall of Legends")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
-          Honors & Relics
-        </h1>
+          {t("achievements.title", "Honors & Relics")}
+            </h1>
         <p className="mt-2 text-xs tracking-wide text-muted-foreground">
-          {unlockedCount} of {ACHIEVEMENTS.length} honors claimed
+          {t("achievements.honorsClaimed", "{{count}} of {{total}} honors claimed", { count: unlockedCount, total: ACHIEVEMENTS.length })}
         </p>
       </header>
 
