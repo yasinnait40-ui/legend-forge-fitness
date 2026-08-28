@@ -5,13 +5,11 @@ import homeKingdom from "@/assets/home-kingdom.jpg";
 import arcaneWarrior from "@/assets/arcane-warrior.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { MonetagAdSlot } from "@/components/MonetagAdSlot";
-
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, useGame } from "@/lib/game-store";
 import { levelProgress, titleForLevel, QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
-
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,7 +39,6 @@ export const Route = createFileRoute("/")({
         name: "twitter:description",
         content: "Turn your daily workouts into a fantasy RPG adventure.",
       },
-
     ],
   }),
   component: HomePage,
@@ -51,9 +48,9 @@ function HomePage() {
   const { t } = useTranslation();
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
-  const doneCount = QUESTS.filter((q) =>return ( questsDoneToday(game).includes(q.id)).length;
+  const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
 
-
+  return (
     <RealmScreen
       image={homeKingdom}
       alt="A warrior on a cliff overlooking the moonlit magical kingdom of Aethora"
@@ -61,7 +58,6 @@ function HomePage() {
       veil="soft"
       eager
     >
-      {/* Wordmark */}
       <header className="pt-14 text-center">
         <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-primary/85">
           The Realm of
@@ -74,10 +70,8 @@ function HomePage() {
         </p>
       </header>
 
-      {/* Let the artwork breathe */}
       <div className="h-[26dvh]" aria-hidden="true" />
 
-      {/* Character summary */}
       <RunePanel>
         <div className="flex items-center gap-4">
           <img
@@ -124,7 +118,6 @@ function HomePage() {
         </div>
       </RunePanel>
 
-      {/* {t("home.attributes")} */}
       <RunePanel className="mt-4">
         <RuneHeading>Attributes</RuneHeading>
         <div className="mt-3 space-y-3">
@@ -134,7 +127,6 @@ function HomePage() {
         </div>
       </RunePanel>
 
-      {/* Streak + daily quest progress */}
       <div className="mt-4 grid grid-cols-2 gap-4">
         <RunePanel className="text-center">
           <Flame
@@ -164,7 +156,6 @@ function HomePage() {
         </Link>
       </div>
 
-      {/* Call to adventure */}
       <div className="mt-5 space-y-3">
         <Link to="/trials" className="block">
           <span className="btn-gold">
@@ -180,6 +171,5 @@ function HomePage() {
 
       <MonetagAdSlot />
     </RealmScreen>
-
   );
 }
