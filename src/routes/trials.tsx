@@ -9,11 +9,12 @@ import { announceRewards } from "@/lib/rewards";
 import { playSound } from "@/lib/sound-store";
 import { TRIALS, STAT_LABELS, type StatKey, type Trial } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/trials")({
   head: () => ({
     meta: [
-      { title: "Training Trials — Workouts of the Arena | AETHORA" },
+      { title: "Training Trials — {t("trials.title", "Trials of the Arena")} | AETHORA" },
       {
         name: "description",
         content:
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/trials")({
 });
 
 function TrialsPage() {
+  const { t } = useTranslation();
   const game = useGame();
   const done = trialsDoneToday(game);
   const [openId, setOpenId] = useState<string | null>(TRIALS[0]?.id ?? null);
@@ -51,12 +53,11 @@ function TrialsPage() {
       imagePosition="center 30%"
     >
       <header className="pt-10 text-center">
-        <RuneHeading>The Training Grounds</RuneHeading>
+        <RuneHeading>{t("trials.trainingGrounds", "The Training Grounds")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
-          Trials of the Arena
+          {t("trials.title", "Trials of the Arena")}
         </h1>
-        <p className="mt-2 text-xs tracking-wide text-muted-foreground">
-          Step into the rune circle. Each trial lists its rites — complete them all.
+        {t("trials.subtitle", "Step into the rune circle. Each trial lists its rites — complete them all.")}
         </p>
       </header>
 
@@ -104,7 +105,7 @@ function TrialsPage() {
               {open && (
                 <div className="mt-3 border-t border-primary/15 pt-3">
                   <p className="font-display mb-2 text-[0.62rem] font-bold uppercase tracking-[0.25em] text-muted-foreground">
-                    Rites of the Trial
+                    {t("trials.rites", "Rites of the Trial")}
                   </p>
                   <div className="space-y-2">
                     {t.exercises.map((ex, i) => (
@@ -139,9 +140,7 @@ function TrialsPage() {
                         </span>
                       </div>
                     ) : (
-                      <button className="btn-gold" onClick={() => handleComplete(t)}>
-                        Complete Trial
-                      </button>
+                      {t("trials.completeTrial", "Complete Trial")}
                     )}
                   </div>
                 </div>
