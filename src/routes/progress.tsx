@@ -162,10 +162,10 @@ function ProgressPage() {
       <header className="pt-10 text-center">
         <RuneHeading>{t("progress.observatory", "The Observatory")}</RuneHeading>
         <h1 className="text-glow-gold font-display mt-3 text-3xl font-black tracking-[0.08em] text-primary">
-          Your Legend
+          {t("progress.title", "Your Legend")}
         </h1>
         <p className="mt-2 text-xs tracking-wide text-muted-foreground">
-          {titleForLevel(level)} · {game.xp.toLocaleString()} total XP
+          {titleForLevel(level)} · {game.xp.toLocaleString()} {t("progress.totalXp", "total XP")}
         </p>
       </header>
 
@@ -258,31 +258,31 @@ function ProgressPage() {
           <Swords className="mx-auto h-5 w-5 text-primary" />
           <p className="font-display mt-1 text-xl font-black">{game.totalTrials}</p>
           <p className="text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground">
-            Trials Won
+            {t("progress.trialsWon", "Trials Won")}
           </p>
         </RunePanel>
         <RunePanel className="text-center !p-3">
           <ScrollText className="mx-auto h-5 w-5 text-accent" />
           <p className="font-display mt-1 text-xl font-black">{game.totalQuests}</p>
           <p className="text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground">
-            Quests Sealed
+            {t("progress.questsSealed", "Quests Sealed")}
           </p>
         </RunePanel>
         <RunePanel className="text-center !p-3">
           <Flame className="mx-auto h-5 w-5 text-stat-strength" />
           <p className="font-display mt-1 text-xl font-black">{game.bestStreak}</p>
           <p className="text-[0.55rem] uppercase tracking-[0.14em] text-muted-foreground">
-            Longest Flame
+            {t("progress.longestFlame", "Longest Flame")}
           </p>
         </RunePanel>
       </div>
 
       {/* Chronicle */}
       <RunePanel className="mt-4">
-        <RuneHeading>The Chronicle</RuneHeading>
+        <RuneHeading>{t("progress.chronicle", "The Chronicle")}</RuneHeading>
         {game.workoutLog.length === 0 ? (
           <p className="mt-3 text-sm italic text-muted-foreground">
-            No deeds recorded yet. Conquer a trial and the scribes will write of you.
+            {t("progress.noDeeds", "No deeds recorded yet. Conquer a trial and the scribes will write of you.")}
           </p>
         ) : (
           <div className="mt-3 space-y-2">
