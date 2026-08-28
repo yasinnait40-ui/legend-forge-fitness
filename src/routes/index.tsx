@@ -51,7 +51,7 @@ function HomePage() {
   const { t } = useTranslation();
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
-  const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
+  const doneCount = QUESTS.filter((q) =>return ( questsDoneToday(game).includes(q.id)).length;
 
 
     <RealmScreen
