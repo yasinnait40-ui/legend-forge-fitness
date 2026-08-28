@@ -51,6 +51,7 @@ const QUEST_ICONS = {
 function QuestsPage() {
   const { t } = useTranslation();
   const game = useGame();
+  const questsDone = questsDoneToday();
 
   function handleComplete(q: Quest) {
     const result = completeQuest(q.id, q.xp, q.stats);
@@ -78,7 +79,7 @@ function QuestsPage() {
 
       <div className="mt-6 space-y-4">
         {QUESTS.map((q) => {
-          const isDone = done.includes(q.id);
+          const isDone = questsDone.includes(q.id);
           const Icon = QUEST_ICONS[q.icon as keyof typeof QUEST_ICONS];
           return (
             <RunePanel key={q.id}>
@@ -122,7 +123,14 @@ function QuestsPage() {
                     </span>
                   </div>
                 ) : (
-                  {t("quests.markComplete", "Mark Complete")﴿
+                  <button
+                    onClick={() => handleComplete(q)}
+                    className="flex w-full items-center justify-center gap-2 rounded-md border border-primary/40 bg-primary/10 py-2.5 transition hover:bg-primary/20"
+                  >
+                    <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em] text-primary">
+                      {t("quests.markComplete", "Mark Complete")}
+                    </span>
+                  </button>
                 )}
               </div>
             </RunePanel>
