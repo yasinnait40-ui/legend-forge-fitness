@@ -126,5 +126,303 @@
     "language": "Langue",
     "notifications": "Notifications",
     "about": "À Propos"
+  },
+  "game": {
+    "stats": {
+      "strength": "Force",
+      "endurance": "Endurance",
+      "agility": "Agilité",
+      "vitality": "Vitalité",
+      "recovery": "Récupération"
+    },
+    "rarity": {
+      "common": "Commun",
+      "uncommon": "Peu commun",
+      "rare": "Rare",
+      "epic": "Épique",
+      "legendary": "Légendaire"
+    },
+    "slots": {
+      "weapon": "Arme",
+      "armor": "Armure",
+      "relic": "Relique"
+    },
+    "titles": {
+      "eternal-legend": "Légende Éternelle",
+      "mythic-sovereign": "Souverain Mythique",
+      "dragonheart": "Cœur de Dragon",
+      "storm-warden": "Gardien des Tempêtes",
+      "rune-knight": "Chevalier Runique",
+      "arcane-warrior": "Guerrier Arcanique",
+      "blade-adept": "Adepte de la Lame",
+      "squire-of-the-keep": "Écuyer du Donjon",
+      "ember-initiate": "Initié des Braises",
+      "wanderer-of-the-wilds": "Vagabond des Terres Sauvages"
+    },
+    "quests": {
+      "trial-of-strength": {
+        "name": "Épreuve de Force",
+        "description": "Effectuez 30 pompes avant la fin du jour."
+      },
+      "path-of-endurance": {
+        "name": "Voie de l'Endurance",
+        "description": "Marchez ou courez 3 km sous le ciel ouvert."
+      },
+      "guardians-discipline": {
+        "name": "Discipline du Gardien",
+        "description": "Terminez l'épreuve d'entraînement du jour.",
+        "auto": "Se scelle d'elle-même dès qu'une épreuve est conquise."
+      },
+      "breath-of-the-forest": {
+        "name": "Souffle de la Forêt",
+        "description": "10 minutes d'étirements ou de mobilité."
+      },
+      "shadow-swiftness": {
+        "name": "Célérité de l'Ombre",
+        "description": "50 jumping jacks ou 10 minutes d'agilité."
+      },
+      "feast-of-the-keep": {
+        "name": "Festin du Donjon",
+        "description": "Prenez un repas riche en protéines et buvez 2 L d'eau."
+      }
+    },
+    "trials": {
+      "iron-chest": {
+        "name": "Épreuve du Torse de Fer",
+        "epithet": "Forgez le rempart du haut du corps",
+        "exercises": [
+          {
+            "name": "Développé couché (ou au sol)",
+            "sets": "4 × 12"
+          },
+          {
+            "name": "Pompes",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "Développé incliné haltères",
+            "sets": "3 × 12"
+          },
+          {
+            "name": "Écartés pectoraux",
+            "sets": "3 × 15"
+          }
+        ]
+      },
+      "ember-core": {
+        "name": "Rite du Noyau de Braise",
+        "epithet": "Attisez le feu en votre centre",
+        "exercises": [
+          {
+            "name": "Planche",
+            "sets": "3 × 60 s"
+          },
+          {
+            "name": "Crunchs",
+            "sets": "3 × 20"
+          },
+          {
+            "name": "Russian twists",
+            "sets": "3 × 20"
+          },
+          {
+            "name": "Relevés de jambes",
+            "sets": "3 × 12"
+          }
+        ]
+      },
+      "wardens-keep": {
+        "name": "Donjon Inférieur du Gardien",
+        "epithet": "Bâtissez des fondations de pierre",
+        "exercises": [
+          {
+            "name": "Squats",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "Fentes marchées",
+            "sets": "3 × 12 / jambe"
+          },
+          {
+            "name": "Pont fessier",
+            "sets": "3 × 15"
+          },
+          {
+            "name": "Extensions mollets",
+            "sets": "4 × 20"
+          },
+          {
+            "name": "Chaise contre le mur",
+            "sets": "3 × 45 s"
+          }
+        ]
+      },
+      "stormwind-run": {
+        "name": "Course du Vent de Tempête",
+        "epithet": "Devancez la tempête qui monte",
+        "exercises": [
+          {
+            "name": "Footing d'échauffement",
+            "sets": "5 min"
+          },
+          {
+            "name": "Intervalles rapides",
+            "sets": "8 × 1 min"
+          },
+          {
+            "name": "Marche de récupération",
+            "sets": "1 min entre les intervalles"
+          },
+          {
+            "name": "Marche de retour au calme",
+            "sets": "4 min"
+          }
+        ]
+      },
+      "nightblade-mobility": {
+        "name": "Mobilité de la Lame Nocturne",
+        "epithet": "Mouvez-vous aussi silencieusement que l'ombre",
+        "exercises": [
+          {
+            "name": "Le plus grand étirement du monde",
+            "sets": "3 / côté"
+          },
+          {
+            "name": "Squat profond tenu",
+            "sets": "3 × 30 s"
+          },
+          {
+            "name": "Chat-vache",
+            "sets": "2 × 10"
+          },
+          {
+            "name": "Ouverture des épaules",
+            "sets": "2 × 40 s"
+          }
+        ]
+      },
+      "dragon-slayer": {
+        "name": "Gantelet du Tueur de Dragons",
+        "epithet": "Seules les légendes achèvent ce rite",
+        "exercises": [
+          {
+            "name": "Burpees",
+            "sets": "4 × 12"
+          },
+          {
+            "name": "Tractions (ou rowing)",
+            "sets": "4 × 8"
+          },
+          {
+            "name": "Squats goblet",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "Pompes",
+            "sets": "4 × 20"
+          },
+          {
+            "name": "Mountain climbers",
+            "sets": "4 × 40"
+          },
+          {
+            "name": "Planche",
+            "sets": "3 × 60 s"
+          }
+        ]
+      }
+    },
+    "achievements": {
+      "first-quest": {
+        "name": "Première Quête",
+        "flavor": "Répondez pour la première fois à l'appel de la guilde."
+      },
+      "first-trial": {
+        "name": "Sang de l'Arène",
+        "flavor": "Conquérez votre première épreuve d'entraînement."
+      },
+      "rune-awakened": {
+        "name": "Rune Éveillée",
+        "flavor": "Atteignez le niveau 5."
+      },
+      "seven-day-flame": {
+        "name": "Flamme des Sept Jours",
+        "flavor": "Tenez une série de 7 jours sans la briser."
+      },
+      "night-runner": {
+        "name": "Coureur Nocturne",
+        "flavor": "Portez l'Endurance à 40."
+      },
+      "iron-will": {
+        "name": "Volonté de Fer",
+        "flavor": "Conquérez 10 épreuves d'entraînement."
+      },
+      "dragon-slayer": {
+        "name": "Tueur de Dragons",
+        "flavor": "Survivez au Gantelet du Tueur de Dragons."
+      },
+      "stormheart": {
+        "name": "Cœur de Tempête",
+        "flavor": "Tenez une série de 14 jours."
+      },
+      "legendary-discipline": {
+        "name": "Discipline Légendaire",
+        "flavor": "Atteignez le niveau 20."
+      },
+      "titan-physique": {
+        "name": "Physique de Titan",
+        "flavor": "Portez la Force à 60."
+      }
+    },
+    "equipment": {
+      "worn-iron-blade": {
+        "name": "Lame de Fer Usée",
+        "flavor": "Toute légende commence par un acier modeste."
+      },
+      "emberforged-sword": {
+        "name": "Épée Forgée aux Braises",
+        "flavor": "Trempée dans le feu du dragon, tiède au toucher."
+      },
+      "moonlit-runesaber": {
+        "name": "Sabre Runique Lunaire",
+        "flavor": "Ses runes brillent sous la pleine lune."
+      },
+      "dragonfang-greatblade": {
+        "name": "Grande Lame Croc-de-Dragon",
+        "flavor": "Taillée dans le croc de Vharos l'Aile-de-Cendre."
+      },
+      "travelers-garb": {
+        "name": "Tenue du Voyageur",
+        "flavor": "Poussiéreuse, rapiécée et fiable."
+      },
+      "squires-plate": {
+        "name": "Plastron de l'Écuyer",
+        "flavor": "La première vraie armure du Donjon."
+      },
+      "runebound-aegis": {
+        "name": "Égide Runique",
+        "flavor": "Des protections bourdonnent doucement sur les plaques."
+      },
+      "celestial-warplate": {
+        "name": "Armure Céleste",
+        "flavor": "Forgée dans le cœur d'une étoile tombée."
+      },
+      "cracked-mana-stone": {
+        "name": "Pierre de Mana Fêlée",
+        "flavor": "Elle vibre encore d'un faible pouvoir."
+      },
+      "whispering-amulet": {
+        "name": "Amulette Murmurante",
+        "flavor": "Elle murmure des conseils que vous seul entendez."
+      },
+      "eye-of-the-observatory": {
+        "name": "Œil de l'Observatoire",
+        "flavor": "Il voit le chemin avant que vous ne l'empruntiez."
+      },
+      "heart-of-aethora": {
+        "name": "Cœur d'Aethora",
+        "flavor": "Le pouls même du royaume, au creux de la main."
+      }
+    }
   }
 }

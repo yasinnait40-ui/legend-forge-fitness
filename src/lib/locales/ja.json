@@ -126,5 +126,303 @@
     "language": "言語",
     "notifications": "通知",
     "about": "このアプリについて"
+  },
+  "game": {
+    "stats": {
+      "strength": "筋力",
+      "endurance": "持久力",
+      "agility": "敏捷",
+      "vitality": "活力",
+      "recovery": "回復"
+    },
+    "rarity": {
+      "common": "コモン",
+      "uncommon": "アンコモン",
+      "rare": "レア",
+      "epic": "エピック",
+      "legendary": "レジェンダリー"
+    },
+    "slots": {
+      "weapon": "武器",
+      "armor": "鎧",
+      "relic": "遺物"
+    },
+    "titles": {
+      "eternal-legend": "永遠の伝説",
+      "mythic-sovereign": "神話の君主",
+      "dragonheart": "竜の心",
+      "storm-warden": "嵐の守護者",
+      "rune-knight": "ルーンの騎士",
+      "arcane-warrior": "秘術の戦士",
+      "blade-adept": "剣の達人",
+      "squire-of-the-keep": "城砦の従者",
+      "ember-initiate": "残り火の見習い",
+      "wanderer-of-the-wilds": "荒野の放浪者"
+    },
+    "quests": {
+      "trial-of-strength": {
+        "name": "力の試練",
+        "description": "一日が終わる前に腕立て伏せを30回こなせ。"
+      },
+      "path-of-endurance": {
+        "name": "持久の道",
+        "description": "大空の下を3km歩くか走れ。"
+      },
+      "guardians-discipline": {
+        "name": "守護者の規律",
+        "description": "本日の訓練の試練を完了せよ。",
+        "auto": "いずれかの試練を制すると自動で封印される。"
+      },
+      "breath-of-the-forest": {
+        "name": "森の息吹",
+        "description": "10分間のストレッチまたは可動域トレーニング。"
+      },
+      "shadow-swiftness": {
+        "name": "影の疾さ",
+        "description": "ジャンピングジャック50回、または敏捷ドリル10分。"
+      },
+      "feast-of-the-keep": {
+        "name": "城砦の饗宴",
+        "description": "高タンパクの食事をとり、水を2L飲め。"
+      }
+    },
+    "trials": {
+      "iron-chest": {
+        "name": "鋼の胸の試練",
+        "epithet": "上半身の防壁を鍛えよ",
+        "exercises": [
+          {
+            "name": "ベンチプレス（またはフロアプレス）",
+            "sets": "4 × 12"
+          },
+          {
+            "name": "腕立て伏せ",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "インクラインダンベルプレス",
+            "sets": "3 × 12"
+          },
+          {
+            "name": "チェストフライ",
+            "sets": "3 × 15"
+          }
+        ]
+      },
+      "ember-core": {
+        "name": "残り火の体幹儀式",
+        "epithet": "己の中心に火を灯せ",
+        "exercises": [
+          {
+            "name": "プランク",
+            "sets": "3 × 60秒"
+          },
+          {
+            "name": "クランチ",
+            "sets": "3 × 20"
+          },
+          {
+            "name": "ロシアンツイスト",
+            "sets": "3 × 20"
+          },
+          {
+            "name": "レッグレイズ",
+            "sets": "3 × 12"
+          }
+        ]
+      },
+      "wardens-keep": {
+        "name": "守護者の下層城砦",
+        "epithet": "石の礎を築け",
+        "exercises": [
+          {
+            "name": "スクワット",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "ウォーキングランジ",
+            "sets": "3 × 12（片脚）"
+          },
+          {
+            "name": "ヒップリフト",
+            "sets": "3 × 15"
+          },
+          {
+            "name": "カーフレイズ",
+            "sets": "4 × 20"
+          },
+          {
+            "name": "ウォールシット",
+            "sets": "3 × 45秒"
+          }
+        ]
+      },
+      "stormwind-run": {
+        "name": "嵐風の疾走",
+        "epithet": "迫る嵐を振り切れ",
+        "exercises": [
+          {
+            "name": "ウォームアップジョグ",
+            "sets": "5分"
+          },
+          {
+            "name": "高速インターバル",
+            "sets": "8 × 1分"
+          },
+          {
+            "name": "回復ウォーク",
+            "sets": "インターバル間に1分"
+          },
+          {
+            "name": "クールダウンウォーク",
+            "sets": "4分"
+          }
+        ]
+      },
+      "nightblade-mobility": {
+        "name": "夜刃のモビリティ",
+        "epithet": "影の如く静かに動け",
+        "exercises": [
+          {
+            "name": "ワールドグレイテストストレッチ",
+            "sets": "3回（左右）"
+          },
+          {
+            "name": "ディープスクワット保持",
+            "sets": "3 × 30秒"
+          },
+          {
+            "name": "キャット&カウ",
+            "sets": "2 × 10"
+          },
+          {
+            "name": "ショルダーオープナー",
+            "sets": "2 × 40秒"
+          }
+        ]
+      },
+      "dragon-slayer": {
+        "name": "竜殺しの試練",
+        "epithet": "この儀式を終えるのは伝説のみ",
+        "exercises": [
+          {
+            "name": "バーピー",
+            "sets": "4 × 12"
+          },
+          {
+            "name": "懸垂（またはロー）",
+            "sets": "4 × 8"
+          },
+          {
+            "name": "ゴブレットスクワット",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "腕立て伏せ",
+            "sets": "4 × 20"
+          },
+          {
+            "name": "マウンテンクライマー",
+            "sets": "4 × 40"
+          },
+          {
+            "name": "プランク",
+            "sets": "3 × 60秒"
+          }
+        ]
+      }
+    },
+    "achievements": {
+      "first-quest": {
+        "name": "最初のクエスト",
+        "flavor": "ギルドの呼びかけに初めて応じる。"
+      },
+      "first-trial": {
+        "name": "闘技場の血",
+        "flavor": "最初の訓練の試練を制す。"
+      },
+      "rune-awakened": {
+        "name": "ルーン覚醒",
+        "flavor": "レベル5に到達する。"
+      },
+      "seven-day-flame": {
+        "name": "七日の炎",
+        "flavor": "7日連続の記録を途切れさせない。"
+      },
+      "night-runner": {
+        "name": "夜の走者",
+        "flavor": "持久力を40まで上げる。"
+      },
+      "iron-will": {
+        "name": "鉄の意志",
+        "flavor": "訓練の試練を10回制す。"
+      },
+      "dragon-slayer": {
+        "name": "竜殺し",
+        "flavor": "竜殺しの試練を生き延びる。"
+      },
+      "stormheart": {
+        "name": "嵐の心",
+        "flavor": "14日連続の記録を保つ。"
+      },
+      "legendary-discipline": {
+        "name": "伝説の規律",
+        "flavor": "レベル20に到達する。"
+      },
+      "titan-physique": {
+        "name": "巨人の体躯",
+        "flavor": "筋力を60まで上げる。"
+      }
+    },
+    "equipment": {
+      "worn-iron-blade": {
+        "name": "使い古された鉄の刃",
+        "flavor": "どの伝説も質素な鋼から始まる。"
+      },
+      "emberforged-sword": {
+        "name": "残り火鍛えの剣",
+        "flavor": "竜火で焼き入れされ、触れると温かい。"
+      },
+      "moonlit-runesaber": {
+        "name": "月光のルーンセイバー",
+        "flavor": "満月の下でルーンが輝く。"
+      },
+      "dragonfang-greatblade": {
+        "name": "竜牙の大剣",
+        "flavor": "灰翼のヴァロスの牙から削り出された。"
+      },
+      "travelers-garb": {
+        "name": "旅人の装束",
+        "flavor": "埃まみれで継ぎ接ぎ、それでも頼れる。"
+      },
+      "squires-plate": {
+        "name": "従者の甲冑",
+        "flavor": "城砦で得る最初の本物の鎧。"
+      },
+      "runebound-aegis": {
+        "name": "ルーン縛りのイージス",
+        "flavor": "板金の上で守りの呪が静かに鳴る。"
+      },
+      "celestial-warplate": {
+        "name": "天星の戦装甲",
+        "flavor": "堕ちた星の核から鍛えられた。"
+      },
+      "cracked-mana-stone": {
+        "name": "ひび割れたマナ石",
+        "flavor": "今もかすかな力で震えている。"
+      },
+      "whispering-amulet": {
+        "name": "囁きの護符",
+        "flavor": "あなただけに助言を囁く。"
+      },
+      "eye-of-the-observatory": {
+        "name": "天文台の瞳",
+        "flavor": "歩む前に道を見通す。"
+      },
+      "heart-of-aethora": {
+        "name": "アイソラの心臓",
+        "flavor": "王国の鼓動を掌に。"
+      }
+    }
   }
 }
