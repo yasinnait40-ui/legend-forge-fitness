@@ -126,5 +126,303 @@
     "language": "Idioma",
     "notifications": "Notificaciones",
     "about": "Acerca de"
+  },
+  "game": {
+    "stats": {
+      "strength": "Fuerza",
+      "endurance": "Resistencia",
+      "agility": "Agilidad",
+      "vitality": "Vitalidad",
+      "recovery": "Recuperación"
+    },
+    "rarity": {
+      "common": "Común",
+      "uncommon": "Poco común",
+      "rare": "Raro",
+      "epic": "Épico",
+      "legendary": "Legendario"
+    },
+    "slots": {
+      "weapon": "Arma",
+      "armor": "Armadura",
+      "relic": "Reliquia"
+    },
+    "titles": {
+      "eternal-legend": "Leyenda Eterna",
+      "mythic-sovereign": "Soberano Mítico",
+      "dragonheart": "Corazón de Dragón",
+      "storm-warden": "Guardián de Tormentas",
+      "rune-knight": "Caballero Rúnico",
+      "arcane-warrior": "Guerrero Arcano",
+      "blade-adept": "Adepto de la Hoja",
+      "squire-of-the-keep": "Escudero del Torreón",
+      "ember-initiate": "Iniciado de las Brasas",
+      "wanderer-of-the-wilds": "Errante de las Tierras Salvajes"
+    },
+    "quests": {
+      "trial-of-strength": {
+        "name": "Prueba de Fuerza",
+        "description": "Completa 30 flexiones antes de que acabe el día."
+      },
+      "path-of-endurance": {
+        "name": "Sendero de la Resistencia",
+        "description": "Camina o corre 3 km bajo el cielo abierto."
+      },
+      "guardians-discipline": {
+        "name": "Disciplina del Guardián",
+        "description": "Completa la prueba de entrenamiento de hoy.",
+        "auto": "Se sella sola al conquistar cualquier prueba."
+      },
+      "breath-of-the-forest": {
+        "name": "Aliento del Bosque",
+        "description": "10 minutos de estiramientos o movilidad."
+      },
+      "shadow-swiftness": {
+        "name": "Rapidez de la Sombra",
+        "description": "50 saltos de tijera o 10 minutos de agilidad."
+      },
+      "feast-of-the-keep": {
+        "name": "Festín del Torreón",
+        "description": "Come una comida rica en proteínas y bebe 2 L de agua."
+      }
+    },
+    "trials": {
+      "iron-chest": {
+        "name": "Prueba del Pecho de Hierro",
+        "epithet": "Forja el baluarte del tren superior",
+        "exercises": [
+          {
+            "name": "Press de banca (o press en suelo)",
+            "sets": "4 × 12"
+          },
+          {
+            "name": "Flexiones",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "Press inclinado con mancuernas",
+            "sets": "3 × 12"
+          },
+          {
+            "name": "Aperturas de pecho",
+            "sets": "3 × 15"
+          }
+        ]
+      },
+      "ember-core": {
+        "name": "Rito del Núcleo de Brasas",
+        "epithet": "Aviva el fuego de tu centro",
+        "exercises": [
+          {
+            "name": "Plancha",
+            "sets": "3 × 60 s"
+          },
+          {
+            "name": "Abdominales",
+            "sets": "3 × 20"
+          },
+          {
+            "name": "Giros rusos",
+            "sets": "3 × 20"
+          },
+          {
+            "name": "Elevaciones de piernas",
+            "sets": "3 × 12"
+          }
+        ]
+      },
+      "wardens-keep": {
+        "name": "Torreón Inferior del Guardián",
+        "epithet": "Construye cimientos de piedra",
+        "exercises": [
+          {
+            "name": "Sentadillas",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "Zancadas caminando",
+            "sets": "3 × 12 / pierna"
+          },
+          {
+            "name": "Puente de glúteos",
+            "sets": "3 × 15"
+          },
+          {
+            "name": "Elevaciones de gemelos",
+            "sets": "4 × 20"
+          },
+          {
+            "name": "Sentadilla isométrica en pared",
+            "sets": "3 × 45 s"
+          }
+        ]
+      },
+      "stormwind-run": {
+        "name": "Carrera del Viento Tormentoso",
+        "epithet": "Adelanta a la tormenta que se acerca",
+        "exercises": [
+          {
+            "name": "Trote de calentamiento",
+            "sets": "5 min"
+          },
+          {
+            "name": "Intervalos rápidos",
+            "sets": "8 × 1 min"
+          },
+          {
+            "name": "Caminata de recuperación",
+            "sets": "1 min entre intervalos"
+          },
+          {
+            "name": "Caminata de enfriamiento",
+            "sets": "4 min"
+          }
+        ]
+      },
+      "nightblade-mobility": {
+        "name": "Movilidad del Filo Nocturno",
+        "epithet": "Muévete tan silencioso como la sombra",
+        "exercises": [
+          {
+            "name": "El mejor estiramiento del mundo",
+            "sets": "3 / lado"
+          },
+          {
+            "name": "Sentadilla profunda sostenida",
+            "sets": "3 × 30 s"
+          },
+          {
+            "name": "Gato-vaca",
+            "sets": "2 × 10"
+          },
+          {
+            "name": "Apertura de hombros",
+            "sets": "2 × 40 s"
+          }
+        ]
+      },
+      "dragon-slayer": {
+        "name": "Guantelete del Matadragones",
+        "epithet": "Solo las leyendas terminan este rito",
+        "exercises": [
+          {
+            "name": "Burpees",
+            "sets": "4 × 12"
+          },
+          {
+            "name": "Dominadas (o remo)",
+            "sets": "4 × 8"
+          },
+          {
+            "name": "Sentadillas goblet",
+            "sets": "4 × 15"
+          },
+          {
+            "name": "Flexiones",
+            "sets": "4 × 20"
+          },
+          {
+            "name": "Escaladores",
+            "sets": "4 × 40"
+          },
+          {
+            "name": "Plancha",
+            "sets": "3 × 60 s"
+          }
+        ]
+      }
+    },
+    "achievements": {
+      "first-quest": {
+        "name": "Primera Misión",
+        "flavor": "Responde por primera vez a la llamada del gremio."
+      },
+      "first-trial": {
+        "name": "Sangre de la Arena",
+        "flavor": "Conquista tu primera prueba de entrenamiento."
+      },
+      "rune-awakened": {
+        "name": "Runa Despertada",
+        "flavor": "Alcanza el nivel 5."
+      },
+      "seven-day-flame": {
+        "name": "Llama de Siete Días",
+        "flavor": "Mantén una racha de 7 días sin romperla."
+      },
+      "night-runner": {
+        "name": "Corredor Nocturno",
+        "flavor": "Sube Resistencia a 40."
+      },
+      "iron-will": {
+        "name": "Voluntad de Hierro",
+        "flavor": "Conquista 10 pruebas de entrenamiento."
+      },
+      "dragon-slayer": {
+        "name": "Matadragones",
+        "flavor": "Sobrevive al Guantelete del Matadragones."
+      },
+      "stormheart": {
+        "name": "Corazón de Tormenta",
+        "flavor": "Mantén una racha de 14 días."
+      },
+      "legendary-discipline": {
+        "name": "Disciplina Legendaria",
+        "flavor": "Alcanza el nivel 20."
+      },
+      "titan-physique": {
+        "name": "Físico del Titán",
+        "flavor": "Sube Fuerza a 60."
+      }
+    },
+    "equipment": {
+      "worn-iron-blade": {
+        "name": "Hoja de Hierro Gastada",
+        "flavor": "Toda leyenda comienza con acero humilde."
+      },
+      "emberforged-sword": {
+        "name": "Espada Forjada en Brasas",
+        "flavor": "Templada en fuego de dragón, cálida al tacto."
+      },
+      "moonlit-runesaber": {
+        "name": "Sable Rúnico Lunar",
+        "flavor": "Sus runas brillan bajo la luna llena."
+      },
+      "dragonfang-greatblade": {
+        "name": "Gran Hoja Colmillo de Dragón",
+        "flavor": "Tallada del colmillo de Vharos el Alaceniza."
+      },
+      "travelers-garb": {
+        "name": "Atuendo del Viajero",
+        "flavor": "Polvoriento, remendado y fiable."
+      },
+      "squires-plate": {
+        "name": "Coraza del Escudero",
+        "flavor": "La primera armadura verdadera del Torreón."
+      },
+      "runebound-aegis": {
+        "name": "Égida Rúnica",
+        "flavor": "Las guardas zumban suavemente sobre las placas."
+      },
+      "celestial-warplate": {
+        "name": "Coraza Celestial",
+        "flavor": "Forjada del corazón de una estrella caída."
+      },
+      "cracked-mana-stone": {
+        "name": "Piedra de Maná Agrietada",
+        "flavor": "Aún zumba con un poder tenue."
+      },
+      "whispering-amulet": {
+        "name": "Amuleto Susurrante",
+        "flavor": "Murmura consejos que solo tú escuchas."
+      },
+      "eye-of-the-observatory": {
+        "name": "Ojo del Observatorio",
+        "flavor": "Ve el camino antes de que lo recorras."
+      },
+      "heart-of-aethora": {
+        "name": "Corazón de Aethora",
+        "flavor": "El propio pulso del reino, en tu palma."
+      }
+    }
   }
 }
