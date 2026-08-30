@@ -33,11 +33,10 @@ import {
   EQUIPMENT,
   levelFromXp,
   levelProgress,
-  titleForLevel,
-  SLOT_LABELS,
   STAT_ORDER,
   type EquipSlot,
 } from "@/lib/game-data";
+import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -81,6 +80,7 @@ const SLOTS: EquipSlot[] = ["weapon", "armor", "relic"];
 
 function CharacterPage() {
   const { t } = useTranslation();
+  const g = useGameText();
   const game = useGame();
   const { user } = useAuth();
   const level = levelFromXp(game.xp);
@@ -115,14 +115,14 @@ function CharacterPage() {
           <div className="absolute inset-x-0 bottom-0 p-4">
             <div className="flex items-end justify-between gap-3">
               <div>
-                <p className="font-display text-xl font-bold leading-tight">Arcane Warrior</p>
+                <p className="font-display text-xl font-bold leading-tight">{t("home.heroName")}</p>
                 <p className="mt-0.5 text-[0.68rem] uppercase tracking-[0.24em] text-primary">
-                  {titleForLevel(level)}
+                  {g.title(level)}
                 </p>
               </div>
               <div className="text-right">
                 <p className="font-display text-[0.56rem] uppercase tracking-[0.26em] text-muted-foreground">
-                  Level
+                  {t("character.level")}
                 </p>
                 <p className="text-glow-gold font-display text-3xl font-black text-primary">
                   {level}
@@ -149,7 +149,7 @@ function CharacterPage() {
 
       {/* Attributes */}
       <RunePanel className="mt-4">
-        <RuneHeading>Attributes</RuneHeading>
+        <RuneHeading>{t("character.attributes")}</RuneHeading>
         <div className="mt-3 space-y-3">
           {STAT_ORDER.map((s) => (
             <StatBar key={s} stat={s} value={game.stats[s]} />
@@ -160,7 +160,7 @@ function CharacterPage() {
       {/* Equipment */}
       {SLOTS.map((slot) => (
         <RunePanel key={slot} className="mt-4">
-          <RuneHeading>{SLOT_LABELS[slot]}</RuneHeading>
+          <RuneHeading>{g.slot(slot)}</RuneHeading>
           <div className="mt-3 space-y-2">
             {EQUIPMENT.filter((i) => i.slot === slot).map((item) => {
               const locked = level < item.levelReq;
@@ -172,7 +172,9 @@ function CharacterPage() {
                   disabled={locked || equipped}
                   onClick={() => {
                     equipItem(slot, item.id);
-                    toast.success(`${item.name} equipped`, { description: item.flavor });
+                    toast.success(`${g.item(item).name} ${t("character.equipped")}`, {
+                      description: g.item(item).flavor,
+                    });
                   }}
                   className={cn(
                     "flex w-full items-center gap-3 rounded-md border px-3 py-2.5 text-left transition-all duration-200",
@@ -190,9 +192,9 @@ function CharacterPage() {
                     )}
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-semibold">{item.name}</span>
+                    <span className="block truncate text-sm font-semibold">{g.item(item).name}</span>
                     <span className="block text-[0.7rem] italic text-muted-foreground">
-                      {item.flavor}
+                      {g.item(item).flavor}
                     </span>
                   </span>
                   {locked ? (
@@ -215,10 +217,10 @@ function CharacterPage() {
           <Trophy className="h-7 w-7 shrink-0 text-primary drop-shadow-[0_0_10px_var(--primary)]" />
           <div className="flex-1">
             <p className="font-display text-sm font-bold uppercase tracking-[0.14em]">
-              Hall of Legends
+              {t("character.hallOfLegends")}
             </p>
             <p className="text-xs text-muted-foreground">
-              {game.achievements.length} honors claimed — behold your trophies
+              {t("character.honorsClaimed", { count: game.achievements.length })}
             </p>
           </div>
         </RunePanel>
@@ -226,34 +228,33 @@ function CharacterPage() {
 
       {/* Cloud binding */}
       <RunePanel className="mt-4">
-        <RuneHeading>Arcane Archives</RuneHeading>
+        <RuneHeading>{t("character.arcaneArchives")}</RuneHeading>
         {user ? (
           <>
             <p className="mt-3 text-sm">
-              Bound as <span className="text-primary">{user.email}</span>
+              {t("character.boundAs")} <span className="text-primary">{user.email}</span>
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Your XP, attributes and streaks are mirrored to the cloud.
+              {t("character.syncNote")}
             </p>
             <button
               className="btn-rune-ghost mt-3"
               onClick={async () => {
                 await supabase.auth.signOut();
                 stopCloudSync();
-                toast("Your oath is released — progress stays on this device.");
+                toast(t("character.oathReleased"));
               }}
             >
-              <LogOut className="h-4 w-4" /> Release the Oath
+              <LogOut className="h-4 w-4" /> {t("character.releaseOath")}
             </button>
           </>
         ) : (
           <>
             <p className="mt-3 text-xs text-muted-foreground">
-              Your legend lives only on this device. Swear an oath at the Oath Stone to sync it
-              across the realms.
+              {t("character.localOnly")}
             </p>
             <Link to="/auth" className="btn-gold mt-3">
-              <LogIn className="h-4 w-4" /> Bind My Legend
+              <LogIn className="h-4 w-4" /> {t("character.bindLegend")}
             </Link>
           </>
         )}
@@ -263,12 +264,10 @@ function CharacterPage() {
         className="btn-rune-ghost mt-6"
         onClick={() => {
           if (
-            window.confirm(
-              "Abandon your legend and begin anew? All XP, stats and honors will be lost.",
-            )
+            window.confirm(t("character.resetConfirm"))
           ) {
             resetLegend();
-            toast("The mists clear — a new legend begins.");
+            toast(t("character.resetDone"));
           }
         }}
       >

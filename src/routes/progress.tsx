@@ -11,6 +11,7 @@ import {
   type StatKey,
 } from "@/lib/game-data";
 import { useTranslation } from "react-i18next";
+import { useGameText } from "@/lib/game-i18n";
 
 export const Route = createFileRoute("/progress")({
   head: () => ({
@@ -139,6 +140,7 @@ function formatChronicleDate(date: string): string {
 
 function ProgressPage() {
   const { t } = useTranslation();
+  const g = useGameText();
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
 
