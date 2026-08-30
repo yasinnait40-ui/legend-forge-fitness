@@ -7,7 +7,8 @@ import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeTrial, trialsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
 import { playSound } from "@/lib/sound-store";
-import { TRIALS, STAT_LABELS, type StatKey, type Trial } from "@/lib/game-data";
+import { TRIALS, type StatKey, type Trial } from "@/lib/game-data";
+import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/trials")({
 
 function TrialsPage() {
   const { t } = useTranslation();
+  const g = useGameText();
   const game = useGame();
   const done = trialsDoneToday(game);
   const [openId, setOpenId] = useState<string | null>(TRIALS[0]?.id ?? null);
@@ -42,7 +44,7 @@ function TrialsPage() {
     const result = completeTrial(trial.id, trial.name, trial.xp, trial.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
-      announceRewards(result, `${trial.name} — conquered`);
+      announceRewards(result, t("trials.conqueredToast", { name: g.trial(trial).name }));
     }
   }
 
@@ -69,6 +71,7 @@ function TrialsPage() {
         {TRIALS.map((trial) => {
           const isDone = done.includes(trial.id);
           const open = openId === trial.id;
+          const tt = g.trial(trial);
           return (
             <RunePanel key={trial.id} className={cn(isDone && "border-primary/50")}>
               <button
@@ -78,9 +81,9 @@ function TrialsPage() {
               >
                 <div className="min-w-0">
                   <h3 className="font-display text-base font-bold tracking-[0.05em]">
-                    {trial.name}
+                    {tt.name}
                   </h3>
-                  <p className="mt-0.5 text-xs italic text-muted-foreground">{trial.epithet}</p>
+                  <p className="mt-0.5 text-xs italic text-muted-foreground">{tt.epithet}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <span className="flex" aria-label={`Difficulty ${trial.difficulty} of 5`}>
                       {Array.from({ length: 5 }, (_, i) => (
@@ -114,17 +117,17 @@ function TrialsPage() {
                     {t("trials.rites", "Rites of the Trial")}
                   </p>
                   <div className="space-y-2">
-                    {trial.exercises.map((ex, i) => (
+                    {trial.exercises.map((_ex, i) => (
                       <div
                         key={i}
                         className="flex items-center justify-between gap-3 rounded-md border border-border/60 bg-background/55 px-3 py-2"
                       >
                         <span className="flex items-center gap-2 text-sm">
                           <span className="text-primary">✦</span>
-                          {ex.name}
+                          {tt.exercises[i].name}
                         </span>
                         <span className="font-display shrink-0 text-sm font-bold text-primary">
-                          {ex.sets}
+                          {tt.exercises[i].sets}
                         </span>
                       </div>
                     ))}
@@ -133,7 +136,7 @@ function TrialsPage() {
                     <span className="rune-chip text-primary">+{trial.xp} XP</span>
                     {Object.entries(trial.stats).map(([k, v]) => (
                       <span key={k} className="rune-chip" style={{ color: `var(--stat-${k})` }}>
-                        +{v} {STAT_LABELS[k as StatKey]}
+                        +{v} {g.stat(k as StatKey)}
                       </span>
                     ))}
                   </div>

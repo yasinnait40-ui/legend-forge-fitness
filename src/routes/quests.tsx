@@ -15,7 +15,8 @@ import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeQuest, questsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
 import { playSound } from "@/lib/sound-store";
-import { QUESTS, STAT_LABELS, type Quest, type StatKey } from "@/lib/game-data";
+import { QUESTS, type Quest, type StatKey } from "@/lib/game-data";
+import { useGameText } from "@/lib/game-i18n";
 import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/quests")({
@@ -50,6 +51,7 @@ const QUEST_ICONS = {
 
 function QuestsPage() {
   const { t } = useTranslation();
+  const g = useGameText();
   const game = useGame();
   const questsDone = questsDoneToday(game);
 
@@ -57,7 +59,7 @@ function QuestsPage() {
     const result = completeQuest(q.id, q.xp, q.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
-      announceRewards(result, `${q.name} — sealed`);
+      announceRewards(result, t("quests.sealedToast", { name: g.quest(q).name }));
     }
   }
 
@@ -81,6 +83,7 @@ function QuestsPage() {
         {QUESTS.map((q) => {
           const isDone = questsDone.includes(q.id);
           const Icon = QUEST_ICONS[q.icon as keyof typeof QUEST_ICONS];
+          const qt = g.quest(q);
           return (
             <RunePanel key={q.id}>
               <div className="flex items-start gap-3">
@@ -89,15 +92,15 @@ function QuestsPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-display text-sm font-bold uppercase tracking-[0.12em]">
-                    {q.name}
+                    {qt.name}
                   </h3>
-                  <p className="mt-1 text-sm leading-snug text-muted-foreground">{q.description}</p>
-                  {q.auto && <p className="mt-1 text-[0.7rem] italic text-accent">{q.auto}</p>}
+                  <p className="mt-1 text-sm leading-snug text-muted-foreground">{qt.description}</p>
+                  {qt.auto && <p className="mt-1 text-[0.7rem] italic text-accent">{qt.auto}</p>}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <span className="rune-chip text-primary">+{q.xp} XP</span>
                     {Object.entries(q.stats).map(([k, v]) => (
                       <span key={k} className="rune-chip" style={{ color: `var(--stat-${k})` }}>
-                        +{v} {STAT_LABELS[k as StatKey]}
+                        +{v} {g.stat(k as StatKey)}
                       </span>
                     ))}
                   </div>
