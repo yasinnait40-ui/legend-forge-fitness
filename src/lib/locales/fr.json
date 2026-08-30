@@ -33,7 +33,8 @@
     "markComplete": "Marquer comme Terminée",
     "sealed": "Scellée",
     "conquerToSeal": "Conquérez une épreuve pour la sceller",
-    "renewNote": "Le tableau se renouvelle à minuit, voyageur."
+    "renewNote": "Le tableau se renouvelle à minuit, voyageur.",
+    "sealedToast": "{{name}} — scellée"
   },
   "trials": {
     "trainingGrounds": "Les Terrains d'Entraînement",
@@ -42,7 +43,8 @@
     "rites": "Rites de l'Épreuve",
     "completeTrial": "Terminer l'Épreuve",
     "conqueredToday": "Conquise Aujourd'hui",
-    "minutes": "min"
+    "minutes": "min",
+    "conqueredToast": "{{name}} — conquise"
   },
   "achievements": {
     "hallOfLegends": "Panthéon des Légendes",

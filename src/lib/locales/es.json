@@ -33,7 +33,8 @@
     "markComplete": "Marcar Completada",
     "sealed": "Sellada",
     "conquerToSeal": "Conquista una prueba para sellarla",
-    "renewNote": "El tablón se renueva a medianoche, viajero."
+    "renewNote": "El tablón se renueva a medianoche, viajero.",
+    "sealedToast": "{{name}} — sellada"
   },
   "trials": {
     "trainingGrounds": "Los Campos de Entrenamiento",
@@ -42,7 +43,8 @@
     "rites": "Ritos de la Prueba",
     "completeTrial": "Completar Prueba",
     "conqueredToday": "Conquistada Hoy",
-    "minutes": "min"
+    "minutes": "min",
+    "conqueredToast": "{{name}} — conquistada"
   },
   "achievements": {
     "hallOfLegends": "Salón de las Leyendas",
