@@ -4,7 +4,7 @@ import { Flame, ScrollText, Sparkles, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.jpg";
 import arcaneWarrior from "@/assets/arcane-warrior.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
-import { MonetagAdSlot } from "@/components/MonetagAdSlot";
+import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, useGame } from "@/lib/game-store";
@@ -171,7 +171,8 @@ function HomePage() {
         </Link>
       </div>
 
-      <MonetagAdSlot />
+      <MonetagBanner />
+      <MonetagRewardedButton />
     </RealmScreen>
   );
 }
