@@ -6,13 +6,12 @@ import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { todayKey, useGame } from "@/lib/game-store";
 import {
   levelProgress,
-  titleForLevel,
   STAT_ORDER,
   STAT_CAP,
-  STAT_LABELS,
   type StatKey,
 } from "@/lib/game-data";
 import { useTranslation } from "react-i18next";
+import { useGameText } from "@/lib/game-i18n";
 
 export const Route = createFileRoute("/progress")({
   head: () => ({
@@ -141,6 +140,7 @@ function formatChronicleDate(date: string): string {
 
 function ProgressPage() {
   const { t } = useTranslation();
+  const g = useGameText();
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
 
@@ -165,7 +165,7 @@ function ProgressPage() {
           {t("progress.title", "Your Legend")}
         </h1>
         <p className="mt-2 text-xs tracking-wide text-muted-foreground">
-          {titleForLevel(level)} · {game.xp.toLocaleString()} {t("progress.totalXp", "total XP")}
+          {g.title(level)} · {game.xp.toLocaleString()} {t("progress.totalXp", "total XP")}
         </p>
       </header>
 
@@ -246,7 +246,7 @@ function ProgressPage() {
         <div className="mt-1 flex flex-wrap justify-center gap-1.5">
           {STAT_ORDER.map((s) => (
             <span key={s} className="rune-chip" style={{ color: `var(--stat-${s})` }}>
-              {STAT_LABELS[s]} {game.stats[s]}
+              {g.stat(s)} {game.stats[s]}
             </span>
           ))}
         </div>

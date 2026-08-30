@@ -33,7 +33,8 @@
     "markComplete": "إتمام المهمة",
     "sealed": "مختومة",
     "conquerToSeal": "أنجز تجربة لختمها",
-    "renewNote": "يتجدد اللوح عند منتصف الليل، أيها المسافر."
+    "renewNote": "يتجدد اللوح عند منتصف الليل، أيها المسافر.",
+    "sealedToast": "{{name}} — مُختوم"
   },
   "trials": {
     "trainingGrounds": "ساحات التدريب",
@@ -42,7 +43,8 @@
     "rites": "طقوس التجربة",
     "completeTrial": "إتمام التجربة",
     "conqueredToday": "أُنجزت اليوم",
-    "minutes": "دقيقة"
+    "minutes": "دقيقة",
+    "conqueredToast": "{{name}} — تم الانتصار"
   },
   "achievements": {
     "hallOfLegends": "قاعة الأساطير",

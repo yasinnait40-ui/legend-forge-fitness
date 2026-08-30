@@ -1,4 +1,5 @@
-import { STAT_CAP, STAT_LABELS, type StatKey } from "@/lib/game-data";
+import { STAT_CAP, type StatKey } from "@/lib/game-data";
+import { useGameText } from "@/lib/game-i18n";
 
 const STAT_COLORS: Record<StatKey, string> = {
   strength: "var(--stat-strength)",
@@ -10,11 +11,12 @@ const STAT_COLORS: Record<StatKey, string> = {
 
 export function StatBar({ stat, value, label }: { stat: StatKey; value: number; label?: string }) {
   const color = STAT_COLORS[stat];
+  const g = useGameText();
   return (
     <div>
       <div className="mb-1 flex items-baseline justify-between">
         <span className="font-display text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          {label ?? STAT_LABELS[stat]}
+          {label ?? g.stat(stat)}
         </span>
         <span className="font-display text-sm font-bold" style={{ color }}>
           {value}

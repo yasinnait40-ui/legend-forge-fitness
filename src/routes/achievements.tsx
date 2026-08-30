@@ -16,7 +16,8 @@ import hallOfLegends from "@/assets/hall-of-legends.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { useGame } from "@/lib/game-store";
-import { ACHIEVEMENTS, RARITY_LABELS } from "@/lib/game-data";
+import { ACHIEVEMENTS } from "@/lib/game-data";
+import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -56,6 +57,7 @@ const ACHIEVEMENT_ICONS = {
 
 function AchievementsPage() {
   const { t } = useTranslation();
+  const g = useGameText();
   const game = useGame();
   const unlockedCount = ACHIEVEMENTS.filter((a) => game.achievements.includes(a.id)).length;
 
@@ -83,6 +85,7 @@ function AchievementsPage() {
           const unlocked = game.achievements.includes(a.id);
           const Icon = ACHIEVEMENT_ICONS[a.icon as keyof typeof ACHIEVEMENT_ICONS];
           const color = `var(--rarity-${a.rarity})`;
+          const at = g.achievement(a);
           return (
             <RunePanel
               key={a.id}
@@ -107,8 +110,8 @@ function AchievementsPage() {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="font-display text-sm font-bold tracking-[0.08em]">{a.name}</h3>
-                <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{a.flavor}</p>
+                <h3 className="font-display text-sm font-bold tracking-[0.08em]">{at.name}</h3>
+                <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{at.flavor}</p>
                 <span
                   className="rune-chip mt-2"
                   style={
@@ -121,7 +124,7 @@ function AchievementsPage() {
                       : undefined
                   }
                 >
-                  {RARITY_LABELS[a.rarity]}
+                  {g.rarity(a.rarity)}
                 </span>
               </div>
             </RunePanel>
@@ -130,7 +133,7 @@ function AchievementsPage() {
       </div>
 
       <p className="mt-6 text-center text-[0.68rem] italic tracking-wide text-muted-foreground">
-        The hall remembers every deed, traveler — even those yet to come.
+        {t("achievements.hallRemembers")}
       </p>
     </RealmScreen>
   );

@@ -33,7 +33,8 @@
     "markComplete": "Mark Complete",
     "sealed": "Sealed",
     "conquerToSeal": "Conquer a trial to seal",
-    "renewNote": "The board renews at midnight, traveler."
+    "renewNote": "The board renews at midnight, traveler.",
+    "sealedToast": "{{name}} — sealed"
   },
   "trials": {
     "trainingGrounds": "The Training Grounds",
@@ -42,7 +43,8 @@
     "rites": "Rites of the Trial",
     "completeTrial": "Complete Trial",
     "conqueredToday": "Conquered Today",
-    "minutes": "min"
+    "minutes": "min",
+    "conqueredToast": "{{name}} — conquered"
   },
   "achievements": {
     "hallOfLegends": "Hall of Legends",

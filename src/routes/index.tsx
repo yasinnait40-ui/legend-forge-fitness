@@ -8,7 +8,8 @@ import { MonetagAdSlot } from "@/components/MonetagAdSlot";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, useGame } from "@/lib/game-store";
-import { levelProgress, titleForLevel, QUESTS, STAT_ORDER } from "@/lib/game-data";
+import { levelProgress, QUESTS, STAT_ORDER } from "@/lib/game-data";
+import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -46,6 +47,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { t } = useTranslation();
+  const g = useGameText();
   const game = useGame();
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
@@ -60,7 +62,7 @@ function HomePage() {
     >
       <header className="pt-14 text-center">
         <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-primary/85">
-          The Realm of
+          {t("home.realmOf")}
         </p>
         <h1 className="text-glow-gold font-display mt-2 text-[3.2rem] font-black leading-none tracking-[0.1em] text-primary">
           {t("home.title")}
@@ -83,9 +85,9 @@ function HomePage() {
             className="h-20 w-20 shrink-0 rounded-full border-2 border-primary/60 object-cover object-[center_12%] shadow-[0_0_18px_rgb(0_0_0/0.6)]"
           />
           <div className="min-w-0 flex-1">
-            <p className="font-display text-lg font-bold leading-tight">Arcane Warrior</p>
+            <p className="font-display text-lg font-bold leading-tight">{t("home.heroName")}</p>
             <p className="mt-0.5 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
-              {titleForLevel(level)}
+              {g.title(level)}
             </p>
           </div>
           <div className="shrink-0 text-right">
@@ -119,7 +121,7 @@ function HomePage() {
       </RunePanel>
 
       <RunePanel className="mt-4">
-        <RuneHeading>Attributes</RuneHeading>
+        <RuneHeading>{t("home.attributes")}</RuneHeading>
         <div className="mt-3 space-y-3">
           {STAT_ORDER.map((s) => (
             <StatBar key={s} stat={s} value={game.stats[s]} />

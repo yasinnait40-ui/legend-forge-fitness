@@ -33,7 +33,8 @@
     "markComplete": "完了にする",
     "sealed": "封印済み",
     "conquerToSeal": "試練を制して封印せよ",
-    "renewNote": "ボードは深夜に更新される、旅人よ。"
+    "renewNote": "ボードは深夜に更新される、旅人よ。",
+    "sealedToast": "{{name}} — 封印完了"
   },
   "trials": {
     "trainingGrounds": "訓練場",
@@ -42,7 +43,8 @@
     "rites": "試練の儀式",
     "completeTrial": "試練を完了",
     "conqueredToday": "本日制覇",
-    "minutes": "分"
+    "minutes": "分",
+    "conqueredToast": "{{name}} — 制覇"
   },
   "achievements": {
     "hallOfLegends": "伝説の殿堂",
