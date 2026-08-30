@@ -124,10 +124,10 @@ function TrialsPage() {
                       >
                         <span className="flex items-center gap-2 text-sm">
                           <span className="text-primary">✦</span>
-                          {tt.exercises[i].name}
+                          {tt.exercises[i]?.name}
                         </span>
                         <span className="font-display shrink-0 text-sm font-bold text-primary">
-                          {tt.exercises[i].sets}
+                          {tt.exercises[i]?.sets}
                         </span>
                       </div>
                     ))}
