@@ -426,5 +426,8 @@
         "flavor": "Le pouls même du royaume, au creux de la main."
       }
     }
+  },
+  "ads": {
+    "watchReward": "Regarde une annonce pour recevoir une bénédiction"
   }
 }

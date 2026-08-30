@@ -426,5 +426,8 @@
         "flavor": "El propio pulso del reino, en tu palma."
       }
     }
+  },
+  "ads": {
+    "watchReward": "Mira un anuncio para recibir una bendición"
   }
 }

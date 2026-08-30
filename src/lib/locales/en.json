@@ -426,5 +426,8 @@
         "flavor": "The realm's own pulse, carried in your palm."
       }
     }
+  },
+  "ads": {
+    "watchReward": "Watch an ad for a blessing"
   }
 }
