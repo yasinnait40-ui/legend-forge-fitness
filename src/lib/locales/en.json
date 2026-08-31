@@ -429,5 +429,26 @@
   },
   "ads": {
     "watchReward": "Watch an ad for a blessing"
-  }
+  } ,"characters": {
+  "welcome": {
+    "king": "Welcome, warrior. Your journey begins now.",
+    "adventurer": "New quests await you at the guild.",
+    "scientist": "Let's see what your body can achieve today.",
+    "wizard": "Ask, and I shall guide you.",
+    "sacred": "The sanctuary welcomes your return.",
+    "maid": "Your chamber is ready, my lord."
+  },
+  "levelUp": {
+    "title": "Congratulations! You reached level {{level}}.",
+    "subtitle": "Your power grows, but your journey is far from over."
+  },
+  "questComplete": "Quest complete! Keep moving forward.",
+  "trialComplete": "Trial conquered! Your strength grows."
+},"statMastery": {
+  "strength": "Your strength surpasses mortal limits.",
+  "endurance": "Nothing can stop you now.",
+  "agility": "Your swiftness has become legendary.",
+  "vitality": "Your vitality pulses with the power of life.",
+  "recovery": "Your body heals like the ancients."
+}
 }
