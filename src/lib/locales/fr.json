@@ -429,5 +429,20 @@
   },
   "ads": {
     "watchReward": "Regarde une annonce pour recevoir une bénédiction"
+  },"characters": {
+    "welcome": {
+      "king": "Bienvenue, guerrier. Ton voyage commence maintenant.",
+      "adventurer": "De nouvelles quêtes t'attendent à la guilde.",
+      "scientist": "Voyons ce que ton corps peut accomplir aujourd'hui.",
+      "wizard": "Demande, et je te guiderai.",
+      "sacred": "Le sanctuaire accueille ton retour.",
+      "maid": "Votre chambre est prête, mon seigneur."
+    },
+    "levelUp": {
+      "title": "Félicitations ! Tu as atteint le niveau {{level}}.",
+      "subtitle": "Ton pouvoir grandit, mais ton voyage est loin d'être terminé."
+    },
+    "questComplete": "Quête terminée ! Continue d'avancer.",
+    "trialComplete": "Épreuve vaincue ! Ta force augmente."
   }
 }
