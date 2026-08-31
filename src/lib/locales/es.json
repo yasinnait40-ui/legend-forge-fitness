@@ -429,5 +429,20 @@
   },
   "ads": {
     "watchReward": "Mira un anuncio para recibir una bendición"
+  },"characters": {
+    "welcome": {
+      "king": "Bienvenido, guerrero. Tu viaje comienza ahora.",
+      "adventurer": "Nuevas misiones te esperan en el gremio.",
+      "scientist": "Veamos qué puede lograr tu cuerpo hoy.",
+      "wizard": "Pregunta, y te guiaré.",
+      "sacred": "El santuario da la bienvenida a tu regreso.",
+      "maid": "Vuestra alcoba está lista, mi señor."
+    },
+    "levelUp": {
+      "title": "¡Felicidades! Alcanzaste el nivel {{level}}.",
+      "subtitle": "Tu poder crece, pero tu viaje aún no termina."
+    },
+    "questComplete": "¡Misión completada! Sigue avanzando.",
+    "trialComplete": "¡Prueba conquistada! Tu fuerza crece."
   }
 }
