@@ -124,3 +124,32 @@ export function playSound(key: SoundKey) {
     tone(1046.5, 0.45, 0.9, ctx, master, "triangle");
   }
 }
+
+// Background music (real audio file, respects mute/volume state)
+let musicEl: HTMLAudioElement | null = null;
+
+function applyMusicState() {
+  if (!musicEl) return;
+  musicEl.muted = state.muted;
+  musicEl.volume = state.volume * 0.5; // موسيقى الخلفية أهدأ من المؤثرات
+}
+
+export function initBackgroundMusic() {
+  if (musicEl) return; // already initialized
+  musicEl = new Audio("/audio/fantasy-theme.mp3");
+  musicEl.loop = true;
+  applyMusicState();
+
+  const tryPlay = () => {
+    musicEl?.play().catch(() => {
+      const resume = () => {
+        musicEl?.play();
+        document.removeEventListener("pointerdown", resume);
+      };
+      document.addEventListener("pointerdown", resume, { once: true });
+    });
+  };
+  tryPlay();
+
+  listeners.add(applyMusicState);
+}
