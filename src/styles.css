@@ -360,7 +360,7 @@
   pointer-events: none;
   transform: translateY(110%);
   opacity: 0;
-  transition: transform .65s cubic-bezier(.22,1,.36,1), opacity .35s ease;
+  transition: transform .28s cubic-bezier(.22,1,.36,1), opacity .24s ease;
 }
 .fantasy-character.is-entered { transform: translateY(0); opacity: 1; }
 .fantasy-character-figure {
@@ -371,20 +371,22 @@
   width: clamp(9rem, 42vw, 17rem);
   height: clamp(13rem, 56vw, 22rem);
   margin: 0;
-  filter: drop-shadow(0 1rem 1rem rgb(0 0 0 / .6));
+  filter: drop-shadow(.35rem .7rem .65rem rgb(0 0 0 / .7));
+  mix-blend-mode: multiply;
   pointer-events: none;
 }
-.fantasy-character-art { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 82%, transparent 100%), linear-gradient(180deg, black 82%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 82%, transparent 100%), linear-gradient(180deg, black 82%, transparent 100%); mask-composite: intersect; }
+.fantasy-character-art { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 88%, transparent 100%), linear-gradient(180deg, black 88%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 88%, transparent 100%), linear-gradient(180deg, black 88%, transparent 100%); mask-composite: intersect; }
 .fantasy-character-sigil { display: none; }
 .fantasy-character-dialogue {
   flex: 1;
   min-width: 0;
   width: min(82%, 46rem);
   margin: 0 1rem 0 auto;
-  padding: 1.15rem 2.75rem 1.15rem clamp(8rem, 34vw, 12rem);
-  border: 1px solid color-mix(in oklab, var(--character-accent) 68%, var(--border));
-  border-radius: .75rem 0 0 .75rem;
-  background: color-mix(in oklab, var(--card) 96%, var(--background));
+  padding: 2.3rem 2.75rem 1.15rem clamp(8rem, 34vw, 12rem);
+  border: 2px solid color-mix(in oklab, var(--character-accent) 68%, var(--border));
+  border-radius: .75rem 0 .25rem .75rem;
+  background: linear-gradient(135deg, color-mix(in oklab, var(--card) 96%, var(--background)), color-mix(in oklab, var(--background) 92%, var(--primary) 8%));
+  overflow: visible;
   box-shadow: 0 -1rem 2rem rgb(0 0 0 / .22);
   color: inherit;
   font: inherit;
@@ -395,6 +397,10 @@
   z-index: 1;
 }
 .fantasy-character-dialogue:focus-visible { outline: 2px solid var(--character-accent); outline-offset: -3px; }
+.fantasy-character-nameplate { position: absolute; top: -.95rem; left: 1rem; display: grid; gap: .12rem; min-width: 9rem; padding: .4rem .85rem .35rem; border: 1px solid var(--character-accent); background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 24%, var(--card)), var(--card)); box-shadow: .2rem .2rem 0 rgb(0 0 0 / .35); color: var(--foreground); clip-path: polygon(0 0, 96% 0, 100% 50%, 96% 100%, 0 100%, 3% 50%); }
+.fantasy-character-nameplate strong { font-family: var(--font-display), serif; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); }
+.fantasy-character-nameplate small { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-foreground); }
+.fantasy-character-line { display: block; font-family: var(--font-serif), Georgia, serif; font-size: clamp(.82rem, 3.2vw, 1rem); line-height: 1.55; color: var(--foreground); }
 .fantasy-character-continue { position: absolute; right: .9rem; bottom: .65rem; color: var(--character-accent); font-size: .7rem; animation: continue-pulse 1.2s ease-in-out infinite; }
 
 @keyframes continue-pulse { 50% { opacity: .35; transform: translateY(.2rem); } }
