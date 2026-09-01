@@ -350,7 +350,7 @@
 .fantasy-character {
   --character-accent: var(--primary);
   position: fixed;
-  z-index: 40;
+  z-index: 80;
   left: 0;
   right: 0;
   bottom: calc(3.75rem + env(safe-area-inset-bottom));
@@ -365,7 +365,7 @@
 .fantasy-character.is-entered { transform: translateY(0); opacity: 1; }
 .fantasy-character-figure {
   position: absolute;
-  z-index: 3;
+  z-index: 12;
   right: clamp(.25rem, 4vw, 2.5rem);
   bottom: 2.25rem;
   width: clamp(8.5rem, 38vw, 15rem);
@@ -373,6 +373,7 @@
   margin: 0;
   filter: drop-shadow(.35rem .7rem .65rem rgb(0 0 0 / .7));
   isolation: isolate;
+  mix-blend-mode: screen;
   pointer-events: none;
 }
 .fantasy-character-art { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 88%, transparent 100%), linear-gradient(180deg, black 88%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 88%, transparent 100%), linear-gradient(180deg, black 88%, transparent 100%); mask-composite: intersect; }
@@ -394,7 +395,7 @@
   cursor: pointer;
   pointer-events: auto;
   position: relative;
-  z-index: 1;
+  z-index: 14;
 }
 .fantasy-character-dialogue:focus-visible { outline: 2px solid var(--character-accent); outline-offset: -3px; }
 .fantasy-character-nameplate { position: absolute; top: -.95rem; left: 1rem; display: grid; gap: .12rem; min-width: 9rem; padding: .4rem .85rem .35rem; border: 1px solid var(--character-accent); background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 24%, var(--card)), var(--card)); box-shadow: .2rem .2rem 0 rgb(0 0 0 / .35); color: var(--foreground); clip-path: polygon(0 0, 96% 0, 100% 50%, 96% 100%, 0 100%, 3% 50%); }
