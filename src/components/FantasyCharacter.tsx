@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export type FantasyCharacterKind =
   | "king"
@@ -34,30 +34,42 @@ function CharacterArt({ kind }: { kind: FantasyCharacterKind }) {
 
 export function FantasyCharacter({ kind, dialogue }: { kind: FantasyCharacterKind; dialogue?: ReactNode }) {
   const [entered, setEntered] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
+  const [lineIndex, setLineIndex] = useState(0);
+  const [dismissed, setDismissed] = useState(false);
   const meta = META[kind];
+  const lines = useMemo(() => {
+    if (typeof dialogue !== "string") return dialogue ? [dialogue] : [];
+    return dialogue.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+  }, [dialogue]);
+
   useEffect(() => {
     const enterFrame = requestAnimationFrame(() => setEntered(true));
-    const exitTimer = window.setTimeout(() => setEntered(false), 7200);
-    return () => {
-      cancelAnimationFrame(enterFrame);
-      window.clearTimeout(exitTimer);
-    };
+    return () => cancelAnimationFrame(enterFrame);
   }, []);
+
   useEffect(() => {
-    if (!dialogue) return;
-    setSpeaking(true);
-    const timer = window.setTimeout(() => setSpeaking(false), 6200);
-    return () => window.clearTimeout(timer);
+    setLineIndex(0);
+    setDismissed(false);
+    setEntered(true);
   }, [dialogue]);
+
+  const advanceDialogue = () => {
+    if (lineIndex < lines.length - 1) {
+      setLineIndex((current) => current + 1);
+      return;
+    }
+    setDismissed(true);
+    setEntered(false);
+  };
   return (
-    <aside className={`fantasy-character fantasy-character-${kind} ${entered ? "is-entered" : ""} ${speaking ? "is-speaking" : ""}`} style={{ "--character-accent": meta.accent } as CSSProperties} aria-label={meta.name}>
+    <aside className={`fantasy-character fantasy-character-${kind} ${entered && !dismissed ? "is-entered" : ""}`} style={{ "--character-accent": meta.accent } as CSSProperties} aria-label={meta.name}>
       <div className="fantasy-character-figure"><CharacterArt kind={kind} /><span className="fantasy-character-sigil" /></div>
-      <div className="fantasy-character-dialogue rune-panel-soft">
-        <p className="font-display text-[0.62rem] uppercase tracking-[0.2em] text-primary">{meta.name}</p>
-        <p className="mt-1 text-[0.62rem] uppercase tracking-[0.14em] text-muted-foreground">{meta.role}</p>
-        {dialogue && <p className="mt-2 text-sm leading-relaxed text-foreground">{dialogue}</p>}
-      </div>
+      <button type="button" className="fantasy-character-dialogue rune-panel-soft" onClick={advanceDialogue} aria-label={lineIndex < lines.length - 1 ? "Advance dialogue" : "Dismiss dialogue"}>
+        <span className="font-display text-[0.62rem] uppercase tracking-[0.2em] text-primary">{meta.name}</span>
+        <span className="mt-1 block text-[0.62rem] uppercase tracking-[0.14em] text-muted-foreground">{meta.role}</span>
+        {lines.length > 0 && <span className="mt-2 block text-left text-sm leading-relaxed text-foreground">{lines[lineIndex]}</span>}
+        <span className="fantasy-character-continue" aria-hidden="true">▼</span>
+      </button>
     </aside>
   );
 }
