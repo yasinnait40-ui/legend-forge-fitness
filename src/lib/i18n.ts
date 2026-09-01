@@ -25,8 +25,10 @@ i18n
     },
     fallbackLng: "en",
     interpolation: { escapeValue: false },
+    // Keep the first render deterministic for SSR/hydration. The persisted or
+    // browser locale is applied after mount in the root component.
     detection: {
-      order: ["localStorage", "navigator"],
+      order: [],
       caches: ["localStorage"],
       lookupLocalStorage: "aethora_lang",
     },
@@ -37,13 +39,6 @@ export function applyDirection(lang: string) {
   const dir = RTL_LANGUAGES.includes(lang) ? "rtl" : "ltr";
   document.documentElement.dir = dir;
   document.documentElement.lang = lang;
-}
-
-i18n.on("languageChanged", applyDirection);
-
-// Only run on client side
-if (typeof window !== "undefined") {
-  applyDirection(i18n.language);
 }
 
 export default i18n;
