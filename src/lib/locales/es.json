@@ -433,6 +433,7 @@
     "watchReward": "Mira un anuncio para recibir una bendición"
   },
   "notifications": { "permissionPrompt": "El reino aguarda tu regreso. ¿Permitir recordatorios diarios?", "dailyReminder": "El reino aguarda tu regreso." },
+  "treasure": { "title": "Cofre del Tesoro", "invitation": "Una recompensa oculta ha respondido a tu leyenda.", "open": "Abrir Cofre", "revealed": "El cofre revela...", "xp": "+{{amount}} XP adicional", "cosmetic": "Cosmético Hoja Forjada por el Sol", "claim": "Reclamar Recompensa" },
   "characters": {
     "welcome": {
       "king": "Bienvenido, guerrero. Tu viaje comienza ahora.",

@@ -433,6 +433,7 @@
     "watchReward": "Regarde une annonce pour recevoir une bénédiction"
   },
   "notifications": { "permissionPrompt": "Le royaume attend ton retour. Autoriser les rappels quotidiens ?", "dailyReminder": "Le royaume attend ton retour." },
+  "treasure": { "title": "Coffre au Trésor", "invitation": "Une récompense cachée a répondu à ta légende.", "open": "Ouvrir le Coffre", "revealed": "Le coffre révèle...", "xp": "+{{amount}} XP bonus", "cosmetic": "Cosmétique Lame Forgée au Soleil", "claim": "Réclamer la Récompense" },
   "characters": {
     "welcome": {
       "king": "Bienvenue, guerrier. Ton voyage commence maintenant.",

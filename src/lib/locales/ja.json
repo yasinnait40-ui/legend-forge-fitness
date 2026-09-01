@@ -433,6 +433,7 @@
     "watchReward": "広告を見て加護を得る"
   },
   "notifications": { "permissionPrompt": "王国は君の帰還を待っている。毎日の通知を許可しますか？", "dailyReminder": "王国は君の帰還を待っている。" },
+  "treasure": { "title": "宝箱", "invitation": "君の伝説に隠された報酬が応えた。", "open": "宝箱を開く", "revealed": "宝箱の中身は…", "xp": "+{{amount}} ボーナス経験値", "cosmetic": "太陽鍛造の刃コスメ", "claim": "報酬を受け取る" },
   "characters": {
     "welcome": {
       "king": "ようこそ、戦士よ。汝の旅は今始まる。",

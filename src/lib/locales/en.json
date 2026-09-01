@@ -433,6 +433,7 @@
     "watchReward": "Watch an ad for a blessing"
   },
   "notifications": { "permissionPrompt": "The kingdom awaits your return. Allow daily reminders?", "dailyReminder": "The kingdom awaits your return." },
+  "treasure": { "title": "Treasure Chest", "invitation": "A hidden reward has answered your legend.", "open": "Open Chest", "revealed": "The chest reveals...", "xp": "+{{amount}} bonus XP", "cosmetic": "Sun-Forged Blade cosmetic", "claim": "Claim Reward" },
   "characters": {
   "welcome": {
     "king": "Welcome, warrior. Your journey begins now.",

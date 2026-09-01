@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Apple,
@@ -12,6 +13,7 @@ import {
 import guildHall from "@/assets/guild-hall.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
+import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeQuest, questsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
@@ -56,12 +58,14 @@ function QuestsPage() {
   const g = useGameText();
   const game = useGame();
   const questsDone = questsDoneToday(game);
+  const [treasure, setTreasure] = useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
 
   function handleComplete(q: Quest) {
     const result = completeQuest(q.id, q.xp, q.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
       announceRewards(result, t("quests.sealedToast", { name: g.quest(q).name }));
+      if (result.treasure) setTreasure(result.treasure);
       if (game.totalQuests + game.totalTrials === 1) requestReminderPermission(t("notifications.permissionPrompt"));
     }
   }
@@ -144,6 +148,7 @@ function QuestsPage() {
       <p className="mt-6 text-center text-[0.68rem] italic tracking-wide text-muted-foreground">
         {t("quests.renewNote", "The board renews at midnight, traveler.")}
       </p>
+      {treasure && <TreasureChest reward={treasure} onClose={() => setTreasure(null)} />}
     </RealmScreen>
   );
 }
