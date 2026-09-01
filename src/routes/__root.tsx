@@ -152,6 +152,17 @@ function RootComponent() {
     hydrateSoundStore();
     initBackgroundMusic();
 
+    // Supabase is optional for the public preview. Keep the local game experience
+    // available when the project has not supplied its cloud credentials yet.
+    const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"];
+    const supabaseKey =
+      import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_PUBLISHABLE_KEY"];
+
+    if (!supabaseUrl || !supabaseKey) {
+      stopCloudSync();
+      return;
+    }
+
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         startCloudSync(session.user.id);
