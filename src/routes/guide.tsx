@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RotateCcw, Send, Sparkles, WandSparkles } from "lucide-react";
 import arcaneLibrary from "@/assets/arcane-library.jpg";
 import { Particles } from "@/components/Particles";
+import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { consultArcaneGuide } from "@/lib/arcane.functions";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -193,6 +194,10 @@ function GuidePage() {
           )}
         </div>
       </header>
+
+      <div className="relative z-10 mx-auto w-full max-w-lg px-4">
+        <CharacterWelcome kind="wizard" dialogue={t("characters.welcome.wizard")} />
+      </div>
 
       {/* Conversation scroll */}
       <main

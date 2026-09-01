@@ -4,6 +4,7 @@ import { Flame, ScrollText, Sparkles, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.jpg";
 import arcaneWarrior from "@/assets/arcane-warrior.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
@@ -72,6 +73,7 @@ function HomePage() {
         </p>
       </header>
 
+      <CharacterWelcome kind="king" dialogue={t("characters.welcome.king")} />
       <div className="h-[26dvh]" aria-hidden="true" />
 
       <RunePanel>

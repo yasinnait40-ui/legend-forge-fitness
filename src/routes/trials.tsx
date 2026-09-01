@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, ChevronDown, Clock, Star } from "lucide-react";
 import trainingArena from "@/assets/training-arena.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeTrial, trialsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
@@ -67,6 +68,7 @@ function TrialsPage() {
         </p>
       </header>
 
+      <CharacterWelcome kind="scientist" dialogue={t("characters.welcome.scientist")} />
       <div className="mt-6 space-y-4">
         {TRIALS.map((trial) => {
           const isDone = done.includes(trial.id);

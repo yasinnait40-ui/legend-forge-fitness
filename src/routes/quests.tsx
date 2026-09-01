@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import guildHall from "@/assets/guild-hall.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeQuest, questsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
@@ -79,6 +80,7 @@ function QuestsPage() {
         </p>
       </header>
 
+      <CharacterWelcome kind="adventurer" dialogue={t("characters.welcome.adventurer")} />
       <div className="mt-6 space-y-4">
         {QUESTS.map((q) => {
           const isDone = questsDone.includes(q.id);
