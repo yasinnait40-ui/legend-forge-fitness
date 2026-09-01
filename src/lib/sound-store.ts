@@ -136,20 +136,17 @@ function applyMusicState() {
 
 export function initBackgroundMusic() {
   if (musicEl) return; // already initialized
-  musicEl = new Audio("/audio/fantasy-theme.mp3");
-  musicEl.loop = true;
-  applyMusicState();
 
-  const tryPlay = () => {
-    musicEl?.play().catch(() => {
-      const resume = () => {
-        musicEl?.play();
-        document.removeEventListener("pointerdown", resume);
-      };
-      document.addEventListener("pointerdown", resume, { once: true });
-    });
-  };
-  tryPlay();
-
-  listeners.add(applyMusicState);
+  // The audio asset is optional in previews. Check that it is actually served
+  // before creating an HTMLAudioElement, which avoids unsupported-source errors.
+  fetch("/audio/fantasy-theme.mp3", { method: "HEAD" })
+    .then((response) => {
+      if (!response.ok || !response.headers.get("content-type")?.startsWith("audio/")) return;
+      musicEl = new Audio("/audio/fantasy-theme.mp3");
+      musicEl.loop = true;
+      applyMusicState();
+      musicEl.play().catch(() => undefined);
+      listeners.add(applyMusicState);
+    })
+    .catch(() => undefined);
 }
