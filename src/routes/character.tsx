@@ -101,7 +101,7 @@ function CharacterPage() {
         </h1>
       </header>
 
-      <CharacterWelcome kind="sacred" dialogue={t("characters.welcome.sacred")} />
+      <CharacterWelcome kind="sprite" dialogue={t("characters.welcome.sprite")} />
 
       {/* Portrait */}
       <RunePanel className="mt-6 overflow-hidden !p-0">

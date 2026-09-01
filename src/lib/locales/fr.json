@@ -436,7 +436,8 @@
       "scientist": "Voyons ce que ton corps peut accomplir aujourd'hui.",
       "wizard": "Demande, et je te guiderai.",
       "sacred": "Le sanctuaire accueille ton retour.",
-      "maid": "Votre chambre est prête, mon seigneur."
+      "maid": "Votre chambre est prête, mon seigneur.",
+      "sprite": "Psst ! Je suis Miri, ta petite étincelle magique. Faisons briller ta légende !"
     },
     "levelUp": {
       "title": "Félicitations ! Tu as atteint le niveau {{level}}.",
