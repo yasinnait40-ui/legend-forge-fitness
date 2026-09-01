@@ -64,7 +64,7 @@ export function FantasyCharacter({ kind, dialogue }: { kind: FantasyCharacterKin
   return (
     <aside className={`fantasy-character fantasy-character-${kind} ${entered && !dismissed ? "is-entered" : ""}`} style={{ "--character-accent": meta.accent } as CSSProperties} aria-label={meta.name}>
       <div className="fantasy-character-figure"><CharacterArt kind={kind} /><span className="fantasy-character-sigil" /></div>
-      <button type="button" className="fantasy-character-dialogue rune-panel-soft" onClick={advanceDialogue} aria-label={lineIndex < lines.length - 1 ? "Advance dialogue" : "Dismiss dialogue"}>
+      <button type="button" className="fantasy-character-dialogue" onClick={advanceDialogue} aria-label={lineIndex < lines.length - 1 ? "Advance dialogue" : "Dismiss dialogue"}>
         <span className="font-display text-[0.62rem] uppercase tracking-[0.2em] text-primary">{meta.name}</span>
         <span className="mt-1 block text-[0.62rem] uppercase tracking-[0.14em] text-muted-foreground">{meta.role}</span>
         {lines.length > 0 && <span className="mt-2 block text-left text-sm leading-relaxed text-foreground">{lines[lineIndex]}</span>}

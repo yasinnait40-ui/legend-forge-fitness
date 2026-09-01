@@ -355,9 +355,9 @@
   right: 0;
   bottom: calc(3.75rem + env(safe-area-inset-bottom));
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   width: 100%;
-  min-height: 7.5rem;
+  min-height: 8.5rem;
   pointer-events: none;
   transform: translateY(110%);
   opacity: 0;
@@ -365,13 +365,14 @@
 }
 .fantasy-character.is-entered { transform: translateY(0); opacity: 1; }
 .fantasy-character-figure {
-  position: relative;
-  z-index: 2;
-  flex: 0 0 clamp(7.25rem, 30vw, 11rem);
-  align-self: flex-end;
-  height: clamp(8.25rem, 31vw, 12rem);
+  position: absolute;
+  z-index: 3;
+  left: clamp(.15rem, 3vw, 2rem);
+  bottom: 0;
+  width: clamp(8.5rem, 37vw, 14rem);
+  height: clamp(10.5rem, 45vw, 17rem);
   margin: 0;
-  filter: drop-shadow(0 1rem 1rem rgb(0 0 0 / .55));
+  filter: drop-shadow(0 1rem 1rem rgb(0 0 0 / .6));
   pointer-events: none;
 }
 .fantasy-character-art { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
@@ -379,13 +380,13 @@
 .fantasy-character-dialogue {
   flex: 1;
   min-width: 0;
-  align-self: stretch;
+  width: 100%;
+  align-self: flex-end;
   margin: 0;
-  padding: .75rem 2.5rem .9rem .9rem;
+  padding: 1rem 2.75rem 1rem clamp(10rem, 43vw, 14rem);
   border: 1px solid color-mix(in oklab, var(--character-accent) 55%, var(--border));
-  border-left: 0;
-  border-radius: 0;
-  background: color-mix(in oklab, var(--card) 94%, var(--background));
+  border-radius: .65rem 0 0 .65rem;
+  background: color-mix(in oklab, var(--card) 96%, var(--background));
   box-shadow: 0 -1rem 2rem rgb(0 0 0 / .22);
   color: inherit;
   font: inherit;
@@ -397,12 +398,10 @@
 }
 .fantasy-character-dialogue:focus-visible { outline: 2px solid var(--character-accent); outline-offset: -3px; }
 .fantasy-character-continue { position: absolute; right: .9rem; bottom: .65rem; color: var(--character-accent); font-size: .7rem; animation: continue-pulse 1.2s ease-in-out infinite; }
-.fantasy-character-king, .fantasy-character-maid, .fantasy-character-sacred { flex-direction: row-reverse; }
-.fantasy-character-king .fantasy-character-figure, .fantasy-character-maid .fantasy-character-figure, .fantasy-character-sacred .fantasy-character-figure { order: 2; }
-.fantasy-character-king .fantasy-character-dialogue, .fantasy-character-maid .fantasy-character-dialogue, .fantasy-character-sacred .fantasy-character-dialogue { border-left: 1px solid color-mix(in oklab, var(--character-accent) 55%, var(--border)); border-right: 0; }
+
 @keyframes continue-pulse { 50% { opacity: .35; transform: translateY(.2rem); } }
 @media (min-width: 640px) { .fantasy-character { min-height: 9rem; } .fantasy-character-figure { height: 14rem; } }
-@media (max-width: 360px) { .fantasy-character { min-height: 6.8rem; } .fantasy-character-figure { flex-basis: 6.5rem; height: 7.5rem; } .fantasy-character-dialogue { padding: .55rem 2rem .65rem .65rem; } }
+@media (max-width: 360px) { .fantasy-character { min-height: 7.5rem; } .fantasy-character-figure { left: 0; width: 7.25rem; height: 9rem; } .fantasy-character-dialogue { padding: .65rem 2rem .7rem 8rem; } }
 @media (prefers-reduced-motion: reduce) { .fantasy-character, .fantasy-character-dialogue, .fantasy-character-figure, .fantasy-character-continue { animation: none; transition: none; } }
 
 /* ---------- Magic effects ---------- */
