@@ -107,6 +107,10 @@ export function hydrateGameStore() {
         stats: { ...DEFAULT_STATE.stats, ...(parsed.stats ?? {}) },
         equipment: { ...DEFAULT_STATE.equipment, ...(parsed.equipment ?? {}) },
       };
+      const yesterday = todayKey(new Date(Date.now() - 86400000));
+      if (state.lastActiveDate && state.lastActiveDate !== todayKey() && state.lastActiveDate !== yesterday) {
+        state = { ...state, streak: 0 };
+      }
       emit();
     }
   } catch {
@@ -198,8 +202,10 @@ export function completeQuest(
     totalQuests: state.totalQuests + 1,
   };
   const { next, unlocked, leveledUp, newLevel } = applyAward(working, xp, stats);
-  commit(next);
-  return { xpGained: xp, leveledUp, newLevel, unlocked, autoCompletedQuest: null };
+  const streakBonus = [3, 7, 14, 30].includes(next.streak) ? next.streak * 5 : 0;
+  const rewarded = streakBonus ? { ...next, xp: next.xp + streakBonus } : next;
+  commit(rewarded);
+  return { xpGained: xp + streakBonus, leveledUp, newLevel: levelFromXp(rewarded.xp), unlocked, autoCompletedQuest: null };
 }
 
 /** Mark a training trial complete. Also seals Guardian's Discipline if open. */
@@ -237,8 +243,10 @@ export function completeTrial(
     autoCompletedQuest = "guardians-discipline";
   }
 
-  commit(next);
-  return { xpGained: xp, leveledUp, newLevel, unlocked, autoCompletedQuest };
+  const streakBonus = [3, 7, 14, 30].includes(next.streak) ? next.streak * 5 : 0;
+  const rewarded = streakBonus ? { ...next, xp: next.xp + streakBonus } : next;
+  commit(rewarded);
+  return { xpGained: xp + streakBonus, leveledUp, newLevel: levelFromXp(rewarded.xp), unlocked, autoCompletedQuest };
 }
 
 export function equipItem(slot: "weapon" | "armor" | "relic", itemId: string) {

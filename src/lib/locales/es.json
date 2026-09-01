@@ -22,6 +22,8 @@
     "vitality": "Vitalidad",
     "recovery": "Recuperación",
     "dayFlame": "Llama del Día",
+    "longestStreak": "Récord: {{count}} días",
+    "streakRestart": "El Rey cree en tu regreso. Enciende la llama de nuevo hoy.",
     "dailyQuests": "Misiones Diarias",
     "beginTrials": "Comenzar las Pruebas de Hoy",
     "consultGuide": "Consultar la Guía Arcana"

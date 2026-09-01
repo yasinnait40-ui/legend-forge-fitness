@@ -22,6 +22,8 @@
     "vitality": "Vitality",
     "recovery": "Recovery",
     "dayFlame": "Day Flame",
+    "longestStreak": "Longest: {{count}} days",
+    "streakRestart": "The King believes in your return. Light the flame again today.",
     "dailyQuests": "Daily Quests",
     "beginTrials": "Begin Today's Trials",
     "consultGuide": "Consult the Arcane Guide"

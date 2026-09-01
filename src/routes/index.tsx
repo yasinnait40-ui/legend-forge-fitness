@@ -7,7 +7,7 @@ import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
-import { questsDoneToday, useGame } from "@/lib/game-store";
+import { questsDoneToday, todayKey, useGame } from "@/lib/game-store";
 import { QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
 
@@ -48,6 +48,8 @@ function HomePage() {
   const { t } = useTranslation();
   const game = useGame();
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
+  const yesterday = todayKey(new Date(Date.now() - 86400000));
+  const streakInterrupted = Boolean(game.lastActiveDate && game.lastActiveDate !== todayKey() && game.lastActiveDate !== yesterday);
 
   return (
     <RealmScreen
@@ -95,6 +97,14 @@ function HomePage() {
           <p className="text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
             {t("home.dayFlame")}
           </p>
+          <p className="mt-2 text-[0.58rem] text-muted-foreground">
+            {t("home.longestStreak", { count: game.bestStreak })}
+          </p>
+          {streakInterrupted && (
+            <p className="mt-1 text-[0.58rem] italic text-accent">
+              {t("home.streakRestart")}
+            </p>
+          )}
         </RunePanel>
         <Link to="/quests" className="block">
           <RunePanel className="h-full text-center">

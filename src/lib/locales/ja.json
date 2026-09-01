@@ -22,6 +22,8 @@
     "vitality": "生命力",
     "recovery": "回復力",
     "dayFlame": "日々の炎",
+    "longestStreak": "最高記録：{{count}}日",
+    "streakRestart": "王は君の帰還を信じている。今日、もう一度炎を灯そう。",
     "dailyQuests": "デイリークエスト",
     "beginTrials": "今日の試練を始める",
     "consultGuide": "秘術の書を開く"

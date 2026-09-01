@@ -22,6 +22,8 @@
     "vitality": "الحيوية",
     "recovery": "التعافي",
     "dayFlame": "شعلة اليوم",
+    "longestStreak": "الأطول: {{count}} يومًا",
+    "streakRestart": "يؤمن الملك بعودتك. أشعل الشعلة من جديد اليوم.",
     "dailyQuests": "المهام اليومية",
     "beginTrials": "ابدأ تجارب اليوم",
     "consultGuide": "استشر الدليل السحري"
