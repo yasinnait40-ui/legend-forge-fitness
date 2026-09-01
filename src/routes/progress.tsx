@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Flame, ScrollText, Swords } from "lucide-react";
 import observatory from "@/assets/observatory.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { FantasyCharacter } from "@/components/FantasyCharacter";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { todayKey, useGame } from "@/lib/game-store";
 import {
@@ -168,6 +169,14 @@ function ProgressPage() {
           {g.title(level)} · {game.xp.toLocaleString()} {t("progress.totalXp", "total XP")}
         </p>
       </header>
+
+      <RunePanel className="mt-6 overflow-hidden">
+        <RuneHeading>{t("characters.welcome.hakari", "Sacred Companions")}</RuneHeading>
+        <div className="grid gap-6 md:grid-cols-2">
+          <FantasyCharacter kind="hakari" embedded dialogue={t("characters.welcome.hakari", "You are growing up today!")} />
+          <FantasyCharacter kind="sprite" embedded dialogue={t("characters.welcome.sprite")} />
+        </div>
+      </RunePanel>
 
       {/* Level */}
       <RunePanel className="mt-6">
