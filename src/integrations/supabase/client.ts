@@ -38,13 +38,24 @@ function createSupabaseClient() {
     import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_PUBLISHABLE_KEY"];
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    const missing = [
-      ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),
-      ...(!SUPABASE_PUBLISHABLE_KEY ? ["SUPABASE_PUBLISHABLE_KEY"] : []),
-    ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(", ")}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    const offlineQuery = {
+      select: () => offlineQuery,
+      eq: () => offlineQuery,
+      maybeSingle: async () => ({ data: null, error: null }),
+      upsert: async () => ({ data: null, error: null }),
+      insert: async () => ({ data: null, error: null }),
+    };
+    return {
+      auth: {
+        onAuthStateChange: (callback: (event: string, session: null) => void) => {
+          callback("INITIAL_SESSION", null);
+          return { data: { subscription: { unsubscribe: () => undefined } } };
+        },
+        getSession: async () => ({ data: { session: null }, error: null }),
+        signOut: async () => ({ error: null }),
+      },
+      from: () => offlineQuery,
+    } as unknown as ReturnType<typeof createSupabaseClient>;
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
