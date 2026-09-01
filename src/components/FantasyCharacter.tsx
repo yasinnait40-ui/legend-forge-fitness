@@ -27,7 +27,7 @@ const ARTWORK: Record<FantasyCharacterKind, { src: string; alt: string }> = {
   hakari: { src: "/characters/hakari.png", alt: "Hakari, a friendly little fantasy monster companion" },
 };
 
-export function FantasyCharacter({ kind, dialogue }: { kind: FantasyCharacterKind; dialogue?: ReactNode }) {
+export function FantasyCharacter({ kind, dialogue, embedded = false }: { kind: FantasyCharacterKind; dialogue?: ReactNode; embedded?: boolean }) {
   const [visible, setVisible] = useState(false);
   const [lineIndex, setLineIndex] = useState(0);
   const meta = META[kind];
@@ -50,7 +50,7 @@ export function FantasyCharacter({ kind, dialogue }: { kind: FantasyCharacterKin
   };
 
   return (
-    <aside className={`fantasy-character fantasy-character-${kind} ${visible ? "is-entered" : ""}`} style={{ "--character-accent": meta.accent } as CSSProperties} aria-label={meta.name}>
+    <aside className={`fantasy-character fantasy-character-${kind} ${embedded ? "fantasy-character-embedded" : ""} ${visible ? "is-entered" : ""}`} style={{ "--character-accent": meta.accent } as CSSProperties} aria-label={meta.name}>
       <div className="fantasy-character-figure"><img src={ARTWORK[kind].src} alt={ARTWORK[kind].alt} className="fantasy-character-art" /></div>
       <button type="button" className="fantasy-character-dialogue" onClick={advance} aria-label={lineIndex < lines.length - 1 ? "Advance dialogue" : "Dismiss dialogue"}>
         <span className="fantasy-character-nameplate"><strong>{meta.name}</strong><small>{meta.role}</small></span>

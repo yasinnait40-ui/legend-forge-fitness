@@ -363,8 +363,29 @@
   transition: transform .28s cubic-bezier(.22,1,.36,1), opacity .24s ease;
 }
 .fantasy-character.is-entered { transform: translateY(0); opacity: 1; }
-.fantasy-character-hakari { z-index: 90; }
-.fantasy-character-hakari .fantasy-character-figure { right: clamp(1rem, 9vw, 6rem); bottom: 7.5rem; }
+.fantasy-character-embedded {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  min-height: 12rem;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+}
+.fantasy-character-embedded .fantasy-character-figure {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  margin: 0 auto;
+  width: clamp(7rem, 34vw, 10rem);
+  height: clamp(9rem, 42vw, 13rem);
+}
+.fantasy-character-embedded .fantasy-character-dialogue {
+  position: relative;
+  inset: auto;
+  width: min(100%, 24rem);
+  margin: -1rem auto 0;
+}
 .fantasy-character-figure {
   position: absolute;
   z-index: 12;
