@@ -10,6 +10,7 @@ import i18n from "@/lib/i18n";
 import hallOfLegends from "@/assets/hall-of-legends.jpg";
 import { cn } from "@/lib/utils";
 import { FriendsPanel } from "@/components/FriendsPanel";
+import { HealthSyncInfo } from "@/components/HealthSyncInfo";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -99,6 +100,7 @@ function SettingsPage() {
         </RunePanel>
       </div>
       <FriendsPanel />
+      <HealthSyncInfo />
     </RealmScreen>
   );
 }
