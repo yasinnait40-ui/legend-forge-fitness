@@ -72,6 +72,7 @@ function HomePage() {
       </header>
 
       <CharacterWelcome kind="king" dialogue={t("characters.welcome.king")} />
+      <CharacterWelcome kind="hakari" dialogue={t("characters.welcome.hakari", "Your growing up today")} />
       <div className="h-[26dvh]" aria-hidden="true" />
 
       <RunePanel className="mt-4">

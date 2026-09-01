@@ -445,7 +445,8 @@
       "wizard": "Pregunta, y te guiaré.",
       "sacred": "El santuario da la bienvenida a tu regreso.",
       "maid": "Vuestra alcoba está lista, mi señor.",
-      "sprite": "¡Psst! Soy Miri, tu pequeña chispa de magia. ¡Hagamos brillar tu leyenda!"
+      "sprite": "¡Psst! Soy Miri, tu pequeña chispa de magia. ¡Hagamos brillar tu leyenda!",
+      "hakari": "¡Hoy estás creciendo!"
     },
     "levelUp": {
       "title": "¡Felicidades! Alcanzaste el nivel {{level}}.",

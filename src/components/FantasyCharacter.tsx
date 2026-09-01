@@ -3,7 +3,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 
-export type FantasyCharacterKind = "king" | "adventurer" | "maid" | "wizard" | "sacred" | "scientist" | "sprite";
+export type FantasyCharacterKind = "king" | "adventurer" | "maid" | "wizard" | "sacred" | "scientist" | "sprite" | "hakari";
 
 const META: Record<FantasyCharacterKind, { name: string; role: string; accent: string }> = {
   king: { name: "The King", role: "Royal guide", accent: "var(--primary)" },
@@ -13,6 +13,7 @@ const META: Record<FantasyCharacterKind, { name: string; role: string; accent: s
   sacred: { name: "The Sacred Guardian", role: "Sanctuary protector", accent: "var(--stat-agility)" },
   scientist: { name: "The Scientist", role: "Trial researcher", accent: "var(--stat-endurance)" },
   sprite: { name: "Miri", role: "Little magic monster", accent: "var(--accent)" },
+  hakari: { name: "Hakari", role: "Growth companion", accent: "var(--stat-vitality)" },
 };
 
 const ARTWORK: Record<FantasyCharacterKind, { src: string; alt: string }> = {
@@ -23,6 +24,7 @@ const ARTWORK: Record<FantasyCharacterKind, { src: string; alt: string }> = {
   sacred: { src: "/characters/sacred.png", alt: "Stoic silver-haired guardian with an eyepatch" },
   scientist: { src: "/characters/scientist.png", alt: "Rugged fantasy alchemist surrounded by vials" },
   sprite: { src: "/characters/sprite.png", alt: "Miri, a cute little glowing magic monster" },
+  hakari: { src: "/characters/hakari.png", alt: "Hakari, a friendly little fantasy monster companion" },
 };
 
 export function FantasyCharacter({ kind, dialogue }: { kind: FantasyCharacterKind; dialogue?: ReactNode }) {
