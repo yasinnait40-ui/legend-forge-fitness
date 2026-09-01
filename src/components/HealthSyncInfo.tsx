@@ -19,8 +19,13 @@ export function HealthSyncInfo() {
         <p className="text-sm leading-6 text-muted-foreground">{t("health.privacy")}</p>
       </div>
       <div className="space-y-2 text-sm leading-6 text-muted-foreground">
-        <p><strong className="text-foreground">{t("health.webHeading")}</strong> {t("health.web")}</p>
-        <p><strong className="text-foreground">{t("health.nativeHeading")}</strong> {t("health.native")}</p>
+        <p>
+          <strong className="text-foreground">{t("health.webHeading")}</strong> {t("health.web")}
+        </p>
+        <p>
+          <strong className="text-foreground">{t("health.nativeHeading")}</strong>{" "}
+          {t("health.native")}
+        </p>
       </div>
     </RunePanel>
   );

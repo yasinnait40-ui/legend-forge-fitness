@@ -58,7 +58,8 @@ function QuestsPage() {
   const g = useGameText();
   const game = useGame();
   const questsDone = questsDoneToday(game);
-  const [treasure, setTreasure] = useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
+  const [treasure, setTreasure] =
+    useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
 
   function handleComplete(q: Quest) {
     const result = completeQuest(q.id, q.xp, q.stats);
@@ -66,7 +67,8 @@ function QuestsPage() {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
       announceRewards(result, t("quests.sealedToast", { name: g.quest(q).name }));
       if (result.treasure) setTreasure(result.treasure);
-      if (game.totalQuests + game.totalTrials === 1) requestReminderPermission(t("notifications.permissionPrompt"));
+      if (game.totalQuests + game.totalTrials === 1)
+        requestReminderPermission(t("notifications.permissionPrompt"));
     }
   }
 
@@ -102,7 +104,9 @@ function QuestsPage() {
                   <h3 className="font-display text-sm font-bold uppercase tracking-[0.12em]">
                     {qt.name}
                   </h3>
-                  <p className="mt-1 text-sm leading-snug text-muted-foreground">{qt.description}</p>
+                  <p className="mt-1 text-sm leading-snug text-muted-foreground">
+                    {qt.description}
+                  </p>
                   {qt.auto && <p className="mt-1 text-[0.7rem] italic text-accent">{qt.auto}</p>}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <span className="rune-chip text-primary">+{q.xp} XP</span>

@@ -108,7 +108,11 @@ export function hydrateGameStore() {
         equipment: { ...DEFAULT_STATE.equipment, ...(parsed.equipment ?? {}) },
       };
       const yesterday = todayKey(new Date(Date.now() - 86400000));
-      if (state.lastActiveDate && state.lastActiveDate !== todayKey() && state.lastActiveDate !== yesterday) {
+      if (
+        state.lastActiveDate &&
+        state.lastActiveDate !== todayKey() &&
+        state.lastActiveDate !== yesterday
+      ) {
         state = { ...state, streak: 0 };
       }
       emit();
@@ -218,11 +222,22 @@ export function completeQuest(
         ? { type: "cosmetic" as const, itemId: "sun-forged-blade" }
         : { type: "xp" as const, amount: 100 }
     : null;
-  const chestXp = treasure?.type === "xp" ? treasure.amount ?? 0 : 0;
+  const chestXp = treasure?.type === "xp" ? (treasure.amount ?? 0) : 0;
   const rewarded = { ...next, xp: next.xp + streakBonus + chestXp };
-  if (treasure?.type === "cosmetic") rewarded.equipment = { ...rewarded.equipment, weapon: treasure.itemId ?? rewarded.equipment.weapon };
+  if (treasure?.type === "cosmetic")
+    rewarded.equipment = {
+      ...rewarded.equipment,
+      weapon: treasure.itemId ?? rewarded.equipment.weapon,
+    };
   commit(rewarded);
-  return { xpGained: xp + streakBonus + chestXp, treasure, leveledUp, newLevel: levelFromXp(rewarded.xp), unlocked, autoCompletedQuest: null };
+  return {
+    xpGained: xp + streakBonus + chestXp,
+    treasure,
+    leveledUp,
+    newLevel: levelFromXp(rewarded.xp),
+    unlocked,
+    autoCompletedQuest: null,
+  };
 }
 
 /** Mark a training trial complete. Also seals Guardian's Discipline if open. */
@@ -269,11 +284,22 @@ export function completeTrial(
         ? { type: "cosmetic" as const, itemId: "sun-forged-blade" }
         : { type: "xp" as const, amount: 100 }
     : null;
-  const chestXp = treasure?.type === "xp" ? treasure.amount ?? 0 : 0;
+  const chestXp = treasure?.type === "xp" ? (treasure.amount ?? 0) : 0;
   const rewarded = { ...next, xp: next.xp + streakBonus + chestXp };
-  if (treasure?.type === "cosmetic") rewarded.equipment = { ...rewarded.equipment, weapon: treasure.itemId ?? rewarded.equipment.weapon };
+  if (treasure?.type === "cosmetic")
+    rewarded.equipment = {
+      ...rewarded.equipment,
+      weapon: treasure.itemId ?? rewarded.equipment.weapon,
+    };
   commit(rewarded);
-  return { xpGained: xp + streakBonus + chestXp, treasure, leveledUp, newLevel: levelFromXp(rewarded.xp), unlocked, autoCompletedQuest };
+  return {
+    xpGained: xp + streakBonus + chestXp,
+    treasure,
+    leveledUp,
+    newLevel: levelFromXp(rewarded.xp),
+    unlocked,
+    autoCompletedQuest,
+  };
 }
 
 export function equipItem(slot: "weapon" | "armor" | "relic", itemId: string) {

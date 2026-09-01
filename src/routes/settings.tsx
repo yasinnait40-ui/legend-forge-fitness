@@ -102,9 +102,16 @@ function SettingsPage() {
       </div>
       <FriendsPanel />
       <HealthSyncInfo />
-      <nav className="mt-5 flex justify-center gap-4 text-sm" aria-label={t("legal.navigation", "Legal navigation")}>
-        <Link to="/privacy" className="text-primary underline underline-offset-4">{t("legal.privacyLink", "Privacy Policy")}</Link>
-        <Link to="/terms" className="text-primary underline underline-offset-4">{t("legal.termsLink", "Terms of Service")}</Link>
+      <nav
+        className="mt-5 flex justify-center gap-4 text-sm"
+        aria-label={t("legal.navigation", "Legal navigation")}
+      >
+        <Link to="/privacy" className="text-primary underline underline-offset-4">
+          {t("legal.privacyLink", "Privacy Policy")}
+        </Link>
+        <Link to="/terms" className="text-primary underline underline-offset-4">
+          {t("legal.termsLink", "Terms of Service")}
+        </Link>
       </nav>
     </RealmScreen>
   );

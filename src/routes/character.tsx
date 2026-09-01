@@ -29,13 +29,7 @@ import { equipItem, resetLegend, useGame } from "@/lib/game-store";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { stopCloudSync } from "@/lib/cloud-sync";
-import {
-  EQUIPMENT,
-  levelFromXp,
-  levelProgress,
-  STAT_ORDER,
-  type EquipSlot,
-} from "@/lib/game-data";
+import { EQUIPMENT, levelFromXp, levelProgress, STAT_ORDER, type EquipSlot } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -192,7 +186,9 @@ function CharacterPage() {
                     )}
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-semibold">{g.item(item).name}</span>
+                    <span className="block truncate text-sm font-semibold">
+                      {g.item(item).name}
+                    </span>
                     <span className="block text-[0.7rem] italic text-muted-foreground">
                       {g.item(item).flavor}
                     </span>
@@ -234,9 +230,7 @@ function CharacterPage() {
             <p className="mt-3 text-sm">
               {t("character.boundAs")} <span className="text-primary">{user.email}</span>
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {t("character.syncNote")}
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{t("character.syncNote")}</p>
             <button
               className="btn-rune-ghost mt-3"
               onClick={async () => {
@@ -250,9 +244,7 @@ function CharacterPage() {
           </>
         ) : (
           <>
-            <p className="mt-3 text-xs text-muted-foreground">
-              {t("character.localOnly")}
-            </p>
+            <p className="mt-3 text-xs text-muted-foreground">{t("character.localOnly")}</p>
             <Link to="/auth" className="btn-gold mt-3">
               <LogIn className="h-4 w-4" /> {t("character.bindLegend")}
             </Link>
@@ -263,9 +255,7 @@ function CharacterPage() {
       <button
         className="btn-rune-ghost mt-6"
         onClick={() => {
-          if (
-            window.confirm(t("character.resetConfirm"))
-          ) {
+          if (window.confirm(t("character.resetConfirm"))) {
             resetLegend();
             toast(t("character.resetDone"));
           }

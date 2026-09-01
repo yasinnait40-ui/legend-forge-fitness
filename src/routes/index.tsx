@@ -49,7 +49,9 @@ function HomePage() {
   const game = useGame();
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
   const yesterday = todayKey(new Date(Date.now() - 86400000));
-  const streakInterrupted = Boolean(game.lastActiveDate && game.lastActiveDate !== todayKey() && game.lastActiveDate !== yesterday);
+  const streakInterrupted = Boolean(
+    game.lastActiveDate && game.lastActiveDate !== todayKey() && game.lastActiveDate !== yesterday,
+  );
 
   return (
     <RealmScreen
@@ -101,9 +103,7 @@ function HomePage() {
             {t("home.longestStreak", { count: game.bestStreak })}
           </p>
           {streakInterrupted && (
-            <p className="mt-1 text-[0.58rem] italic text-accent">
-              {t("home.streakRestart")}
-            </p>
+            <p className="mt-1 text-[0.58rem] italic text-accent">{t("home.streakRestart")}</p>
           )}
         </RunePanel>
         <Link to="/quests" className="block">
