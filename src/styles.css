@@ -362,8 +362,10 @@
   transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
 }
 .fantasy-character.is-entered { transform: translateY(0) scale(1); opacity: 1; }
-.fantasy-character-figure { position: relative; flex: 0 0 8rem; filter: drop-shadow(0 1rem 1rem rgb(0 0 0 / .55)); }
-.fantasy-character-art { display: block; width: 100%; height: auto; overflow: visible; }
+.fantasy-character:not(.is-entered) .fantasy-character-dialogue { opacity: 0; }
+.fantasy-character-figure { position: relative; flex: 0 0 9.5rem; filter: drop-shadow(0 1rem 1rem rgb(0 0 0 / .55)); }
+.fantasy-character-art { display: block; width: 100%; max-height: 19rem; object-fit: contain; object-position: bottom; overflow: visible; }
+.fantasy-character.is-speaking .fantasy-character-figure { filter: drop-shadow(0 1rem 1rem rgb(0 0 0 / .55)) drop-shadow(0 0 .85rem color-mix(in oklab, var(--character-accent) 52%, transparent)); }
 .fantasy-character-sigil { position: absolute; inset: auto 18% 2% 18%; height: .5rem; border-radius: 999px; background: var(--character-accent); box-shadow: 0 0 1.5rem var(--character-accent); opacity: .8; }
 .fantasy-character-dialogue { flex: 1; min-width: 0; padding: .7rem .75rem; transform: translateX(-.5rem); animation: character-dialogue-in .6s .55s both ease-out; }
 .fantasy-character-right { flex-direction: row-reverse; }
@@ -383,7 +385,8 @@
 }
 @media (max-width: 360px) {
   .fantasy-character { gap: .25rem; }
-  .fantasy-character-figure { flex-basis: 6.75rem; }
+  .fantasy-character-figure { flex-basis: 7.5rem; }
+  .fantasy-character-art { max-height: 15rem; }
   .fantasy-character-dialogue { padding: .55rem; }
   .fantasy-character-dialogue p:last-child { font-size: .75rem; }
 }
