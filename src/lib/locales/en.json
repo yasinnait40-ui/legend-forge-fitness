@@ -434,6 +434,7 @@
   },
   "notifications": { "permissionPrompt": "The kingdom awaits your return. Allow daily reminders?", "dailyReminder": "The kingdom awaits your return." },
   "treasure": { "title": "Treasure Chest", "invitation": "A hidden reward has answered your legend.", "open": "Open Chest", "revealed": "The chest reveals...", "xp": "+{{amount}} bonus XP", "cosmetic": "Sun-Forged Blade cosmetic", "claim": "Claim Reward" },
+  "social": { "title": "Allies of Aethora", "subtitle": "Invite a trusted companion and keep each other accountable.", "yourCode": "Your invite code", "copyCode": "Copy invite code", "inviteFriend": "Share invite", "copied": "Copied", "friendsList": "Your allies", "empty": "No allies have joined your legend yet.", "addCode": "Enter a friend code", "add": "Add", "cloudLimit": "Friend profiles require cloud linking; only level and streak will be shared.", "yourStreak": "Your streak", "yourLevel": "Your level", "inviteMessage": "Join my legend in Aethora with code", "pending": "Awaiting cloud link" },
   "characters": {
   "welcome": {
     "king": "Welcome, warrior. Your journey begins now.",

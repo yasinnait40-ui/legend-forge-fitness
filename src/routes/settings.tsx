@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 import hallOfLegends from "@/assets/hall-of-legends.jpg";
 import { cn } from "@/lib/utils";
+import { FriendsPanel } from "@/components/FriendsPanel";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -97,6 +98,7 @@ function SettingsPage() {
           </div>
         </RunePanel>
       </div>
+      <FriendsPanel />
     </RealmScreen>
   );
 }

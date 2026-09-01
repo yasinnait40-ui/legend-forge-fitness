@@ -434,6 +434,7 @@
   },
   "notifications": { "permissionPrompt": "El reino aguarda tu regreso. ¿Permitir recordatorios diarios?", "dailyReminder": "El reino aguarda tu regreso." },
   "treasure": { "title": "Cofre del Tesoro", "invitation": "Una recompensa oculta ha respondido a tu leyenda.", "open": "Abrir Cofre", "revealed": "El cofre revela...", "xp": "+{{amount}} XP adicional", "cosmetic": "Cosmético Hoja Forjada por el Sol", "claim": "Reclamar Recompensa" },
+  "social": { "title": "Aliados de Aethora", "subtitle": "Invita a un compañero de confianza y mantengan la motivación.", "yourCode": "Tu código de invitación", "copyCode": "Copiar código", "inviteFriend": "Compartir invitación", "copied": "Copiado", "friendsList": "Tus aliados", "empty": "Aún no se ha unido ningún aliado a tu leyenda.", "addCode": "Introduce un código de amigo", "add": "Añadir", "cloudLimit": "Los perfiles de amigos requieren conexión en la nube; solo se compartirán el nivel y la llama.", "yourStreak": "Tu llama", "yourLevel": "Tu nivel", "inviteMessage": "Únete a mi leyenda en Aethora con el código", "pending": "Esperando conexión en la nube" },
   "characters": {
     "welcome": {
       "king": "Bienvenido, guerrero. Tu viaje comienza ahora.",

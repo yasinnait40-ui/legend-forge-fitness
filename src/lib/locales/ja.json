@@ -300,7 +300,7 @@
             "sets": "2 × 10"
           },
           {
-            "name": "ショルダーオープナー",
+            "name": "ショルダ���オープナー",
             "sets": "2 × 40秒"
           }
         ]
@@ -434,6 +434,7 @@
   },
   "notifications": { "permissionPrompt": "王国は君の帰還を待っている。毎日の通知を許可しますか？", "dailyReminder": "王国は君の帰還を待っている。" },
   "treasure": { "title": "宝箱", "invitation": "君の伝説に隠された報酬が応えた。", "open": "宝箱を開く", "revealed": "宝箱の中身は…", "xp": "+{{amount}} ボーナス経験値", "cosmetic": "太陽鍛造の刃コスメ", "claim": "報酬を受け取る" },
+  "social": { "title": "アエソラの仲間", "subtitle": "信頼できる仲間を招いて、お互いの挑戦を支えよう。", "yourCode": "招待コード", "copyCode": "招待コードをコピー", "inviteFriend": "招待を共有", "copied": "コピーしました", "friendsList": "仲間", "empty": "まだ仲間は参加していません。", "addCode": "仲間のコードを入力", "add": "追加", "cloudLimit": "仲間のプロフィールにはクラウド連携が必要です。共有するのはレベルと炎だけです。", "yourStreak": "あなたの炎", "yourLevel": "あなたのレベル", "inviteMessage": "アエソラで私の伝説に参加しよう。コード", "pending": "クラウド連携待ち" },
   "characters": {
     "welcome": {
       "king": "ようこそ、戦士よ。汝の旅は今始まる。",
