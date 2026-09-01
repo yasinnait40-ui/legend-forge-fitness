@@ -405,7 +405,8 @@
 
 @keyframes continue-pulse { 50% { opacity: .35; transform: translateY(.2rem); } }
 @media (min-width: 640px) { .fantasy-character { min-height: 12rem; } .fantasy-character-figure { height: 22rem; } .fantasy-character-dialogue { width: min(76%, 48rem); } }
-@media (max-width: 360px) { .fantasy-character { min-height: 9rem; } .fantasy-character-figure { right: 0; bottom: 1.5rem; width: 7.5rem; height: 10.5rem; } .fantasy-character-dialogue { width: 82%; margin-left: 0; padding: .75rem 5.75rem .8rem .75rem; } }
+@media (max-width: 639px) { .fantasy-character { bottom: calc(4.25rem + env(safe-area-inset-bottom)); min-height: 11rem; } .fantasy-character-figure { right: .25rem; bottom: 4.75rem; width: clamp(7.5rem, 34vw, 10rem); height: clamp(9rem, 42vw, 13rem); z-index: 13; } .fantasy-character-dialogue { width: calc(100% - 1rem); margin-left: .5rem; margin-right: .5rem; padding: 2.1rem 4.5rem 1rem .85rem; } .fantasy-character-nameplate { left: .7rem; min-width: 8.5rem; } }
+@media (max-width: 360px) { .fantasy-character { min-height: 10rem; } .fantasy-character-figure { right: 0; bottom: 4.35rem; width: 7rem; height: 9.5rem; } .fantasy-character-dialogue { width: calc(100% - .75rem); margin-left: .375rem; margin-right: .375rem; padding: 2rem 4rem .8rem .7rem; } }
 @media (prefers-reduced-motion: reduce) { .fantasy-character, .fantasy-character-dialogue, .fantasy-character-figure, .fantasy-character-continue { animation: none; transition: none; } }
 
 /* ---------- Magic effects ---------- */
