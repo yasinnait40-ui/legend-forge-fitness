@@ -431,7 +431,9 @@
   },
   "ads": {
     "watchReward": "Mira un anuncio para recibir una bendición"
-  },"characters": {
+  },
+  "notifications": { "permissionPrompt": "El reino aguarda tu regreso. ¿Permitir recordatorios diarios?", "dailyReminder": "El reino aguarda tu regreso." },
+  "characters": {
     "welcome": {
       "king": "Bienvenido, guerrero. Tu viaje comienza ahora.",
       "adventurer": "Nuevas misiones te esperan en el gremio.",

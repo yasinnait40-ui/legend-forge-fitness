@@ -431,7 +431,9 @@
   },
   "ads": {
     "watchReward": "شاهد إعلانًا لتنال البركة"
-  },"characters": {
+  },
+  "notifications": { "permissionPrompt": "المملكة بانتظار عودتك. هل تسمح بالتذكيرات اليومية؟", "dailyReminder": "المملكة بانتظار عودتك." },
+  "characters": {
     "welcome": {
       "king": "أهلاً بك أيها المحارب. رحلتك تبدأ الآن.",
       "adventurer": "مهام جديدة بانتظارك في النقابة.",

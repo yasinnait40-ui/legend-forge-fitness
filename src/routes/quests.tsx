@@ -19,6 +19,7 @@ import { playSound } from "@/lib/sound-store";
 import { QUESTS, type Quest, type StatKey } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { useTranslation } from "react-i18next";
+import { requestReminderPermission } from "@/lib/notifications";
 
 export const Route = createFileRoute("/quests")({
   head: () => ({
@@ -61,6 +62,7 @@ function QuestsPage() {
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
       announceRewards(result, t("quests.sealedToast", { name: g.quest(q).name }));
+      if (game.totalQuests + game.totalTrials === 1) requestReminderPermission(t("notifications.permissionPrompt"));
     }
   }
 

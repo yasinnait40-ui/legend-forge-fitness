@@ -14,6 +14,7 @@ import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
+import { ReminderMonitor } from "../components/ReminderMonitor";
 import { hydrateGameStore } from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
 import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
@@ -190,6 +191,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <BottomNav />
+      <ReminderMonitor />
       <Toaster theme="dark" position="top-center" />
     </QueryClientProvider>
   );

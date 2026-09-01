@@ -431,7 +431,9 @@
   },
   "ads": {
     "watchReward": "広告を見て加護を得る"
-  },"characters": {
+  },
+  "notifications": { "permissionPrompt": "王国は君の帰還を待っている。毎日の通知を許可しますか？", "dailyReminder": "王国は君の帰還を待っている。" },
+  "characters": {
     "welcome": {
       "king": "ようこそ、戦士よ。汝の旅は今始まる。",
       "adventurer": "ギルドで新たな依頼が待っている。",
@@ -445,7 +447,7 @@
       "title": "おめでとう！レベル{{level}}に到達した。",
       "subtitle": "力は増したが、旅はまだ終わらない���"
     },
-    "questComplete": "クエスト完了！前進を続けよ。",
+    "questComplete": "��エスト完了！前進を続けよ。",
     "trialComplete": "試練を制した！力が増していく。"
   }
 }

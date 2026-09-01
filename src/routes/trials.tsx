@@ -12,6 +12,7 @@ import { TRIALS, type StatKey, type Trial } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { requestReminderPermission } from "@/lib/notifications";
 
 export const Route = createFileRoute("/trials")({
   head: () => ({
@@ -46,6 +47,7 @@ function TrialsPage() {
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
       announceRewards(result, t("trials.conqueredToast", { name: g.trial(trial).name }));
+      if (game.totalQuests + game.totalTrials === 1) requestReminderPermission(t("notifications.permissionPrompt"));
     }
   }
 

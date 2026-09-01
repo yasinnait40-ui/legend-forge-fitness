@@ -431,7 +431,9 @@
   },
   "ads": {
     "watchReward": "Watch an ad for a blessing"
-  } ,"characters": {
+  },
+  "notifications": { "permissionPrompt": "The kingdom awaits your return. Allow daily reminders?", "dailyReminder": "The kingdom awaits your return." },
+  "characters": {
   "welcome": {
     "king": "Welcome, warrior. Your journey begins now.",
     "adventurer": "New quests await you at the guild.",

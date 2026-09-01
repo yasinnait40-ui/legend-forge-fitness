@@ -431,7 +431,9 @@
   },
   "ads": {
     "watchReward": "Regarde une annonce pour recevoir une bénédiction"
-  },"characters": {
+  },
+  "notifications": { "permissionPrompt": "Le royaume attend ton retour. Autoriser les rappels quotidiens ?", "dailyReminder": "Le royaume attend ton retour." },
+  "characters": {
     "welcome": {
       "king": "Bienvenue, guerrier. Ton voyage commence maintenant.",
       "adventurer": "De nouvelles quêtes t'attendent à la guilde.",
