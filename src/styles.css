@@ -346,6 +346,69 @@
   background: linear-gradient(180deg, rgb(255 255 255 / 0.35), transparent 55%);
 }
 
+/* ---------- Unified visual-novel dialogue bar ---------- */
+.fantasy-character {
+  --character-accent: var(--primary);
+  position: fixed;
+  z-index: 80;
+  left: 0;
+  right: 0;
+  bottom: calc(3.75rem + env(safe-area-inset-bottom));
+  display: block;
+  width: 100%;
+  min-height: 10rem;
+  pointer-events: none;
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform .28s cubic-bezier(.22,1,.36,1), opacity .24s ease;
+}
+.fantasy-character.is-entered { transform: translateY(0); opacity: 1; }
+.fantasy-character-figure {
+  position: absolute;
+  z-index: 12;
+  right: clamp(.25rem, 4vw, 2.5rem);
+  bottom: 7.5rem;
+  width: clamp(8.5rem, 38vw, 15rem);
+  height: clamp(12rem, 50vw, 20rem);
+  margin: 0;
+  filter: drop-shadow(.35rem .7rem .65rem rgb(0 0 0 / .7));
+  isolation: isolate;
+  pointer-events: none;
+}
+.fantasy-character-art { display: block; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; }
+.fantasy-character-sigil { display: none; }
+.fantasy-character-dialogue {
+  flex: 1;
+  min-width: 0;
+  width: min(82%, 46rem);
+  margin: 0 auto 0 1rem;
+  padding: 2.3rem clamp(3.5rem, 10vw, 6rem) 1.15rem 1.1rem;
+  border: 2px solid color-mix(in oklab, var(--character-accent) 68%, var(--border));
+  border-radius: .75rem 0 .25rem .75rem;
+  background: linear-gradient(135deg, color-mix(in oklab, var(--card) 96%, var(--background)), color-mix(in oklab, var(--background) 92%, var(--primary) 8%));
+  overflow: visible;
+  box-shadow: 0 -1rem 2rem rgb(0 0 0 / .22);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 14;
+}
+.fantasy-character-dialogue:focus-visible { outline: 2px solid var(--character-accent); outline-offset: -3px; }
+.fantasy-character-nameplate { position: absolute; top: -.95rem; left: 1rem; display: grid; gap: .12rem; min-width: 9rem; padding: .4rem .85rem .35rem; border: 1px solid var(--character-accent); background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 24%, var(--card)), var(--card)); box-shadow: .2rem .2rem 0 rgb(0 0 0 / .35); color: var(--foreground); clip-path: polygon(0 0, 96% 0, 100% 50%, 96% 100%, 0 100%, 3% 50%); }
+.fantasy-character-nameplate strong { font-family: var(--font-display), serif; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); }
+.fantasy-character-nameplate small { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-foreground); }
+.fantasy-character-line { display: block; font-family: var(--font-serif), Georgia, serif; font-size: clamp(.82rem, 3.2vw, 1rem); line-height: 1.55; color: var(--foreground); }
+.fantasy-character-continue { position: absolute; right: .9rem; bottom: .65rem; color: var(--character-accent); font-size: .7rem; animation: continue-pulse 1.2s ease-in-out infinite; }
+
+@keyframes continue-pulse { 50% { opacity: .35; transform: translateY(.2rem); } }
+@media (min-width: 640px) { .fantasy-character { min-height: 12rem; } .fantasy-character-figure { height: 22rem; } .fantasy-character-dialogue { width: min(76%, 48rem); } }
+@media (max-width: 639px) { .fantasy-character { position: fixed; bottom: calc(4.25rem + env(safe-area-inset-bottom)); min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; transform: translateY(110%); } .fantasy-character.is-entered { transform: translateY(0); } .fantasy-character-figure { position: relative; inset: auto; order: 1; align-self: flex-end; width: clamp(8rem, 38vw, 11rem); height: clamp(10rem, 45vw, 14rem); z-index: 1; margin: 0 .5rem -1px 0; } .fantasy-character-dialogue { order: 2; width: calc(100% - 1rem); min-height: 7rem; margin: 0 .5rem; padding: 2.1rem clamp(6.25rem, 31vw, 8rem) 1rem .85rem; z-index: 2; } .fantasy-character-nameplate { left: .7rem; min-width: 8.5rem; } }
+@media (max-width: 360px) { .fantasy-character-figure { width: 7.5rem; height: 10.5rem; margin-right: .25rem; } .fantasy-character-dialogue { width: calc(100% - .75rem); margin-left: .375rem; margin-right: .375rem; padding: 2rem 5.5rem .8rem .7rem; } }
+@media (prefers-reduced-motion: reduce) { .fantasy-character, .fantasy-character-dialogue, .fantasy-character-figure, .fantasy-character-continue { animation: none; transition: none; } }
+
 /* ---------- Magic effects ---------- */
 
 .ember {

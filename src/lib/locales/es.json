@@ -22,6 +22,8 @@
     "vitality": "Vitalidad",
     "recovery": "Recuperación",
     "dayFlame": "Llama del Día",
+    "longestStreak": "Récord: {{count}} días",
+    "streakRestart": "El Rey cree en tu regreso. Enciende la llama de nuevo hoy.",
     "dailyQuests": "Misiones Diarias",
     "beginTrials": "Comenzar las Pruebas de Hoy",
     "consultGuide": "Consultar la Guía Arcana"
@@ -436,7 +438,8 @@
       "scientist": "Veamos qué puede lograr tu cuerpo hoy.",
       "wizard": "Pregunta, y te guiaré.",
       "sacred": "El santuario da la bienvenida a tu regreso.",
-      "maid": "Vuestra alcoba está lista, mi señor."
+      "maid": "Vuestra alcoba está lista, mi señor.",
+      "sprite": "¡Psst! Soy Miri, tu pequeña chispa de magia. ¡Hagamos brillar tu leyenda!"
     },
     "levelUp": {
       "title": "¡Felicidades! Alcanzaste el nivel {{level}}.",

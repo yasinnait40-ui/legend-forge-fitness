@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import i18n, { applyDirection } from "../lib/i18n";
 import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
@@ -132,7 +133,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -148,9 +149,28 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
+    const savedLanguage = window.localStorage.getItem("aethora_lang");
+    const browserLanguage = window.navigator.language?.split("-")[0];
+    const language = savedLanguage || browserLanguage;
+    if (language && ["en", "ar", "ja", "es", "fr"].includes(language)) {
+      applyDirection(language);
+      if (language !== i18n.language) void i18n.changeLanguage(language);
+    }
+
     hydrateGameStore();
     hydrateSoundStore();
     initBackgroundMusic();
+
+    // Supabase is optional for the public preview. Keep the local game experience
+    // available when the project has not supplied its cloud credentials yet.
+    const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"];
+    const supabaseKey =
+      import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_PUBLISHABLE_KEY"];
+
+    if (!supabaseUrl || !supabaseKey) {
+      stopCloudSync();
+      return;
+    }
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {

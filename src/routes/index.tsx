@@ -2,14 +2,13 @@ import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flame, ScrollText, Sparkles, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.jpg";
-import arcaneWarrior from "@/assets/arcane-warrior.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
-import { questsDoneToday, useGame } from "@/lib/game-store";
-import { levelProgress, QUESTS, STAT_ORDER } from "@/lib/game-data";
-import { useGameText } from "@/lib/game-i18n";
+import { questsDoneToday, todayKey, useGame } from "@/lib/game-store";
+import { QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -47,10 +46,10 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { t } = useTranslation();
-  const g = useGameText();
   const game = useGame();
-  const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
+  const yesterday = todayKey(new Date(Date.now() - 86400000));
+  const streakInterrupted = Boolean(game.lastActiveDate && game.lastActiveDate !== todayKey() && game.lastActiveDate !== yesterday);
 
   return (
     <RealmScreen
@@ -72,53 +71,8 @@ function HomePage() {
         </p>
       </header>
 
+      <CharacterWelcome kind="king" dialogue={t("characters.welcome.king")} />
       <div className="h-[26dvh]" aria-hidden="true" />
-
-      <RunePanel>
-        <div className="flex items-center gap-4">
-          <img
-            src={arcaneWarrior}
-            alt="Your arcane warrior in rune-engraved armor"
-            width={1024}
-            height={1536}
-            loading="lazy"
-            className="h-20 w-20 shrink-0 rounded-full border-2 border-primary/60 object-cover object-[center_12%] shadow-[0_0_18px_rgb(0_0_0/0.6)]"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="font-display text-lg font-bold leading-tight">{t("home.heroName")}</p>
-            <p className="mt-0.5 text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
-              {g.title(level)}
-            </p>
-          </div>
-          <div className="shrink-0 text-right">
-            <p className="font-display text-[0.58rem] uppercase tracking-[0.28em] text-muted-foreground">
-              {t("home.level")}
-            </p>
-            <p className="text-glow-gold font-display text-3xl font-black text-primary">{level}</p>
-          </div>
-        </div>
-        <div className="mt-4">
-          <div className="mb-1 flex items-baseline justify-between">
-            <span className="font-display text-[0.62rem] uppercase tracking-[0.22em] text-muted-foreground">
-              {t("home.experience")}
-            </span>
-            <span className="font-display text-xs font-bold text-primary">
-              {intoLevel} / {needed} XP
-            </span>
-          </div>
-          <div className="bar-track !h-2.5">
-            <div
-              className="bar-fill"
-              style={{
-                width: `${Math.max(2, ratio * 100)}%`,
-                background:
-                  "linear-gradient(90deg, color-mix(in oklab, var(--primary) 50%, black 30%), var(--primary))",
-                boxShadow: "0 0 16px color-mix(in oklab, var(--primary) 70%, transparent)",
-              }}
-            />
-          </div>
-        </div>
-      </RunePanel>
 
       <RunePanel className="mt-4">
         <RuneHeading>{t("home.attributes")}</RuneHeading>
@@ -143,6 +97,14 @@ function HomePage() {
           <p className="text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
             {t("home.dayFlame")}
           </p>
+          <p className="mt-2 text-[0.58rem] text-muted-foreground">
+            {t("home.longestStreak", { count: game.bestStreak })}
+          </p>
+          {streakInterrupted && (
+            <p className="mt-1 text-[0.58rem] italic text-accent">
+              {t("home.streakRestart")}
+            </p>
+          )}
         </RunePanel>
         <Link to="/quests" className="block">
           <RunePanel className="h-full text-center">

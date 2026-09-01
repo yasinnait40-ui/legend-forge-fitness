@@ -22,6 +22,8 @@
     "vitality": "生命力",
     "recovery": "回復力",
     "dayFlame": "日々の炎",
+    "longestStreak": "最高記録：{{count}}日",
+    "streakRestart": "王は君の帰還を信じている。今日、もう一度炎を灯そう。",
     "dailyQuests": "デイリークエスト",
     "beginTrials": "今日の試練を始める",
     "consultGuide": "秘術の書を開く"
@@ -213,7 +215,7 @@
       },
       "ember-core": {
         "name": "残り火の体幹儀式",
-        "epithet": "己の中心に火を灯せ",
+        "epithet": "己の中���に火を灯せ",
         "exercises": [
           {
             "name": "プランク",
@@ -436,11 +438,12 @@
       "scientist": "今日、汝の肉体が何を成し遂げるか見てみよう。",
       "wizard": "問うがよい。汝を導こう。",
       "sacred": "聖域は汝の帰還を歓迎する。",
-      "maid": "お部屋の準備が整いました、閣下。"
+      "maid": "お部屋の準備が整いました、閣下。",
+      "sprite": "ねえ！ぼくはミリ、小さな魔法のきらめきだよ。君の伝説を輝かせよう！"
     },
     "levelUp": {
       "title": "おめでとう！レベル{{level}}に到達した。",
-      "subtitle": "力は増したが、旅はまだ終わらない。"
+      "subtitle": "力は増したが、旅はまだ終わらない���"
     },
     "questComplete": "クエスト完了！前進を続けよ。",
     "trialComplete": "試練を制した！力が増していく。"

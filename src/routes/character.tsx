@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import warriorChamber from "@/assets/warrior-chamber.jpg";
 import arcaneWarrior from "@/assets/arcane-warrior.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { equipItem, resetLegend, useGame } from "@/lib/game-store";
@@ -99,6 +100,8 @@ function CharacterPage() {
           {t("character.title", "Your Hero")}
         </h1>
       </header>
+
+      <CharacterWelcome kind="sprite" dialogue={t("characters.welcome.sprite")} />
 
       {/* Portrait */}
       <RunePanel className="mt-6 overflow-hidden !p-0">
