@@ -190,6 +190,10 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <footer className="relative z-10 flex justify-center gap-4 px-4 pb-24 pt-3 text-xs text-muted-foreground">
+        <Link to="/privacy" className="underline underline-offset-4">Privacy Policy</Link>
+        <Link to="/terms" className="underline underline-offset-4">Terms of Service</Link>
+      </footer>
       <BottomNav />
       <ReminderMonitor />
       <Toaster theme="dark" position="top-center" />
