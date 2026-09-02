@@ -56,7 +56,7 @@ function AuthPage() {
     try {
       if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
-          email,
+          email: email.trim().toLowerCase(),
           password,
           options: {
             emailRedirectTo: authCallbackUrl(),
@@ -73,7 +73,10 @@ function AuthPage() {
           });
         }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.trim().toLowerCase(),
+          password,
+        });
         if (error) throw error;
         toast.success("The gates open — welcome back.");
         void navigate({ to: "/", replace: true });
@@ -82,13 +85,17 @@ function AuthPage() {
       const message = err instanceof Error ? err.message.toLowerCase() : "";
       const safeMessage = message.includes("email not confirmed")
         ? "Confirm your email before signing in."
-        : message.includes("password") && message.includes("6")
-          ? "Choose a stronger password."
-          : message.includes("rate limit") || message.includes("too many")
-            ? "Too many attempts. Please wait and try again."
-            : mode === "signin"
-              ? "Invalid email or password."
-              : "We could not create the account. Check your details and try again.";
+        : message.includes("already registered") || message.includes("already been registered")
+          ? "An account already exists for this email. Switch to Sign In."
+          : message.includes("invalid email") || message.includes("email_address_invalid")
+            ? "Enter a valid email address."
+            : message.includes("password") && (message.includes("6") || message.includes("weak"))
+              ? "Choose a stronger password."
+              : message.includes("rate limit") || message.includes("too many")
+                ? "Too many attempts. Please wait and try again."
+                : mode === "signin"
+                  ? "Invalid email or password."
+                  : "We could not create the account. Check your details and try again.";
       toast.error(safeMessage);
     } finally {
       setBusy(false);
