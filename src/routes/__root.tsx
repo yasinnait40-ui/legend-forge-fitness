@@ -15,7 +15,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
 import { ReminderMonitor } from "../components/ReminderMonitor";
-import { hydrateGameStore } from "../lib/game-store";
+import { hydrateGameStore, resetGameStore } from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
 import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 import "../lib/i18n";
@@ -169,7 +169,6 @@ function RootComponent() {
       if (language !== i18n.language) void i18n.changeLanguage(language);
     }
 
-    hydrateGameStore();
     hydrateSoundStore();
     initBackgroundMusic();
 
@@ -184,15 +183,29 @@ function RootComponent() {
       return;
     }
 
+    let activeUserId: string | null = null;
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        startCloudSync(session.user.id);
-      } else if (event === "SIGNED_OUT") {
+      const nextUserId = session?.user?.id ?? null;
+      if (nextUserId && nextUserId !== activeUserId) {
+        activeUserId = nextUserId;
+        resetGameStore();
+        startCloudSync(nextUserId);
+      } else if (!nextUserId) {
+        activeUserId = null;
         stopCloudSync();
+        resetGameStore();
       }
     });
-    void supabase.auth.getSession().then(({ data }) => {
-      if (data.session?.user) startCloudSync(data.session.user.id);
+    void supabase.auth.getSession().then(({ data, error }) => {
+      if (error || !data.session?.user) {
+        if (error) console.error("[v0] session restoration failed", error.message);
+        resetGameStore();
+        stopCloudSync();
+        return;
+      }
+      activeUserId = data.session.user.id;
+      resetGameStore();
+      startCloudSync(activeUserId);
     });
     return () => sub.subscription.unsubscribe();
   }, []);

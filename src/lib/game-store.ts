@@ -67,6 +67,15 @@ export function getGameState(): GameState {
   return state;
 }
 
+/** Clear cached state when auth ownership changes or the user signs out. */
+export function resetGameStore() {
+  replaceGameState({
+    ...DEFAULT_STATE,
+    stats: { ...DEFAULT_STATE.stats },
+    equipment: { ...DEFAULT_STATE.equipment },
+  });
+}
+
 function emit() {
   listeners.forEach((l) => l());
 }

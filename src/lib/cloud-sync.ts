@@ -42,8 +42,10 @@ function schedulePush(userId: string) {
 /** Pull the cloud legend, keep whichever is further along, then push the result. */
 async function pullAndMerge(userId: string) {
   const { data, error } = await supabase
-    .from("character_stats")
-    .select("*")
+    .from("game_states")
+    .select(
+      "xp, level, streak, best_streak, last_active_date, stats, equipment, total_quests, total_trials, achievements",
+    )
     .eq("user_id", userId)
     .maybeSingle();
 
@@ -53,24 +55,52 @@ async function pullAndMerge(userId: string) {
   }
 
   const local = getGameState();
-  if (data && data.xp > local.xp) {
-    replaceGameState({
-      ...local,
-      xp: data.xp,
-      stats: {
-        strength: data.strength,
-        endurance: data.endurance,
-        agility: data.agility,
-        vitality: data.vitality,
-        recovery: data.recovery,
-      },
-      streak: data.streak,
-      bestStreak: data.best_streak,
-      lastActiveDate: data.last_active_date,
-    });
-  }
-  // Progression is now committed atomically by the Supabase RPC; never overwrite it with cached state.
-  return;
+  if (!data) return;
+
+  const stats = (data.stats ?? {}) as Partial<GameState["stats"]>;
+  const equipment = (data.equipment ?? {}) as Partial<GameState["equipment"]>;
+  const [questResult, trialResult] = await Promise.all([
+    supabase
+      .from("quest_completions")
+      .select("quest_id, completed_at" as never)
+      .eq("user_id", userId),
+    supabase
+      .from("trial_completions" as never)
+      .select("trial_id, completed_at" as never)
+      .eq("user_id", userId),
+  ]);
+  const today = todayKey();
+  const questRows = (questResult.data ?? []) as unknown as Array<{
+    quest_id: string;
+    completed_at: string;
+  }>;
+  const trialRows = (trialResult.data ?? []) as unknown as Array<{
+    trial_id: string;
+    completed_at: string;
+  }>;
+  const questsToday = questRows
+    .filter((row) => row.completed_at.slice(0, 10) === today)
+    .map((row) => row.quest_id);
+  const trialsToday = trialRows
+    .filter((row) => row.completed_at.slice(0, 10) === today)
+    .map((row) => row.trial_id);
+  replaceGameState({
+    ...local,
+    xp: data.xp,
+    stats: { ...local.stats, ...stats },
+    equipment: { ...local.equipment, ...equipment },
+    streak: data.streak,
+    bestStreak: data.best_streak,
+    lastActiveDate: data.last_active_date,
+    questsToday: { date: today, ids: questsToday },
+    trialsToday: { date: today, ids: trialsToday },
+    trialsEver: trialRows.map((row) => row.trial_id),
+    achievements: Array.isArray(data.achievements)
+      ? (data.achievements as string[])
+      : local.achievements,
+    totalQuests: data.total_quests,
+    totalTrials: data.total_trials,
+  });
 }
 
 function logNewCompletions(userId: string, prev: GameState, next: GameState) {

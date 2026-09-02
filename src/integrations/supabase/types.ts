@@ -8,6 +8,96 @@ export type Database = {
   };
   public: {
     Tables: {
+      game_states: {
+        Row: {
+          achievements: Json;
+          best_streak: number;
+          equipment: Json;
+          last_active_date: string | null;
+          level: number;
+          stats: Json;
+          streak: number;
+          total_quests: number;
+          total_trials: number;
+          updated_at: string;
+          user_id: string;
+          xp: number;
+        };
+        Insert: {
+          achievements?: Json;
+          best_streak?: number;
+          equipment?: Json;
+          last_active_date?: string | null;
+          level?: number;
+          stats?: Json;
+          streak?: number;
+          total_quests?: number;
+          total_trials?: number;
+          updated_at?: string;
+          user_id: string;
+          xp?: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["game_states"]["Insert"]>;
+        Relationships: [];
+      };
+      inventory: {
+        Row: { acquired_at: string; item_id: string; quantity: number; user_id: string };
+        Insert: { acquired_at?: string; item_id: string; quantity?: number; user_id: string };
+        Update: Partial<Database["public"]["Tables"]["inventory"]["Insert"]>;
+        Relationships: [];
+      };
+      trial_completions: {
+        Row: {
+          completed_at: string;
+          completed_day: string | null;
+          id: string;
+          trial_id: string;
+          trial_name: string;
+          user_id: string;
+          xp_earned: number;
+        };
+        Insert: {
+          completed_at?: string;
+          completed_day?: string | null;
+          id?: string;
+          trial_id: string;
+          trial_name: string;
+          user_id: string;
+          xp_earned: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["trial_completions"]["Insert"]>;
+        Relationships: [];
+      };
+      reward_history: {
+        Row: {
+          amount: number | null;
+          created_at: string;
+          id: string;
+          item_id: string | null;
+          reward_type: string;
+          source_id: string;
+          source_type: string;
+          user_id: string;
+        };
+        Insert: {
+          amount?: number | null;
+          created_at?: string;
+          id?: string;
+          item_id?: string | null;
+          reward_type: string;
+          source_id: string;
+          source_type: string;
+          user_id: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["reward_history"]["Insert"]>;
+        Relationships: [];
+      };
+      achievement_unlocks: {
+        Row: { achievement_id: string; unlocked_at: string; user_id: string };
+        Insert: { achievement_id: string; unlocked_at?: string; user_id: string };
+        Update: Partial<Database["public"]["Tables"]["achievement_unlocks"]["Insert"]>;
+        Relationships: [];
+      };
       character_stats: {
         Row: {
           agility: number;
@@ -133,7 +223,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      complete_activity: {
+        Args: { p_activity_id: string; p_kind: string };
+        Returns: Json;
+      };
     };
     Enums: {
       [_ in never]: never;
