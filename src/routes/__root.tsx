@@ -21,6 +21,16 @@ import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 import "../lib/i18n";
 import { hydrateSoundStore, initBackgroundMusic } from "../lib/sound-store";
 
+const CHARACTER_ASSETS = [
+  "/characters/king.png",
+  "/characters/adventurer.png",
+  "/characters/scientist.png",
+  "/characters/wizard.png",
+  "/characters/sacred.png",
+  "/characters/hakari.png",
+  "/characters/sprite.png",
+];
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -114,6 +124,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
     links: [
+      ...CHARACTER_ASSETS.map((href) => ({ rel: "preload", as: "image", href })),
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },

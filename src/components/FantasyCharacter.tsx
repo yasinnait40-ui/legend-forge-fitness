@@ -62,6 +62,9 @@ export function FantasyCharacter({
           src={character.artwork.src}
           alt={t(character.artwork.altKey)}
           className="fantasy-character-art"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
       </div>
       <button
