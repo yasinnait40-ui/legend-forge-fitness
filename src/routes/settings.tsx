@@ -6,7 +6,7 @@ import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { useSound, toggleMuted, setVolume } from "@/lib/sound-store";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
-import hallOfLegends from "@/assets/hall-of-legends.jpg";
+import warriorChamber from "@/assets/warrior-chamber.jpg";
 import { cn } from "@/lib/utils";
 import { FriendsPanel } from "@/components/FriendsPanel";
 import { Link } from "@tanstack/react-router";
@@ -41,15 +41,43 @@ function SettingsPage() {
 
   return (
     <RealmScreen
-      image={hallOfLegends}
-      alt="A quiet chamber of runes and scrolls"
-      imagePosition="center 25%"
+      image={warriorChamber}
+      alt="A peaceful fantasy bedroom chamber with golden ornaments"
+      imagePosition="center 40%"
+      veil="normal"
     >
       <header className="pt-10 text-center">
         <RuneHeading>{t("settings.title", "Settings")}</RuneHeading>
       </header>
 
-      <div className="mt-6 space-y-3">
+      {/* Maid Character Section */}
+      <div className="mt-8 flex flex-col items-center gap-4">
+        <div className="relative h-64 w-full max-w-xs">
+          {/* Maid Character Placeholder - Gold border frame */}
+          <div className="absolute inset-0 flex items-center justify-center rounded-lg border-2 border-yellow-600/60 bg-gradient-to-b from-yellow-900/20 to-black/40 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <div className="text-4xl">👩‍🦰</div>
+              <p className="font-display text-xs uppercase tracking-widest text-yellow-600">The Maid</p>
+              <p className="font-serif text-xs italic text-foreground/70">Chamber Steward</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Maid Dialogue Box */}
+        <div className="w-full max-w-sm rounded-lg border-2 border-yellow-600/60 bg-gradient-to-b from-black/80 to-black/60 p-4 backdrop-blur-sm">
+          <p className="font-display text-[0.65rem] uppercase tracking-widest text-yellow-600">
+            The Maid
+          </p>
+          <p className="font-serif text-sm leading-6 text-foreground">
+            Your chamber is ready, my lord. The realm awaits your commands.
+          </p>
+          <div className="mt-3 flex justify-end">
+            <div className="h-2 w-2 rotate-45 border-b-2 border-r-2 border-yellow-600/60" />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 space-y-3">
         <RunePanel className="flex items-start gap-4">
           {user ? (
             <LogIn className="mt-1 h-6 w-6 shrink-0" />
