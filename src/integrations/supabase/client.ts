@@ -59,6 +59,26 @@ function createSupabaseClient(): SupabaseClient<Database> {
           return { data: { subscription: { unsubscribe: () => undefined } } };
         },
         getSession: async () => ({ data: { session: null }, error: null }),
+        signInWithPassword: async () => ({
+          data: { user: null, session: null },
+          error: new Error("Supabase is not configured in this preview."),
+        }),
+        signInWithOAuth: async () => ({
+          data: { provider: null, url: null },
+          error: new Error("Supabase is not configured in this preview."),
+        }),
+        signUp: async () => ({
+          data: { user: null, session: null },
+          error: new Error("Supabase is not configured in this preview."),
+        }),
+        resetPasswordForEmail: async () => ({
+          data: {},
+          error: new Error("Supabase is not configured in this preview."),
+        }),
+        resend: async () => ({
+          data: {},
+          error: new Error("Supabase is not configured in this preview."),
+        }),
         signOut: async () => ({ error: null }),
       },
       from: () => offlineQuery,
