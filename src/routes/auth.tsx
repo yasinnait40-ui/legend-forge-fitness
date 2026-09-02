@@ -116,7 +116,10 @@ function AuthPage() {
     const { error } = await supabase.auth.resend({
       type: "signup",
       email: email.trim(),
-      options: { emailRedirectTo: window.location.origin },
+      options: {
+        emailRedirectTo:
+          import.meta.env["VITE_DEV_SUPABASE_REDIRECT_URL"] ?? `${window.location.origin}/auth`,
+      },
     });
     setBusy(false);
     if (error) {

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Flame, ScrollText, Sparkles, Swords } from "lucide-react";
+import { Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
@@ -10,6 +10,7 @@ import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, todayKey, useGame } from "@/lib/game-store";
 import { QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,6 +48,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { t } = useTranslation();
   const game = useGame();
+  const { user, loading } = useAuth();
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
   const yesterday = todayKey(new Date(Date.now() - 86400000));
   const streakInterrupted = Boolean(
@@ -62,6 +64,11 @@ function HomePage() {
       eager
     >
       <header className="pt-14 text-center">
+        {!loading && !user && (
+          <Link to="/auth" className="btn-rune-ghost mx-auto mb-6 !w-auto px-5 py-2 text-[0.65rem]">
+            <LogIn className="h-4 w-4" /> Sign In / Create Account
+          </Link>
+        )}
         <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-primary/85">
           {t("home.realmOf")}
         </p>
