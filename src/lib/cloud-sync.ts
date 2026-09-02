@@ -62,7 +62,7 @@ async function pullAndMerge(userId: string) {
   const [questResult, trialResult] = await Promise.all([
     supabase
       .from("quest_completions")
-      .select("quest_id, completed_at" as never)
+      .select("quest_id, quest_date" as never)
       .eq("user_id", userId),
     supabase
       .from("trial_completions" as never)
@@ -72,14 +72,14 @@ async function pullAndMerge(userId: string) {
   const today = todayKey();
   const questRows = (questResult.data ?? []) as unknown as Array<{
     quest_id: string;
-    completed_at: string;
+    quest_date: string;
   }>;
   const trialRows = (trialResult.data ?? []) as unknown as Array<{
     trial_id: string;
     completed_at: string;
   }>;
   const questsToday = questRows
-    .filter((row) => row.completed_at.slice(0, 10) === today)
+    .filter((row) => row.quest_date === today)
     .map((row) => row.quest_id);
   const trialsToday = trialRows
     .filter((row) => row.completed_at.slice(0, 10) === today)
