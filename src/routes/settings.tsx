@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Volume2, VolumeX, Languages } from "lucide-react";
+import { LogIn, LogOut, UserPlus, Volume2, VolumeX, Languages } from "lucide-react";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { useSound, toggleMuted, setVolume } from "@/lib/sound-store";
@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import { FriendsPanel } from "@/components/FriendsPanel";
 import { Link } from "@tanstack/react-router";
 import { HealthSyncInfo } from "@/components/HealthSyncInfo";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -27,6 +29,7 @@ const LANGUAGES = [
 function SettingsPage() {
   const { t } = useTranslation();
   const { muted, volume } = useSound();
+  const { user, loading } = useAuth();
   const [, forceUpdate] = useState(0);
   const currentLang = i18n.language?.split("-")[0] ?? "en";
 
@@ -47,6 +50,58 @@ function SettingsPage() {
       </header>
 
       <div className="mt-6 space-y-3">
+        <RunePanel className="flex items-start gap-4">
+          {user ? (
+            <LogIn className="mt-1 h-6 w-6 shrink-0" />
+          ) : (
+            <UserPlus className="mt-1 h-6 w-6 shrink-0" />
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold">{t("settings.account", "Account")}</p>
+            {loading ? (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("settings.accountLoading", "Reading your oath...")}
+              </p>
+            ) : user ? (
+              <>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {t("settings.signedIn", "Signed in")}
+                </p>
+                <p
+                  className="mt-1 truncate text-sm text-foreground/80"
+                  title={user.email ?? undefined}
+                >
+                  {user.email}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => void supabase.auth.signOut()}
+                  className="btn-rune-ghost mt-3 !w-auto px-4 py-2 text-[0.65rem]"
+                >
+                  <LogOut className="h-4 w-4" /> {t("settings.logOut", "Log Out")}
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                  {t(
+                    "settings.accountDescription",
+                    "Sign in to save your progress, quests, achievements, inventory, and character data.",
+                  )}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Link to="/auth" className="btn-rune !w-auto px-4 py-2 text-[0.65rem]">
+                    <LogIn className="h-4 w-4" /> {t("settings.signIn", "Sign In")}
+                  </Link>
+                  <Link to="/auth" className="btn-rune-ghost !w-auto px-4 py-2 text-[0.65rem]">
+                    <UserPlus className="h-4 w-4" /> {t("settings.createAccount", "Create Account")}
+                  </Link>
+                </div>
+              </>
+            )}
+          </div>
+        </RunePanel>
+
         <RunePanel className="flex items-center gap-4">
           {muted ? (
             <VolumeX className="h-6 w-6 shrink-0" />
