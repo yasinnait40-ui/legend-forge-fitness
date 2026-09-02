@@ -14,8 +14,9 @@ function AuthCallbackPage() {
 
   useEffect(() => {
     let active = true;
-    const code = new URLSearchParams(window.location.search).get("code");
-    const errorDescription = new URLSearchParams(window.location.search).get("error_description");
+    const query = new URLSearchParams(window.location.search);
+    const code = query.get("code");
+    const errorDescription = query.get("error_description");
 
     async function finishAuth() {
       if (errorDescription) {
@@ -26,6 +27,11 @@ function AuthCallbackPage() {
         return;
       }
       if (!code) {
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
+          if (active) void navigate({ to: "/", replace: true });
+          return;
+        }
         if (active) setMessage("This authentication link is incomplete or expired.");
         return;
       }
