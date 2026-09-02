@@ -397,7 +397,6 @@
   width: clamp(8.5rem, 38vw, 15rem);
   height: clamp(12rem, 50vw, 20rem);
   margin: 0 auto;
-  margin: 0;
   filter: drop-shadow(0.35rem 0.7rem 0.65rem rgb(0 0 0 / 0.7));
   isolation: isolate;
   pointer-events: none;
