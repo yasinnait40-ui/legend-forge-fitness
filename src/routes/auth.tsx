@@ -43,10 +43,24 @@ function AuthPage() {
   const [verificationSent, setVerificationSent] = useState(false);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string>("");
 
   useEffect(() => {
+    // Log environment and configuration info
+    const viteEnv = import.meta.env as ImportMetaEnv & {
+      VITE_SUPABASE_URL?: string;
+      NEXT_PUBLIC_SUPABASE_URL?: string;
+    };
+    const supabaseUrl = viteEnv.VITE_SUPABASE_URL || viteEnv.NEXT_PUBLIC_SUPABASE_URL;
+    console.log("🔐 Auth Page Loaded");
+    console.log("🌐 Supabase URL:", supabaseUrl?.substring(0, 20) + "..." || "NOT SET");
+    console.log("🔗 Redirect URL:", authCallbackUrl());
+    
     void supabase.auth.getSession().then(({ data }) => {
-      if (data.session) void navigate({ to: "/", replace: true });
+      if (data.session) {
+        console.log("✅ Session found, redirecting home");
+        void navigate({ to: "/", replace: true });
+      }
     });
   }, [navigate]);
 
@@ -151,18 +165,25 @@ function AuthPage() {
 
   async function onGoogle() {
     setBusy(true);
+    const redirectUrl = authCallbackUrl();
+    
     try {
-      const redirectUrl = authCallbackUrl();
-      console.log("🔐 OAuth Redirect URL:", redirectUrl);
-      
+      const logMsg = `🔐 Google OAuth Starting\n🌐 Redirect: ${redirectUrl}\n📦 Supabase: ${supabase ? "✓" : "✗"}`;
+      console.log(logMsg);
+      setDebugInfo(logMsg);
+
       // Verify Supabase is configured
-      if (!supabase.auth) {
-        toast.error("Authentication service is not available.");
+      if (!supabase?.auth) {
+        const errMsg = "❌ Supabase Auth not available";
+        console.error(errMsg);
+        toast.error("Authentication service is not configured.");
+        setDebugInfo(errMsg);
         setBusy(false);
         return;
       }
 
-      console.log("🔐 Starting Google OAuth flow...");
+      // Call OAuth
+      console.log("📤 Initiating signInWithOAuth...");
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -175,33 +196,48 @@ function AuthPage() {
       });
 
       if (error) {
-        console.error("❌ OAuth Error:", error);
         const errorMsg = error.message || error.toString();
-        
-        // Provide specific error messages based on the error
-        if (errorMsg.includes("redirect_uri")) {
-          toast.error("Redirect URL not configured in Supabase. Check your OAuth settings.");
-        } else if (errorMsg.includes("oauth") || errorMsg.includes("provider")) {
-          toast.error("Google OAuth is not properly configured. Check Supabase settings.");
+        const fullMsg = `❌ OAuth Error: ${errorMsg}`;
+        console.error(fullMsg);
+        setDebugInfo(fullMsg);
+
+        // Provide specific guidance
+        if (errorMsg.includes("redirect_uri") || errorMsg.includes("mismatch")) {
+          toast.error(
+            "❌ CONFIGURATION ERROR\n\nAdd this URL to Supabase:\n" +
+              redirectUrl +
+              "\n\nGo to Supabase → Auth → URL Configuration",
+          );
+        } else if (errorMsg.includes("provider") || errorMsg.includes("oauth")) {
+          toast.error(
+            "❌ Google OAuth Not Enabled\n\nEnable Google provider:\nSupabase → Auth → Providers → Google",
+          );
+        } else if (errorMsg.includes("network") || errorMsg.includes("fetch")) {
+          toast.error("❌ Network Error - Check your internet connection");
         } else {
-          toast.error(`Authentication error: ${errorMsg}`);
+          toast.error(`Authentication failed: ${errorMsg}`);
         }
         setBusy(false);
         return;
       }
 
-      console.log("✅ OAuth initiated, redirecting...");
-      // OAuth will redirect - keep busy state
+      if (data) {
+        console.log("✅ OAuth initiated, user will be redirected to Google");
+        setDebugInfo("✅ Redirecting to Google...");
+        // Don't reset busy - let the redirect happen
+      }
     } catch (err) {
-      console.error("❌ Google sign-in exception:", err);
       const errorMsg = err instanceof Error ? err.message : String(err);
-      
-      if (errorMsg.includes("window.location")) {
-        toast.error("Could not redirect to Google. Check popup blockers.");
-      } else if (errorMsg.includes("fetch")) {
-        toast.error("Network error. Check your internet connection.");
+      const fullMsg = `❌ Exception: ${errorMsg}`;
+      console.error(fullMsg);
+      setDebugInfo(fullMsg);
+
+      if (errorMsg.includes("popup")) {
+        toast.error("❌ Popup Blocked - Allow popups for Google sign-in");
+      } else if (errorMsg.includes("window")) {
+        toast.error("❌ Browser Error - Try a different browser");
       } else {
-        toast.error("Google sign-in unavailable. Please try again.");
+        toast.error("Google sign-in failed. Please try again.");
       }
       setBusy(false);
     }
@@ -321,9 +357,22 @@ function AuthPage() {
           <span className="h-px flex-1 bg-border/60" />
         </div>
 
-        <button type="button" onClick={onGoogle} disabled={busy} className="btn-rune-ghost disabled:opacity-60">
+        <button
+          type="button"
+          onClick={onGoogle}
+          disabled={busy}
+          className="btn-rune-ghost disabled:opacity-60"
+        >
           <Sparkles className="h-4 w-4" /> Continue with Google
         </button>
+
+        {debugInfo && (
+          <div className="mt-4 rounded-md bg-muted/50 p-2 font-mono text-[0.65rem] text-muted-foreground">
+            {debugInfo.split("\n").map((line, i) => (
+              <div key={i}>{line}</div>
+            ))}
+          </div>
+        )}
       </RunePanel>
 
       <p className="mt-4 text-center text-xs text-muted-foreground">
