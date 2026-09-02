@@ -61,8 +61,8 @@ function QuestsPage() {
   const [treasure, setTreasure] =
     useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
 
-  function handleComplete(q: Quest) {
-    const result = completeQuest(q.id, q.xp, q.stats);
+  async function handleComplete(q: Quest) {
+    const result = await completeQuest(q.id, q.xp, q.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
       announceRewards(result, t("quests.sealedToast", { name: g.quest(q).name }));

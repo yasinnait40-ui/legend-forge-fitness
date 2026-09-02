@@ -69,7 +69,8 @@ async function pullAndMerge(userId: string) {
       lastActiveDate: data.last_active_date,
     });
   }
-  await pushStats(userId);
+  // Progression is now committed atomically by the Supabase RPC; never overwrite it with cached state.
+  return;
 }
 
 function logNewCompletions(userId: string, prev: GameState, next: GameState) {
@@ -107,10 +108,8 @@ export function startCloudSync(userId: string) {
   currentUserId = userId;
 
   void pullAndMerge(userId);
-  unobserve = observeCommits((prev, next) => {
-    logNewCompletions(userId, prev, next);
-    schedulePush(userId);
-  });
+  // Completion writes happen in the authoritative transaction; cached commits are not uploaded.
+  unobserve = null;
 }
 
 export function stopCloudSync() {

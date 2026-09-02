@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { ACHIEVEMENTS, levelFromXp, STAT_CAP, type StatKey } from "./game-data";
 
 export interface WorkoutLogEntry {
@@ -200,8 +201,72 @@ function applyAward(
   return { next, unlocked, leveledUp: newLevel > prevLevel, newLevel };
 }
 
-/** Mark a daily quest complete. Returns null if it was already done today. */
-export function completeQuest(
+/** Complete through the transaction-safe Supabase RPC. Client XP/stat inputs are ignored. */
+export async function completeQuest(
+  questId: string,
+  _xp: number,
+  _stats: Partial<Record<StatKey, number>>,
+): Promise<AwardResult | null> {
+  return completeActivity("quest", questId);
+}
+
+async function completeActivity(
+  kind: "quest" | "trial",
+  activityId: string,
+): Promise<AwardResult | null> {
+  const { data, error } = await supabase.rpc(
+    "complete_activity" as never,
+    {
+      p_kind: kind,
+      p_activity_id: activityId,
+    } as never,
+  );
+  if (error || !data) {
+    console.error("[v0] authoritative activity completion failed", error?.message);
+    return null;
+  }
+  const result = data as {
+    duplicate?: boolean;
+    xpGained?: number;
+    xp?: number;
+    level?: number;
+    rewardItem?: string | null;
+    streak?: number;
+    bestStreak?: number;
+  };
+  if (result.duplicate) return null;
+  const xp = result.xp ?? state.xp;
+  const next = {
+    ...state,
+    xp,
+    totalQuests: kind === "quest" ? state.totalQuests + 1 : state.totalQuests,
+    totalTrials: kind === "trial" ? state.totalTrials + 1 : state.totalTrials,
+    lastActiveDate: todayKey(),
+    streak: result.streak ?? state.streak,
+    bestStreak: result.bestStreak ?? state.bestStreak,
+  };
+  if (kind === "quest")
+    next.questsToday = { date: todayKey(), ids: [...questsDoneToday(state), activityId] };
+  if (kind === "trial")
+    next.trialsToday = { date: todayKey(), ids: [...trialsDoneToday(state), activityId] };
+  if (kind === "trial")
+    next.trialsEver = state.trialsEver.includes(activityId)
+      ? state.trialsEver
+      : [...state.trialsEver, activityId];
+  if (result.rewardItem) next.equipment = { ...next.equipment, weapon: result.rewardItem };
+  commit(next);
+  return {
+    xpGained: result.xpGained ?? 0,
+    treasure: result.rewardItem ? { type: "cosmetic", itemId: result.rewardItem } : null,
+    leveledUp: (result.level ?? 1) > levelFromXp(state.xp),
+    newLevel: result.level ?? levelFromXp(xp),
+    unlocked: [],
+    autoCompletedQuest: null,
+  };
+}
+
+/** @deprecated use completeQuest; retained for existing callers. */
+function legacyCompleteQuest(
   questId: string,
   xp: number,
   stats: Partial<Record<StatKey, number>>,
@@ -241,7 +306,16 @@ export function completeQuest(
 }
 
 /** Mark a training trial complete. Also seals Guardian's Discipline if open. */
-export function completeTrial(
+export async function completeTrial(
+  trialId: string,
+  _name: string,
+  _xp: number,
+  _stats: Partial<Record<StatKey, number>>,
+): Promise<AwardResult | null> {
+  return completeActivity("trial", trialId);
+}
+
+function legacyCompleteTrial(
   trialId: string,
   name: string,
   xp: number,

@@ -45,8 +45,8 @@ function TrialsPage() {
   const [treasure, setTreasure] =
     useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
 
-  function handleComplete(trial: Trial) {
-    const result = completeTrial(trial.id, trial.name, trial.xp, trial.stats);
+  async function handleComplete(trial: Trial) {
+    const result = await completeTrial(trial.id, trial.name, trial.xp, trial.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
       announceRewards(result, t("trials.conqueredToast", { name: g.trial(trial).name }));
