@@ -133,12 +133,23 @@ function AuthPage() {
 
   async function onGoogle() {
     setBusy(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: authCallbackUrl() },
-    });
-    if (error) toast.error("Google sign-in failed. Please try again.");
-    setBusy(false);
+    try {
+      const signInWithOAuth = supabase.auth.signInWithOAuth;
+      if (typeof signInWithOAuth !== "function") {
+        toast.error("Google sign-in is unavailable because Supabase is not configured.");
+        return;
+      }
+
+      const { error } = await signInWithOAuth.call(supabase.auth, {
+        provider: "google",
+        options: { redirectTo: authCallbackUrl() },
+      });
+      if (error) toast.error("Google sign-in failed. Please try again.");
+    } catch {
+      toast.error("Google sign-in failed. Please try again.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (

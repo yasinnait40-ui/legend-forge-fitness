@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
   return {
+    envPrefix: ["VITE_", "NEXT_PUBLIC_"],
     define: {
       "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
         env["VITE_SUPABASE_URL"] || env["NEXT_PUBLIC_SUPABASE_URL"] || env["SUPABASE_URL"] || "",
