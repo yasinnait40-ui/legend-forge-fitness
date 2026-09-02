@@ -8,9 +8,12 @@ import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
-const authCallbackUrl = () =>
-  import.meta.env["NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL"] ??
-  `${window.location.origin}/auth/callback`;
+const authCallbackUrl = () => {
+  const viteEnv = import.meta.env as ImportMetaEnv & {
+    NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL?: string;
+  };
+  return viteEnv.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/auth/callback`;
+};
 
 export const Route = createFileRoute("/auth")({
   head: () => ({

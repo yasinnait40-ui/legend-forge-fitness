@@ -33,14 +33,19 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 function createSupabaseClient(): SupabaseClient<Database> {
   // Use import.meta.env for client-side (Vite build-time replacement)
   // Fall back to process.env for SSR (server-side rendering)
+  const viteEnv = import.meta.env as ImportMetaEnv & {
+    VITE_SUPABASE_URL?: string;
+    VITE_SUPABASE_PUBLISHABLE_KEY?: string;
+    NEXT_PUBLIC_SUPABASE_URL?: string;
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?: string;
+    NEXT_PUBLIC_SUPABASE_ANON_KEY?: string;
+  };
   const SUPABASE_URL =
-    import.meta.env["VITE_SUPABASE_URL"] ||
-    import.meta.env["NEXT_PUBLIC_SUPABASE_URL"] ||
-    process.env["SUPABASE_URL"];
+    viteEnv.VITE_SUPABASE_URL || viteEnv.NEXT_PUBLIC_SUPABASE_URL || process.env["SUPABASE_URL"];
   const SUPABASE_PUBLISHABLE_KEY =
-    import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
-    import.meta.env["NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"] ||
-    import.meta.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"] ||
+    viteEnv.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    viteEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    viteEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env["SUPABASE_PUBLISHABLE_KEY"] ||
     process.env["SUPABASE_ANON_KEY"];
 
