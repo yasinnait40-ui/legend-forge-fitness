@@ -6,8 +6,11 @@ import guildHall from "@/assets/guild-hall.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { cn } from "@/lib/utils";
+
+const authCallbackUrl = () =>
+  import.meta.env["NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL"] ??
+  `${window.location.origin}/auth/callback`;
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -53,8 +56,7 @@ function AuthPage() {
           email,
           password,
           options: {
-            emailRedirectTo:
-              import.meta.env["VITE_DEV_SUPABASE_REDIRECT_URL"] ?? `${window.location.origin}/auth`,
+            emailRedirectTo: authCallbackUrl(),
           },
         });
         if (error) throw error;
@@ -117,8 +119,7 @@ function AuthPage() {
       type: "signup",
       email: email.trim(),
       options: {
-        emailRedirectTo:
-          import.meta.env["VITE_DEV_SUPABASE_REDIRECT_URL"] ?? `${window.location.origin}/auth`,
+        emailRedirectTo: authCallbackUrl(),
       },
     });
     setBusy(false);
@@ -131,11 +132,13 @@ function AuthPage() {
   }
 
   async function onGoogle() {
-    try {
-      await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    } catch {
-      toast.error("Google sign-in failed. Please try again.");
-    }
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: authCallbackUrl() },
+    });
+    if (error) toast.error("Google sign-in failed. Please try again.");
+    setBusy(false);
   }
 
   return (
