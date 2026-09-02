@@ -174,9 +174,13 @@ function RootComponent() {
 
     // Supabase is optional for the public preview. Keep the local game experience
     // available when the project has not supplied its cloud credentials yet.
-    const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"];
+    const viteEnv = import.meta.env as ImportMetaEnv & {
+      VITE_SUPABASE_URL?: string;
+      VITE_SUPABASE_PUBLISHABLE_KEY?: string;
+    };
+    const supabaseUrl = viteEnv.VITE_SUPABASE_URL || process.env["SUPABASE_URL"];
     const supabaseKey =
-      import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_PUBLISHABLE_KEY"];
+      viteEnv.VITE_SUPABASE_PUBLISHABLE_KEY || process.env["SUPABASE_PUBLISHABLE_KEY"];
 
     if (!supabaseUrl || !supabaseKey) {
       stopCloudSync();
