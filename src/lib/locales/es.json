@@ -432,12 +432,142 @@
   "ads": {
     "watchReward": "Mira un anuncio para recibir una bendición"
   },
-  "notifications": { "permissionPrompt": "El reino aguarda tu regreso. ¿Permitir recordatorios diarios?", "dailyReminder": "El reino aguarda tu regreso." },
-  "treasure": { "title": "Cofre del Tesoro", "invitation": "Una recompensa oculta ha respondido a tu leyenda.", "open": "Abrir Cofre", "revealed": "El cofre revela...", "xp": "+{{amount}} XP adicional", "cosmetic": "Cosmético Hoja Forjada por el Sol", "claim": "Reclamar Recompensa" },
-  "social": { "title": "Aliados de Aethora", "subtitle": "Invita a un compañero de confianza y mantengan la motivación.", "yourCode": "Tu código de invitación", "copyCode": "Copiar código", "inviteFriend": "Compartir invitación", "copied": "Copiado", "friendsList": "Tus aliados", "empty": "Aún no se ha unido ningún aliado a tu leyenda.", "addCode": "Introduce un código de amigo", "add": "Añadir", "cloudLimit": "Los perfiles de amigos requieren conexión en la nube; solo se compartirán el nivel y la llama.", "yourStreak": "Tu llama", "yourLevel": "Tu nivel", "inviteMessage": "Únete a mi leyenda en Aethora con el código", "pending": "Esperando conexión en la nube" },
-  "health": { "title": "Sincronización de salud y actividad", "status": "El registro manual de actividad sigue activo. Esta aplicación web no tiene conexión de salud habilitada.", "privacy": "Aethora no solicita ni accede a datos de salud desde este navegador.", "webHeading": "Límites actuales de la web:", "web": "Apple Health, Google Health Connect y Google Fit no ofrecen una API fiable entre navegadores para importar pasos a esta aplicación.", "nativeHeading": "Futuro camino nativo:", "native": "La aplicación Capacitor necesitaría permisos de plataforma, un puente de HealthKit para iOS, un puente de Health Connect para Android y una capa de sincronización segura antes de añadir la importación automática." },
-  "legal": { "lastUpdated": "Última actualización: 1 de septiembre de 2026", "navigation": "Navegación legal", "privacyLink": "Política de privacidad", "termsLink": "Términos del servicio" },
+  "notifications": {
+    "permissionPrompt": "El reino aguarda tu regreso. ¿Permitir recordatorios diarios?",
+    "dailyReminder": "El reino aguarda tu regreso."
+  },
+  "treasure": {
+    "title": "Cofre del Tesoro",
+    "invitation": "Una recompensa oculta ha respondido a tu leyenda.",
+    "open": "Abrir Cofre",
+    "revealed": "El cofre revela...",
+    "xp": "+{{amount}} XP adicional",
+    "cosmetic": "Cosmético Hoja Forjada por el Sol",
+    "claim": "Reclamar Recompensa"
+  },
+  "social": {
+    "title": "Aliados de Aethora",
+    "subtitle": "Invita a un compañero de confianza y mantengan la motivación.",
+    "yourCode": "Tu código de invitación",
+    "copyCode": "Copiar código",
+    "inviteFriend": "Compartir invitación",
+    "copied": "Copiado",
+    "friendsList": "Tus aliados",
+    "empty": "Aún no se ha unido ningún aliado a tu leyenda.",
+    "addCode": "Introduce un código de amigo",
+    "add": "Añadir",
+    "cloudLimit": "Los perfiles de amigos requieren conexión en la nube; solo se compartirán el nivel y la llama.",
+    "yourStreak": "Tu llama",
+    "yourLevel": "Tu nivel",
+    "inviteMessage": "Únete a mi leyenda en Aethora con el código",
+    "pending": "Esperando conexión en la nube"
+  },
+  "health": {
+    "title": "Sincronización de salud y actividad",
+    "status": "El registro manual de actividad sigue activo. Esta aplicación web no tiene conexión de salud habilitada.",
+    "privacy": "Aethora no solicita ni accede a datos de salud desde este navegador.",
+    "webHeading": "Límites actuales de la web:",
+    "web": "Apple Health, Google Health Connect y Google Fit no ofrecen una API fiable entre navegadores para importar pasos a esta aplicación.",
+    "nativeHeading": "Futuro camino nativo:",
+    "native": "La aplicación Capacitor necesitaría permisos de plataforma, un puente de HealthKit para iOS, un puente de Health Connect para Android y una capa de sincronización segura antes de añadir la importación automática."
+  },
+  "legal": {
+    "lastUpdated": "Última actualización: 1 de septiembre de 2026",
+    "navigation": "Navegación legal",
+    "privacyLink": "Política de privacidad",
+    "termsLink": "Términos del servicio"
+  },
   "characters": {
+    "roster": {
+      "king": {
+        "name": "El Rey",
+        "role": "Gobernante y narrador",
+        "alt": "Rey de cabello dorado con atuendo rojo y dorado"
+      },
+      "adventurer": {
+        "name": "El Aventurero",
+        "role": "Dador de misiones",
+        "alt": "Valiente aventurero de fantasía"
+      },
+      "scholar": {
+        "name": "El Sabio",
+        "role": "Investigador de pruebas",
+        "alt": "Erudito e investigador de fantasía"
+      },
+      "sage": {
+        "name": "El Oráculo",
+        "role": "Guía arcana antigua",
+        "alt": "Mago antiguo y guía arcana"
+      },
+      "hero": {
+        "name": "El Héroe",
+        "role": "Leyenda en construcción",
+        "alt": "Héroe de una leyenda creciente"
+      },
+      "hakari": {
+        "name": "Hakari",
+        "role": "Compañero sagrado",
+        "alt": "Hakari, compañero mágico y alegre"
+      },
+      "miri": {
+        "name": "Miri",
+        "role": "Compañera juguetona",
+        "alt": "Miri, compañera mágica y elegante"
+      }
+    },
+    "actions": { "advance": "Avanzar diálogo", "dismiss": "Cerrar diálogo" },
+    "companionsTitle": "Compañeros sagrados",
+    "dialogue": {
+      "king": {
+        "default": "Bienvenido, guerrero. Tu leyenda comienza aquí.",
+        "new": "Tu leyenda comienza aquí.",
+        "levelUp": "Comienza un nuevo capítulo de tu leyenda.",
+        "streak": "Tu constancia honra al reino.",
+        "progress": "El reino ve crecer tu leyenda."
+      },
+      "adventurer": {
+        "default": "Una nueva misión te espera, valiente.",
+        "new": "Tu primera misión te espera en el gremio.",
+        "levelUp": "¡Otra misión conquistada!",
+        "streak": "Tu impulso se está volviendo imparable.",
+        "progress": "El gremio ya ha notado tu valor."
+      },
+      "scholar": {
+        "default": "Estudia el rito y después prueba tus límites.",
+        "new": "Observa con cuidado. Cada prueba enseña algo.",
+        "levelUp": "Tu disciplina se vuelve medible.",
+        "streak": "La práctica constante revela los datos verdaderos.",
+        "progress": "Tus resultados forman un registro fascinante."
+      },
+      "sage": {
+        "default": "Pregunta y guiaré tu próximo paso.",
+        "new": "Toda leyenda comienza con un paso decidido.",
+        "levelUp": "Tu poder creciente revela un camino más profundo.",
+        "streak": "La constancia es el hechizo más antiguo del dominio.",
+        "progress": "Tus registros muestran un camino claro."
+      },
+      "hero": {
+        "default": "Sigue adelante. Tú forjas tu leyenda.",
+        "new": "El primer paso ya es una victoria.",
+        "levelUp": "Comienza un nuevo capítulo de tu leyenda.",
+        "streak": "Tu constancia se hace más fuerte.",
+        "progress": "Te estás convirtiendo en el héroe de tu historia."
+      },
+      "hakari": {
+        "default": "Yo también te ayudaré.",
+        "new": "Yo también te ayudaré.",
+        "levelUp": "¡Tu leyenda brilla más!",
+        "streak": "¡Esa racha es mágica!",
+        "progress": "¡Siento crecer tu leyenda!"
+      },
+      "miri": {
+        "default": "Tu leyenda tiene una chispa preciosa.",
+        "new": "¡Hagamos brillar tus primeros pasos!",
+        "levelUp": "Otra marca se suma a tu leyenda.",
+        "streak": "Tu llama constante es hermosa.",
+        "progress": "Cada día brillas más."
+      }
+    },
     "welcome": {
       "king": "Bienvenido, guerrero. Tu viaje comienza ahora.",
       "adventurer": "Nuevas misiones te esperan en el gremio.",

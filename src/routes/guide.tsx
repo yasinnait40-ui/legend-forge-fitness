@@ -196,7 +196,7 @@ function GuidePage() {
       </header>
 
       <div className="relative z-10 mx-auto w-full max-w-lg px-4">
-        <CharacterWelcome kind="wizard" dialogue={t("characters.welcome.wizard")} />
+        <CharacterWelcome kind="sage" />
       </div>
 
       {/* Conversation scroll */}

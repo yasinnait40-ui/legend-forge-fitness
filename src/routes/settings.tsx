@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Volume2, VolumeX, Languages } from "lucide-react";
 import { RealmScreen } from "@/components/RealmScreen";
-import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { useSound, toggleMuted, setVolume } from "@/lib/sound-store";
 import { useTranslation } from "react-i18next";
@@ -47,7 +46,6 @@ function SettingsPage() {
         <RuneHeading>{t("settings.title", "Settings")}</RuneHeading>
       </header>
 
-      <CharacterWelcome kind="maid" dialogue={t("characters.welcome.maid")} />
       <div className="mt-6 space-y-3">
         <RunePanel className="flex items-center gap-4">
           {muted ? (

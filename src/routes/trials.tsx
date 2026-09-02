@@ -75,7 +75,7 @@ function TrialsPage() {
         </p>
       </header>
 
-      <CharacterWelcome kind="scientist" dialogue={t("characters.welcome.scientist")} />
+      <CharacterWelcome kind="scholar" />
       <div className="mt-6 space-y-4">
         {TRIALS.map((trial) => {
           const isDone = done.includes(trial.id);

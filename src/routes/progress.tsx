@@ -166,17 +166,13 @@ function ProgressPage() {
       </header>
 
       <RunePanel className="mt-6 overflow-hidden">
-        <RuneHeading>{t("characters.welcome.hakari", "Sacred Companions")}</RuneHeading>
-        <div className="grid grid-cols-2 items-start gap-3 md:gap-12">
+        <RuneHeading>{t("characters.companionsTitle", "Sacred Companions")}</RuneHeading>
+        <div className="grid grid-cols-1 items-start gap-3 min-[390px]:grid-cols-2 md:gap-12">
           <div className="min-w-0 rounded-lg border border-border/60 bg-background/20 p-1 md:p-4">
-            <FantasyCharacter
-              kind="hakari"
-              embedded
-              dialogue={t("characters.welcome.hakari", "You are growing up today!")}
-            />
+            <FantasyCharacter kind="hakari" embedded />
           </div>
           <div className="min-w-0 rounded-lg border border-border/60 bg-background/20 p-1 md:p-4">
-            <FantasyCharacter kind="sprite" embedded dialogue={t("characters.welcome.sprite")} />
+            <FantasyCharacter kind="miri" embedded />
           </div>
         </div>
       </RunePanel>
