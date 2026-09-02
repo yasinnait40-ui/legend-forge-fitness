@@ -152,20 +152,29 @@ function AuthPage() {
   async function onGoogle() {
     setBusy(true);
     try {
-      const signInWithOAuth = supabase.auth.signInWithOAuth;
-      if (typeof signInWithOAuth !== "function") {
-        toast.error("Google sign-in is unavailable because Supabase is not configured.");
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: authCallbackUrl(),
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
+        },
+      });
+      
+      if (error) {
+        console.error("OAuth error:", error);
+        toast.error("Google sign-in failed. Please try again.");
+        setBusy(false);
         return;
       }
-
-      const { error } = await signInWithOAuth.call(supabase.auth, {
-        provider: "google",
-        options: { redirectTo: authCallbackUrl() },
-      });
-      if (error) toast.error("Google sign-in failed. Please try again.");
-    } catch {
+      
+      // If we get here without error, the OAuth flow should handle the redirect
+      // The busy state will be maintained during redirect
+    } catch (err) {
+      console.error("Google sign-in exception:", err);
       toast.error("Google sign-in failed. Please try again.");
-    } finally {
       setBusy(false);
     }
   }
@@ -284,7 +293,7 @@ function AuthPage() {
           <span className="h-px flex-1 bg-border/60" />
         </div>
 
-        <button type="button" onClick={onGoogle} className="btn-rune-ghost">
+        <button type="button" onClick={onGoogle} disabled={busy} className="btn-rune-ghost disabled:opacity-60">
           <Sparkles className="h-4 w-4" /> Continue with Google
         </button>
       </RunePanel>
