@@ -14,10 +14,14 @@ import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CharacterRouteImport } from './routes/character'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as QuestsRouteImport } from './routes/quests'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrialsRouteImport } from './routes/trials'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -44,6 +48,11 @@ const GuideRoute = GuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgressRoute = ProgressRouteImport.update({
   id: '/progress',
   path: '/progress',
@@ -54,9 +63,19 @@ const QuestsRoute = QuestsRouteImport.update({
   path: '/quests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrialsRoute = TrialsRouteImport.update({
@@ -64,40 +83,57 @@ const TrialsRoute = TrialsRouteImport.update({
   path: '/trials',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,10 +143,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/privacy'
     | '/progress'
     | '/quests'
+    | '/reset-password'
     | '/settings'
+    | '/terms'
     | '/trials'
+    | '/auth/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,10 +158,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/privacy'
     | '/progress'
     | '/quests'
+    | '/reset-password'
     | '/settings'
+    | '/terms'
     | '/trials'
+    | '/auth/callback'
   id:
     | '__root__'
     | '/'
@@ -129,21 +173,28 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/privacy'
     | '/progress'
     | '/quests'
+    | '/reset-password'
     | '/settings'
+    | '/terms'
     | '/trials'
+    | '/auth/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AchievementsRoute: typeof AchievementsRoute
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   CharacterRoute: typeof CharacterRoute
   GuideRoute: typeof GuideRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProgressRoute: typeof ProgressRoute
   QuestsRoute: typeof QuestsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
+  TermsRoute: typeof TermsRoute
   TrialsRoute: typeof TrialsRoute
 }
 
@@ -184,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/progress': {
       id: '/progress'
       path: '/progress'
@@ -198,11 +256,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trials': {
@@ -212,18 +284,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrialsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
+
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AchievementsRoute: AchievementsRoute,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   CharacterRoute: CharacterRoute,
   GuideRoute: GuideRoute,
+  PrivacyRoute: PrivacyRoute,
   ProgressRoute: ProgressRoute,
   QuestsRoute: QuestsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
+  TermsRoute: TermsRoute,
   TrialsRoute: TrialsRoute,
 }
 export const routeTree = rootRouteImport

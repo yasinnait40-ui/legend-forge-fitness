@@ -431,27 +431,196 @@
   },
   "ads": {
     "watchReward": "Watch an ad for a blessing"
-  } ,"characters": {
-  "welcome": {
-    "king": "Welcome, warrior. Your journey begins now.",
-    "adventurer": "New quests await you at the guild.",
-    "scientist": "Let's see what your body can achieve today.",
-    "wizard": "Ask, and I shall guide you.",
-    "sacred": "The sanctuary welcomes your return.",
-    "maid": "Your chamber is ready, my lord.",
-    "sprite": "Psst! I am Miri, your tiny spark of magic. Let us make your legend shine!"
   },
-  "levelUp": {
-    "title": "Congratulations! You reached level {{level}}.",
-    "subtitle": "Your power grows, but your journey is far from over."
+  "notifications": {
+    "permissionPrompt": "The kingdom awaits your return. Allow daily reminders?",
+    "dailyReminder": "The kingdom awaits your return."
   },
-  "questComplete": "Quest complete! Keep moving forward.",
-  "trialComplete": "Trial conquered! Your strength grows."
-},"statMastery": {
-  "strength": "Your strength surpasses mortal limits.",
-  "endurance": "Nothing can stop you now.",
-  "agility": "Your swiftness has become legendary.",
-  "vitality": "Your vitality pulses with the power of life.",
-  "recovery": "Your body heals like the ancients."
-}
+  "treasure": {
+    "title": "Treasure Chest",
+    "invitation": "A hidden reward has answered your legend.",
+    "open": "Open Chest",
+    "revealed": "The chest reveals...",
+    "xp": "+{{amount}} bonus XP",
+    "cosmetic": "Sun-Forged Blade cosmetic",
+    "claim": "Claim Reward"
+  },
+  "social": {
+    "title": "Allies of Aethora",
+    "subtitle": "Invite a trusted companion and keep each other accountable.",
+    "yourCode": "Your invite code",
+    "copyCode": "Copy invite code",
+    "inviteFriend": "Share invite",
+    "copied": "Copied",
+    "friendsList": "Your allies",
+    "empty": "No allies have joined your legend yet.",
+    "addCode": "Enter a friend code",
+    "add": "Add",
+    "cloudLimit": "Friend profiles require cloud linking; only level and streak will be shared.",
+    "yourStreak": "Your streak",
+    "yourLevel": "Your level",
+    "inviteMessage": "Join my legend in Aethora with code",
+    "pending": "Awaiting cloud link"
+  },
+  "health": {
+    "title": "Health & Activity Sync",
+    "status": "Manual activity logging remains active. No health connection is enabled in this web app.",
+    "privacy": "Aethora does not request or access health data from this browser.",
+    "webHeading": "Current web limits:",
+    "web": "Apple Health, Google Health Connect, and Google Fit do not provide a reliable cross-browser API for importing steps into this app.",
+    "nativeHeading": "Future native path:",
+    "native": "The Capacitor app would need platform permissions, an iOS HealthKit bridge, an Android Health Connect bridge, and a secure sync layer before automatic activity import can be added."
+  },
+  "legal": {
+    "lastUpdated": "Last updated: September 1, 2026",
+    "navigation": "Legal navigation",
+    "privacyLink": "Privacy Policy",
+    "termsLink": "Terms of Service",
+    "disclaimer": "This general information is not legal advice. Review it with qualified counsel before store publication.",
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "Aethora is a fantasy fitness RPG. This policy describes the information used to provide the app.",
+      "section1Title": "Account and cloud data",
+      "section1": "When you sign in, Supabase Authentication handles your account. Aethora may store game progress, including level, XP, streaks, quest and workout completion, and related settings in the connected Supabase data store.",
+      "section2Title": "Fitness information",
+      "section2": "Activity and workout details that you enter are used to calculate game progress and rewards. The current web app does not connect to Apple Health, Google Fit, or Health Connect.",
+      "section3Title": "Advertising",
+      "section3": "The app displays advertisements through Monetag where enabled. The ad provider may process information under its own privacy policy, including device or advertising identifiers where permitted.",
+      "section4Title": "How information is used",
+      "section4": "We use information to authenticate you, save progress, operate quests and rewards, provide requested features, and maintain app security.",
+      "section5Title": "Sharing and retention",
+      "section5": "We do not publish your private account information. Data may be processed by Supabase and Monetag to provide their services, or disclosed when required by law. Retention depends on account and service needs.",
+      "section6Title": "Choices and contact",
+      "section6": "You may stop using the app or request account-data assistance through the app publisher. Device and browser controls may also limit advertising technologies."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "intro": "By using Aethora, you agree to these terms. If you do not agree, do not use the app.",
+      "section1Title": "The service",
+      "section1": "Aethora provides fantasy-themed fitness quests, workouts, progression, streaks, rewards, reminders, and related entertainment features.",
+      "section2Title": "Health and safety",
+      "section2": "Aethora is not medical advice, a medical device, or a substitute for professional care. Choose activities appropriate for you and stop if you feel unwell.",
+      "section3Title": "Accounts and fair play",
+      "section3": "Keep account credentials secure and provide accurate information. Do not abuse, reverse engineer, disrupt, or attempt unauthorized access to the service or its rewards.",
+      "section4Title": "Availability and changes",
+      "section4": "Features may change, pause, or become unavailable. Progress can be affected by device, network, authentication, or service failures. We may update these terms as the app evolves.",
+      "section5Title": "Ads and responsibility",
+      "section5": "Advertisements may appear through Monetag. Aethora is not responsible for third-party services or external content. To the extent permitted by law, use the app at your own risk."
+    }
+  },
+  "characters": {
+    "roster": {
+      "king": {
+        "name": "The King",
+        "role": "Ruler and narrator",
+        "alt": "A golden-haired king in red and gold regalia"
+      },
+      "adventurer": {
+        "name": "The Adventurer",
+        "role": "Quest giver",
+        "alt": "A brave fantasy adventurer"
+      },
+      "scholar": {
+        "name": "The Scholar",
+        "role": "Trial researcher",
+        "alt": "A fantasy scholar and researcher"
+      },
+      "sage": {
+        "name": "The Sage",
+        "role": "Ancient AI guide",
+        "alt": "An ancient wizard and arcane guide"
+      },
+      "hero": {
+        "name": "The Hero",
+        "role": "Legend in the making",
+        "alt": "The hero of a growing legend"
+      },
+      "hakari": {
+        "name": "Hakari",
+        "role": "Sacred companion",
+        "alt": "Hakari, a cheerful magical companion"
+      },
+      "miri": {
+        "name": "Miri",
+        "role": "Playful companion",
+        "alt": "Miri, an elegant magical companion"
+      }
+    },
+    "actions": { "advance": "Advance dialogue", "dismiss": "Dismiss dialogue" },
+    "companionsTitle": "Sacred Companions",
+    "dialogue": {
+      "king": {
+        "default": "Welcome, warrior. Your legend begins here.",
+        "new": "Your legend begins here.",
+        "levelUp": "A new chapter of your legend begins.",
+        "streak": "Your consistency honors the realm.",
+        "progress": "The realm sees your legend growing."
+      },
+      "adventurer": {
+        "default": "A new quest awaits, brave one.",
+        "new": "Your first quest is waiting at the guild.",
+        "levelUp": "Another quest conquered!",
+        "streak": "Your momentum is becoming a force of nature.",
+        "progress": "The guild has taken notice of your courage."
+      },
+      "scholar": {
+        "default": "Study the rite, then test your limits.",
+        "new": "Observe carefully. Every trial teaches us something.",
+        "levelUp": "Your discipline is becoming measurable.",
+        "streak": "Consistent practice reveals the truest data.",
+        "progress": "Your results are forming a compelling record."
+      },
+      "sage": {
+        "default": "Ask, and I shall guide your next step.",
+        "new": "Every legend begins with a single deliberate step.",
+        "levelUp": "Your growing power reveals a deeper path.",
+        "streak": "Consistency is the oldest spell of mastery.",
+        "progress": "Your records offer a clear path forward."
+      },
+      "hero": {
+        "default": "Keep going. Your legend is yours to forge.",
+        "new": "The first step is already a victory.",
+        "levelUp": "A new chapter of your legend begins.",
+        "streak": "Your consistency grows stronger.",
+        "progress": "You are becoming the hero of your own story."
+      },
+      "hakari": {
+        "default": "I will help you too.",
+        "new": "I will help you too.",
+        "levelUp": "Your legend shines brighter!",
+        "streak": "That streak is magical! Keep going!",
+        "progress": "I can feel your legend growing!"
+      },
+      "miri": {
+        "default": "Your legend has a lovely spark.",
+        "new": "Let us make your first steps sparkle!",
+        "levelUp": "Another mark added to your legend.",
+        "streak": "Your steady flame is beautiful.",
+        "progress": "You are glowing brighter every day."
+      }
+    },
+    "welcome": {
+      "king": "Welcome, warrior. Your journey begins now.",
+      "adventurer": "New quests await you at the guild.",
+      "scientist": "Let's see what your body can achieve today.",
+      "wizard": "Ask, and I shall guide you.",
+      "sacred": "The sanctuary welcomes your return.",
+      "maid": "Your chamber is ready, my lord.",
+      "sprite": "Psst! I am Miri, your tiny spark of magic. Let us make your legend shine!",
+      "hakari": "I will help you too"
+    },
+    "levelUp": {
+      "title": "Congratulations! You reached level {{level}}.",
+      "subtitle": "Your power grows, but your journey is far from over."
+    },
+    "questComplete": "Quest complete! Keep moving forward.",
+    "trialComplete": "Trial conquered! Your strength grows."
+  },
+  "statMastery": {
+    "strength": "Your strength surpasses mortal limits.",
+    "endurance": "Nothing can stop you now.",
+    "agility": "Your swiftness has become legendary.",
+    "vitality": "Your vitality pulses with the power of life.",
+    "recovery": "Your body heals like the ancients."
+  }
 }

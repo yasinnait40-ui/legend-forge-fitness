@@ -1,274 +1,355 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
-  }
+    PostgrestVersion: "14.5";
+  };
   public: {
     Tables: {
+      game_states: {
+        Row: {
+          achievements: Json;
+          best_streak: number;
+          equipment: Json;
+          last_active_date: string | null;
+          level: number;
+          stats: Json;
+          streak: number;
+          total_quests: number;
+          total_trials: number;
+          updated_at: string;
+          user_id: string;
+          xp: number;
+        };
+        Insert: {
+          achievements?: Json;
+          best_streak?: number;
+          equipment?: Json;
+          last_active_date?: string | null;
+          level?: number;
+          stats?: Json;
+          streak?: number;
+          total_quests?: number;
+          total_trials?: number;
+          updated_at?: string;
+          user_id: string;
+          xp?: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["game_states"]["Insert"]>;
+        Relationships: [];
+      };
+      inventory: {
+        Row: { acquired_at: string; item_id: string; quantity: number; user_id: string };
+        Insert: { acquired_at?: string; item_id: string; quantity?: number; user_id: string };
+        Update: Partial<Database["public"]["Tables"]["inventory"]["Insert"]>;
+        Relationships: [];
+      };
+      trial_completions: {
+        Row: {
+          completed_at: string;
+          completed_day: string | null;
+          id: string;
+          trial_id: string;
+          trial_name: string;
+          user_id: string;
+          xp_earned: number;
+        };
+        Insert: {
+          completed_at?: string;
+          completed_day?: string | null;
+          id?: string;
+          trial_id: string;
+          trial_name: string;
+          user_id: string;
+          xp_earned: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["trial_completions"]["Insert"]>;
+        Relationships: [];
+      };
+      reward_history: {
+        Row: {
+          amount: number | null;
+          created_at: string;
+          id: string;
+          item_id: string | null;
+          reward_type: string;
+          source_id: string;
+          source_type: string;
+          user_id: string;
+        };
+        Insert: {
+          amount?: number | null;
+          created_at?: string;
+          id?: string;
+          item_id?: string | null;
+          reward_type: string;
+          source_id: string;
+          source_type: string;
+          user_id: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["reward_history"]["Insert"]>;
+        Relationships: [];
+      };
+      achievement_unlocks: {
+        Row: { achievement_id: string; unlocked_at: string; user_id: string };
+        Insert: { achievement_id: string; unlocked_at?: string; user_id: string };
+        Update: Partial<Database["public"]["Tables"]["achievement_unlocks"]["Insert"]>;
+        Relationships: [];
+      };
       character_stats: {
         Row: {
-          agility: number
-          best_streak: number
-          endurance: number
-          last_active_date: string | null
-          recovery: number
-          streak: number
-          strength: number
-          updated_at: string
-          user_id: string
-          vitality: number
-          xp: number
-        }
+          agility: number;
+          best_streak: number;
+          endurance: number;
+          last_active_date: string | null;
+          recovery: number;
+          streak: number;
+          strength: number;
+          updated_at: string;
+          user_id: string;
+          vitality: number;
+          xp: number;
+        };
         Insert: {
-          agility?: number
-          best_streak?: number
-          endurance?: number
-          last_active_date?: string | null
-          recovery?: number
-          streak?: number
-          strength?: number
-          updated_at?: string
-          user_id: string
-          vitality?: number
-          xp?: number
-        }
+          agility?: number;
+          best_streak?: number;
+          endurance?: number;
+          last_active_date?: string | null;
+          recovery?: number;
+          streak?: number;
+          strength?: number;
+          updated_at?: string;
+          user_id: string;
+          vitality?: number;
+          xp?: number;
+        };
         Update: {
-          agility?: number
-          best_streak?: number
-          endurance?: number
-          last_active_date?: string | null
-          recovery?: number
-          streak?: number
-          strength?: number
-          updated_at?: string
-          user_id?: string
-          vitality?: number
-          xp?: number
-        }
-        Relationships: []
-      }
+          agility?: number;
+          best_streak?: number;
+          endurance?: number;
+          last_active_date?: string | null;
+          recovery?: number;
+          streak?: number;
+          strength?: number;
+          updated_at?: string;
+          user_id?: string;
+          vitality?: number;
+          xp?: number;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
-          avatar_url: string | null
-          created_at: string
-          display_name: string | null
-          id: string
-          updated_at: string
-        }
+          avatar_url: string | null;
+          created_at: string;
+          display_name: string | null;
+          id: string;
+          updated_at: string;
+        };
         Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          display_name?: string | null
-          id: string
-          updated_at?: string
-        }
+          avatar_url?: string | null;
+          created_at?: string;
+          display_name?: string | null;
+          id: string;
+          updated_at?: string;
+        };
         Update: {
-          avatar_url?: string | null
-          created_at?: string
-          display_name?: string | null
-          id?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
+          avatar_url?: string | null;
+          created_at?: string;
+          display_name?: string | null;
+          id?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       quest_completions: {
         Row: {
-          created_at: string
-          id: string
-          quest_date: string
-          quest_id: string
-          user_id: string
-          xp_earned: number
-        }
+          created_at: string;
+          id: string;
+          quest_date: string;
+          quest_id: string;
+          user_id: string;
+          xp_earned: number;
+        };
         Insert: {
-          created_at?: string
-          id?: string
-          quest_date?: string
-          quest_id: string
-          user_id: string
-          xp_earned?: number
-        }
+          created_at?: string;
+          id?: string;
+          quest_date?: string;
+          quest_id: string;
+          user_id: string;
+          xp_earned?: number;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          quest_date?: string
-          quest_id?: string
-          user_id?: string
-          xp_earned?: number
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: string;
+          quest_date?: string;
+          quest_id?: string;
+          user_id?: string;
+          xp_earned?: number;
+        };
+        Relationships: [];
+      };
       workout_logs: {
         Row: {
-          completed_at: string
-          id: string
-          trial_id: string
-          trial_name: string
-          user_id: string
-          xp_earned: number
-        }
+          completed_at: string;
+          id: string;
+          trial_id: string;
+          trial_name: string;
+          user_id: string;
+          xp_earned: number;
+        };
         Insert: {
-          completed_at?: string
-          id?: string
-          trial_id: string
-          trial_name: string
-          user_id: string
-          xp_earned?: number
-        }
+          completed_at?: string;
+          id?: string;
+          trial_id: string;
+          trial_name: string;
+          user_id: string;
+          xp_earned?: number;
+        };
         Update: {
-          completed_at?: string
-          id?: string
-          trial_id?: string
-          trial_name?: string
-          user_id?: string
-          xp_earned?: number
-        }
-        Relationships: []
-      }
-    }
+          completed_at?: string;
+          id?: string;
+          trial_id?: string;
+          trial_name?: string;
+          user_id?: string;
+          xp_earned?: number;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
-      [_ in never]: never
-    }
+      complete_activity: {
+        Args: { p_activity_id: string; p_kind: string };
+        Returns: Json;
+      };
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+    : never;
 
 export const Constants = {
   public: {
     Enums: {},
   },
-} as const
+} as const;

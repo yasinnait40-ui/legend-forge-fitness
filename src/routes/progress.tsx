@@ -2,14 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Flame, ScrollText, Swords } from "lucide-react";
 import observatory from "@/assets/observatory.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
+import { FantasyCharacter } from "@/components/FantasyCharacter";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { todayKey, useGame } from "@/lib/game-store";
-import {
-  levelProgress,
-  STAT_ORDER,
-  STAT_CAP,
-  type StatKey,
-} from "@/lib/game-data";
+import { levelProgress, STAT_ORDER, STAT_CAP, type StatKey } from "@/lib/game-data";
 import { useTranslation } from "react-i18next";
 import { useGameText } from "@/lib/game-i18n";
 
@@ -169,6 +165,18 @@ function ProgressPage() {
         </p>
       </header>
 
+      <RunePanel className="mt-6 overflow-hidden">
+        <RuneHeading>{t("characters.companionsTitle", "Sacred Companions")}</RuneHeading>
+        <div className="grid grid-cols-1 items-start gap-3 min-[390px]:grid-cols-2 md:gap-12">
+          <div className="min-w-0 rounded-lg border border-border/60 bg-background/20 p-1 md:p-4">
+            <FantasyCharacter kind="hakari" embedded />
+          </div>
+          <div className="min-w-0 rounded-lg border border-border/60 bg-background/20 p-1 md:p-4">
+            <FantasyCharacter kind="miri" embedded />
+          </div>
+        </div>
+      </RunePanel>
+
       {/* Level */}
       <RunePanel className="mt-6">
         <div className="flex items-center justify-between">
@@ -282,7 +290,10 @@ function ProgressPage() {
         <RuneHeading>{t("progress.chronicle", "The Chronicle")}</RuneHeading>
         {game.workoutLog.length === 0 ? (
           <p className="mt-3 text-sm italic text-muted-foreground">
-            {t("progress.noDeeds", "No deeds recorded yet. Conquer a trial and the scribes will write of you.")}
+            {t(
+              "progress.noDeeds",
+              "No deeds recorded yet. Conquer a trial and the scribes will write of you.",
+            )}
           </p>
         ) : (
           <div className="mt-3 space-y-2">

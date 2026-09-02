@@ -431,7 +431,143 @@
   },
   "ads": {
     "watchReward": "Regarde une annonce pour recevoir une bénédiction"
-  },"characters": {
+  },
+  "notifications": {
+    "permissionPrompt": "Le royaume attend ton retour. Autoriser les rappels quotidiens ?",
+    "dailyReminder": "Le royaume attend ton retour."
+  },
+  "treasure": {
+    "title": "Coffre au Trésor",
+    "invitation": "Une récompense cachée a répondu à ta légende.",
+    "open": "Ouvrir le Coffre",
+    "revealed": "Le coffre révèle...",
+    "xp": "+{{amount}} XP bonus",
+    "cosmetic": "Cosmétique Lame Forgée au Soleil",
+    "claim": "Réclamer la Récompense"
+  },
+  "social": {
+    "title": "Alliés d'Aethora",
+    "subtitle": "Invite un compagnon de confiance et entretenez votre motivation.",
+    "yourCode": "Ton code d'invitation",
+    "copyCode": "Copier le code",
+    "inviteFriend": "Partager l'invitation",
+    "copied": "Copié",
+    "friendsList": "Tes alliés",
+    "empty": "Aucun allié n'a encore rejoint ta légende.",
+    "addCode": "Saisis un code ami",
+    "add": "Ajouter",
+    "cloudLimit": "Les profils d'amis nécessitent la synchronisation cloud ; seuls le niveau et la flamme seront partagés.",
+    "yourStreak": "Ta flamme",
+    "yourLevel": "Ton niveau",
+    "inviteMessage": "Rejoins ma légende dans Aethora avec le code",
+    "pending": "En attente de synchronisation cloud"
+  },
+  "health": {
+    "title": "Synchronisation santé et activité",
+    "status": "La saisie manuelle des activités reste active. Cette application web n'a aucune connexion santé activée.",
+    "privacy": "Aethora ne demande ni n'accède aux données de santé depuis ce navigateur.",
+    "webHeading": "Limites actuelles du web :",
+    "web": "Apple Health, Google Health Connect et Google Fit ne fournissent pas d'API fiable entre navigateurs pour importer les pas dans cette application.",
+    "nativeHeading": "Futur parcours natif :",
+    "native": "L'application Capacitor nécessiterait des autorisations de plateforme, un pont HealthKit pour iOS, un pont Health Connect pour Android et une synchronisation sécurisée avant d'ajouter l'import automatique."
+  },
+  "legal": {
+    "lastUpdated": "Dernière mise à jour : 1 septembre 2026",
+    "navigation": "Navigation juridique",
+    "privacyLink": "Politique de confidentialité",
+    "termsLink": "Conditions d'utilisation"
+  },
+  "characters": {
+    "roster": {
+      "king": {
+        "name": "Le Roi",
+        "role": "Souverain et narrateur",
+        "alt": "Roi aux cheveux dorés en tenue rouge et or"
+      },
+      "adventurer": {
+        "name": "L'Aventurier",
+        "role": "Guide des quêtes",
+        "alt": "Courageux aventurier fantastique"
+      },
+      "scholar": {
+        "name": "Le Savant",
+        "role": "Chercheur des épreuves",
+        "alt": "Savant et chercheur fantastique"
+      },
+      "sage": {
+        "name": "Le Sage",
+        "role": "Guide ancien",
+        "alt": "Ancien sorcier et guide arcanique"
+      },
+      "hero": {
+        "name": "Le Héros",
+        "role": "Légende en devenir",
+        "alt": "Héros d'une légende grandissante"
+      },
+      "hakari": {
+        "name": "Hakari",
+        "role": "Compagnon sacré",
+        "alt": "Hakari, compagnon magique et joyeux"
+      },
+      "miri": {
+        "name": "Miri",
+        "role": "Compagne espiègle",
+        "alt": "Miri, compagne magique et élégante"
+      }
+    },
+    "actions": { "advance": "Avancer le dialogue", "dismiss": "Fermer le dialogue" },
+    "companionsTitle": "Compagnons sacrés",
+    "dialogue": {
+      "king": {
+        "default": "Bienvenue, guerrier. Ta légende commence ici.",
+        "new": "Ta légende commence ici.",
+        "levelUp": "Un nouveau chapitre de ta légende commence.",
+        "streak": "Ta constance honore le royaume.",
+        "progress": "Le royaume voit grandir ta légende."
+      },
+      "adventurer": {
+        "default": "Une nouvelle quête t'attend, brave héros.",
+        "new": "Ta première quête t'attend à la guilde.",
+        "levelUp": "Une quête de plus conquise !",
+        "streak": "Ton élan devient une force redoutable.",
+        "progress": "La guilde a remarqué ton courage."
+      },
+      "scholar": {
+        "default": "Étudie le rite, puis teste tes limites.",
+        "new": "Observe attentivement. Chaque épreuve enseigne quelque chose.",
+        "levelUp": "Ta discipline devient mesurable.",
+        "streak": "La pratique constante révèle les vraies données.",
+        "progress": "Tes résultats forment un registre remarquable."
+      },
+      "sage": {
+        "default": "Demande, et je guiderai ton prochain pas.",
+        "new": "Toute légende commence par un pas décidé.",
+        "levelUp": "Ton pouvoir grandissant révèle un chemin plus profond.",
+        "streak": "La constance est le plus ancien sort de la maîtrise.",
+        "progress": "Tes registres indiquent une voie claire."
+      },
+      "hero": {
+        "default": "Continue. Tu forges ta propre légende.",
+        "new": "Le premier pas est déjà une victoire.",
+        "levelUp": "Un nouveau chapitre de ta légende commence.",
+        "streak": "Ta constance devient plus forte.",
+        "progress": "Tu deviens le héros de ta propre histoire."
+      },
+      "hakari": {
+        "default": "Je vais t'aider aussi.",
+        "new": "Je vais t'aider aussi.",
+        "levelUp": "Ta légende brille davantage !",
+        "streak": "Cette série est magique ! Continue !",
+        "progress": "Je sens ta légende grandir !"
+      },
+      "miri": {
+        "default": "Ta légende possède une jolie étincelle.",
+        "new": "Faisons briller tes premiers pas !",
+        "levelUp": "Une nouvelle marque s'ajoute à ta légende.",
+        "streak": "Ta flamme constante est magnifique.",
+        "progress": "Tu brilles davantage chaque jour."
+      }
+    },
     "welcome": {
       "king": "Bienvenue, guerrier. Ton voyage commence maintenant.",
       "adventurer": "De nouvelles quêtes t'attendent à la guilde.",
@@ -439,7 +575,8 @@
       "wizard": "Demande, et je te guiderai.",
       "sacred": "Le sanctuaire accueille ton retour.",
       "maid": "Votre chambre est prête, mon seigneur.",
-      "sprite": "Psst ! Je suis Miri, ta petite étincelle magique. Faisons briller ta légende !"
+      "sprite": "Psst ! Je suis Miri, ta petite étincelle magique. Faisons briller ta légende !",
+      "hakari": "Tu grandis aujourd’hui !"
     },
     "levelUp": {
       "title": "Félicitations ! Tu as atteint le niveau {{level}}.",

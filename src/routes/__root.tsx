@@ -14,11 +14,22 @@ import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
-import { hydrateGameStore } from "../lib/game-store";
+import { ReminderMonitor } from "../components/ReminderMonitor";
+import { hydrateGameStore, resetGameStore } from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
 import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 import "../lib/i18n";
 import { hydrateSoundStore, initBackgroundMusic } from "../lib/sound-store";
+
+const CHARACTER_ASSETS = [
+  "/characters/king.png",
+  "/characters/adventurer.png",
+  "/characters/scientist.png",
+  "/characters/wizard.png",
+  "/characters/sacred.png",
+  "/characters/hakari.png",
+  "/characters/sprite.png",
+];
 
 function NotFoundComponent() {
   return (
@@ -113,6 +124,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
     links: [
+      ...CHARACTER_ASSETS.map((href) => ({ rel: "preload", as: "image", href })),
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -157,30 +169,47 @@ function RootComponent() {
       if (language !== i18n.language) void i18n.changeLanguage(language);
     }
 
-    hydrateGameStore();
     hydrateSoundStore();
     initBackgroundMusic();
 
     // Supabase is optional for the public preview. Keep the local game experience
     // available when the project has not supplied its cloud credentials yet.
-    const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"];
+    const viteEnv = import.meta.env as ImportMetaEnv & {
+      VITE_SUPABASE_URL?: string;
+      VITE_SUPABASE_PUBLISHABLE_KEY?: string;
+    };
+    const supabaseUrl = viteEnv.VITE_SUPABASE_URL || process.env["SUPABASE_URL"];
     const supabaseKey =
-      import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_PUBLISHABLE_KEY"];
+      viteEnv.VITE_SUPABASE_PUBLISHABLE_KEY || process.env["SUPABASE_PUBLISHABLE_KEY"];
 
     if (!supabaseUrl || !supabaseKey) {
       stopCloudSync();
       return;
     }
 
+    let activeUserId: string | null = null;
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        startCloudSync(session.user.id);
-      } else if (event === "SIGNED_OUT") {
+      const nextUserId = session?.user?.id ?? null;
+      if (nextUserId && nextUserId !== activeUserId) {
+        activeUserId = nextUserId;
+        resetGameStore();
+        startCloudSync(nextUserId);
+      } else if (!nextUserId) {
+        activeUserId = null;
         stopCloudSync();
+        resetGameStore();
       }
     });
-    void supabase.auth.getSession().then(({ data }) => {
-      if (data.session?.user) startCloudSync(data.session.user.id);
+    void supabase.auth.getSession().then(({ data, error }) => {
+      if (error || !data.session?.user) {
+        if (error) console.error("[v0] session restoration failed", error.message);
+        resetGameStore();
+        stopCloudSync();
+        return;
+      }
+      activeUserId = data.session.user.id;
+      resetGameStore();
+      startCloudSync(activeUserId);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -189,7 +218,16 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <footer className="relative z-10 flex justify-center gap-4 px-4 pb-24 pt-3 text-xs text-muted-foreground">
+        <Link to="/privacy" className="underline underline-offset-4">
+          Privacy Policy
+        </Link>
+        <Link to="/terms" className="underline underline-offset-4">
+          Terms of Service
+        </Link>
+      </footer>
       <BottomNav />
+      <ReminderMonitor />
       <Toaster theme="dark" position="top-center" />
     </QueryClientProvider>
   );

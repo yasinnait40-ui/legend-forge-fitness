@@ -4,6 +4,7 @@ import { Check, ChevronDown, Clock, Star } from "lucide-react";
 import trainingArena from "@/assets/training-arena.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
+import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeTrial, trialsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
@@ -12,6 +13,7 @@ import { TRIALS, type StatKey, type Trial } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { requestReminderPermission } from "@/lib/notifications";
 
 export const Route = createFileRoute("/trials")({
   head: () => ({
@@ -40,12 +42,17 @@ function TrialsPage() {
   const game = useGame();
   const done = trialsDoneToday(game);
   const [openId, setOpenId] = useState<string | null>(TRIALS[0]?.id ?? null);
+  const [treasure, setTreasure] =
+    useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
 
-  function handleComplete(trial: Trial) {
-    const result = completeTrial(trial.id, trial.name, trial.xp, trial.stats);
+  async function handleComplete(trial: Trial) {
+    const result = await completeTrial(trial.id, trial.name, trial.xp, trial.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
       announceRewards(result, t("trials.conqueredToast", { name: g.trial(trial).name }));
+      if (result.treasure) setTreasure(result.treasure);
+      if (game.totalQuests + game.totalTrials === 1)
+        requestReminderPermission(t("notifications.permissionPrompt"));
     }
   }
 
@@ -68,7 +75,7 @@ function TrialsPage() {
         </p>
       </header>
 
-      <CharacterWelcome kind="scientist" dialogue={t("characters.welcome.scientist")} />
+      <CharacterWelcome kind="scholar" />
       <div className="mt-6 space-y-4">
         {TRIALS.map((trial) => {
           const isDone = done.includes(trial.id);
@@ -82,9 +89,7 @@ function TrialsPage() {
                 aria-expanded={open}
               >
                 <div className="min-w-0">
-                  <h3 className="font-display text-base font-bold tracking-[0.05em]">
-                    {tt.name}
-                  </h3>
+                  <h3 className="font-display text-base font-bold tracking-[0.05em]">{tt.name}</h3>
                   <p className="mt-0.5 text-xs italic text-muted-foreground">{tt.epithet}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <span className="flex" aria-label={`Difficulty ${trial.difficulty} of 5`}>
@@ -167,6 +172,7 @@ function TrialsPage() {
           );
         })}
       </div>
+      {treasure && <TreasureChest reward={treasure} onClose={() => setTreasure(null)} />}
     </RealmScreen>
   );
 }

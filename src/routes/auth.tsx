@@ -1,13 +1,19 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogIn, Sparkles, UserPlus } from "lucide-react";
+import { LogIn, Mail, Sparkles, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import guildHall from "@/assets/guild-hall.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { cn } from "@/lib/utils";
+
+const authCallbackUrl = () => {
+  const viteEnv = import.meta.env as ImportMetaEnv & {
+    NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL?: string;
+  };
+  return viteEnv.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/auth/callback`;
+};
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -34,6 +40,7 @@ function AuthPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
+  const [verificationSent, setVerificationSent] = useState(false);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -51,13 +58,16 @@ function AuthPage() {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin },
+          options: {
+            emailRedirectTo: authCallbackUrl(),
+          },
         });
         if (error) throw error;
         if (data.session) {
           toast.success("Your oath is sworn — welcome, warrior.");
           void navigate({ to: "/", replace: true });
         } else {
+          setVerificationSent(true);
           toast("A sealed scroll awaits", {
             description: "Check your email and confirm to complete your oath.",
           });
@@ -69,17 +79,79 @@ function AuthPage() {
         void navigate({ to: "/", replace: true });
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "The oath stone rejected you.");
+      const message = err instanceof Error ? err.message.toLowerCase() : "";
+      const safeMessage = message.includes("email not confirmed")
+        ? "Confirm your email before signing in."
+        : message.includes("password") && message.includes("6")
+          ? "Choose a stronger password."
+          : message.includes("rate limit") || message.includes("too many")
+            ? "Too many attempts. Please wait and try again."
+            : mode === "signin"
+              ? "Invalid email or password."
+              : "We could not create the account. Check your details and try again.";
+      toast.error(safeMessage);
     } finally {
       setBusy(false);
     }
   }
 
+  async function onForgotPassword() {
+    if (!email.trim()) {
+      toast.error("Enter your email address first.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setBusy(false);
+    if (error) {
+      toast.error("We could not send a recovery email. Please check the address and try again.");
+      return;
+    }
+    toast.success("Recovery instructions sent. Check your email.");
+  }
+
+  async function resendVerification() {
+    if (!email.trim()) {
+      toast.error("Enter your email address first.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: email.trim(),
+      options: {
+        emailRedirectTo: authCallbackUrl(),
+      },
+    });
+    setBusy(false);
+    if (error) {
+      toast.error("We could not resend verification. Please try again later.");
+      return;
+    }
+    setVerificationSent(true);
+    toast.success("Verification instructions sent. Check your email.");
+  }
+
   async function onGoogle() {
+    setBusy(true);
     try {
-      await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Google sign-in failed.");
+      const signInWithOAuth = supabase.auth.signInWithOAuth;
+      if (typeof signInWithOAuth !== "function") {
+        toast.error("Google sign-in is unavailable because Supabase is not configured.");
+        return;
+      }
+
+      const { error } = await signInWithOAuth.call(supabase.auth, {
+        provider: "google",
+        options: { redirectTo: authCallbackUrl() },
+      });
+      if (error) toast.error("Google sign-in failed. Please try again.");
+    } catch {
+      toast.error("Google sign-in failed. Please try again.");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -151,6 +223,31 @@ function AuthPage() {
             />
           </label>
 
+          {mode === "signin" && (
+            <div className="flex items-center justify-between gap-3 text-xs">
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => void onForgotPassword()}
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                Forgot your sigil?
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => void resendVerification()}
+                className="text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+              >
+                Resend verification
+              </button>
+            </div>
+          )}
+          {verificationSent && (
+            <p className="text-xs leading-5 text-muted-foreground" role="status">
+              Verification email sent. Confirm your account before entering the realm.
+            </p>
+          )}
           <button type="submit" disabled={busy} className="btn-gold mt-2 disabled:opacity-60">
             {mode === "signin" ? (
               <>
