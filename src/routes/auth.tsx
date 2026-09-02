@@ -74,7 +74,17 @@ function AuthPage() {
         void navigate({ to: "/", replace: true });
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "The oath stone rejected you.");
+      const message = err instanceof Error ? err.message.toLowerCase() : "";
+      const safeMessage = message.includes("email not confirmed")
+        ? "Confirm your email before signing in."
+        : message.includes("password") && message.includes("6")
+          ? "Choose a stronger password."
+          : message.includes("rate limit") || message.includes("too many")
+            ? "Too many attempts. Please wait and try again."
+            : mode === "signin"
+              ? "Invalid email or password."
+              : "We could not create the account. Check your details and try again.";
+      toast.error(safeMessage);
     } finally {
       setBusy(false);
     }
@@ -120,8 +130,8 @@ function AuthPage() {
   async function onGoogle() {
     try {
       await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Google sign-in failed.");
+    } catch {
+      toast.error("Google sign-in failed. Please try again.");
     }
   }
 
