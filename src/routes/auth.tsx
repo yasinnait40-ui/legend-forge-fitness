@@ -152,29 +152,57 @@ function AuthPage() {
   async function onGoogle() {
     setBusy(true);
     try {
+      const redirectUrl = authCallbackUrl();
+      console.log("🔐 OAuth Redirect URL:", redirectUrl);
+      
+      // Verify Supabase is configured
+      if (!supabase.auth) {
+        toast.error("Authentication service is not available.");
+        setBusy(false);
+        return;
+      }
+
+      console.log("🔐 Starting Google OAuth flow...");
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: authCallbackUrl(),
+          redirectTo: redirectUrl,
           queryParams: {
             access_type: "offline",
             prompt: "consent",
           },
         },
       });
-      
+
       if (error) {
-        console.error("OAuth error:", error);
-        toast.error("Google sign-in failed. Please try again.");
+        console.error("❌ OAuth Error:", error);
+        const errorMsg = error.message || error.toString();
+        
+        // Provide specific error messages based on the error
+        if (errorMsg.includes("redirect_uri")) {
+          toast.error("Redirect URL not configured in Supabase. Check your OAuth settings.");
+        } else if (errorMsg.includes("oauth") || errorMsg.includes("provider")) {
+          toast.error("Google OAuth is not properly configured. Check Supabase settings.");
+        } else {
+          toast.error(`Authentication error: ${errorMsg}`);
+        }
         setBusy(false);
         return;
       }
-      
-      // If we get here without error, the OAuth flow should handle the redirect
-      // The busy state will be maintained during redirect
+
+      console.log("✅ OAuth initiated, redirecting...");
+      // OAuth will redirect - keep busy state
     } catch (err) {
-      console.error("Google sign-in exception:", err);
-      toast.error("Google sign-in failed. Please try again.");
+      console.error("❌ Google sign-in exception:", err);
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      
+      if (errorMsg.includes("window.location")) {
+        toast.error("Could not redirect to Google. Check popup blockers.");
+      } else if (errorMsg.includes("fetch")) {
+        toast.error("Network error. Check your internet connection.");
+      } else {
+        toast.error("Google sign-in unavailable. Please try again.");
+      }
       setBusy(false);
     }
   }
