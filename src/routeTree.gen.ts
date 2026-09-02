@@ -17,6 +17,7 @@ import { Route as GuideRouteImport } from './routes/guide'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as QuestsRouteImport } from './routes/quests'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrialsRouteImport } from './routes/trials'
@@ -61,6 +62,11 @@ const QuestsRoute = QuestsRouteImport.update({
   path: '/quests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/progress'
     | '/quests'
+    | '/reset-password'
     | '/settings'
     | '/terms'
     | '/trials'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/progress'
     | '/quests'
+    | '/reset-password'
     | '/settings'
     | '/terms'
     | '/trials'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/progress'
     | '/quests'
+    | '/reset-password'
     | '/settings'
     | '/terms'
     | '/trials'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProgressRoute: typeof ProgressRoute
   QuestsRoute: typeof QuestsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
   TermsRoute: typeof TermsRoute
   TrialsRoute: typeof TrialsRoute
@@ -231,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProgressRoute: ProgressRoute,
   QuestsRoute: QuestsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
   TermsRoute: TermsRoute,
   TrialsRoute: TrialsRoute,
