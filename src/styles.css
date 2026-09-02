@@ -349,14 +349,12 @@
 /* ---------- Unified visual-novel dialogue bar ---------- */
 .fantasy-character {
   --character-accent: var(--primary);
-  position: fixed;
-  z-index: 80;
-  left: 0;
-  right: 0;
-  bottom: calc(3.75rem + env(safe-area-inset-bottom));
+  position: relative;
+  z-index: 10;
   display: block;
   width: 100%;
   min-height: 10rem;
+  margin: 1rem auto 0;
   pointer-events: none;
   transform: translateY(110%);
   opacity: 0;
@@ -392,12 +390,13 @@
   margin: -1rem auto 0;
 }
 .fantasy-character-figure {
-  position: absolute;
+  position: relative;
   z-index: 12;
-  right: clamp(0.25rem, 4vw, 2.5rem);
-  bottom: 7.5rem;
+  right: auto;
+  bottom: auto;
   width: clamp(8.5rem, 38vw, 15rem);
   height: clamp(12rem, 50vw, 20rem);
+  margin: 0 auto;
   margin: 0;
   filter: drop-shadow(0.35rem 0.7rem 0.65rem rgb(0 0 0 / 0.7));
   isolation: isolate;
@@ -506,8 +505,8 @@
 }
 @media (max-width: 639px) {
   .fantasy-character {
-    position: fixed;
-    bottom: calc(4.25rem + env(safe-area-inset-bottom));
+    position: relative;
+    bottom: auto;
     min-height: 0;
     display: flex;
     flex-direction: column;

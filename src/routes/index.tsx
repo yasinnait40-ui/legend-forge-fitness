@@ -73,7 +73,7 @@ function HomePage() {
         </p>
       </header>
 
-      <CharacterWelcome kind="king" dialogue={t("characters.welcome.king")} />
+      <CharacterWelcome kind="king" />
       <div className="h-[26dvh]" aria-hidden="true" />
 
       <RunePanel className="mt-4">

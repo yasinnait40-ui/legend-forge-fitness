@@ -88,7 +88,7 @@ function QuestsPage() {
         </p>
       </header>
 
-      <CharacterWelcome kind="adventurer" dialogue={t("characters.welcome.adventurer")} />
+      <CharacterWelcome kind="adventurer" />
       <div className="mt-6 space-y-4">
         {QUESTS.map((q) => {
           const isDone = questsDone.includes(q.id);
