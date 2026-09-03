@@ -1,0 +1,1 @@
+- [Package installation caution](package-installation-caution.md) — dependency helpers may rewrite manifests and preview setup may mutate `.replit`; verify and restore unrelated changes.
