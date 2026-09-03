@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Volume2, VolumeX, Languages } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Volume2, VolumeX, Languages, LogIn, LogOut, UserPlus } from "lucide-react";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
+import { FriendsPanel } from "@/components/FriendsPanel";
+import { HealthSyncInfo } from "@/components/HealthSyncInfo";
 import { useSound, toggleMuted, setVolume } from "@/lib/sound-store";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
 import warriorChamber from "@/assets/warrior-chamber.jpg";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -25,12 +28,27 @@ function SettingsPage() {
   const { t } = useTranslation();
   const { muted, volume } = useSound();
   const [, forceUpdate] = useState(0);
+  const [session, setSession] = useState<Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"] | null>(null);
   const currentLang = i18n.language?.split("-")[0] ?? "en";
+
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   function changeLang(code: string) {
     i18n.changeLanguage(code).then(() => {
       forceUpdate((n) => n + 1);
     });
+  }
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
   }
 
   return (
@@ -76,6 +94,42 @@ function SettingsPage() {
       </div>
 
       <div className="mt-8 space-y-3">
+        <RunePanel className="flex flex-col gap-3">
+          <p className="font-semibold">{t("settings.account", "Account")}</p>
+          {session ? (
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm text-muted-foreground truncate">
+                {session.user.email}
+              </p>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="flex items-center gap-2 rounded-full border-2 px-3 py-1 text-xs"
+              >
+                <LogOut className="h-4 w-4" />
+                {t("settings.signOut", "Sign Out")}
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <a
+                href="/auth"
+                className="flex items-center gap-2 rounded-full border-2 px-3 py-1 text-xs"
+              >
+                <LogIn className="h-4 w-4" />
+                {t("settings.signIn", "Sign In")}
+              </a>
+              <a
+                href="/auth"
+                className="flex items-center gap-2 rounded-full border-2 px-3 py-1 text-xs"
+              >
+                <UserPlus className="h-4 w-4" />
+                {t("settings.createAccount", "Create Account")}
+              </a>
+            </div>
+          )}
+        </RunePanel>
+
         <RunePanel className="flex items-center gap-4">
           {muted ? (
             <VolumeX className="h-6 w-6 shrink-0" />
@@ -126,6 +180,10 @@ function SettingsPage() {
             </div>
           </div>
         </RunePanel>
+
+        <FriendsPanel />
+
+        <HealthSyncInfo />
       </div>
     </RealmScreen>
   );
