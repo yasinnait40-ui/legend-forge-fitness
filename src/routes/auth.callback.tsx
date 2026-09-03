@@ -21,8 +21,8 @@ function AuthCallbackPage() {
     async function finishAuth() {
       if (errorDescription) {
         if (active) {
-          setMessage("The Google oath was declined. Please try again.");
-          toast.error("Google sign-in was not completed.");
+          setMessage("The sign-in oath was declined. Please try again.");
+          toast.error("Sign-in was not completed.");
         }
         return;
       }
