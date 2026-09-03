@@ -56,7 +56,7 @@ function SettingsPage() {
           {/* Maid Character Placeholder - Gold border frame */}
           <div className="absolute inset-0 flex items-center justify-center rounded-lg border-2 border-yellow-600/60 bg-gradient-to-b from-yellow-900/20 to-black/40 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-2 text-center">
-              <div className="text-4xl">👩‍🦰</div>
+              <img src="/characters/Maid.png" ... />
               <p className="font-display text-xs uppercase tracking-widest text-yellow-600">The Maid</p>
               <p className="font-serif text-xs italic text-foreground/70">Chamber Steward</p>
             </div>
