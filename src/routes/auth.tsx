@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogIn, Mail, Sparkles, UserPlus } from "lucide-react";
+import { LogIn, Mail, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import guildHall from "@/assets/guild-hall.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
@@ -43,7 +43,6 @@ function AuthPage() {
   const [verificationSent, setVerificationSent] = useState(false);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<string>("");
 
   useEffect(() => {
     // Log environment and configuration info
@@ -55,7 +54,7 @@ function AuthPage() {
     console.log("🔐 Auth Page Loaded");
     console.log("🌐 Supabase URL:", supabaseUrl?.substring(0, 20) + "..." || "NOT SET");
     console.log("🔗 Redirect URL:", authCallbackUrl());
-    
+
     void supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
         console.log("✅ Session found, redirecting home");
@@ -163,86 +162,6 @@ function AuthPage() {
     toast.success("Verification instructions sent. Check your email.");
   }
 
-  async function onGoogle() {
-    setBusy(true);
-    const redirectUrl = authCallbackUrl();
-    
-    try {
-      const logMsg = `🔐 Google OAuth Starting\n🌐 Redirect: ${redirectUrl}\n📦 Supabase: ${supabase ? "✓" : "✗"}`;
-      console.log(logMsg);
-      setDebugInfo(logMsg);
-
-      // Verify Supabase is configured
-      if (!supabase?.auth) {
-        const errMsg = "❌ Supabase Auth not available";
-        console.error(errMsg);
-        toast.error("Authentication service is not configured.");
-        setDebugInfo(errMsg);
-        setBusy(false);
-        return;
-      }
-
-      // Call OAuth
-      console.log("📤 Initiating signInWithOAuth...");
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: redirectUrl,
-          queryParams: {
-            access_type: "offline",
-            prompt: "consent",
-          },
-        },
-      });
-
-      if (error) {
-        const errorMsg = error.message || error.toString();
-        const fullMsg = `❌ OAuth Error: ${errorMsg}`;
-        console.error(fullMsg);
-        setDebugInfo(fullMsg);
-
-        // Provide specific guidance
-        if (errorMsg.includes("redirect_uri") || errorMsg.includes("mismatch")) {
-          toast.error(
-            "❌ CONFIGURATION ERROR\n\nAdd this URL to Supabase:\n" +
-              redirectUrl +
-              "\n\nGo to Supabase → Auth → URL Configuration",
-          );
-        } else if (errorMsg.includes("provider") || errorMsg.includes("oauth")) {
-          toast.error(
-            "❌ Google OAuth Not Enabled\n\nEnable Google provider:\nSupabase → Auth → Providers → Google",
-          );
-        } else if (errorMsg.includes("network") || errorMsg.includes("fetch")) {
-          toast.error("❌ Network Error - Check your internet connection");
-        } else {
-          toast.error(`Authentication failed: ${errorMsg}`);
-        }
-        setBusy(false);
-        return;
-      }
-
-      if (data) {
-        console.log("✅ OAuth initiated, user will be redirected to Google");
-        setDebugInfo("✅ Redirecting to Google...");
-        // Don't reset busy - let the redirect happen
-      }
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : String(err);
-      const fullMsg = `❌ Exception: ${errorMsg}`;
-      console.error(fullMsg);
-      setDebugInfo(fullMsg);
-
-      if (errorMsg.includes("popup")) {
-        toast.error("❌ Popup Blocked - Allow popups for Google sign-in");
-      } else if (errorMsg.includes("window")) {
-        toast.error("❌ Browser Error - Try a different browser");
-      } else {
-        toast.error("Google sign-in failed. Please try again.");
-      }
-      setBusy(false);
-    }
-  }
-
   return (
     <RealmScreen
       image={guildHall}
@@ -348,31 +267,6 @@ function AuthPage() {
             )}
           </button>
         </form>
-
-        <div className="my-4 flex items-center gap-3">
-          <span className="h-px flex-1 bg-border/60" />
-          <span className="font-display text-[0.56rem] uppercase tracking-[0.26em] text-muted-foreground">
-            or
-          </span>
-          <span className="h-px flex-1 bg-border/60" />
-        </div>
-
-        <button
-          type="button"
-          onClick={onGoogle}
-          disabled={busy}
-          className="btn-rune-ghost disabled:opacity-60"
-        >
-          <Sparkles className="h-4 w-4" /> Continue with Google
-        </button>
-
-        {debugInfo && (
-          <div className="mt-4 rounded-md bg-muted/50 p-2 font-mono text-[0.65rem] text-muted-foreground">
-            {debugInfo.split("\n").map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-          </div>
-        )}
       </RunePanel>
 
       <p className="mt-4 text-center text-xs text-muted-foreground">
