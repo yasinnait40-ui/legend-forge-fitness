@@ -14,6 +14,21 @@ const DEFAULT_SOUND_STATE: SoundState = {
 
 const STORAGE_KEY = "aethora-sound-v1";
 
+/**
+ * P0.1 hardening: every volume that enters the store (from a saved payload or
+ * from UI input) passes through here. Non-finite values (NaN/Infinity from a
+ * corrupted save or a bad input event) fall back to the default instead of
+ * poisoning AudioContext gains or HTMLMediaElement.volume, which throws on
+ * non-finite floats.
+ */
+function clampVolume(v: unknown): number {
+  if (typeof v !== "number" || !Number.isFinite(v)) {
+    return DEFAULT_SOUND_STATE.volume;
+  }
+
+  return Math.min(1, Math.max(0, v));
+}
+
 let state: SoundState = DEFAULT_SOUND_STATE;
 const listeners = new Set<() => void>();
 
@@ -45,10 +60,7 @@ export function hydrateSoundStore() {
       state = {
         ...DEFAULT_SOUND_STATE,
         ...parsed,
-        volume: Math.min(
-          1,
-          Math.max(0, typeof parsed.volume === "number" ? parsed.volume : DEFAULT_SOUND_STATE.volume),
-        ),
+        volume: clampVolume(parsed.volume),
         muted: typeof parsed.muted === "boolean" ? parsed.muted : DEFAULT_SOUND_STATE.muted,
       };
 
@@ -75,7 +87,7 @@ export function toggleMuted() {
 export function setVolume(v: number) {
   commit({
     ...state,
-    volume: Math.min(1, Math.max(0, v)),
+    volume: clampVolume(v),
   });
 
   applyMusicState();
@@ -104,6 +116,16 @@ let audioCtx: AudioContext | null = null;
 function getCtx(): AudioContext | null {
   if (typeof window === "undefined") return null;
 
+  // A closed context can never be resumed again (e.g. after a page-level
+  // teardown). Recover by lazily creating a fresh one on the next sound.
+  if (audioCtx) {
+    try {
+      if (audioCtx.state === "closed") audioCtx = null;
+    } catch {
+      audioCtx = null;
+    }
+  }
+
   if (!audioCtx) {
     const AudioContextCtor =
       window.AudioContext ??
@@ -113,7 +135,14 @@ function getCtx(): AudioContext | null {
 
     if (!AudioContextCtor) return null;
 
-    audioCtx = new AudioContextCtor();
+    // P0.1 hardening: constructing an AudioContext can throw on some
+    // browsers/embedded webviews (hardware budget, privacy settings).
+    // Sound must never crash the caller.
+    try {
+      audioCtx = new AudioContextCtor();
+    } catch {
+      return null;
+    }
   }
 
   return audioCtx;
@@ -134,7 +163,7 @@ async function resumeAudioContext(ctx: AudioContext): Promise<boolean> {
 function createMaster(ctx: AudioContext, multiplier = 1): GainNode {
   const master = ctx.createGain();
 
-  master.gain.value = state.volume * multiplier;
+  master.gain.value = clampVolume(state.volume * multiplier);
   master.connect(ctx.destination);
 
   return master;
@@ -188,19 +217,25 @@ export function playSound(key: SoundKey) {
   void resumeAudioContext(ctx).then((ready) => {
     if (!ready || state.muted) return;
 
-    const master = createMaster(ctx);
+    // P0.1 hardening: graph construction/scheduling can still throw in edge
+    // cases (closed context races, OS-level audio failures). Keep it silent.
+    try {
+      const master = createMaster(ctx);
 
-    if (key === "questComplete") {
-      tone(523.25, 0, 0.5, ctx, master, "sine", 0.45);
-      tone(659.25, 0.08, 0.5, ctx, master, "sine", 0.45);
-      tone(783.99, 0.16, 0.6, ctx, master, "triangle", 0.4);
-    }
+      if (key === "questComplete") {
+        tone(523.25, 0, 0.5, ctx, master, "sine", 0.45);
+        tone(659.25, 0.08, 0.5, ctx, master, "sine", 0.45);
+        tone(783.99, 0.16, 0.6, ctx, master, "triangle", 0.4);
+      }
 
-    if (key === "levelUp") {
-      tone(523.25, 0, 0.35, ctx, master, "sine", 0.4);
-      tone(659.25, 0.15, 0.35, ctx, master, "sine", 0.4);
-      tone(783.99, 0.3, 0.35, ctx, master, "triangle", 0.4);
-      tone(1046.5, 0.45, 0.9, ctx, master, "triangle", 0.45);
+      if (key === "levelUp") {
+        tone(523.25, 0, 0.35, ctx, master, "sine", 0.4);
+        tone(659.25, 0.15, 0.35, ctx, master, "sine", 0.4);
+        tone(783.99, 0.3, 0.35, ctx, master, "triangle", 0.4);
+        tone(1046.5, 0.45, 0.9, ctx, master, "triangle", 0.45);
+      }
+    } catch {
+      // Never let a sound effect propagate an exception to the caller.
     }
   });
 }
@@ -210,12 +245,66 @@ export function playSound(key: SoundKey) {
 /* -------------------------------------------------------------------------- */
 
 let musicEl: HTMLAudioElement | null = null;
+let musicLoadFailed = false;
+let musicRetryBound = false;
+
+const MUSIC_RETRY_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
+
+function tryStartMusic(): void {
+  const el = musicEl;
+
+  if (!el || state.muted || musicLoadFailed || !el.paused) return;
+
+  void el
+    .play()
+    .then(() => {
+      // Autoplay unlocked — stop listening for further retry triggers.
+      removeMusicRetryListeners();
+    })
+    .catch(() => {
+      // Still blocked (or the media failed). The next interaction retries.
+    });
+}
+
+function onMusicRetryEvent(): void {
+  tryStartMusic();
+}
+
+function addMusicRetryListeners(): void {
+  if (typeof window === "undefined" || musicRetryBound) return;
+
+  musicRetryBound = true;
+
+  for (const eventName of MUSIC_RETRY_EVENTS) {
+    window.addEventListener(eventName, onMusicRetryEvent, {
+      passive: eventName !== "keydown",
+    });
+  }
+}
+
+function removeMusicRetryListeners(): void {
+  if (typeof window === "undefined" || !musicRetryBound) return;
+
+  musicRetryBound = false;
+
+  for (const eventName of MUSIC_RETRY_EVENTS) {
+    window.removeEventListener(eventName, onMusicRetryEvent);
+  }
+}
 
 function applyMusicState() {
   if (!musicEl) return;
 
   musicEl.muted = state.muted;
-  musicEl.volume = Math.min(1, Math.max(0, state.volume * 0.5));
+  musicEl.volume = clampVolume(state.volume * 0.5);
+
+  // P0.1 fix: previously, if the browser blocked the very first autoplay
+  // attempt while muted (or the first interaction was consumed while muted),
+  // unmuting would never start the music until a full page reload. Now any
+  // unmute/volume change re-attempts playback, which is itself a user gesture.
+  if (!state.muted && !musicLoadFailed && musicEl.paused) {
+    tryStartMusic();
+  }
 }
 
 export function initBackgroundMusic() {
@@ -227,33 +316,42 @@ export function initBackgroundMusic() {
 
   const musicPath = "/audio/fantasy-theme.mp3";
 
-  musicEl = new Audio(musicPath);
+  // P0.1 hardening: new Audio() can throw in rare embedded environments.
+  try {
+    musicEl = new Audio(musicPath);
+  } catch {
+    musicEl = null;
+  }
+
+  if (!musicEl) return;
+
   musicEl.loop = true;
   musicEl.preload = "auto";
 
-  applyMusicState();
-
   // Do not remove or replace the existing AETHORA background music.
   // Browser autoplay policies may block playback until the user interacts.
-  const tryPlay = () => {
-    if (!musicEl || state.muted) return;
+  musicEl.addEventListener("error", () => {
+    // Missing/broken asset: stop retrying play() on every interaction.
+    musicLoadFailed = true;
+    removeMusicRetryListeners();
+  });
 
-    applyMusicState();
-
-    musicEl.play().catch(() => {
-      // Autoplay blocked. The next user interaction can retry playback.
-    });
-  };
+  applyMusicState();
 
   void musicEl.play().catch(() => undefined);
 
-  window.addEventListener("pointerdown", tryPlay, {
-    once: true,
-    passive: true,
-  });
+  // P0.1 fix: the old retry used `once: true`, so a single interaction
+  // (even one that happened while muted, or a gesture the browser ignored)
+  // consumed the only retry forever. Retry on every interaction until the
+  // music is actually playing.
+  addMusicRetryListeners();
 
-  window.addEventListener("keydown", tryPlay, {
-    once: true,
+  // Mobile browsers suspend media when the app is backgrounded. When the
+  // user returns, restart the theme if it should be audible.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      tryStartMusic();
+    }
   });
 
   listeners.add(applyMusicState);
@@ -413,9 +511,22 @@ const CHARACTER_INTROS: Record<string, CharacterIntroFn> = {
  * It should be called by the quest/character component exactly once
  * when a character first appears for that quest session.
  */
+const INTRO_COOLDOWN_MS = 400;
+const lastIntroPlayedAt = new Map<string, number>();
+
 export function playCharacterIntro(characterId: string) {
   if (state.muted) return;
   if (typeof window === "undefined") return;
+
+  // P0.1 hardening: a character entering can trigger multiple intro calls in
+  // quick succession (re-renders, fast dialogue advance). Play at most one
+  // entrance sound per character within the cooldown window.
+  const now = Date.now();
+  const last = lastIntroPlayedAt.get(characterId) ?? 0;
+
+  if (now - last < INTRO_COOLDOWN_MS) return;
+
+  lastIntroPlayedAt.set(characterId, now);
 
   const ctx = getCtx();
   if (!ctx) return;
@@ -423,13 +534,17 @@ export function playCharacterIntro(characterId: string) {
   void resumeAudioContext(ctx).then((ready) => {
     if (!ready || state.muted) return;
 
-    const master = createMaster(ctx, 0.45);
+    try {
+      const master = createMaster(ctx, 0.45);
 
-    const intro =
-      CHARACTER_INTROS[characterId] ??
-      playLightIntro;
+      const intro =
+        CHARACTER_INTROS[characterId] ??
+        playLightIntro;
 
-    intro(ctx, master);
+      intro(ctx, master);
+    } catch {
+      // Never let an intro sound propagate an exception to the caller.
+    }
   });
 }
 
