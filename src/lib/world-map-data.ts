@@ -6,8 +6,8 @@ export interface WorldRegion {
   name: string;
   description: string;
   levelReq: number;
-  x: number; // position on the map, 0-100 (percentage)
-  y: number;
+  x: number; // 0-100 (percentage of width)
+  y: number; // 0-130 (matches map viewBox height)
   icon: "castle" | "forest" | "desert";
 }
 
@@ -17,8 +17,8 @@ export const WORLD_REGIONS: WorldRegion[] = [
     name: "The Kingdom",
     description: "Where every legend begins. Home of the King and the Keep.",
     levelReq: 1,
-    x: 18,
-    y: 68,
+    x: 20,
+    y: 100,
     icon: "castle",
   },
   {
@@ -27,7 +27,7 @@ export const WORLD_REGIONS: WorldRegion[] = [
     description: "Ancient trees whisper old magic. The Wizard dwells here.",
     levelReq: 4,
     x: 50,
-    y: 32,
+    y: 55,
     icon: "forest",
   },
   {
@@ -35,8 +35,8 @@ export const WORLD_REGIONS: WorldRegion[] = [
     name: "Desert of Ashes",
     description: "Scorched sands hide forgotten trials. Only the disciplined survive.",
     levelReq: 8,
-    x: 82,
-    y: 62,
+    x: 80,
+    y: 95,
     icon: "desert",
   },
 ];
