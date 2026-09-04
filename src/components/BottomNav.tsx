@@ -8,11 +8,13 @@ import {
   UserRound,
   WandSparkles,
   Settings,
+  Map as MapIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
   { to: "/", labelKey: "nav.home", icon: Castle, exact: true },
+  { to: "/map", labelKey: "nav.map", icon: MapIcon, exact: false },
   { to: "/quests", labelKey: "nav.quests", icon: ScrollText, exact: false },
   { to: "/trials", labelKey: "nav.trials", icon: Swords, exact: false },
   { to: "/progress", labelKey: "nav.legend", icon: Telescope, exact: false },
