@@ -151,84 +151,50 @@ export function initBackgroundMusic() {
     .catch(() => undefined);
 }
 
-// ── Character voices ────────────────────────────────────────────────
-export interface VoiceProfile {
-  pitch: number;
-  rate: number;
-  gender: "male" | "female";
+// ── Character "talk" blips (بدل الكلام الحقيقي) ─────────────────────
+interface BlipProfile {
+  baseFreq: number; // النغمة الأساسية
+  variance: number; // مقدار التذبذب العشوائي (يعطي إحساس حيوية)
+  type: OscillatorType; // طابع الصوت
+  blipDuration: number; // مدة كل "بلب"
+  gap: number; // فاصل بين البلبات
 }
 
-const VOICE_PROFILES: Record<string, VoiceProfile> = {
-  king: { pitch: 0.75, rate: 0.92, gender: "male" },
-  adventurer: { pitch: 0.95, rate: 1.08, gender: "male" },
-  scientist: { pitch: 1.0, rate: 1.0, gender: "female" },
-  wizard: { pitch: 0.6, rate: 0.82, gender: "male" },
-  sacred: { pitch: 1.0, rate: 0.95, gender: "female" },
-  maid: { pitch: 1.25, rate: 1.05, gender: "female" },
+const BLIP_PROFILES: Record<string, BlipProfile> = {
+  king: { baseFreq: 180, variance: 18, type: "sawtooth", blipDuration: 0.055, gap: 0.05 },
+  adventurer: { baseFreq: 260, variance: 35, type: "square", blipDuration: 0.04, gap: 0.035 },
+  scientist: { baseFreq: 340, variance: 22, type: "sine", blipDuration: 0.045, gap: 0.04 },
+  wizard: { baseFreq: 140, variance: 15, type: "triangle", blipDuration: 0.075, gap: 0.065 },
+  sacred: { baseFreq: 400, variance: 18, type: "sine", blipDuration: 0.05, gap: 0.045 },
+  maid: { baseFreq: 440, variance: 40, type: "square", blipDuration: 0.035, gap: 0.03 },
 };
 
-const LANG_VOICE_CODES: Record<string, string> = {
-  en: "en-US",
-  ar: "ar-SA",
-  ja: "ja-JP",
-  es: "es-ES",
-  fr: "fr-FR",
-};
+function playCharacterBlips(characterId: string, text: string) {
+  const ctx = getCtx();
+  const master = ctx.createGain();
+  master.gain.value = state.volume * 0.35; // البلبات أهدأ من المؤثرات العادية
+  master.connect(ctx.destination);
 
-// كاش لأصوات المتصفح
-let cachedVoices: SpeechSynthesisVoice[] = [];
+  const profile = BLIP_PROFILES[characterId] ?? BLIP_PROFILES.adventurer;
+  const words = text.split(/\s+/).filter(Boolean);
+  const step = profile.blipDuration + profile.gap;
 
-function loadVoices() {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-  cachedVoices = window.speechSynthesis.getVoices();
+  words.forEach((_, i) => {
+    const jitter = (Math.random() - 0.5) * 2 * profile.variance;
+    tone(
+      profile.baseFreq + jitter,
+      i * step,
+      profile.blipDuration,
+      ctx,
+      master,
+      profile.type,
+    );
+  });
 }
 
-if (typeof window !== "undefined" && "speechSynthesis" in window) {
-  loadVoices();
-  window.speechSynthesis.onvoiceschanged = loadVoices;
-}
-
-const MALE_HINTS = ["male", "david", "mark", "daniel", "fred", "george", "guy", "alex"];
-const FEMALE_HINTS = [
-  "female",
-  "zira",
-  "samantha",
-  "susan",
-  "victoria",
-  "karen",
-  "moira",
-  "tessa",
-  "salma",
-];
-
-function pickVoice(langCode: string, gender: "male" | "female"): SpeechSynthesisVoice | undefined {
-  if (!cachedVoices.length) loadVoices();
-  const langPrefix = (LANG_VOICE_CODES[langCode] ?? "en-US").split("-")[0];
-  const sameLang = cachedVoices.filter((v) => v.lang.toLowerCase().startsWith(langPrefix));
-  const hints = gender === "male" ? MALE_HINTS : FEMALE_HINTS;
-
-  const matched = sameLang.find((v) => hints.some((h) => v.name.toLowerCase().includes(h)));
-  if (matched) return matched;
-
-  if (sameLang.length) return sameLang[0];
-
-  return cachedVoices[0];
-}
-
-export function speakCharacterLine(characterId: string, text: string, langCode: string) {
+// نفس اسم الدالة والتوقيع القديم، حتى FantasyCharacter.tsx ما يحتاج أي تعديل
+export function speakCharacterLine(characterId: string, text: string, _langCode: string) {
   if (state.muted) return;
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  const profile = VOICE_PROFILES[characterId] ?? { pitch: 1, rate: 1, gender: "female" as const };
-
-  const voice = pickVoice(langCode, profile.gender);
-  if (voice) utterance.voice = voice;
-
-  utterance.pitch = profile.pitch;
-  utterance.rate = profile.rate;
-  utterance.volume = state.volume;
-  utterance.lang = LANG_VOICE_CODES[langCode] ?? "en-US";
-  window.speechSynthesis.speak(utterance);
+  if (typeof window === "undefined") return;
+  playCharacterBlips(characterId, text);
 }
