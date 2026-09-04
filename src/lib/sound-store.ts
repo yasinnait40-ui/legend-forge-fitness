@@ -150,18 +150,21 @@ export function initBackgroundMusic() {
     })
     .catch(() => undefined);
 }
+
+// ── Character voices ────────────────────────────────────────────────
 export interface VoiceProfile {
   pitch: number;
   rate: number;
+  gender: "male" | "female";
 }
 
 const VOICE_PROFILES: Record<string, VoiceProfile> = {
-  king: { pitch: 0.75, rate: 0.92 },
-  adventurer: { pitch: 0.95, rate: 1.08 },
-  scientist: { pitch: 1.0, rate: 1.0 },
-  wizard: { pitch: 0.65, rate: 0.85 },
-  sacred: { pitch: 0.8, rate: 0.95 },
-  maid: { pitch: 1.25, rate: 1.05 },
+  king: { pitch: 0.75, rate: 0.92, gender: "male" },
+  adventurer: { pitch: 0.95, rate: 1.08, gender: "male" },
+  scientist: { pitch: 1.0, rate: 1.0, gender: "female" },
+  wizard: { pitch: 0.6, rate: 0.82, gender: "male" },
+  sacred: { pitch: 1.0, rate: 0.95, gender: "female" },
+  maid: { pitch: 1.25, rate: 1.05, gender: "female" },
 };
 
 const LANG_VOICE_CODES: Record<string, string> = {
@@ -172,12 +175,57 @@ const LANG_VOICE_CODES: Record<string, string> = {
   fr: "fr-FR",
 };
 
+// كاش لأصوات المتصفح
+let cachedVoices: SpeechSynthesisVoice[] = [];
+
+function loadVoices() {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  cachedVoices = window.speechSynthesis.getVoices();
+}
+
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+const MALE_HINTS = ["male", "david", "mark", "daniel", "fred", "george", "guy", "alex"];
+const FEMALE_HINTS = [
+  "female",
+  "zira",
+  "samantha",
+  "susan",
+  "victoria",
+  "karen",
+  "moira",
+  "tessa",
+  "salma",
+];
+
+function pickVoice(langCode: string, gender: "male" | "female"): SpeechSynthesisVoice | undefined {
+  if (!cachedVoices.length) loadVoices();
+  const langPrefix = (LANG_VOICE_CODES[langCode] ?? "en-US").split("-")[0];
+  const sameLang = cachedVoices.filter((v) => v.lang.toLowerCase().startsWith(langPrefix));
+  const hints = gender === "male" ? MALE_HINTS : FEMALE_HINTS;
+
+  const matched = sameLang.find((v) => hints.some((h) => v.name.toLowerCase().includes(h)));
+  if (matched) return matched;
+
+  if (sameLang.length) return sameLang[0];
+
+  return cachedVoices[0];
+}
+
 export function speakCharacterLine(characterId: string, text: string, langCode: string) {
   if (state.muted) return;
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
-  const profile = VOICE_PROFILES[characterId] ?? { pitch: 1, rate: 1 };
+  const profile = VOICE_PROFILES[characterId] ?? { pitch: 1, rate: 1, gender: "female" as const };
+
+  const voice = pickVoice(langCode, profile.gender);
+  if (voice) utterance.voice = voice;
+
   utterance.pitch = profile.pitch;
   utterance.rate = profile.rate;
   utterance.volume = state.volume;
