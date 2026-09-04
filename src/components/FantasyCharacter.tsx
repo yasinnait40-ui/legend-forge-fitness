@@ -9,7 +9,7 @@ import {
   type LegacyCharacterId,
 } from "@/lib/characters";
 import { useGame } from "@/lib/game-store";
-import { speakCharacterLine } from "@/lib/character-voice";
+import { speakCharacterLine } from "@/lib/sound-store";
 
 export type FantasyCharacterKind = CharacterId | LegacyCharacterId;
 
