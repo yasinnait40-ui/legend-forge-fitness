@@ -150,7 +150,7 @@ function GuidePage() {
           )}
           style={{ objectPosition: "center 28%" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/55 to-background/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/15 to-background/85" />
       </div>
       <div className="pointer-events-none fixed inset-0 z-0">
         <Particles count={10} />

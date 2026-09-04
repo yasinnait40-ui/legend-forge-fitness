@@ -27,8 +27,8 @@ export function StatBar({ stat, value, label }: { stat: StatKey; value: number; 
           className="bar-fill"
           style={{
             width: `${Math.min(100, (value / STAT_CAP) * 100)}%`,
-            background: `linear-gradient(90deg, color-mix(in oklab, ${color} 45%, black 30%), ${color})`,
-            boxShadow: `0 0 12px color-mix(in oklab, ${color} 60%, transparent)`,
+            background: `linear-gradient(90deg, color-mix(in oklab, ${color} 70%, white 12%), ${color})`,
+            boxShadow: `0 0 12px color-mix(in oklab, ${color} 45%, transparent)`,
           }}
         />
       </div>

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide-react";
+import { ChevronRight, Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
@@ -8,7 +8,7 @@ import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { questsDoneToday, todayKey, useGame } from "@/lib/game-store";
-import { QUESTS, STAT_ORDER } from "@/lib/game-data";
+import { levelProgress, QUESTS, STAT_ORDER } from "@/lib/game-data";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -49,6 +49,7 @@ function HomePage() {
   const { t } = useTranslation();
   const game = useGame();
   const { user, loading } = useAuth();
+  const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
   const yesterday = todayKey(new Date(Date.now() - 86400000));
   const streakInterrupted = Boolean(
@@ -58,7 +59,7 @@ function HomePage() {
   return (
     <RealmScreen
       image={homeKingdom}
-      alt="A warrior on a cliff overlooking the moonlit magical kingdom of Aethora"
+      alt="A radiant fantasy kingdom under a golden sky, seen from a cliff above the clouds"
       imagePosition="center 30%"
       veil="soft"
       eager
@@ -66,10 +67,10 @@ function HomePage() {
       <header className="pt-14 text-center">
         {!loading && !user && (
           <Link to="/auth" className="btn-rune-ghost mx-auto mb-6 !w-auto px-5 py-2 text-[0.65rem]">
-            <LogIn className="h-4 w-4" /> Sign In / Create Account
+            <LogIn className="h-4 w-4" /> {t("auth.signIn")} / {t("auth.create")}
           </Link>
         )}
-        <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-primary/85">
+        <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-primary/90">
           {t("home.realmOf")}
         </p>
         <h1 className="text-glow-gold font-display mt-2 text-[3.2rem] font-black leading-none tracking-[0.1em] text-primary">
@@ -83,12 +84,37 @@ function HomePage() {
       <CharacterWelcome kind="king" />
       <div className="h-[26dvh]" aria-hidden="true" />
 
+      {/* Hero status: level & XP at a glance */}
       <RunePanel className="mt-4">
-        <RuneHeading>{t("home.attributes")}</RuneHeading>
-        <div className="mt-3 space-y-3">
-          {STAT_ORDER.map((s) => (
-            <StatBar key={s} stat={s} value={game.stats[s]} />
-          ))}
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <p className="font-display text-[0.6rem] uppercase tracking-[0.28em] text-muted-foreground">
+              {t("home.level")} {level}
+            </p>
+            <p className="text-glow-gold font-display mt-0.5 text-4xl font-black leading-none text-primary">
+              {level}
+            </p>
+          </div>
+          <div className="min-w-0 flex-1 pb-1 text-right">
+            <p className="font-display text-[0.6rem] uppercase tracking-[0.28em] text-muted-foreground">
+              {t("home.experience")}
+            </p>
+            <p className="font-display text-sm font-bold text-foreground">
+              {intoLevel.toLocaleString()}{" "}
+              <span className="text-muted-foreground">/ {needed.toLocaleString()} XP</span>
+            </p>
+          </div>
+        </div>
+        <div className="bar-track mt-3 !h-2.5">
+          <div
+            className="bar-fill"
+            style={{
+              width: `${Math.max(2, ratio * 100)}%`,
+              background:
+                "linear-gradient(90deg, color-mix(in oklab, var(--primary) 55%, white 10%), var(--primary))",
+              boxShadow: "0 0 14px color-mix(in oklab, var(--primary) 55%, transparent)",
+            }}
+          />
         </div>
       </RunePanel>
 
@@ -98,7 +124,7 @@ function HomePage() {
             className={cn(
               "mx-auto h-7 w-7",
               game.streak > 0
-                ? "text-stat-strength drop-shadow-[0_0_10px_var(--stat-strength)]"
+                ? "text-stat-strength drop-shadow-[0_0_10px_color-mix(in_oklab,var(--stat-strength)_55%,transparent)]"
                 : "text-muted-foreground",
             )}
           />
@@ -114,7 +140,7 @@ function HomePage() {
           )}
         </RunePanel>
         <Link to="/quests" className="block">
-          <RunePanel className="h-full text-center">
+          <RunePanel className="h-full text-center transition-shadow hover:shadow-[0_10px_30px_-12px_color-mix(in_oklab,var(--primary)_45%,transparent)]">
             <ScrollText className="mx-auto h-7 w-7 text-primary" />
             <p className="font-display mt-1 text-2xl font-black">
               {doneCount}
@@ -123,9 +149,21 @@ function HomePage() {
             <p className="text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
               {t("home.dailyQuests")}
             </p>
+            <span className="mt-2 inline-flex items-center gap-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-primary">
+              {t("nav.quests")} <ChevronRight className="h-3 w-3 rtl:-scale-x-100" />
+            </span>
           </RunePanel>
         </Link>
       </div>
+
+      <RunePanel className="mt-4">
+        <RuneHeading>{t("home.attributes")}</RuneHeading>
+        <div className="mt-3 space-y-3">
+          {STAT_ORDER.map((s) => (
+            <StatBar key={s} stat={s} value={game.stats[s]} />
+          ))}
+        </div>
+      </RunePanel>
 
       <div className="mt-5 space-y-3">
         <Link to="/trials" className="block">

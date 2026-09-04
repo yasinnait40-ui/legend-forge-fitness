@@ -63,7 +63,7 @@ function SettingsPage() {
 
       <div className="mt-8 flex flex-col items-center gap-4">
         <div className="relative h-64 w-full max-w-xs">
-          <div className="absolute inset-0 flex items-center justify-center rounded-lg border-2 border-yellow-600/60 bg-gradient-to-b from-yellow-900/20 to-black/40 backdrop-blur-sm">
+          <div className="absolute inset-0 flex items-center justify-center rounded-lg border-2 border-primary/50 bg-gradient-to-b from-primary/12 to-secondary/35">
             <div className="flex flex-col items-center gap-2 text-center">
               <img
                 src="/characters/Maid.png"
@@ -71,7 +71,7 @@ function SettingsPage() {
                 className="h-48 w-auto max-w-full rounded-md object-contain"
                 loading="lazy"
               />
-              <p className="font-display text-xs uppercase tracking-widest text-yellow-600">
+              <p className="font-display text-xs uppercase tracking-widest text-primary">
                 The Maid
               </p>
               <p className="font-serif text-xs italic text-foreground/70">
@@ -80,15 +80,15 @@ function SettingsPage() {
             </div>
           </div>
         </div>
-        <div className="w-full max-w-sm rounded-lg border-2 border-yellow-600/60 bg-gradient-to-b from-black/80 to-black/60 p-4 backdrop-blur-sm">
-          <p className="font-display text-[0.65rem] uppercase tracking-widest text-yellow-600">
+        <div className="w-full max-w-sm rounded-lg border-2 border-primary/40 bg-gradient-to-b from-card/90 to-secondary/40 p-4 shadow-[0_8px_24px_-14px_rgb(60_45_15/0.5)]">
+          <p className="font-display text-[0.65rem] uppercase tracking-widest text-primary">
             The Maid
           </p>
           <p className="font-serif text-sm leading-6 text-foreground">
             Your chamber is ready, my lord. The realm awaits your commands.
           </p>
           <div className="mt-3 flex justify-end">
-            <div className="h-2 w-2 rotate-45 border-b-2 border-r-2 border-yellow-600/60" />
+            <div className="h-2 w-2 rotate-45 border-b-2 border-r-2 border-primary/50" />
           </div>
         </div>
       </div>
@@ -101,27 +101,27 @@ function SettingsPage() {
               <p className="text-sm text-muted-foreground truncate">
                 {session.user.email}
               </p>
-              <button
-                type="button"
-                onClick={handleSignOut}
-                className="flex items-center gap-2 rounded-full border-2 px-3 py-1 text-xs"
-              >
-                <LogOut className="h-4 w-4" />
-                {t("settings.signOut", "Sign Out")}
-              </button>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="btn-rune-ghost !w-auto px-3 py-2 text-xs"
+            >
+              <LogOut className="h-4 w-4" />
+              {t("settings.signOut", "Sign Out")}
+            </button>
             </div>
           ) : (
             <div className="flex flex-wrap gap-2">
               <a
                 href="/auth"
-                className="flex items-center gap-2 rounded-full border-2 px-3 py-1 text-xs"
+                className="btn-rune-ghost !w-auto px-3 py-2 text-xs"
               >
                 <LogIn className="h-4 w-4" />
                 {t("settings.signIn", "Sign In")}
               </a>
               <a
                 href="/auth"
-                className="flex items-center gap-2 rounded-full border-2 px-3 py-1 text-xs"
+                className="btn-gold !w-auto px-3 py-2 text-xs"
               >
                 <UserPlus className="h-4 w-4" />
                 {t("settings.createAccount", "Create Account")}
@@ -151,7 +151,7 @@ function SettingsPage() {
           <button
             type="button"
             onClick={toggleMuted}
-            className="rounded-full border-2 px-3 py-1 text-xs"
+            className="btn-rune-ghost !w-auto px-3 py-2 text-xs"
           >
             {muted ? "Unmute" : "Mute"}
           </button>

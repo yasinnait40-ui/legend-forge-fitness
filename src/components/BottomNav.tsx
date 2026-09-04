@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import {
   Castle,
   ScrollText,
@@ -11,16 +12,17 @@ import {
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
-  { to: "/", label: "Home", icon: Castle, exact: true },
-  { to: "/quests", label: "Quests", icon: ScrollText, exact: false },
-  { to: "/trials", label: "Trials", icon: Swords, exact: false },
-  { to: "/progress", label: "Legend", icon: Telescope, exact: false },
-  { to: "/guide", label: "Guide", icon: WandSparkles, exact: false },
-  { to: "/character", label: "Hero", icon: UserRound, exact: false },
-  { to: "/settings", label: "Settings", icon: Settings, exact: false },
+  { to: "/", labelKey: "nav.home", icon: Castle, exact: true },
+  { to: "/quests", labelKey: "nav.quests", icon: ScrollText, exact: false },
+  { to: "/trials", labelKey: "nav.trials", icon: Swords, exact: false },
+  { to: "/progress", labelKey: "nav.legend", icon: Telescope, exact: false },
+  { to: "/guide", labelKey: "nav.guide", icon: WandSparkles, exact: false },
+  { to: "/character", labelKey: "nav.hero", icon: UserRound, exact: false },
+  { to: "/settings", labelKey: "nav.settings", icon: Settings, exact: false },
 ] as const;
 
 export function BottomNav() {
+  const { t } = useTranslation();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
@@ -29,9 +31,9 @@ export function BottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       aria-label="Realm navigation"
     >
-      <div className="border-t border-primary/25 bg-background/85 shadow-[0_-10px_36px_rgb(0_0_0/0.6)] backdrop-blur-xl">
+      <div className="border-t border-primary/30 bg-card/80 shadow-[0_-8px_30px_-12px_rgb(60_45_15/0.35)] backdrop-blur-xl">
         <div className="mx-auto flex h-[var(--nav-h)] max-w-lg items-stretch justify-between px-1">
-          {ITEMS.map(({ to, label, icon: Icon, exact }) => {
+          {ITEMS.map(({ to, labelKey, icon: Icon, exact }) => {
             const active = exact ? pathname === to : pathname.startsWith(to);
             return (
               <Link
@@ -61,7 +63,7 @@ export function BottomNav() {
                     active ? "text-primary" : "text-muted-foreground",
                   )}
                 >
-                  {label}
+                  {t(labelKey)}
                 </span>
               </Link>
             );
