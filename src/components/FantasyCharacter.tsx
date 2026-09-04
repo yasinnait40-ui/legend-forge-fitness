@@ -9,6 +9,7 @@ import {
   type LegacyCharacterId,
 } from "@/lib/characters";
 import { useGame } from "@/lib/game-store";
+import { speakCharacterLine } from "@/lib/character-voice";
 
 export type FantasyCharacterKind = CharacterId | LegacyCharacterId;
 
@@ -43,6 +44,12 @@ export function FantasyCharacter({
     const frame = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(frame);
   }, [resolvedDialogue]);
+
+  useEffect(() => {
+    if (visible && lines[lineIndex]) {
+      speakCharacterLine(id, lines[lineIndex], "en");
+    }
+  }, [visible, lineIndex, lines, id]);
 
   const advance = () => {
     if (lineIndex < lines.length - 1) setLineIndex((current) => current + 1);
