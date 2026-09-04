@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   CHARACTERS,
@@ -9,7 +9,7 @@ import {
   type LegacyCharacterId,
 } from "@/lib/characters";
 import { useGame } from "@/lib/game-store";
-import { speakCharacterLine } from "@/lib/sound-store";
+import { playCharacterIntro } from "@/lib/sound-store";
 
 export type FantasyCharacterKind = CharacterId | LegacyCharacterId;
 
@@ -24,44 +24,96 @@ export function FantasyCharacter({
 }) {
   const { t } = useTranslation();
   const game = useGame();
+
   const id = resolveCharacterId(kind);
   const character = CHARACTERS[id];
+
   const [visible, setVisible] = useState(false);
   const [lineIndex, setLineIndex] = useState(0);
+
+  /*
+   * Prevent the intro sound from playing repeatedly because of:
+   * - React re-renders
+   * - dialogue changes
+   * - translation changes
+   * - game-store updates
+   */
+  const introPlayedRef = useRef<string | null>(null);
+
   const resolvedDialogue = dialogue ?? characterDialogue(id, game, t);
+
   const lines = useMemo(() => {
-    if (typeof resolvedDialogue !== "string") return resolvedDialogue ? [resolvedDialogue] : [];
+    if (typeof resolvedDialogue !== "string") {
+      return resolvedDialogue ? [resolvedDialogue] : [];
+    }
+
     return resolvedDialogue
       .split(/\n+/)
       .map((line) => line.trim())
       .filter(Boolean);
   }, [resolvedDialogue]);
 
+  /*
+   * Character visibility / dialogue lifecycle.
+   */
   useEffect(() => {
     setLineIndex(0);
     setVisible(Boolean(resolvedDialogue));
+
     if (!resolvedDialogue) return;
-    const frame = requestAnimationFrame(() => setVisible(true));
+
+    const frame = requestAnimationFrame(() => {
+      setVisible(true);
+    });
+
     return () => cancelAnimationFrame(frame);
   }, [resolvedDialogue]);
 
+  /*
+   * CHARACTER INTRO SOUND
+   *
+   * Play exactly ONE sound when this character enters.
+   *
+   * IMPORTANT:
+   * This is completely independent from dialogue.
+   * Clicking the dialogue box will NEVER trigger another
+   * character sound.
+   */
   useEffect(() => {
-    if (visible && lines[lineIndex]) {
-      speakCharacterLine(id, lines[lineIndex], "en");
-    }
-  }, [visible, lineIndex, lines, id]);
+    if (!visible) return;
+    if (!resolvedDialogue) return;
+
+    /*
+     * Only play once for this character while this component
+     * instance is alive.
+     */
+    if (introPlayedRef.current === id) return;
+
+    introPlayedRef.current = id;
+    playCharacterIntro(id);
+  }, [visible, resolvedDialogue, id]);
 
   const advance = () => {
-    if (lineIndex < lines.length - 1) setLineIndex((current) => current + 1);
-    else setVisible(false);
+    if (lineIndex < lines.length - 1) {
+      setLineIndex((current) => current + 1);
+    } else {
+      setVisible(false);
+    }
   };
+
   const name = t(character.nameKey);
   const role = t(character.roleKey);
 
   return (
     <aside
-      className={`fantasy-character fantasy-character-${id} ${embedded ? "fantasy-character-embedded" : ""} ${visible ? "is-entered" : ""}`}
-      style={{ "--character-accent": character.accent } as CSSProperties}
+      className={`fantasy-character fantasy-character-${id} ${
+        embedded ? "fantasy-character-embedded" : ""
+      } ${visible ? "is-entered" : ""}`}
+      style={
+        {
+          "--character-accent": character.accent,
+        } as CSSProperties
+      }
       aria-label={`${name}, ${role}`}
     >
       <div className="fantasy-character-figure">
@@ -74,6 +126,7 @@ export function FantasyCharacter({
           fetchPriority="high"
         />
       </div>
+
       <button
         type="button"
         className="fantasy-character-dialogue"
@@ -88,8 +141,17 @@ export function FantasyCharacter({
           <strong>{name}</strong>
           <small>{role}</small>
         </span>
-        {lines.length > 0 && <span className="fantasy-character-line">{lines[lineIndex]}</span>}
-        <span className="fantasy-character-continue" aria-hidden="true">
+
+        {lines.length > 0 && (
+          <span className="fantasy-character-line">
+            {lines[lineIndex]}
+          </span>
+        )}
+
+        <span
+          className="fantasy-character-continue"
+          aria-hidden="true"
+        >
           ▼
         </span>
       </button>
