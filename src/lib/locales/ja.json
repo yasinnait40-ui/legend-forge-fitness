@@ -46,7 +46,114 @@
     "completeTrial": "試練を完了",
     "conqueredToday": "本日制覇",
     "minutes": "分",
-    "conqueredToast": "{{name}} — 制覇"
+    "conqueredToast": "{{name}} — 制覇",
+    "trials.battleVictory": "試練を撃破",
+    "trials.battleResolveBar": "抵抗",
+    "trials.battleResolveFull": "抵抗 満タン",
+    "trials.battleResolveDepleted": "抵抗 粉砕",
+    "trials.battleTip": "完了したセットごとに確認しよう。実際に行った努力ごとに守護者の抵抗が弱まる。",
+    "trials.battleConfirmTurn": "このパートを完了した",
+    "trials.battleConfirmAll": "すべて完了した",
+    "trials.battleConfirm": "確認",
+    "trials.battleCancel": "まだ — 続ける",
+    "trials.battleFlavor": "あなたが動かしたその一挙手が刃となる。セットごとに、自分の中の抵抗を打ち砕いていく。",
+    "trials.battleStrike": "{{part}} — 打撃成立",
+    "trials.battleEnemy": "試練の守護者",
+    "trials.battlePlayer": "あなた",
+    "trials.battleEnemyResolve": "意志",
+    "trials.battleAttack": "セットを確定",
+    "trials.battleStay": "これはまだあなたの戦いだ。準備ができたら続ければいい。",
+    "trials.battleVictoryFlavor": "抵抗は崩れた。あなたの努力が打ち破った。\n\nここに敵はいない。やめることを考える自分自身だけだ。",
+    "battleVictory": {
+      ".": "試練を撃破"
+    },
+    "battleResolveBar": {
+      ".": "抵抗"
+    },
+    "battleResolveFull": {
+      ".": "抵抗 満タン"
+    },
+    "battleResolveDepleted": {
+      ".": "抵抗 粉砕"
+    },
+    "battleTip": {
+      ".": "完了したセットごとに確認しよう。実際に行った努力ごとに守護者の抵抗が弱まる。"
+    },
+    "battleConfirmTurn": {
+      ".": "このパートを完了した"
+    },
+    "battleConfirmAll": {
+      ".": "すべて完了した"
+    },
+    "battleConfirm": {
+      ".": "セットを確定"
+    },
+    "battleCancel": {
+      ".": "まだ — 続ける"
+    },
+    "battleFlavor": {
+      ".": "あなたが動かしたその一挙手が刃となる。セットごとに、自分の中の抵抗を打ち砕いていく。"
+    },
+    "battleStrike": {
+      ".": "{{part}} — 打撃成立"
+    },
+    "battleEnemy": {
+      ".": "試練の守護者"
+    },
+    "battlePlayer": {
+      ".": "あなた"
+    },
+    "battleEnemyResolve": {
+      ".": "意志"
+    },
+    "battleAttack": {
+      ".": "セットを確定"
+    },
+    "battleStay": {
+      ".": "これはまだあなたの戦いだ。準備ができたら続ければいい。"
+    },
+    "battleVictoryFlavor": {
+      ".": "抵抗は崩れた。あなたの努力が打ち破った。\n\nここに敵はいない。やめることを考える自分自身だけだ。"
+    },
+    "battleEnter": {
+      ".": "円に入る"
+    },
+    "battleEnterConfirm": {
+      ".": "始める準備ができた"
+    },
+    "battleActive": {
+      ".": "守護者が踏みとどまる"
+    },
+    "battleExit": {
+      ".": "円を閉じる（一時中断）"
+    },
+    "battleExitLabel": {
+      ".": "まだ — 続ける"
+    },
+    "battleResolveText": {
+      ".": "抵抗"
+    },
+    "battleResolveFullText": {
+      ".": "抵抗 満タン"
+    },
+    "battleResolveLooseText": {
+      ".": "抵抗 崩れ"
+    },
+    "battleResolveBrokenText": {
+      ".": "抵抗 粉砕"
+    },
+    "battleEnemyResolveText": {
+      ".": "守護者の意志"
+    },
+    "battlePlayerResolveText": {
+      ".": "あなたの意志"
+    },
+    "battleTitle": {
+      ".": "円が開く"
+    },
+    "battleShield": {
+      ".": "試練の守護者が円に立った"
+    }
   },
   "achievements": {
     "hallOfLegends": "伝説の殿堂",
@@ -478,19 +585,46 @@
   },
   "characters": {
     "roster": {
-      "king": { "name": "王", "role": "王と語り部", "alt": "赤と金の衣装をまとった金髪の王" },
+      "king": {
+        "name": "王",
+        "role": "王と語り部",
+        "alt": "赤と金の衣装をまとった金髪の王"
+      },
       "adventurer": {
         "name": "冒険者",
         "role": "クエストの案内人",
         "alt": "勇敢なファンタジー冒険者"
       },
-      "scholar": { "name": "学者", "role": "試練の研究者", "alt": "ファンタジーの学者" },
-      "sage": { "name": "賢者", "role": "古代の導き手", "alt": "古代の魔術師" },
-      "hero": { "name": "英雄", "role": "伝説を築く者", "alt": "成長する伝説の英雄" },
-      "hakari": { "name": "ハカリ", "role": "聖なる仲間", "alt": "陽気な魔法の仲間ハカリ" },
-      "miri": { "name": "ミリ", "role": "遊び心ある仲間", "alt": "優雅な魔法の仲間ミリ" }
+      "scholar": {
+        "name": "学者",
+        "role": "試練の研究者",
+        "alt": "ファンタジーの学者"
+      },
+      "sage": {
+        "name": "賢者",
+        "role": "古代の導き手",
+        "alt": "古代の魔術師"
+      },
+      "hero": {
+        "name": "英雄",
+        "role": "伝説を築く者",
+        "alt": "成長する伝説の英雄"
+      },
+      "hakari": {
+        "name": "ハカリ",
+        "role": "聖なる仲間",
+        "alt": "陽気な魔法の仲間ハカリ"
+      },
+      "miri": {
+        "name": "ミリ",
+        "role": "遊び心ある仲間",
+        "alt": "優雅な魔法の仲間ミリ"
+      }
     },
-    "actions": { "advance": "会話を進める", "dismiss": "会話を閉じる" },
+    "actions": {
+      "advance": "会話を進める",
+      "dismiss": "会話を閉じる"
+    },
     "companionsTitle": "聖なる仲間",
     "dialogue": {
       "king": {
@@ -656,5 +790,24 @@
       "title": "ミリ의 기원",
       "content": "ミリは シルバーパインの 숲 아래 古代 베틀의 은색 糸에서 왔다—— 編み手들의 創造性의 顕現. ミリ는 魔法의 遊び心ある、好奇心旺盛한 側面을 代表한다： 경이가 幼稚하지 않고 본質的이라고 信じる. ハカリ가 勇気를 가져올 때、ミリ는 기쁨을 가져온다. "
     }
+  },
+  "trials:trials": {
+    "battleVictory": "試練を撃破",
+    "battleResolveBar": "抵抗",
+    "battleResolveFull": "抵抗 満タン",
+    "battleResolveDepleted": "抵抗 粉砕",
+    "battleTip": "完了したセットごとに確認しよう。実際に行った努力ごとに守護者の抵抗が弱まる。",
+    "battleConfirmTurn": "このパートを完了した",
+    "battleConfirmAll": "すべて完了した",
+    "battleConfirm": "確認",
+    "battleCancel": "まだ — 続ける",
+    "battleFlavor": "あなたが動かしたその一挙手が刃となる。セットごとに、自分の中の抵抗を打ち砕いていく。",
+    "battleStrike": "{{part}} — 打撃成立",
+    "battleEnemy": "試練の守護者",
+    "battlePlayer": "あなた",
+    "battleEnemyResolve": "意志",
+    "battleAttack": "セットを確定",
+    "battleStay": "これはまだあなたの戦いだ。準備ができたら続ければいい。",
+    "battleVictoryFlavor": "抵抗は崩れた。あなたの努力が打ち破った。\n\nここに敵はいない。やめることを考える自分自身だけだ。"
   }
 }

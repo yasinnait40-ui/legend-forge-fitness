@@ -2081,6 +2081,306 @@ html[dir="rtl"] .font-display {
     transparent 62%
   );
 }
+/* -------------------------------------------------------------------------- */
+/* AETHORA BATTLE ENCOUNTER — trial guardian UI tokens                         */
+/* -------------------------------------------------------------------------- */
+/* The duel is a stylized metaphor: the player overcoming their own           */
+/* resistance to working out, not fighting an external villain.               */
+
+/* Two tokens facing each other inside the duel panel. */
+.player-side,
+.enemy-side {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.player-side {
+  flex-direction: row;
+}
+
+.enemy-side {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.player-token,
+.enemy-token {
+  flex: 0 0 auto;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, var(--accent) 35%, transparent) 0%,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 18%, transparent) 55%,
+    transparent 78%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--character-accent, var(--primary)) 40%, transparent),
+    0 0 18px color-mix(in oklab, var(--accent) 45%, transparent);
+  position: relative;
+}
+
+.player-token::after,
+.enemy-token::after {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 40% 30%,
+    color-mix(in oklab, var(--accent) 60%, white 20%) 0%,
+    transparent 55%
+  );
+  opacity: 0.7;
+}
+
+.enemy-token[data-element="stone"] {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, var(--stat-strength) 40%, transparent) 0%,
+    color-mix(in oklab, var(--stat-strength) 22%, transparent) 55%,
+    transparent 78%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--stat-strength) 40%, transparent),
+    0 0 18px color-mix(in oklab, var(--stat-strength) 45%, transparent);
+}
+.enemy-token[data-element="stone"]::after {
+  background: radial-gradient(
+    circle at 40% 30%,
+    color-mix(in oklab, var(--stat-strength) 60%, white 20%) 0%,
+    transparent 55%
+  );
+}
+
+.enemy-token[data-element="ember"] {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, var(--stat-vitality) 40%, transparent) 0%,
+    color-mix(in oklab, var(--stat-vitality) 22%, transparent) 55%,
+    transparent 78%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--stat-vitality) 40%, transparent),
+    0 0 22px 4px color-mix(in oklab, var(--stat-vitality) 45%, transparent);
+}
+.enemy-token[data-element="ember"]::after {
+  background: radial-gradient(
+    circle at 40% 30%,
+    color-mix(in oklab, var(--stat-vitality) 70%, white 20%) 0%,
+    transparent 55%
+  );
+  animation: ember-pulse 2s ease-in-out infinite;
+}
+
+.enemy-token[data-element="storm"] {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, var(--primary) 35%, transparent) 0%,
+    color-mix(in oklab, var(--primary) 20%, transparent) 55%,
+    transparent 78%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--primary) 45%, transparent),
+    0 0 20px 6px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+.enemy-token[data-element="storm"]::after {
+  background: radial-gradient(
+    circle at 40% 30%,
+    color-mix(in oklab, var(--primary) 70%, white 20%) 0%,
+    transparent 55%
+  );
+  animation: storm-gleam 1.8s ease-in-out infinite;
+}
+
+.enemy-token[data-element="shadow"] {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, rgb(40 30 50 / 0.8) 45%, transparent) 0%,
+    transparent 62%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, rgb(40 30 50 / 0.7) 40%, transparent),
+    0 0 16px color-mix(in oklab, rgb(40 30 50 / 0.6) 50%, transparent);
+  filter: grayscale(0.15);
+}
+
+.enemy-token[data-element="mist"] {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, var(--stat-recovery) 40%, transparent) 0%,
+    color-mix(in oklab, var(--stat-recovery) 20%, transparent) 55%,
+    transparent 78%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--stat-recovery) 40%, transparent),
+    0 0 18px color-mix(in oklab, var(--stat-recovery) 45%, transparent);
+}
+.enemy-token[data-element="mist"]::after {
+  background: radial-gradient(
+    circle at 40% 30%,
+    color-mix(in oklab, var(--stat-recovery) 60%, white 20%) 0%,
+    transparent 55%
+  );
+  animation: mist-gleam 2.4s ease-in-out infinite;
+}
+
+.enemy-token[data-element="frost"] {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, var(--stat-endurance) 40%, transparent) 0%,
+    color-mix(in oklab, var(--stat-endurance) 22%, transparent) 55%,
+    transparent 78%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--stat-endurance) 40%, transparent),
+    0 0 18px color-mix(in oklab, var(--stat-endurance) 45%, transparent);
+}
+.enemy-token[data-element="frost"]::after {
+  background: radial-gradient(
+    circle at 40% 30%,
+    color-mix(in oklab, var(--stat-endurance) 60%, white 20%) 0%,
+    transparent 55%
+  );
+}
+
+.enemy-token[data-element="arcane"] {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in oklab, var(--stat-agility) 40%, transparent) 0%,
+    color-mix(in oklab, var(--stat-agility) 20%, transparent) 55%,
+    transparent 78%
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--stat-agility) 45%, transparent),
+    0 0 22px 5px color-mix(in oklab, var(--stat-agility) 45%, transparent);
+}
+.enemy-token[data-element="arcane"]::after {
+  background: radial-gradient(
+    circle at 40% 30%,
+    color-mix(in oklab, var(--stat-agility) 70%, white 20%) 0%,
+    transparent 55%
+  );
+  animation: arcane-pulse 2.6s ease-in-out infinite;
+}
+
+/* Center verse divider between player and enemy tokens. */
+.verse-divider {
+  position: relative;
+  height: 1.2rem;
+  margin: 0 auto;
+  width: min(88%, 18rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verse-mark {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--accent) 70%, transparent);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--accent) 70%, transparent);
+  position: relative;
+}
+
+.verse-mark::before,
+.verse-mark::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  height: 1px;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--accent) 50%, transparent),
+    transparent
+  );
+  transform: translateY(-50%);
+}
+
+.verse-mark::before {
+  right: 100%;
+  left: 100%;
+  background: linear-gradient(
+    270deg,
+    color-mix(in oklab, var(--accent) 50%, transparent),
+    transparent
+  );
+}
+
+.verse-mark::after {
+  left: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--accent) 50%, transparent),
+    transparent
+  );
+  right: 100%;
+}
+
+/* Elemental pulse animations — lightweight, go/no-go only. */
+@keyframes ember-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes storm-gleam {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes mist-gleam {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes arcane-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.92) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06) rotate(8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enemy-token[data-element="ember"]::after,
+  .enemy-token[data-element="storm"]::after,
+  .enemy-token[data-element="mist"]::after,
+  .enemy-token[data-element="arcane"]::after {
+    animation: none;
+  }
+}
+
 
 /* Keep the dialogue arrow readable on small screens */
 .fantasy-character-continue {

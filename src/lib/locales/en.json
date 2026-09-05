@@ -46,7 +46,24 @@
     "completeTrial": "Complete Trial",
     "conqueredToday": "Conquered Today",
     "minutes": "min",
-    "conqueredToast": "{{name}} — conquered"
+    "conqueredToast": "{{name}} — conquered",
+    "trials.battleVictory": "Trial Conquered",
+    "trials.battleResolveBar": "Resistance",
+    "trials.battleResolveFull": "Resolve full",
+    "trials.battleResolveDepleted": "Resolve shattered",
+    "trials.battleTip": "Confirm each completed set. The guardian weakens with every real effort you make.",
+    "trials.battleConfirmTurn": "I completed this part",
+    "trials.battleConfirmAll": "I completed everything",
+    "trials.battleConfirm": "Confirm",
+    "trials.battleCancel": "Not yet — I'll continue",
+    "trials.battleFlavor": "The work you do is the blade. Each set is a strike against your own resistance.",
+    "trials.battleStrike": "{{part}} — strike landed",
+    "trials.battleEnemy": "Trial Guardian",
+    "trials.battlePlayer": "You",
+    "trials.battleEnemyResolve": "Resolve",
+    "trials.battleAttack": "Confirm Set",
+    "trials.battleStay": "This is still your fight. Continue when you are ready.",
+    "trials.battleVictoryFlavor": "The resistance could not hold. Your effort broke through.\n\nThere is no opponent here but the part of you that wanted to quit."
   },
   "achievements": {
     "hallOfLegends": "Hall of Legends",
@@ -539,18 +556,22 @@
         "name": "Hakari",
         "role": "Sacred companion",
         "alt": "Hakari, a cheerful magical companion"
-      }, "miri": {
-  "name": "Miri",
-  "role": "Playful companion",
-  "alt": "Miri, an elegant magical companion"
- },
- "maid": {
-  "name": "The Maid",
-  "role": "Chamber steward",
-  "alt": "The Maid, an elegant chamber steward of the keep"
- }
-},
-    "actions": { "advance": "Advance dialogue", "dismiss": "Dismiss dialogue" },
+      },
+      "miri": {
+        "name": "Miri",
+        "role": "Playful companion",
+        "alt": "Miri, an elegant magical companion"
+      },
+      "maid": {
+        "name": "The Maid",
+        "role": "Chamber steward",
+        "alt": "The Maid, an elegant chamber steward of the keep"
+      }
+    },
+    "actions": {
+      "advance": "Advance dialogue",
+      "dismiss": "Dismiss dialogue"
+    },
     "companionsTitle": "Sacred Companions",
     "companionsDesc": "Two sacred companions walk beside you on this journey.",
     "dialogue": {
@@ -595,21 +616,22 @@
         "levelUp": "Your light grew stronger! I could feel it from here!",
         "streak": "The same flame, burning brighter each day. That is real magic.",
         "progress": "I am so proud of you! The realm is brighter because of your legend."
-      }, "miri": {
- "default": "A gentle glow follows those who persevere. Yours is lovely.",
- "new": "Welcome, new traveler. I will add a little sparkle to your path.",
- "levelUp": "Another verse added to your legend. Each one more beautiful.",
- "streak": "Steady as starlight, warm as dawn. Your consistency inspires me.",
- "progress": "You shine a little brighter every day. The realm notices."
- },
- "maid": {
- "default": "Okaeri, goshujin-sama. Your chamber has been prepared. Shall we review the realm's settings?",
- "new": "Okaeri, goshujin-sama. I have kept your chamber ready — rest, then return to the road.",
- "levelUp": "Magnificent, goshujin-sama. The whole keep will speak of this by evening.",
- "streak": "Your flame burns daily, goshujin-sama. I shall keep the hearth lit to match it.",
- "progress": "Every seal and every trial — I have noted each one. Your chamber reflects your rising legend."
- }
-},
+      },
+      "miri": {
+        "default": "A gentle glow follows those who persevere. Yours is lovely.",
+        "new": "Welcome, new traveler. I will add a little sparkle to your path.",
+        "levelUp": "Another verse added to your legend. Each one more beautiful.",
+        "streak": "Steady as starlight, warm as dawn. Your consistency inspires me.",
+        "progress": "You shine a little brighter every day. The realm notices."
+      },
+      "maid": {
+        "default": "Okaeri, goshujin-sama. Your chamber has been prepared. Shall we review the realm's settings?",
+        "new": "Okaeri, goshujin-sama. I have kept your chamber ready — rest, then return to the road.",
+        "levelUp": "Magnificent, goshujin-sama. The whole keep will speak of this by evening.",
+        "streak": "Your flame burns daily, goshujin-sama. I shall keep the hearth lit to match it.",
+        "progress": "Every seal and every trial — I have noted each one. Your chamber reflects your rising legend."
+      }
+    },
     "welcome": {
       "king": "Warrior. The realm has need of you. Your trial begins at dawn.",
       "adventurer": "The road ahead is long, but every great journey starts with a single step. Let us move.",
@@ -625,7 +647,31 @@
       "subtitle": "Your power grows, but your journey is far from over."
     },
     "questComplete": "Quest complete! Keep moving forward.",
-    "trialComplete": "Trial conquered! Your strength grows."
+    "trialComplete": "Trial conquered! Your strength grows.",
+  "trialBattle": {
+    "title": "The Circle Opens",
+    "shield": "A trial guardian steps into the circle against you.",
+    "tip": "Confirm each set as you do it. Every real effort weakens the guardian's resolve.",
+    "strike": "{{part}} — strike landed",
+    "victory": "Trial shattered. The circle remembers your effort.",
+    "victoryFlavor": "You did not fight an external enemy — you kept going when part of you wanted to stop. That is the real contest.",
+    "enter": "Step into the circle.",
+    "enterConfirm": "I'm ready to begin",
+    "active": "The guardian holds.",
+    "confirm": "Confirm this set",
+    "confirmAll": "All sets done",
+    "exit": "Pause the circle",
+    "exitLabel": "Not yet — I'll continue",
+    "resolve": "Resolve",
+    "resolveFull": "Resolve steady",
+    "resolveLow": "Resolve crumbling",
+    "resolveBroken": "Resolve shattered",
+    "player": "You",
+    "enemy": "Trial Guardian"
+  },
+  "trialBattleComplete": "The trial is complete. The guardian yields.",
+  "battleHit": "hit",
+  "battleVictory": "victory"
   },
   "statMastery": {
     "strength": "Your strength surpasses mortal limits.",
@@ -736,5 +782,24 @@
       "title": "Miri's Origin",
       "content": "Miri came from the silver threads of the ancient loom beneath Silverpine Forest — a manifestation of the weavers' creativity. Miri represents the playful, curious side of magic: the belief that wonder is not childish, but essential. Where Hakari brings courage, Miri brings delight."
     }
+  },
+  "trials:trials": {
+    "battleVictory": "Trial Conquered",
+    "battleResolveBar": "Resistance",
+    "battleResolveFull": "Resolve full",
+    "battleResolveDepleted": "Resolve shattered",
+    "battleTip": "Confirm each completed set. The guardian weakens with every real effort you make.",
+    "battleConfirmTurn": "I completed this part",
+    "battleConfirmAll": "I completed everything",
+    "battleConfirm": "Confirm",
+    "battleCancel": "Not yet — I'll continue",
+    "battleFlavor": "The work you do is the blade. Each set is a strike against your own resistance.",
+    "battleStrike": "{{part}} — strike landed",
+    "battleEnemy": "Trial Guardian",
+    "battlePlayer": "You",
+    "battleEnemyResolve": "Resolve",
+    "battleAttack": "Confirm Set",
+    "battleStay": "This is still your fight. Continue when you are ready.",
+    "battleVictoryFlavor": "The resistance could not hold. Your effort broke through.\n\nThere is no opponent here but the part of you that wanted to quit."
   }
 }

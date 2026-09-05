@@ -204,7 +204,7 @@ function tone(
 /* General game sounds                                                         */
 /* -------------------------------------------------------------------------- */
 
-export type SoundKey = "questComplete" | "levelUp";
+export type SoundKey = "questComplete" | "levelUp" | "battleHit" | "battleVictory";
 
 export function playSound(key: SoundKey) {
   if (state.muted) return;
@@ -232,6 +232,28 @@ export function playSound(key: SoundKey) {
         tone(659.25, 0.15, 0.35, ctx, master, "sine", 0.4);
         tone(783.99, 0.3, 0.35, ctx, master, "triangle", 0.4);
         tone(1046.5, 0.45, 0.9, ctx, master, "triangle", 0.45);
+      }
+
+      if (key === "battleHit") {
+        /*
+         * Hard unpitched impulse with a soft metallic chime on top.
+         * Short, percussive, encouraging — never aggressive/violent.
+         */
+        tone(180, 0, 0.18, ctx, master, "sawtooth", 0.35);
+        tone(210, 0, 0.14, ctx, master, "sine", 0.3);
+        tone(1200, 0.06, 0.2, ctx, master, "triangle", 0.18);
+        tone(1560, 0.08, 0.24, ctx, master, "sine", 0.12);
+      }
+
+      if (key === "battleVictory") {
+        /*
+         * Broad, ascending major-arche feel. Warm and triumphant, not combat.
+         */
+        tone(523.25, 0, 0.3, ctx, master, "sine", 0.4);
+        tone(659.25, 0.08, 0.3, ctx, master, "sine", 0.4);
+        tone(783.99, 0.16, 0.4, ctx, master, "triangle", 0.4);
+        tone(1046.5, 0.32, 0.8, ctx, master, "triangle", 0.45);
+        tone(1318.5, 0.5, 1.1, ctx, master, "sine", 0.3);
       }
     } catch {
       // Never let a sound effect propagate an exception to the caller.

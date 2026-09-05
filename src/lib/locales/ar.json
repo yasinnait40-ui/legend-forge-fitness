@@ -46,7 +46,114 @@
     "completeTrial": "إتمام التجربة",
     "conqueredToday": "أُنجزت اليوم",
     "minutes": "دقيقة",
-    "conqueredToast": "{{name}} — تم الانتصار"
+    "conqueredToast": "{{name}} — تم الانتصار",
+    "trials.battleVictory": "الاختبار تمَّ هزيمته",
+    "trials.battleResolveBar": "المقاومة",
+    "trials.battleResolveFull": "إجهاد كامل",
+    "trials.battleResolveDepleted": "تحطمت المقاومة",
+    "trials.battleTip": "أكد على كل مجموعّة تُكملها. كل جهد حقيقي تُبذله يُضعف الحامي.",
+    "trials.battleConfirmTurn": "أكملت هذه الجزئية",
+    "trials.battleConfirmAll": "أكملت كل شيء",
+    "trials.battleConfirm": "تأكيد",
+    "trials.battleCancel": "ليس بعد — سأكمل لاحقًا",
+    "trials.battleFlavor": "العمل الذي تفعله هو السيف. كل مجموعّة تُ攻撃 المقاومة داخل نفسك.",
+    "trials.battleStrike": "{{part}} — ضربة واضحة",
+    "trials.battleEnemy": "حامي الاختبار",
+    "trials.battlePlayer": "أنت",
+    "trials.battleEnemyResolve": "عزم",
+    "trials.battleAttack": "تأكيد المجموعة",
+    "trials.battleStay": "هذه معركتك ما زالت. تحدَّث متى تستعدّ.",
+    "trials.battleVictoryFlavor": "لم تستطع المقاومة أن تُمسك. لقد اخترقتها جهودك.\n\nلا عدو هنا سوى ذاكرة الرغبة في الاستسلام.",
+    "battleVictory": {
+      ".": "الاختبار تمَّ هزيمته"
+    },
+    "battleResolveBar": {
+      ".": "المقاومة"
+    },
+    "battleResolveFull": {
+      ".": "إجهاد كامل"
+    },
+    "battleResolveDepleted": {
+      ".": "تحطمت المقاومة"
+    },
+    "battleTip": {
+      ".": "أكد على كل مجموعّة تُكملها. كل جهد حقيقي تُبذله يُضعف الحامي."
+    },
+    "battleConfirmTurn": {
+      ".": "أكملت هذه الجزئية"
+    },
+    "battleConfirmAll": {
+      ".": "أكملت كل شيء"
+    },
+    "battleConfirm": {
+      ".": "تأكيد المجموعة"
+    },
+    "battleCancel": {
+      ".": "ليس بعد — سأكمل لاحقًا"
+    },
+    "battleFlavor": {
+      ".": "العمل الذي تفعله هو السيف. كل مجموعّة تُضعف المقاومة داخل نفسك."
+    },
+    "battleStrike": {
+      ".": "{{part}} — ضربة واضحة"
+    },
+    "battleEnemy": {
+      ".": "حامي الاختبار"
+    },
+    "battlePlayer": {
+      ".": "أنت"
+    },
+    "battleEnemyResolve": {
+      ".": "عزم"
+    },
+    "battleAttack": {
+      ".": "تأكيد المجموعة"
+    },
+    "battleStay": {
+      ".": "هذه معركتك ما زالت. تحدَّث متى تستعدّ."
+    },
+    "battleVictoryFlavor": {
+      ".": "لم تستطع المقاومة أن تُمسك. لقد اخترقتها جهودك.\n\nلا عدو هنا سوى ذاكرة الرغبة في الاستسلام."
+    },
+    "battleEnter": {
+      ".": "ادخل الدائرة"
+    },
+    "battleEnterConfirm": {
+      ".": "أنا مستعد"
+    },
+    "battleActive": {
+      ".": "الحارس يثبت"
+    },
+    "battleExit": {
+      ".": "إيقاف مؤقت"
+    },
+    "battleExitLabel": {
+      ".": "ليس بعد — سأكمل لاحقًا"
+    },
+    "battleResolveText": {
+      ".": "عزم"
+    },
+    "battleResolveFullText": {
+      ".": "عزم ثابت"
+    },
+    "battleResolveLooseText": {
+      ".": "عزم ينهار"
+    },
+    "battleResolveBrokenText": {
+      ".": "عزم محطّم"
+    },
+    "battleEnemyResolveText": {
+      ".": "عزم الحارس"
+    },
+    "battlePlayerResolveText": {
+      ".": "عزمك"
+    },
+    "battleTitle": {
+      ".": "الدائرة تُفتح"
+    },
+    "battleShield": {
+      ".": "حارس الاختبار يخرج للقاءك"
+    }
   },
   "achievements": {
     "hallOfLegends": "قاعة الأساطير",
@@ -478,19 +585,46 @@
   },
   "characters": {
     "roster": {
-      "king": { "name": "الملك", "role": "الحاكم والراوي", "alt": "ملك بشعر ذهبي بزي أحمر وذهبي" },
+      "king": {
+        "name": "الملك",
+        "role": "الحاكم والراوي",
+        "alt": "ملك بشعر ذهبي بزي أحمر وذهبي"
+      },
       "adventurer": {
         "name": "المغامر",
         "role": "مانح المهام",
         "alt": "مغامر شجاع من عالم الخيال"
       },
-      "scholar": { "name": "العالِم", "role": "باحث الاختبارات", "alt": "عالِم وباحث خيالي" },
-      "sage": { "name": "الحكيم", "role": "المرشد السحري القديم", "alt": "ساحر قديم ومرشد غامض" },
-      "hero": { "name": "البطل", "role": "أسطورة في طور التكوين", "alt": "بطل أسطورة نامية" },
-      "hakari": { "name": "هاكاري", "role": "الرفيق المقدس", "alt": "هاكاري، رفيق سحري مرح" },
-      "miri": { "name": "ميري", "role": "الرفيقة المرحة", "alt": "ميري، رفيقة سحرية أنيقة" }
+      "scholar": {
+        "name": "العالِم",
+        "role": "باحث الاختبارات",
+        "alt": "عالِم وباحث خيالي"
+      },
+      "sage": {
+        "name": "الحكيم",
+        "role": "المرشد السحري القديم",
+        "alt": "ساحر قديم ومرشد غامض"
+      },
+      "hero": {
+        "name": "البطل",
+        "role": "أسطورة في طور التكوين",
+        "alt": "بطل أسطورة نامية"
+      },
+      "hakari": {
+        "name": "هاكاري",
+        "role": "الرفيق المقدس",
+        "alt": "هاكاري، رفيق سحري مرح"
+      },
+      "miri": {
+        "name": "ميري",
+        "role": "الرفيقة المرحة",
+        "alt": "ميري، رفيقة سحرية أنيقة"
+      }
     },
-    "actions": { "advance": "تابع الحوار", "dismiss": "إغلاق الحوار" },
+    "actions": {
+      "advance": "تابع الحوار",
+      "dismiss": "إغلاق الحوار"
+    },
     "companionsTitle": "الرفاق المقدسون",
     "dialogue": {
       "king": {
@@ -656,5 +790,24 @@
       "title": "أصل ميري",
       "content": "جاءت ميري من الخيوط الفضية لمنشأة النساج القديم تحت غابة سيلفرباين — تجسّد لإبداع النسّاجين. تمثّل ميري الجانب المرح والفضولي من السحر: الاعتقاد بأن العجب ليس طفوليًا، بل أساسيًا. حيث يجلب هاكاري الشجاعة، تجلب ميري المرح."
     }
+  },
+  "trials:trials": {
+    "battleVictory": "الاختبار تمَّ هزيمته",
+    "battleResolveBar": "المقاومة",
+    "battleResolveFull": "إجهاد كامل",
+    "battleResolveDepleted": "تحطمت المقاومة",
+    "battleTip": "أكد على كل مجموعّة تُكملها. كل جهد حقيقي تُبذله يُضعف الحامي.",
+    "battleConfirmTurn": "أكملت هذه الجزئية",
+    "battleConfirmAll": "أكملت كل شيء",
+    "battleConfirm": "تأكيد",
+    "battleCancel": "ليس بعد — سأكمل لاحقًا",
+    "battleFlavor": "العمل الذي تفعله هو السيف. كل مجموعّة تُ攻撃 المقاومة داخل نفسك.",
+    "battleStrike": "{{part}} — ضربة واضحة",
+    "battleEnemy": "حامي الاختبار",
+    "battlePlayer": "أنت",
+    "battleEnemyResolve": "عزم",
+    "battleAttack": "تأكيد المجموعة",
+    "battleStay": "هذه معركتك ما زالت. تحدَّث متى تستعدّ.",
+    "battleVictoryFlavor": "لم تستطع المقاومة أن تُمسك. لقد اخترقتها جهودك.\n\nلا عدو هنا سوى ذاكرة الرغبة في الاستسلام."
   }
 }

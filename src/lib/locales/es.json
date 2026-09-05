@@ -46,7 +46,54 @@
     "completeTrial": "Completar Prueba",
     "conqueredToday": "Conquistada Hoy",
     "minutes": "min",
-    "conqueredToast": "{{name}} — conquistada"
+    "conqueredToast": "{{name}} — conquistada",
+    "trials.battleVictory": "Prueba Superada",
+    "trials.battleResolveBar": "Resistencia",
+    "trials.battleResolveFull": "Resistencia llena",
+    "trials.battleResolveDepleted": "Resistencia rota",
+    "trials.battleTip": "Confirma cada serie completada. Cada esfuerzo real que haces debilita al guardián.",
+    "trials.battleConfirmTurn": "Completé esta parte",
+    "trials.battleConfirmAll": "Completé todo",
+    "trials.battleConfirm": "Confirmar",
+    "trials.battleCancel": "Aún no — seguiré",
+    "trials.battleFlavor": "Tu propio esfuerzo es la hoja. Cada serie es un golpe contra tu resistencia.",
+    "trials.battleStrike": "{{part}} — golpe conectado",
+    "trials.battleEnemy": "Guardián de la Prueba",
+    "trials.battlePlayer": "Tú",
+    "trials.battleEnemyResolve": "Voluntad",
+    "trials.battleAttack": "Confirmar serie",
+    "trials.battleStay": "Esta batalla sigue siendo tuya. Continúa cuando estés listo.",
+    "trials.battleVictoryFlavor": "La resistencia no pudo mantenerse. Tu esfuerzo logró atravesarla.\n\nNo hay rival aquí, solo la parte de ti que quiso rendirse.",
+    "battleVictory": "Prueba Superada",
+    "battleResolveBar": "Resistencia",
+    "battleResolveFull": "Resistencia llena",
+    "battleResolveDepleted": "Resistencia rota",
+    "battleTip": "Confirma cada serie completada. Cada esfuerzo real que haces debilita al guardián.",
+    "battleConfirmTurn": "Completé esta parte",
+    "battleConfirmAll": "Completé todo",
+    "battleConfirm": "Confirmar serie",
+    "battleCancel": "Todavía no — seguiré",
+    "battleFlavor": "Tu propio esfuerzo es la hoja. Cada serie es un golpe contra tu resistencia.",
+    "battleStrike": "{{part}} — golpe conectado",
+    "battleEnemy": "Guardián de la Prueba",
+    "battlePlayer": "Tú",
+    "battleEnemyResolve": "Voluntad",
+    "battleAttack": "Confirmar serie",
+    "battleStay": "Esta batalla sigue siendo tuya. Continúa cuando estés listo.",
+    "battleVictoryFlavor": "La resistencia no pudo mantenerse. Tu esfuerzo logró atravesarla.\n\nNo hay rival aquí, solo la parte de ti que quiso rendirse.",
+    "battleEnter": "Entrar al círculo",
+    "battleEnterConfirm": "Estoy listo",
+    "battleActive": "El guardián resiste",
+    "battleExit": "Cerrar el círculo",
+    "battleExitLabel": "Todavía no — seguiré",
+    "battleResolveText": "Resistencia",
+    "battleResolveFullText": "Resistencia firme",
+    "battleResolveLooseText": "Resistencia cayendo",
+    "battleResolveBrokenText": "Resistencia rota",
+    "battleEnemyResolveText": "Voluntad del guardián",
+    "battlePlayerResolveText": "Tu voluntad",
+    "battleTitle": "El círculo se abre",
+    "battleShield": "Un guardián de prueba entra en el círculo"
   },
   "achievements": {
     "hallOfLegends": "Salón de las Leyendas",
@@ -514,7 +561,10 @@
         "alt": "Miri, compañera mágica y elegante"
       }
     },
-    "actions": { "advance": "Avanzar diálogo", "dismiss": "Cerrar diálogo" },
+    "actions": {
+      "advance": "Avanzar diálogo",
+      "dismiss": "Cerrar diálogo"
+    },
     "companionsTitle": "Compañeros sagrados",
     "dialogue": {
       "king": {
@@ -680,5 +730,24 @@
       "title": "El Origen de Miri",
       "content": "Miri vino de los hilos plateados del telar antiguo bajo el Bosque de Pinos de Plata — una manifestación de la creatividad de los tejedores. Miri representa el lado juguetón y curioso de la magia: la creencia de que asombrarse no es infantil, sino esencial. Donde Hakari trae coraje, Miri trae deleite."
     }
+  },
+  "trials:trials": {
+    "battleVictory": "Prueba Superada",
+    "battleResolveBar": "Resistencia",
+    "battleResolveFull": "Resistencia llena",
+    "battleResolveDepleted": "Resistencia rota",
+    "battleTip": "Confirma cada serie completada. Cada esfuerzo real que haces debilita al guardián.",
+    "battleConfirmTurn": "Completé esta parte",
+    "battleConfirmAll": "Completé todo",
+    "battleConfirm": "Confirmar",
+    "battleCancel": "Aún no — seguiré",
+    "battleFlavor": "Tu propio esfuerzo es la hoja. Cada serie es un golpe contra tu resistencia.",
+    "battleStrike": "{{part}} — golpe conectado",
+    "battleEnemy": "Guardián de la Prueba",
+    "battlePlayer": "Tú",
+    "battleEnemyResolve": "Voluntad",
+    "battleAttack": "Confirmar serie",
+    "battleStay": "Esta batalla sigue siendo tuya. Continúa cuando estés listo.",
+    "battleVictoryFlavor": "La resistencia no pudo mantenerse. Tu esfuerzo logró atravesarla.\n\nNo hay rival aquí, solo la parte de ti que quiso rendirse."
   }
 }

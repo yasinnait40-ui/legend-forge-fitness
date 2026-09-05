@@ -8,6 +8,8 @@ import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeTrial, trialsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
+import { TrialBattle } from "@/components/TrialBattle";
+import { TRIAL_GUARDIANS } from "@/lib/game-data";
 import { emitCharacterReaction } from "@/lib/character-reactions";
 import { playSound } from "@/lib/sound-store";
 import { TRIALS, type StatKey, type Trial } from "@/lib/game-data";
@@ -72,6 +74,20 @@ function TrialsPage() {
         requestReminderPermission(t("notifications.permissionPrompt"));
     }
   }
+
+  function startBattle(trialId: string) {
+    const trial = TRIALS.find((t) => t.id === trialId);
+    const guardian = TRIAL_GUARDIANS[trialId];
+    if (!trial || !guardian) return;
+    setOpenId(null);
+    setOpenTrialId(trialId);
+  }
+
+  function exitBattle() {
+    setOpenTrialId(null);
+  }
+
+  const [openTrialId, setOpenTrialId] = useState<string | null>(null);
 
   return (
     <RealmScreen

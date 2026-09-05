@@ -141,6 +141,58 @@ export interface Trial {
   exercises: TrialExercise[];
 }
 
+/** Thematic guardian id used by the battle presentation layer. Never read by rewards. */
+export interface TrialGuardian {
+  id: string;
+  /** Short label, e.g. "The Weight of Doubt" */
+  name: string;
+  /** Minute-by-minute or set-by-set flavor for the guardian encounter. */
+  manner: string;
+  /** Which elemental spirit family the guardian belongs to (entry themes only). */
+  element: "stone" | "ember" | "storm" | "shadow" | "mist" | "frost" | "iron" | "arcane";
+  /** Optional portrait file in public/ if provided later. */
+  portrait?: string;
+}
+
+export const TRIAL_GUARDIANS: Record<string, TrialGuardian> = {
+  "iron-chest": {
+    id: "iron-chest",
+    name: "The Weight of Doubt",
+    manner: "A heavy old guardian that grows steadier the heavier the iron feels.",
+    element: "iron",
+  },
+  "ember-core": {
+    id: "ember-core",
+    name: "The Core Wraith",
+    manner: "A sluggish ember-spirit that tries to smother the fire at your center.",
+    element: "ember",
+  },
+  "wardens-keep": {
+    id: "wardens-keep",
+    name: "The Stone Warden",
+    manner: "A patient unmoving sentinel that asks for grounded, unbreakable legs.",
+    element: "stone",
+  },
+  "stormwind-run": {
+    id: "stormwind-run",
+    name: "The Wind Wraith",
+    manner: "A restless gale that strikes hardest the moment you slow down.",
+    element: "storm",
+  },
+  "nightblade-mobility": {
+    id: "nightblade-mobility",
+    name: "The Shadow Wraith",
+    manner: "A quiet resistance that follows every stretch and hinge.",
+    element: "shadow",
+  },
+  "dragon-slayer": {
+    id: "dragon-slayer",
+    name: "The Great Wraith",
+    manner: "The gathering of every old excuse, standing tall until the last set is done.",
+    element: "arcane",
+  },
+};
+
 export const TRIALS: Trial[] = [
   {
     id: "iron-chest",
