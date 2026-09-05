@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Castle, TreePine, Sun, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useGame } from "@/lib/game-store";
 import { levelFromXp } from "@/lib/game-data";
 import { RuneHeading } from "@/components/RunePanel";
 import { WORLD_REGIONS, isRegionUnlocked, type WorldRegion } from "@/lib/world-map-data";
+import worldMapImg from "@/assets/world-map.png";
 
 export const Route = createFileRoute("/map")({
   head: () => ({
@@ -20,33 +21,11 @@ export const Route = createFileRoute("/map")({
   component: MapPage,
 });
 
-const REGION_ICON = {
-  castle: Castle,
-  forest: TreePine,
-  desert: Sun,
-} as const;
-
-// Curved road connecting the regions, in order.
-function buildRoadPath(regions: WorldRegion[]): string {
-  if (regions.length < 2) return "";
-  let d = `M ${regions[0]!.x} ${regions[0]!.y}`;
-  for (let i = 1; i < regions.length; i++) {
-    const prev = regions[i - 1]!;
-    const curr = regions[i]!;
-    const midX = (prev.x + curr.x) / 2;
-    const midY = Math.min(prev.y, curr.y) - 12;
-    d += ` Q ${midX} ${midY} ${curr.x} ${curr.y}`;
-  }
-  return d;
-}
-
 function MapPage() {
   const { t } = useTranslation();
   const game = useGame();
   const level = levelFromXp(game.xp);
   const [selected, setSelected] = useState<WorldRegion | null>(null);
-
-  const roadPath = buildRoadPath(WORLD_REGIONS);
 
   return (
     <div className="min-h-screen bg-background px-4 pb-28 pt-10">
@@ -59,131 +38,81 @@ function MapPage() {
         </h1>
       </header>
 
-      {/* Map frame — parchment feel with terrain background */}
       <div
-        className="relative mx-auto mt-8 aspect-[3/4] w-full max-w-md overflow-hidden rounded-2xl border-2 shadow-[0_-8px_30px_-12px_rgb(60_45_15/0.4)]"
-        style={{
-          borderColor: "color-mix(in oklab, var(--primary) 55%, transparent)",
-          background:
-            "linear-gradient(180deg, color-mix(in oklab, var(--primary) 10%, #fbf3de) 0%, color-mix(in oklab, var(--accent) 14%, #f3e6c4) 55%, color-mix(in oklab, var(--primary) 18%, #e9d6a8) 100%)",
-        }}
+        className="relative mx-auto mt-6 aspect-[2/3] w-full max-w-md overflow-hidden rounded-2xl border-2 shadow-[0_-8px_30px_-12px_rgb(0_0_0/0.5)]"
+        style={{ borderColor: "color-mix(in oklab, var(--primary) 55%, transparent)" }}
       >
-        {/* Decorative inner border */}
-        <div
-          className="pointer-events-none absolute inset-2 rounded-xl border"
-          style={{ borderColor: "color-mix(in oklab, var(--primary) 35%, transparent)" }}
+        {/* Base illustrated map */}
+        <img
+          src={worldMapImg}
+          alt="Map of the realm of Aethora"
+          className="absolute inset-0 h-full w-full object-cover"
+          draggable={false}
         />
 
-        <svg viewBox="0 0 100 130" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
-          {/* Sky gradient */}
-          <defs>
-            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="color-mix(in oklab, var(--accent) 25%, transparent)" />
-              <stop offset="100%" stopColor="transparent" />
-            </linearGradient>
-            <linearGradient id="mountainGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="color-mix(in oklab, var(--primary) 35%, #8b7250)" />
-              <stop offset="100%" stopColor="color-mix(in oklab, var(--primary) 15%, #8b7250)" />
-            </linearGradient>
-          </defs>
+        {/* Darken overall for legibility of markers */}
+        <div className="pointer-events-none absolute inset-0 bg-black/10" />
 
-          <rect x="0" y="0" width="100" height="40" fill="url(#skyGrad)" />
-
-          {/* Background mountain range */}
-          <path
-            d="M0,38 L10,22 L18,32 L28,14 L38,30 L48,20 L58,34 L68,18 L78,30 L88,20 L100,34 L100,42 L0,42 Z"
-            fill="url(#mountainGrad)"
-            opacity="0.55"
-          />
-          <path
-            d="M0,42 L14,30 L26,40 L40,26 L54,40 L66,28 L80,40 L92,30 L100,40 L100,48 L0,48 Z"
-            fill="color-mix(in oklab, var(--primary) 30%, #6b5638)"
-            opacity="0.5"
-          />
-
-          {/* Rolling hills / terrain texture across the map */}
-          <path
-            d="M0,60 Q15,54 30,60 T60,60 T100,58 L100,130 L0,130 Z"
-            fill="color-mix(in oklab, var(--accent) 22%, transparent)"
-          />
-          <path
-            d="M0,80 Q20,74 40,80 T80,78 T100,82 L100,130 L0,130 Z"
-            fill="color-mix(in oklab, var(--primary) 12%, transparent)"
-          />
-
-          {/* Scattered pine trees for the forest region */}
-          {[
-            [42, 24],
-            [46, 20],
-            [50, 26],
-            [55, 22],
-          ].map(([tx, ty], i) => (
-            <path
-              key={i}
-              d={`M ${tx} ${ty! + 5} L ${tx! - 2.2} ${ty! + 5} L ${tx} ${ty} Z M ${tx! - 1.6} ${ty! + 3.4} L ${tx! + 1.6} ${ty! + 3.4} L ${tx} ${ty! - 1} Z`}
-              fill="color-mix(in oklab, var(--primary) 40%, #4a5c3a)"
-              opacity="0.7"
-            />
-          ))}
-
-          {/* Winding road connecting regions */}
-          <path
-            d={roadPath}
-            fill="none"
-            stroke="color-mix(in oklab, var(--primary) 70%, #8b6d3a)"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeDasharray="0.5 3.2"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
-
-        {/* Region markers */}
         {WORLD_REGIONS.map((region) => {
           const unlocked = isRegionUnlocked(region, game.xp);
-          const Icon = REGION_ICON[region.icon];
-          const yPct = (region.y / 130) * 100;
           return (
-            <button
+            <div
               key={region.id}
-              type="button"
-              onClick={() => unlocked && setSelected(region)}
-              disabled={!unlocked}
-              className="absolute flex flex-col items-center gap-1.5 -translate-x-1/2 -translate-y-1/2"
-              style={{ left: `${region.x}%`, top: `${yPct}%` }}
-              aria-label={region.name}
+              className="absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${region.x}%`, top: `${region.y}%` }}
             >
-              <span
-                className="flex h-14 w-14 items-center justify-center rounded-full border-[3px] transition-all duration-300"
-                style={{
-                  borderColor: unlocked ? "var(--primary)" : "color-mix(in oklab, var(--muted-foreground) 60%, transparent)",
-                  background: unlocked
-                    ? "radial-gradient(circle at 35% 30%, color-mix(in oklab, var(--primary) 45%, white 10%), color-mix(in oklab, var(--primary) 20%, var(--card)))"
-                    : "color-mix(in oklab, var(--muted-foreground) 14%, var(--card))",
-                  boxShadow: unlocked
-                    ? "0 0 0 4px color-mix(in oklab, var(--primary) 18%, transparent), 0 4px 14px -2px color-mix(in oklab, var(--primary) 60%, transparent)"
-                    : "0 2px 6px -2px rgb(0 0 0 / 0.25)",
-                }}
+              {!unlocked && (
+                // Fog patch: blurs + darkens the map art under locked regions,
+                // feathered at the edges so it doesn't look like a hard circle.
+                <div
+                  className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 backdrop-blur-md"
+                  style={{
+                    background: "rgba(20, 18, 12, 0.55)",
+                    WebkitMaskImage:
+                      "radial-gradient(circle, black 45%, transparent 75%)",
+                    maskImage: "radial-gradient(circle, black 45%, transparent 75%)",
+                  }}
+                />
+              )}
+
+              <button
+                type="button"
+                onClick={() => unlocked && setSelected(region)}
+                disabled={!unlocked}
+                className="relative flex flex-col items-center gap-1"
+                aria-label={region.name}
               >
-                {unlocked ? (
-                  <Icon className="h-6 w-6 text-primary drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" strokeWidth={2.2} />
-                ) : (
-                  <Lock className="h-5 w-5 text-muted-foreground" strokeWidth={2.2} />
-                )}
-              </span>
-              <span
-                className="rounded-full px-2 py-0.5 font-display text-[0.55rem] font-bold uppercase tracking-[0.1em]"
-                style={{
-                  color: unlocked ? "var(--primary-foreground, #2a1c08)" : "var(--muted-foreground)",
-                  background: unlocked
-                    ? "color-mix(in oklab, var(--primary) 85%, transparent)"
-                    : "color-mix(in oklab, var(--card) 80%, transparent)",
-                  boxShadow: unlocked ? "0 2px 6px -2px rgba(0,0,0,0.35)" : "none",
-                }}
-              >
-                {unlocked ? region.name : `Lv.${region.levelReq}`}
-              </span>
-            </button>
+                <span
+                  className="flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300"
+                  style={{
+                    borderColor: unlocked ? "var(--primary)" : "rgba(255,255,255,0.55)",
+                    background: unlocked
+                      ? "color-mix(in oklab, var(--primary) 30%, rgba(20,15,5,0.55))"
+                      : "rgba(10,10,10,0.5)",
+                    boxShadow: unlocked
+                      ? "0 0 14px color-mix(in oklab, var(--primary) 65%, transparent)"
+                      : "none",
+                  }}
+                >
+                  {unlocked ? (
+                    <span className="h-2.5 w-2.5 rounded-full bg-primary" />
+                  ) : (
+                    <Lock className="h-4 w-4 text-white/80" strokeWidth={2.4} />
+                  )}
+                </span>
+                <span
+                  className="whitespace-nowrap rounded-full px-2 py-0.5 font-display text-[0.5rem] font-bold uppercase tracking-[0.08em] shadow-sm"
+                  style={{
+                    color: unlocked ? "#2a1c08" : "rgba(255,255,255,0.85)",
+                    background: unlocked
+                      ? "color-mix(in oklab, var(--primary) 88%, transparent)"
+                      : "rgba(0,0,0,0.55)",
+                  }}
+                >
+                  {unlocked ? region.name : `Lv.${region.levelReq}`}
+                </span>
+              </button>
+            </div>
           );
         })}
       </div>
@@ -207,8 +136,8 @@ function MapPage() {
 
       {!selected && (
         <p className="mx-auto mt-6 max-w-md text-center text-sm italic text-muted-foreground">
-          {level < 8
-            ? t("map.hint", "Grow your legend to unlock new regions of Aethora.")
+          {level < 27
+            ? t("map.hint", "Grow your legend to lift the fog from new regions.")
             : t("map.hintAll", "Tap a region to view its trials.")}
         </p>
       )}
