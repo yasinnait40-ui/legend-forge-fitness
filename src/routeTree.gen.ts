@@ -14,6 +14,7 @@ import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CharacterRouteImport } from './routes/character'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as LegendRouteImport } from './routes/legend'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProgressRouteImport } from './routes/progress'
@@ -48,6 +49,11 @@ const CharacterRoute = CharacterRouteImport.update({
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegendRoute = LegendRouteImport.update({
+  id: '/legend',
+  path: '/legend',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/legend': typeof LegendRoute
   '/map': typeof MapRoute
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/legend': typeof LegendRoute
   '/map': typeof MapRoute
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/legend': typeof LegendRoute
   '/map': typeof MapRoute
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/legend'
     | '/map'
     | '/privacy'
     | '/progress'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/legend'
     | '/map'
     | '/privacy'
     | '/progress'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/legend'
     | '/map'
     | '/privacy'
     | '/progress'
@@ -213,6 +225,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   CharacterRoute: typeof CharacterRoute
   GuideRoute: typeof GuideRoute
+  LegendRoute: typeof LegendRoute
   MapRoute: typeof MapRoute
   PrivacyRoute: typeof PrivacyRoute
   ProgressRoute: typeof ProgressRoute
@@ -259,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legend': {
+      id: '/legend'
+      path: '/legend'
+      fullPath: '/legend'
+      preLoaderRoute: typeof LegendRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -350,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   CharacterRoute: CharacterRoute,
   GuideRoute: GuideRoute,
+  LegendRoute: LegendRoute,
   MapRoute: MapRoute,
   PrivacyRoute: PrivacyRoute,
   ProgressRoute: ProgressRoute,

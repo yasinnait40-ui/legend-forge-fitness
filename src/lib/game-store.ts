@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { notifyStatsChanged, queueActivity } from "./cloud-sync";
+import { notifyRegionsChanged, notifyStatsChanged, queueActivity } from "./cloud-sync";
 import {
   ACHIEVEMENTS,
   ACHIEVEMENT_REWARDS,
@@ -38,6 +38,8 @@ export interface GameState {
   inventory: string[];
   totalQuests: number;
   totalTrials: number;
+  /** World-map regions the player has entered (discovered). */
+  discoveredRegions: string[];
 }
 
 const DEFAULT_STATE: GameState = {
@@ -56,6 +58,7 @@ const DEFAULT_STATE: GameState = {
   inventory: ["worn-iron-blade", "travelers-garb", "cracked-mana-stone"],
   totalQuests: 0,
   totalTrials: 0,
+  discoveredRegions: [],
 };
 
 const STORAGE_KEY = "aethora-legend-v1";
@@ -576,6 +579,33 @@ export function resetLegend() {
     equipment: { ...DEFAULT_STATE.equipment },
     inventory: [...DEFAULT_STATE.inventory],
   });
+}
+
+/**
+ * Record that the player has entered a region. Idempotent: discovering the
+ * same region twice never changes state. Returns true on first discovery so
+ * the caller can fire the one-time discovery moment.
+ */
+export function discoverRegion(regionId: string): boolean {
+  if (state.discoveredRegions.includes(regionId)) return false;
+  const next: GameState = {
+    ...state,
+    discoveredRegions: [...state.discoveredRegions, regionId],
+  };
+  // Achievements re-evaluate so exploration honors unlock from real state.
+  const newlyUnlocked = ACHIEVEMENTS.filter(
+    (a) => !next.achievements.includes(a.id) && a.test(next as AchievementContext),
+  ).map((a) => a.id);
+  next.achievements = [...next.achievements, ...newlyUnlocked];
+  for (const achId of newlyUnlocked) {
+    const rewardItemId = ACHIEVEMENT_REWARDS[achId];
+    if (rewardItemId && !next.inventory.includes(rewardItemId)) {
+      next.inventory = [...next.inventory, rewardItemId];
+    }
+  }
+  commit(next);
+  notifyRegionsChanged();
+  return true;
 }
 
 /** Add an item to inventory if not already owned. Does not grant by default - used for reward distribution. */

@@ -96,6 +96,7 @@
     "totalXp": "total XP",
     "currentLevel": "Current Level",
     "nextAscension": "Next Ascension",
+    "visitCompanions": "Visit the Sacred Companions",
     "weeklyConquests": "Weekly Conquests",
     "statConstellation": "Stat Constellation",
     "trialsWon": "Trials Won",
@@ -625,6 +626,12 @@
   },
   "world": {
     "title": "The World Map",
+    "regionNarrator": {
+      "king": "This land now answers to your legend. Rule it well, and hold fast when the trials come.",
+      "adventurer": "Now THIS is proper country! Untamed roads, old trails — let's see what you're made of.",
+      "scholar": "Fascinating terrain. I've logged three distinct challenges here — pace yourself accordingly.",
+      "sage": "So you have come this far... These lands remember those who walk them with purpose."
+    },
     "kingdom": {
       "name": "The Kingdom",
       "desc": "Forge your body in the training grounds"

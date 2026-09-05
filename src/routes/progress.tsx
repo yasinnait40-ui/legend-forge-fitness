@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flame, ScrollText, Swords } from "lucide-react";
 import observatory from "@/assets/observatory.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
@@ -186,6 +186,12 @@ function ProgressPage() {
               </div>
             </div>
           </div>
+          <Link
+            to="/legend"
+            className="mt-3 block text-center font-display text-[0.66rem] font-bold uppercase tracking-[0.22em] text-primary transition-colors hover:text-accent"
+          >
+            {t("progress.visitCompanions", "Visit the Sacred Companions")}
+          </Link>
         </div>
       </RunePanel>
 

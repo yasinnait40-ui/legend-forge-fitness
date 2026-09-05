@@ -12,6 +12,7 @@ export type Database = {
         Row: {
           achievements: Json;
           best_streak: number;
+          discovered_regions: Json | null;
           equipment: Json;
           last_active_date: string | null;
           level: number;
@@ -26,6 +27,7 @@ export type Database = {
         Insert: {
           achievements?: Json;
           best_streak?: number;
+          discovered_regions?: Json | null;
           equipment?: Json;
           last_active_date?: string | null;
           level?: number;

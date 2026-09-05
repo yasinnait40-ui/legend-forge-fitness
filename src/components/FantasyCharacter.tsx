@@ -10,6 +10,7 @@ import {
 } from "@/lib/characters";
 import { useGame } from "@/lib/game-store";
 import { playCharacterIntro } from "@/lib/sound-store";
+import { cn } from "@/lib/utils";
 
 export type FantasyCharacterKind = CharacterId | LegacyCharacterId;
 
@@ -116,6 +117,8 @@ export function FantasyCharacter({
       ? "char-breathe"
       : "";
 
+  const companionDialogueClass = id === "hakari" || id === "miri" ? " companion-dialogue" : "";
+
   return (
     <aside
       className={`fantasy-character fantasy-character-${id} ${
@@ -145,7 +148,7 @@ export function FantasyCharacter({
 
       <button
         type="button"
-        className="fantasy-character-dialogue"
+        className={cn("fantasy-character-dialogue", companionDialogueClass)}
         onClick={advance}
         aria-label={
           lineIndex < lines.length - 1
@@ -161,7 +164,7 @@ export function FantasyCharacter({
         {lines.length > 0 && <span className="fantasy-character-line">{lines[lineIndex]}</span>}
 
         <span className="fantasy-character-continue" aria-hidden="true">
-          ▼
+          {lineIndex < lines.length - 1 ? "▼" : "✕"}
         </span>
       </button>
     </aside>

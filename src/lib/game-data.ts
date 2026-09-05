@@ -288,6 +288,8 @@ export interface AchievementContext {
   totalTrials: number;
   trialsEver: string[];
   stats: Record<StatKey, number>;
+  /** Regions the player has entered (world-map exploration). */
+  discoveredRegions?: string[];
 }
 
 export interface Achievement {
@@ -403,6 +405,47 @@ export const ACHIEVEMENTS: Achievement[] = [
     rarity: "epic",
     icon: "shield",
     test: (c) => c.trialsEver.length >= 10,
+  },
+  // ----- World exploration (P1.3): unlock only from real region discovery -----
+  {
+    id: "first-region",
+    name: "First Steps Beyond",
+    flavor: "Discover your first region of the realm.",
+    rarity: "common",
+    icon: "scroll",
+    test: (c) => (c.discoveredRegions?.length ?? 0) >= 1,
+  },
+  {
+    id: "explorer",
+    name: "Explorer",
+    flavor: "Discover five regions of the world.",
+    rarity: "rare",
+    icon: "sparkles",
+    test: (c) => (c.discoveredRegions?.length ?? 0) >= 5,
+  },
+  {
+    id: "frostpeak-survivor",
+    name: "Frostpeak Survivor",
+    flavor: "Enter the frozen citadel of Frosthold.",
+    rarity: "epic",
+    icon: "moon",
+    test: (c) => (c.discoveredRegions ?? []).includes("frosthold"),
+  },
+  {
+    id: "ruins-wanderer",
+    name: "Ruins Wanderer",
+    flavor: "Walk the broken lands of the Shattered Waste.",
+    rarity: "rare",
+    icon: "moon",
+    test: (c) => (c.discoveredRegions ?? []).includes("shattered-waste"),
+  },
+  {
+    id: "world-walker",
+    name: "World Walker",
+    flavor: "Discover every region of the known realm.",
+    rarity: "legendary",
+    icon: "crown",
+    test: (c) => (c.discoveredRegions?.length ?? 0) >= 16,
   },
 ];
 

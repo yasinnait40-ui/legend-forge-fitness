@@ -646,6 +646,15 @@
     margin-right: 0.375rem;
     padding: 2rem 5.5rem 0.8rem 0.7rem;
   }
+  /* 360px: embedded companions must fit side-by-side without overlap. */
+  .companion-column .fantasy-character-embedded .fantasy-character-figure {
+    width: min(100%, 4.75rem);
+    height: 6.5rem;
+  }
+  .companion-column .fantasy-character-embedded .fantasy-character-dialogue {
+    min-height: 5rem;
+    padding: 1.5rem 0.5rem 0.6rem;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .fantasy-character,
@@ -1444,10 +1453,9 @@ html[dir="rtl"] .font-display {
 .companions-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
+  gap: 1.25rem;
   width: 100%;
   max-width: 100%;
-  overflow: hidden;
 }
 
 .companion-column {
@@ -1455,11 +1463,110 @@ html[dir="rtl"] .font-display {
   flex-direction: column;
   align-items: center;
   min-width: 0;
-  overflow: hidden;
 }
 
-.companion-column .fantasy-character-embedded {
-  width: 100%;
+.companion-column .fantasy-character {
+  margin-top: 0;
+}
+
+.companion-column .fantasy-character.is-entered {
+  transform: translateY(0);
+}
+
+.companion-column .fantasy-character-dialogue {
+  width: min(100%, 22rem);
+  max-width: 100%;
+}
+
+/* Companions sit low in their columns like figures on shared ground. */
+.companion-column .fantasy-character-figure {
+  margin-bottom: 0;
+}
+
+@media (max-width: 720px) {
+  .companions-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .companion-column .fantasy-character-dialogue {
+    width: min(100%, 14rem);
+  }
+}
+
+@media (max-width: 420px) {
+  .companions-container {
+    gap: 0.4rem;
+  }
+  .companion-column .fantasy-character-dialogue {
+    width: min(100%, 12rem);
+  }
+  /* Tight columns: nameplates must never overlap the neighboring companion. */
+  .companion-column .fantasy-character-nameplate {
+    min-width: 0;
+    width: calc(100% - 0.9rem);
+  }
+  .companion-column .fantasy-character-nameplate strong {
+    font-size: 0.68rem;
+  }
+  .companion-column .fantasy-character-nameplate small {
+    display: none;
+  }
+}
+
+/* Companion-specific presentation */
+
+.char-companion-figure .fantasy-character-art {
+  filter: drop-shadow(0.2rem 0.5rem 0.4rem rgb(30 25 12 / 0.45));
+}
+
+.char-companion-figure .fantasy-character-ground-shadow {
+  opacity: 0.9;
+  width: 72%;
+  height: 10px;
+}
+
+/* Companion dialogue nameplate placement mirror for Miri/Hakari */
+.companion-dialogue .fantasy-character-nameplate {
+  inset-inline-start: 0.6rem;
+  min-width: 0;
+  width: auto;
+  padding-inline: 0.5rem;
+  max-width: 100%;
+  right: auto;
+  bottom: auto;
+}
+
+.companion-dialogue .fantasy-character-nameplate strong {
+  letter-spacing: 0.08em;
+}
+
+.companion-dialogue .fantasy-character-figure {
+  margin-right: 0;
+}
+
+.companion-dialogue .fantasy-character-ground-shadow {
+  bottom: -4px;
+  height: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72%;
+  opacity: 0.9;
+}
+
+/* Keep the dialogue arrow readable on small screens */
+.fantasy-character-continue {
+  inset-inline-end: 0.6rem;
+  bottom: 0.4rem;
+}
+
+@media (max-width: 360px) {
+  .companions-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+  }
+  .companion-column .fantasy-character-dialogue {
+    width: min(100%, 10rem);
+  }
 }
 
 /* -------------------------------------------------------------------------- */

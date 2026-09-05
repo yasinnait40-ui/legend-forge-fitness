@@ -132,6 +132,28 @@ function schedulePush(userId: string) {
 }
 
 /**
+ * Persist the discovered-regions list to the player's game_states row. RLS
+ * still enforces owner-only writes; this only ever merges region ids upward,
+ * so replaying it can never lose progression.
+ */
+async function pushDiscoveredRegions(userId: string) {
+  const { error } = await supabase
+    .from("game_states")
+    .upsert({ user_id: userId, discovered_regions: getGameState().discoveredRegions } as never, {
+      onConflict: "user_id",
+      ignoreDuplicates: false,
+    });
+  if (error) console.error("[cloud-sync] regions push failed", error.message);
+}
+
+/** Queue a region-discovery push (debounced alongside stats). */
+export function notifyRegionsChanged(): void {
+  if (!currentUserId) return;
+  schedulePush(currentUserId);
+  void pushDiscoveredRegions(currentUserId);
+}
+
+/**
  * P0.2: reliably persist stat columns after local progress changes. Called by
  * the game store whenever stats may have moved (authoritative completions,
  * optimistic offline completions). No-op when signed out — the queue replays
@@ -147,7 +169,7 @@ async function pullAndMerge(userId: string) {
   const { data, error } = await supabase
     .from("game_states")
     .select(
-      "xp, level, streak, best_streak, last_active_date, stats, equipment, total_quests, total_trials, achievements",
+      "xp, level, streak, best_streak, last_active_date, stats, equipment, total_quests, total_trials, achievements, discovered_regions",
     )
     .eq("user_id", userId)
     .maybeSingle();
@@ -205,6 +227,15 @@ async function pullAndMerge(userId: string) {
       : local.achievements,
     totalQuests: Math.max(data.total_quests ?? 0, local.totalQuests),
     totalTrials: Math.max(data.total_trials ?? 0, local.totalTrials),
+    discoveredRegions: Array.isArray(data.discovered_regions)
+      ? Array.from(
+          new Set(
+            [...(data.discovered_regions as string[]), ...local.discoveredRegions].filter(
+              (id): id is string => typeof id === "string",
+            ),
+          ),
+        )
+      : local.discoveredRegions,
   });
 }
 
