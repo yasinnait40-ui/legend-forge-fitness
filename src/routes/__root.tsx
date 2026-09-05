@@ -15,12 +15,11 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
 import { ReminderMonitor } from "../components/ReminderMonitor";
-import { hydrateGameStore, resetGameStore, ensureDailyRollover } from "../lib/game-store";
+import { hydrateGameStore, resetGameStore } from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
 import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 import "../lib/i18n";
 import { hydrateSoundStore, initBackgroundMusic } from "../lib/sound-store";
-import { hydrateBossStore } from "../lib/boss-store";
 
 const CHARACTER_ASSETS = [
   "/characters/king.png",
@@ -171,12 +170,7 @@ function RootComponent() {
     }
 
     hydrateSoundStore();
-    hydrateBossStore();
     initBackgroundMusic();
-
-    // P0.2: keep daily quest/trial seals aligned with the local calendar
-    // across midnight ticks, tab focus, and visibility changes.
-    ensureDailyRollover();
 
     // Supabase is optional for the public preview. Keep the local game experience
     // available when the project has not supplied its cloud credentials yet.
@@ -215,4 +209,26 @@ function RootComponent() {
       }
       activeUserId = data.session.user.id;
       resetGameStore();
-      startCloudSync(activeU
+      startCloudSync(activeUserId);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <Outlet />
+      <footer className="relative z-10 flex justify-center gap-4 px-4 pb-24 pt-3 text-xs text-muted-foreground">
+        <Link to="/privacy" className="underline underline-offset-4">
+          Privacy Policy
+        </Link>
+        <Link to="/terms" className="underline underline-offset-4">
+          Terms of Service
+        </Link>
+      </footer>
+      <BottomNav />
+      <ReminderMonitor />
+      <Toaster theme="light" position="top-center" />
+    </QueryClientProvider>
+  );
+}

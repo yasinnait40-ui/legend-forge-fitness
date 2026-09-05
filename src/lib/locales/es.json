@@ -606,5 +606,79 @@
     "finisherNote": "La Fortaleza Inferior del Guardián es el golpe final.",
     "defeated": "El centinela se ha desmoronado. El paso de montaña es tuyo, campeón.",
     "vanquished": "Derrotado"
+  },
+  "lore": {
+    "ageOfCreation": {
+      "title": "La Era de la Creación",
+      "content": "Al principio, Aethora fue formada por los Grandes Tejedores — seres inmortales de luz estelar y canto. Tallaron reinos de montañas, ríos de lágrimas de alegría, y bosques de su propia respiración. Los primeros mortales surgieron de la tierra sagrada de Valerion, bendecidos con la chispa del potencial."
+    },
+    "firstEmpire": {
+      "title": "El Primer Imperio",
+      "content": "Durante mil años, el Imperio de Luz Dorado unió el reino bajo un solo manto. Su capital se alzaba donde hoy se yergue Valerion. La caída del imperio no vino de la guerra, sino del olvido — los gobernantes perdieron contacto con la tierra y su gente, y la magia de los tejedores se desvaneció en leyenda."
+    },
+    "greatWeaving": {
+      "title": "El Gran Tejido",
+      "content": "Cuando los tejedores partieron, dejaron atrás hilos de poder tejidos en la tierra misma. Estos hilos se convirtieron en las líneas de energía que conectan los lugares sagrados de Aethora. El Bosque de Pinos de Plata guarda el más antiguo de estos hilos — un telar de tejedor congelado en el tiempo bajo sus raíces."
+    },
+    "blightEra": {
+      "title": "La Era de la Plaga",
+      "content": "Después de la caída del imperio, una oscuridad corrosiva se filtró de las ruinas de Eldridge. La Plaga distorsionó bosques, envenenó aguas, y convirtió amigos en enemigos. Fue la Edad de Ceniza — un tiempo donde sobrevivir importaba más que la gloria, y las leyendas eran hechas por aquellos que se negaban a rendirse."
+    },
+    "reclamation": {
+      "title": "La Era de la Recuperación",
+      "content": "Del ceniza surgieron nuevos reinos. Valerion reclaimó su trono. Dawnshire se convirtió en refugio para quienes buscaban paz. El Desierto Fragmentado sanó lentamente bajo la guardia de almas valientes dispuestas a aventurarse en la corrupción. Hoy, Aethora entra en una nueva era — una donde los mortales dan forma a su propio destino."
+    },
+    "orderOfEternity": {
+      "title": "Orden de la Eternidad",
+      "content": "La Orden de la Eternidad guarda los pasos del norte y los secretos antiguos de Frosthold. Sus caballeros hacen votos de silencio y servicio, creyendo que algunas verdades son demasiado poderosas para palabras. Buscan el Corazón de Aethora — la fuente mítica de toda la energía de las líneas de energía."
+    },
+    "wanderersGuild": {
+      "title": "Gremio de Caminantes",
+      "content": "Fundado en Dawnshire, el Gremio de Caminantes ayuda a los viajeros a navegar los caminos y misterios de Aethora. Sus miembros van desde guías simples hasta exploradores legendarios que han mapeado los confines más lejanos del reino. El símbolo del gremio — una rosa náutica entrelazada con una enredadera — representa su creencia de que cada camino conduce al crecimiento."
+    },
+    "embercourt": {
+      "title": "Corte de Brasas",
+      "content": "En las profundidades de Emberwood, la Corte de Brasas cuida la llama eterna que mantiene a raya la plaga. Sus guerreros, llamados Guardias de Ceniza, se someten a pruebas de fuego para probar su valía. Creen que la destrucción y la creación son dos caras de la misma moneda — que para construir algo nuevo, primero hay que deshacerse de lo viejo."
+    },
+    "observatory": {
+      "title": "El Observatorio",
+      "content": "Asentado en los Acantilados de Viento Herido, el Observatorio es el punto más alto de Aethora. Antiguos astrónomos lo usaron para rastrear los movimientos de cuerpos celestes y predecir las mareas mágicas. Se dice que los mapas estelares del Observatorio revelan no solo la posición de las estrellas, sino la posición del destino mismo."
+    },
+    "silentTower": {
+      "title": "La Torre Silenciosa",
+      "content": "En el corazón de Eldridge se yergue una torre que no hace ningún sonido. Los pájaros no anidan allí. El viento no silba a través de sus ventanas. Quienes entran reportan escuchar susurros del propio pasado — voces que creían olvidadas. La Torre Silenciosa es el mayor misterio de Eldridge, y algunos dicen que guarda la clave para comprender la plaga misma."
+    },
+    "heartStone": {
+      "title": "La Piedra Corazón",
+      "content": "En el centro del reino, escondida bajo Frosthold, yace la Piedra Corazón — un cristal del tamaño de una montaña que late con el ritmo de Aethora misma. Es la fuente de toda energía mágica en el reino, y la razón por la que algunos lugares se sienten vivos con poder. Las leyendas dicen que quien sostenga la Piedra Corazón puede remodelar el mundo, pero la responsabilidad es demasiado grande para cualquier mortal."
+    },
+    "kingOfValerion": {
+      "title": "El Rey de Valerion",
+      "content": "El Rey gobierna desde el Palacio Dorado en Valerion, la joya más brillante del reino. Su linaje se remonta al Primer Imperio, y su sabiduría es buscada por gobernantes en todo el reino. Sin embargo, lleva una carga — el conocimiento de que un día, la Piedra Corazón llamará a un nuevo guardián, y el rey debe estar listo para pasar la antorcha."
+    },
+    "adventurerOrigins": {
+      "title": "El Camino del Aventurero",
+      "content": "Cada gran héroe comienza como un viajero. Las colinas ondulantes y pueblos pacíficos de Dawnshire fomentan a quienes sueñan con algo más que una vida tranquila. El Camino del Aventurero enseña que el coraje no es la ausencia de miedo, sino la decisión de que algo más es más importante que el miedo."
+    },
+    "scholarResearch": {
+      "title": "La Investigación del Erudito",
+      "content": "En las bibliotecas del Bosque de Pinos de Plata, los eruditos estudian los textos antiguos dejados por los tejedores. Buscan comprender la magia que fluye a través de Aethora — no para controlarla, sino para cooperar con ella. El papel del erudito es preservar el conocimiento y asegurar que cada generación se construya sobre la anterior."
+    },
+    "sageWisdom": {
+      "title": "La Sabiduría del Sabio",
+      "content": "El Sabio de los Acantilados de Viento Herido ha vigilado sobre Aethora durante siglos, acumulando sabiduría como otros acumulan riqueza. Las enseñanzas del sabio enfatizan la paciencia, la observación, y la comprensión de que el mayor poder viene de saber cuándo no actuar. En la torre del sabio, una sola vela ha ardido por cien años — prueba de que las cosas pequeñas pueden iluminar la gran oscuridad."
+    },
+    "heroDestiny": {
+      "title": "El Destino del Héroe",
+      "content": "La leyenda habla de un héroe que algún día unirá el reino — no mediante conquista, sino mediante el ejemplo. Este héroe demostrará que la fuerza y la bondad no son opuestos, que la disciplina y la compasión pueden coexistir. El destino del héroe no está escrito en piedra, sino forjado de nuevo por cada elección hecha al servicio de los demás."
+    },
+    "hakariOrigin": {
+      "title": "El Origen de Hakari",
+      "content": "Hakari surgió de las brasas de Emberwood como una chispa de potencial puro. No exactamente mortal, no exactamente espíritu — Hakari existe en el espacio entre, trayendo alegría y aliento donde el camino se vuelve empinado. Corte de Brasas ve a Hakari como un signo de que la llama eterna aún arde con fuerza."
+    },
+    "miriOrigin": {
+      "title": "El Origen de Miri",
+      "content": "Miri vino de los hilos plateados del telar antiguo bajo el Bosque de Pinos de Plata — una manifestación de la creatividad de los tejedores. Miri representa el lado juguetón y curioso de la magia: la creencia de que asombrarse no es infantil, sino esencial. Donde Hakari trae coraje, Miri trae deleite."
+    }
   }
 }

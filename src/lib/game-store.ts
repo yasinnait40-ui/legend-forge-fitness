@@ -1,7 +1,15 @@
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { notifyStatsChanged, queueActivity } from "./cloud-sync";
-import { ACHIEVEMENTS, levelFromXp, STAT_CAP, type AchievementContext, type StatKey } from "./game-data";
+import {
+  ACHIEVEMENTS,
+  ACHIEVEMENT_REWARDS,
+  itemById,
+  levelFromXp,
+  STAT_CAP,
+  type AchievementContext,
+  type StatKey,
+} from "./game-data";
 
 export interface WorkoutLogEntry {
   date: string;
@@ -27,6 +35,7 @@ export interface GameState {
   activityLog: ActivityEntry[];
   achievements: string[];
   equipment: Record<"weapon" | "armor" | "relic", string>;
+  inventory: string[];
   totalQuests: number;
   totalTrials: number;
 }
@@ -44,6 +53,7 @@ const DEFAULT_STATE: GameState = {
   activityLog: [],
   achievements: [],
   equipment: { weapon: "worn-iron-blade", armor: "travelers-garb", relic: "cracked-mana-stone" },
+  inventory: ["worn-iron-blade", "travelers-garb", "cracked-mana-stone"],
   totalQuests: 0,
   totalTrials: 0,
 };
@@ -256,6 +266,14 @@ function applyAward(
     (a) => !next.achievements.includes(a.id) && a.test(next),
   ).map((a) => a.id);
   next.achievements = [...next.achievements, ...unlocked];
+
+  // Grant achievement rewards
+  for (const achId of unlocked) {
+    const rewardItemId = ACHIEVEMENT_REWARDS[achId];
+    if (rewardItemId && !next.inventory.includes(rewardItemId)) {
+      next.inventory = [...next.inventory, rewardItemId];
+    }
+  }
 
   const newLevel = levelFromXp(next.xp);
   return { next, unlocked, leveledUp: newLevel > prevLevel, newLevel };
@@ -531,8 +549,24 @@ function legacyCompleteTrial(
   };
 }
 
-export function equipItem(slot: "weapon" | "armor" | "relic", itemId: string) {
+export function equipItem(slot: "weapon" | "armor" | "relic", itemId: string): boolean {
+  // Validate ownership
+  if (!hasItem(itemId)) {
+    console.warn("[game-store] Cannot equip item not in inventory:", itemId);
+    return false;
+  }
+  const item = itemById(itemId);
+  if (!item || item.slot !== slot) {
+    console.warn("[game-store] Item does not belong to slot:", itemId, slot);
+    return false;
+  }
+  const itemLevel = levelFromXp(state.xp);
+  if (itemLevel < item.levelReq) {
+    console.warn("[game-store] Item level requirement not met:", itemId, item.levelReq, itemLevel);
+    return false;
+  }
   commit({ ...state, equipment: { ...state.equipment, [slot]: itemId } });
+  return true;
 }
 
 export function resetLegend() {
@@ -540,5 +574,24 @@ export function resetLegend() {
     ...DEFAULT_STATE,
     stats: { ...DEFAULT_STATE.stats },
     equipment: { ...DEFAULT_STATE.equipment },
+    inventory: [...DEFAULT_STATE.inventory],
   });
+}
+
+/** Add an item to inventory if not already owned. Does not grant by default - used for reward distribution. */
+export function addToInventory(itemId: string): boolean {
+  if (state.inventory.includes(itemId)) return false;
+  const next: GameState = { ...state, inventory: [...state.inventory, itemId] };
+  // Auto-equip if this is a weapon/armor/relic and slot is empty or same as current
+  const item = itemById(itemId);
+  if (item) {
+    next.equipment = { ...next.equipment, [item.slot]: itemId };
+  }
+  commit(next);
+  return true;
+}
+
+/** Check if player owns an item */
+export function hasItem(itemId: string): boolean {
+  return state.inventory.includes(itemId);
 }

@@ -28,7 +28,9 @@ function SettingsPage() {
   const { t } = useTranslation();
   const { muted, volume } = useSound();
   const [, forceUpdate] = useState(0);
-  const [session, setSession] = useState<Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"] | null>(null);
+  const [session, setSession] = useState<
+    Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"] | null
+  >(null);
   const currentLang = i18n.language?.split("-")[0] ?? "en";
 
   useEffect(() => {
@@ -61,31 +63,31 @@ function SettingsPage() {
         <RuneHeading>{t("settings.title", "Settings")}</RuneHeading>
       </header>
 
-      <div className="mt-8 flex flex-col items-center gap-4">
-        <div className="relative h-64 w-full max-w-xs">
-          <div className="absolute inset-0 flex items-center justify-center rounded-lg border-2 border-primary/50 bg-gradient-to-b from-primary/12 to-secondary/35">
-            <div className="flex flex-col items-center gap-2 text-center">
-              <img
-                src="/characters/Maid.png"
-                alt="The Maid"
-                className="h-48 w-auto max-w-full rounded-md object-contain"
-                loading="lazy"
-              />
-              <p className="font-display text-xs uppercase tracking-widest text-primary">
-                The Maid
-              </p>
-              <p className="font-serif text-xs italic text-foreground/70">
-                Chamber Steward
-              </p>
-            </div>
+      <div className="mt-6 flex flex-col items-center gap-3">
+        {/* Maid character with RPG framing */}
+        <div className="relative flex flex-col items-center">
+          {/* Aura glow behind character */}
+          <div className="absolute inset-0 -inset-x-12 -top-8 -bottom-4 rounded-full bg-[radial-gradient(ellipse_at_center,_color-mix(in_oklab,_var(--primary)_12%,_transparent)_0%,_transparent_70%)] opacity-50 pointer-events-none" />
+          <div className="relative">
+            <img
+              src="/characters/Maid.png"
+              alt="The Maid"
+              className="h-44 w-auto max-w-full object-contain char-breathe drop-shadow-[0_0_18px_color-mix(in_oklab,_var(--primary)_20%,_transparent)]"
+              loading="lazy"
+            />
+            {/* Ground shadow */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-2 rounded-full bg-[radial-gradient(ellipse,_rgb(40_30_10/_0.2),_transparent_70%)] blur-[3px]" />
           </div>
         </div>
-        <div className="w-full max-w-sm rounded-lg border-2 border-primary/40 bg-gradient-to-b from-card/90 to-secondary/40 p-4 shadow-[0_8px_24px_-14px_rgb(60_45_15/0.5)]">
-          <p className="font-display text-[0.65rem] uppercase tracking-widest text-primary">
+        {/* RPG dialogue bubble */}
+        <div className="relative w-full max-w-sm rounded-lg border-2 border-primary/40 bg-gradient-to-b from-card/90 to-secondary/40 p-4 shadow-[0_8px_24px_-14px_rgb(60_45_15/0.5)]">
+          <span className="font-display text-[0.65rem] uppercase tracking-widest text-primary">
             The Maid
-          </p>
-          <p className="font-serif text-sm leading-6 text-foreground">
-            Your chamber is ready, my lord. The realm awaits your commands.
+          </span>
+          <span className="ml-2 text-[0.58rem] text-muted-foreground italic">Chamber Steward</span>
+          <p className="font-serif mt-1.5 text-sm leading-6 text-foreground">
+            Okaeri, goshujin-sama. Your chamber has been prepared. Shall we review the realm's
+            settings?
           </p>
           <div className="mt-3 flex justify-end">
             <div className="h-2 w-2 rotate-45 border-b-2 border-r-2 border-primary/50" />
@@ -98,31 +100,23 @@ function SettingsPage() {
           <p className="font-semibold">{t("settings.account", "Account")}</p>
           {session ? (
             <div className="flex items-center justify-between gap-3">
-              <p className="text-sm text-muted-foreground truncate">
-                {session.user.email}
-              </p>
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="btn-rune-ghost !w-auto px-3 py-2 text-xs"
-            >
-              <LogOut className="h-4 w-4" />
-              {t("settings.signOut", "Sign Out")}
-            </button>
+              <p className="text-sm text-muted-foreground truncate">{session.user.email}</p>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="btn-rune-ghost !w-auto px-3 py-2 text-xs"
+              >
+                <LogOut className="h-4 w-4" />
+                {t("settings.signOut", "Sign Out")}
+              </button>
             </div>
           ) : (
             <div className="flex flex-wrap gap-2">
-              <a
-                href="/auth"
-                className="btn-rune-ghost !w-auto px-3 py-2 text-xs"
-              >
+              <a href="/auth" className="btn-rune-ghost !w-auto px-3 py-2 text-xs">
                 <LogIn className="h-4 w-4" />
                 {t("settings.signIn", "Sign In")}
               </a>
-              <a
-                href="/auth"
-                className="btn-gold !w-auto px-3 py-2 text-xs"
-              >
+              <a href="/auth" className="btn-gold !w-auto px-3 py-2 text-xs">
                 <UserPlus className="h-4 w-4" />
                 {t("settings.createAccount", "Create Account")}
               </a>

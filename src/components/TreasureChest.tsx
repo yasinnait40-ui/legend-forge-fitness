@@ -32,10 +32,7 @@ export function TreasureChest({
               {t("treasure.title")}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">{t("treasure.invitation")}</p>
-            <button
-              onClick={open}
-              className="btn-gold mt-5"
-            >
+            <button onClick={open} className="btn-gold mt-5">
               {t("treasure.open")}
             </button>
           </>
@@ -54,10 +51,7 @@ export function TreasureChest({
                 ? t("treasure.xp", { amount: reward.amount })
                 : t("treasure.cosmetic")}
             </p>
-            <button
-              onClick={onClose}
-              className="btn-rune-ghost chest-reveal-text relative mt-5"
-            >
+            <button onClick={onClose} className="btn-rune-ghost chest-reveal-text relative mt-5">
               {t("treasure.claim")}
             </button>
           </>

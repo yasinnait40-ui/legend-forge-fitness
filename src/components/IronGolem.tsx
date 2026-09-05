@@ -63,7 +63,10 @@ export function IronGolem() {
           </p>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">
             {defeated
-              ? t("boss.defeated", "The sentinel has crumbled. The mountain pass is yours, champion.")
+              ? t(
+                  "boss.defeated",
+                  "The sentinel has crumbled. The mountain pass is yours, champion.",
+                )
               : IRON_GOLEM.epithet}
           </p>
         </div>

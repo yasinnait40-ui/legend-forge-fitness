@@ -63,6 +63,7 @@ function BossPage() {
     setTimeout(() => setFlashing(false), 200);
     setTimeout(() => setHits((prev) => prev.filter((h) => h.id !== hitId)), 1200);
 
+    if (!boss) return;
     const killedNow = damageBoss(boss.id, boss.maxHp, trial.xp);
     if (killedNow) {
       playSound("levelUp");
@@ -113,7 +114,9 @@ function BossPage() {
           borderColor: defeated
             ? "color-mix(in oklab, var(--muted-foreground) 50%, transparent)"
             : "color-mix(in oklab, #b23b3b 55%, transparent)",
-          boxShadow: defeated ? "none" : "0 0 30px -6px color-mix(in oklab, #b23b3b 55%, transparent)",
+          boxShadow: defeated
+            ? "none"
+            : "0 0 30px -6px color-mix(in oklab, #b23b3b 55%, transparent)",
         }}
       >
         <img
@@ -167,7 +170,9 @@ function BossPage() {
               background: defeated
                 ? "var(--muted-foreground)"
                 : "linear-gradient(90deg, color-mix(in oklab, #b23b3b 60%, black 10%), #b23b3b)",
-              boxShadow: defeated ? "none" : "0 0 14px color-mix(in oklab, #b23b3b 65%, transparent)",
+              boxShadow: defeated
+                ? "none"
+                : "0 0 14px color-mix(in oklab, #b23b3b 65%, transparent)",
             }}
           />
         </div>
@@ -176,7 +181,10 @@ function BossPage() {
       {!defeated && (
         <>
           <p className="mx-auto mt-6 max-w-xs text-center text-xs text-muted-foreground">
-            {t("boss.instructions", "Every trial you conquer strikes this foe. Choose your attack.")}
+            {t(
+              "boss.instructions",
+              "Every trial you conquer strikes this foe. Choose your attack.",
+            )}
           </p>
           <div className="mt-4 space-y-4">
             {TRIALS.map((trial) => {
@@ -191,7 +199,9 @@ function BossPage() {
                     aria-expanded={open}
                   >
                     <div className="min-w-0">
-                      <h3 className="font-display text-base font-bold tracking-[0.05em]">{tt.name}</h3>
+                      <h3 className="font-display text-base font-bold tracking-[0.05em]">
+                        {tt.name}
+                      </h3>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         <span className="flex" aria-label={`Difficulty ${trial.difficulty} of 5`}>
                           {Array.from({ length: 5 }, (_, i) => (
@@ -199,7 +209,9 @@ function BossPage() {
                               key={i}
                               className={cn(
                                 "h-3.5 w-3.5",
-                                i < trial.difficulty ? "fill-primary text-primary" : "text-muted-foreground/40",
+                                i < trial.difficulty
+                                  ? "fill-primary text-primary"
+                                  : "text-muted-foreground/40",
                               )}
                             />
                           ))}
@@ -286,15 +298,23 @@ function BossPage() {
           {/* Radiating gold rings burst */}
           <div className="pointer-events-none absolute flex items-center justify-center">
             <span className="burst-ring absolute h-40 w-40 rounded-full border-2 border-primary" />
-            <span className="burst-ring absolute h-40 w-40 rounded-full border-2 border-primary" style={{ animationDelay: "0.4s" }} />
-            <span className="burst-ring absolute h-40 w-40 rounded-full border-2 border-primary" style={{ animationDelay: "0.8s" }} />
+            <span
+              className="burst-ring absolute h-40 w-40 rounded-full border-2 border-primary"
+              style={{ animationDelay: "0.4s" }}
+            />
+            <span
+              className="burst-ring absolute h-40 w-40 rounded-full border-2 border-primary"
+              style={{ animationDelay: "0.8s" }}
+            />
           </div>
 
           <div className="relative max-w-sm rounded-2xl border-2 border-primary bg-card p-6 text-center shadow-[0_0_60px_-10px_var(--primary)]">
             <p className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
               {t("boss.slain", "Slain")}
             </p>
-            <h2 className="text-glow-gold font-display mt-2 text-2xl font-black text-primary">{boss.name}</h2>
+            <h2 className="text-glow-gold font-display mt-2 text-2xl font-black text-primary">
+              {boss.name}
+            </h2>
             <button onClick={() => setJustDefeated(false)} className="btn-gold mt-5 !w-auto px-8">
               {t("boss.claim", "Claim Victory")}
             </button>
@@ -303,4 +323,4 @@ function BossPage() {
       )}
     </div>
   );
-                  }
+}

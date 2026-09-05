@@ -129,9 +129,11 @@ function getCtx(): AudioContext | null {
   if (!audioCtx) {
     const AudioContextCtor =
       window.AudioContext ??
-      (window as unknown as {
-        webkitAudioContext?: typeof AudioContext;
-      }).webkitAudioContext;
+      (
+        window as unknown as {
+          webkitAudioContext?: typeof AudioContext;
+        }
+      ).webkitAudioContext;
 
     if (!AudioContextCtor) return null;
 
@@ -188,10 +190,7 @@ function tone(
   osc.frequency.setValueAtTime(freq, startTime);
 
   envelope.gain.setValueAtTime(0.0001, startTime);
-  envelope.gain.linearRampToValueAtTime(
-    peakGain,
-    startTime + Math.min(0.02, duration * 0.2),
-  );
+  envelope.gain.linearRampToValueAtTime(peakGain, startTime + Math.min(0.02, duration * 0.2));
   envelope.gain.exponentialRampToValueAtTime(0.001, endTime);
 
   osc.connect(envelope);
@@ -417,10 +416,7 @@ function playWizardIntro(ctx: AudioContext, master: GainNode) {
   osc.type = "triangle";
 
   osc.frequency.setValueAtTime(240 + rand(-10, 10), startTime);
-  osc.frequency.exponentialRampToValueAtTime(
-    720 + rand(-20, 20),
-    startTime + 0.35,
-  );
+  osc.frequency.exponentialRampToValueAtTime(720 + rand(-20, 20), startTime + 0.35);
 
   envelope.gain.setValueAtTime(0.0001, startTime);
   envelope.gain.linearRampToValueAtTime(0.3, startTime + 0.04);
@@ -449,10 +445,7 @@ function playAdventurerIntro(ctx: AudioContext, master: GainNode) {
   osc.type = "square";
 
   osc.frequency.setValueAtTime(1600 + rand(-100, 100), startTime);
-  osc.frequency.exponentialRampToValueAtTime(
-    420,
-    startTime + 0.18,
-  );
+  osc.frequency.exponentialRampToValueAtTime(420, startTime + 0.18);
 
   envelope.gain.setValueAtTime(0.0001, startTime);
   envelope.gain.linearRampToValueAtTime(0.25, startTime + 0.005);
@@ -478,10 +471,7 @@ function playLightIntro(ctx: AudioContext, master: GainNode) {
   tone(1320 + rand(-20, 20), 0.17, 0.3, ctx, master, "triangle", 0.14);
 }
 
-type CharacterIntroFn = (
-  ctx: AudioContext,
-  master: GainNode,
-) => void;
+type CharacterIntroFn = (ctx: AudioContext, master: GainNode) => void;
 
 /**
  * Keep these IDs compatible with the existing character system.
@@ -537,9 +527,7 @@ export function playCharacterIntro(characterId: string) {
     try {
       const master = createMaster(ctx, 0.45);
 
-      const intro =
-        CHARACTER_INTROS[characterId] ??
-        playLightIntro;
+      const intro = CHARACTER_INTROS[characterId] ?? playLightIntro;
 
       intro(ctx, master);
     } catch {
@@ -547,4 +535,3 @@ export function playCharacterIntro(characterId: string) {
     }
   });
 }
-

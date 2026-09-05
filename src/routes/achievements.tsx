@@ -80,7 +80,7 @@ function AchievementsPage() {
         </p>
       </header>
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-6 space-y-3 rpg-stagger-in">
         {ACHIEVEMENTS.map((a) => {
           const unlocked = game.achievements.includes(a.id);
           const Icon = ACHIEVEMENT_ICONS[a.icon as keyof typeof ACHIEVEMENT_ICONS];
@@ -89,7 +89,10 @@ function AchievementsPage() {
           return (
             <RunePanel
               key={a.id}
-              className={cn("flex items-center gap-4", !unlocked && "opacity-55")}
+              className={cn(
+                "flex items-center gap-4 achievement-unlocked",
+                !unlocked && "opacity-55",
+              )}
             >
               <div
                 className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2"
@@ -112,20 +115,18 @@ function AchievementsPage() {
               <div className="min-w-0 flex-1">
                 <h3 className="font-display text-sm font-bold tracking-[0.08em]">{at.name}</h3>
                 <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{at.flavor}</p>
-                <span
-                  className="rune-chip mt-2"
-                  style={
-                    unlocked
-                      ? {
-                          color,
-                          borderColor: `color-mix(in oklab, ${color} 45%, transparent)`,
-                          background: `color-mix(in oklab, ${color} 8%, transparent)`,
-                        }
-                      : undefined
-                  }
-                >
-                  {g.rarity(a.rarity)}
-                </span>
+                {unlocked && (
+                  <span
+                    className="rune-chip mt-1.5"
+                    style={{
+                      color,
+                      borderColor: `color-mix(in oklab, ${color} 45%, transparent)`,
+                      background: `color-mix(in oklab, ${color} 8%, transparent)`,
+                    }}
+                  >
+                    {g.rarity(a.rarity)}
+                  </span>
+                )}
               </div>
             </RunePanel>
           );

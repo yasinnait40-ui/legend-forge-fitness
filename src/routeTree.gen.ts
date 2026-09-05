@@ -14,6 +14,7 @@ import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CharacterRouteImport } from './routes/character'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as QuestsRouteImport } from './routes/quests'
@@ -22,6 +23,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrialsRouteImport } from './routes/trials'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as BossBossIdRouteImport } from './routes/boss.$bossId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +48,11 @@ const CharacterRoute = CharacterRouteImport.update({
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -88,6 +95,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/callback',
   getParentRoute: () => AuthRoute,
 } as any)
+const BossBossIdRoute = BossBossIdRouteImport.update({
+  id: '/boss/$bossId',
+  path: '/boss/$bossId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -95,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/map': typeof MapRoute
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
@@ -103,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/boss/$bossId': typeof BossBossIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +124,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/map': typeof MapRoute
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
@@ -118,6 +133,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/boss/$bossId': typeof BossBossIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,6 +142,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
   '/guide': typeof GuideRoute
+  '/map': typeof MapRoute
   '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/quests': typeof QuestsRoute
@@ -134,6 +151,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/boss/$bossId': typeof BossBossIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -143,6 +161,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/map'
     | '/privacy'
     | '/progress'
     | '/quests'
@@ -151,6 +170,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/trials'
     | '/auth/callback'
+    | '/boss/$bossId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -158,6 +178,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/map'
     | '/privacy'
     | '/progress'
     | '/quests'
@@ -166,6 +187,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/trials'
     | '/auth/callback'
+    | '/boss/$bossId'
   id:
     | '__root__'
     | '/'
@@ -173,6 +195,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/character'
     | '/guide'
+    | '/map'
     | '/privacy'
     | '/progress'
     | '/quests'
@@ -181,6 +204,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/trials'
     | '/auth/callback'
+    | '/boss/$bossId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,6 +213,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   CharacterRoute: typeof CharacterRoute
   GuideRoute: typeof GuideRoute
+  MapRoute: typeof MapRoute
   PrivacyRoute: typeof PrivacyRoute
   ProgressRoute: typeof ProgressRoute
   QuestsRoute: typeof QuestsRoute
@@ -196,6 +221,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   TermsRoute: typeof TermsRoute
   TrialsRoute: typeof TrialsRoute
+  BossBossIdRoute: typeof BossBossIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -233,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -291,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/boss/$bossId': {
+      id: '/boss/$bossId'
+      path: '/boss/$bossId'
+      fullPath: '/boss/$bossId'
+      preLoaderRoute: typeof BossBossIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -310,6 +350,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   CharacterRoute: CharacterRoute,
   GuideRoute: GuideRoute,
+  MapRoute: MapRoute,
   PrivacyRoute: PrivacyRoute,
   ProgressRoute: ProgressRoute,
   QuestsRoute: QuestsRoute,
@@ -317,6 +358,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   TermsRoute: TermsRoute,
   TrialsRoute: TrialsRoute,
+  BossBossIdRoute: BossBossIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

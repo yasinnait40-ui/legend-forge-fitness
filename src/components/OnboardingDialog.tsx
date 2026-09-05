@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dumbbell, Flame, HeartPulse, Timer, TrendingDown } from "lucide-react";
-import {
-  completeOnboarding,
-  useOnboarding,
-  type GoalId,
-} from "@/lib/onboarding";
+import { completeOnboarding, useOnboarding, type GoalId } from "@/lib/onboarding";
 
 const GOALS: { id: GoalId; icon: typeof Flame; key: string }[] = [
   { id: "lose-fat", icon: TrendingDown, key: "onboarding.goal.loseFat" },
@@ -31,7 +27,8 @@ export function OnboardingDialog() {
 
   if (profile) return null;
 
-  const goalLabel = (g: GoalId) => t(GOALS.find((x) => x.id === g)?.key ?? "onboarding.goal.generalHealth");
+  const goalLabel = (g: GoalId) =>
+    t(GOALS.find((x) => x.id === g)?.key ?? "onboarding.goal.generalHealth");
 
   return (
     <div
@@ -40,15 +37,20 @@ export function OnboardingDialog() {
       aria-modal="true"
       aria-label={t("onboarding.title", "Welcome, Traveler")}
     >
-      <div className="rune-panel w-full max-w-md p-5">
+      {/* Ambient glow behind onboarding */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_50%_10%,_color-mix(in_oklab,_var(--primary)_18%,_transparent)_0%,_transparent_60%)]" />
+      <div className="rune-panel w-full max-w-md p-5 relative">
         <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.34em] text-accent">
-          {t("onboarding.kicker", "Your Legend Begins")}
+          {t("onboarding.kicker", "The Realm Beckons")}
         </p>
-        <h2 className="font-display mt-1 text-2xl font-black tracking-[0.06em] text-foreground">
+        <h2 className="font-display mt-1 text-2xl font-black tracking-[0.06em] textgorn">
           {t("onboarding.title", "Welcome, Traveler")}
         </h2>
         <p className="mt-1.5 text-xs leading-snug text-muted-foreground">
-          {t("onboarding.intro", "Four quick answers shape your first quest. No account needed yet.")}
+          {t(
+            "onboarding.intro",
+            "Four quick answers shape your first quest. No account needed yet.",
+          )}
         </p>
 
         <label className="mt-4 block">
@@ -151,7 +153,10 @@ export function OnboardingDialog() {
           {t("onboarding.start", "Forge My First Quest")}
         </button>
         <p className="mt-2 text-center text-[0.62rem] italic text-muted-foreground">
-          {t("onboarding.privacy", "Your answers stay on this device until you bind a cloud legend.")}
+          {t(
+            "onboarding.privacy",
+            "Your answers stay on this device until you bind a cloud legend.",
+          )}
         </p>
       </div>
     </div>

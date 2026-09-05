@@ -429,6 +429,18 @@ export interface EquipmentItem {
   icon: string;
 }
 
+// Achievement reward items - unlocked when achievements are earned
+export const ACHIEVEMENT_REWARDS: Record<string, string> = {
+  "rune-awakened": "emberforged-sword",
+  "seven-day-flame": "whispering-amulet",
+  "iron-will": "squires-plate",
+  "dragon-slayer": "dragonfang-greatblade",
+  stormheart: "eye-of-the-observatory",
+  "legendary-discipline": "celestial-warplate",
+  "titan-physique": "heart-of-aethora",
+  unbroken: "moonlit-runesaber",
+};
+
 export const EQUIPMENT: EquipmentItem[] = [
   // Weapons
   {

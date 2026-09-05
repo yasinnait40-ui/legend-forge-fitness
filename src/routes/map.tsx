@@ -42,6 +42,8 @@ function MapPage() {
         className="relative mx-auto mt-6 aspect-[2/3] w-full max-w-md overflow-hidden rounded-2xl border-2 shadow-[0_-8px_30px_-12px_rgb(0_0_0/0.5)]"
         style={{ borderColor: "color-mix(in oklab, var(--primary) 55%, transparent)" }}
       >
+        {/* Ambient glow behind the map */}
+        <div className="absolute inset-0 -z-10 rounded-2xl bg-[radial-gradient(ellipse_at_30%_20%,_color-mix(in_oklab,_var(--primary)_20%,_transparent)_0%,_transparent_60%)] pointer-events-none" />
         {/* Base illustrated map */}
         <img
           src={worldMapImg}
@@ -51,7 +53,7 @@ function MapPage() {
         />
 
         {/* Darken overall for legibility of markers */}
-        <div className="pointer-events-none absolute inset-0 bg-black/10" />
+        <div className="pointer-events-none absolute inset-0 bg-black/8" />
 
         {WORLD_REGIONS.map((region) => {
           const unlocked = isRegionUnlocked(region, game.xp);
@@ -68,8 +70,7 @@ function MapPage() {
                   className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 backdrop-blur-md"
                   style={{
                     background: "rgba(20, 18, 12, 0.55)",
-                    WebkitMaskImage:
-                      "radial-gradient(circle, black 45%, transparent 75%)",
+                    WebkitMaskImage: "radial-gradient(circle, black 45%, transparent 75%)",
                     maskImage: "radial-gradient(circle, black 45%, transparent 75%)",
                   }}
                 />

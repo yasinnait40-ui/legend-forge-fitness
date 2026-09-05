@@ -50,10 +50,7 @@ function saveQueue() {
 }
 
 /** Queue an activity completion for authoritative replay. Returns false if it was already queued. */
-export function queueActivity(
-  kind: "quest" | "trial",
-  activityId: string,
-): boolean {
+export function queueActivity(kind: "quest" | "trial", activityId: string): boolean {
   const today = todayKey();
   if (pendingQueue.some((p) => p.kind === kind && p.activityId === activityId && p.day === today)) {
     return false;
@@ -78,10 +75,13 @@ export async function replayPendingActivities(): Promise<void> {
   const remaining: PendingActivity[] = [];
   for (const item of pendingQueue) {
     try {
-      const { data, error } = await supabase.rpc("complete_activity" as never, {
-        p_kind: item.kind,
-        p_activity_id: item.activityId,
-      } as never);
+      const { data, error } = await supabase.rpc(
+        "complete_activity" as never,
+        {
+          p_kind: item.kind,
+          p_activity_id: item.activityId,
+        } as never,
+      );
       // "duplicate" means the server already has it — success for our purposes.
       if (error || !data) {
         // Keep queued for a later retry unless the activity is now stale (older day).
@@ -93,10 +93,7 @@ export async function replayPendingActivities(): Promise<void> {
       if (!result.duplicate && typeof result.xp === "number") {
         // Adopt the authoritative XP if the server is ahead of the local estimate.
         if (result.xp > getGameState().xp) {
-          replaceGameState(
-            { ...getGameState(), xp: result.xp, lastActiveDate: item.day },
-            false,
-          );
+          replaceGameState({ ...getGameState(), xp: result.xp, lastActiveDate: item.day }, false);
         }
       }
     } catch {
@@ -205,7 +202,7 @@ async function pullAndMerge(userId: string) {
       ? (data.achievements as string[]).concat(
           local.achievements.filter((a) => !(data.achievements as string[]).includes(a)),
         )
-    : local.achievements,
+      : local.achievements,
     totalQuests: Math.max(data.total_quests ?? 0, local.totalQuests),
     totalTrials: Math.max(data.total_trials ?? 0, local.totalTrials),
   });

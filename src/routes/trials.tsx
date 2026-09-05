@@ -36,6 +36,21 @@ export const Route = createFileRoute("/trials")({
   component: TrialsPage,
 });
 
+/* Dramatic trial lore — short flavor text for each trial */
+const TRIAL_LORE: Record<string, string> = {
+  "iron-chest":
+    "The forge burns hottest for those who shape iron with bare hands. The bulwark of the upper body begins here.",
+  "ember-core":
+    "At the center of every warrior lies a fire. This rite stokes that flame until it cannot be ignored.",
+  "wardens-keep":
+    "The foundations of stone do not tremble. Neither should you. Build legs that carry legends.",
+  "stormwind-run": "The storm gathers on the horizon. Outrun it, and the open road is yours.",
+  "nightblade-mobility":
+    "Silence belongs to those who move without resistance. Bend, stretch, and the shadows will part.",
+  "dragon-slayer":
+    "Only legends finish this rite. The gauntlet spares no one — but those who survive are never forgotten.",
+};
+
 function TrialsPage() {
   const { t } = useTranslation();
   const g = useGameText();
@@ -76,11 +91,12 @@ function TrialsPage() {
       </header>
 
       <CharacterWelcome kind="scholar" />
-      <div className="mt-6 space-y-4">
+      <div className="mt-6 space-y-4 rpg-stagger-in">
         {TRIALS.map((trial) => {
           const isDone = done.includes(trial.id);
           const open = openId === trial.id;
           const tt = g.trial(trial);
+          const lore = TRIAL_LORE[trial.id];
           return (
             <RunePanel key={trial.id} className={cn(isDone && "border-primary/50")}>
               <button
@@ -91,16 +107,20 @@ function TrialsPage() {
                 <div className="min-w-0">
                   <h3 className="font-display text-base font-bold tracking-[0.05em]">{tt.name}</h3>
                   <p className="mt-0.5 text-xs italic text-muted-foreground">{tt.epithet}</p>
+                  {lore && <p className="quest-lore mt-1.5">{lore}</p>}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <span className="flex" aria-label={`Difficulty ${trial.difficulty} of 5`}>
+                    <span
+                      className="trial-difficulty"
+                      aria-label={`Difficulty ${trial.difficulty} of 5`}
+                    >
                       {Array.from({ length: 5 }, (_, i) => (
                         <Star
                           key={i}
                           className={cn(
                             "h-3.5 w-3.5",
                             i < trial.difficulty
-                              ? "fill-primary text-primary drop-shadow-[0_0_6px_var(--primary)]"
-                              : "text-muted-foreground/40",
+                              ? "fill-primary text-primary flame-active"
+                              : "text-muted-foreground/40 flame-inactive",
                           )}
                         />
                       ))}

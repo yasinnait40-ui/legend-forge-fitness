@@ -13,6 +13,11 @@ import { playCharacterIntro } from "@/lib/sound-store";
 
 export type FantasyCharacterKind = CharacterId | LegacyCharacterId;
 
+// Characters that should have the floating animation (companions, magical beings)
+const FLOATING_CHARACTERS: CharacterId[] = ["hakari", "miri", "sage"];
+// Characters that should have a breathing animation (alive, grounded NPCs)
+const BREATHING_CHARACTERS: CharacterId[] = ["king", "adventurer", "hero", "scholar"];
+
 export function FantasyCharacter({
   kind,
   dialogue,
@@ -104,6 +109,13 @@ export function FantasyCharacter({
   const name = t(character.nameKey);
   const role = t(character.roleKey);
 
+  // Determine animation class for the character figure
+  const figureAnimationClass = FLOATING_CHARACTERS.includes(id)
+    ? "char-float"
+    : BREATHING_CHARACTERS.includes(id)
+      ? "char-breathe"
+      : "";
+
   return (
     <aside
       className={`fantasy-character fantasy-character-${id} ${
@@ -117,14 +129,18 @@ export function FantasyCharacter({
       aria-label={`${name}, ${role}`}
     >
       <div className="fantasy-character-figure">
+        {/* Ambient aura glow behind the character */}
+        <div className="char-aura" aria-hidden="true" />
         <img
           src={character.artwork.src}
           alt={t(character.artwork.altKey)}
-          className="fantasy-character-art"
+          className={`fantasy-character-art ${figureAnimationClass}`}
           loading="eager"
           decoding="async"
           fetchPriority="high"
         />
+        {/* Ground shadow for physical presence */}
+        <div className="char-ground-shadow" aria-hidden="true" />
       </div>
 
       <button
@@ -142,16 +158,9 @@ export function FantasyCharacter({
           <small>{role}</small>
         </span>
 
-        {lines.length > 0 && (
-          <span className="fantasy-character-line">
-            {lines[lineIndex]}
-          </span>
-        )}
+        {lines.length > 0 && <span className="fantasy-character-line">{lines[lineIndex]}</span>}
 
-        <span
-          className="fantasy-character-continue"
-          aria-hidden="true"
-        >
+        <span className="fantasy-character-continue" aria-hidden="true">
           ▼
         </span>
       </button>

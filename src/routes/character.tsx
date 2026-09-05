@@ -34,6 +34,7 @@ import { EQUIPMENT, levelFromXp, levelProgress, STAT_ORDER, type EquipSlot } fro
 import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { hasItem } from "@/lib/game-store";
 
 export const Route = createFileRoute("/character")({
   head: () => ({
@@ -160,7 +161,7 @@ function CharacterPage() {
           <RuneHeading>{g.slot(slot)}</RuneHeading>
           <div className="mt-3 space-y-2">
             {EQUIPMENT.filter((i) => i.slot === slot).map((item) => {
-              const locked = level < item.levelReq;
+              const locked = level < item.levelReq || !hasItem(item.id);
               const equipped = game.equipment[slot] === item.id;
               const Icon = EQUIP_ICONS[item.icon as keyof typeof EQUIP_ICONS];
               return (
@@ -168,10 +169,12 @@ function CharacterPage() {
                   key={item.id}
                   disabled={locked || equipped}
                   onClick={() => {
-                    equipItem(slot, item.id);
-                    toast.success(`${g.item(item).name} ${t("character.equipped")}`, {
-                      description: g.item(item).flavor,
-                    });
+                    const success = equipItem(slot, item.id);
+                    if (success) {
+                      toast.success(`${g.item(item).name} ${t("character.equipped")}`, {
+                        description: g.item(item).flavor,
+                      });
+                    }
                   }}
                   className={cn(
                     "flex w-full items-center gap-3 rounded-md border px-3 py-2.5 text-left transition-all duration-200",

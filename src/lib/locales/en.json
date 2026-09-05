@@ -547,66 +547,67 @@
     },
     "actions": { "advance": "Advance dialogue", "dismiss": "Dismiss dialogue" },
     "companionsTitle": "Sacred Companions",
+    "companionsDesc": "Two sacred companions walk beside you on this journey.",
     "dialogue": {
       "king": {
-        "default": "Welcome, warrior. Your legend begins here.",
-        "new": "Your legend begins here.",
-        "levelUp": "A new chapter of your legend begins.",
-        "streak": "Your consistency honors the realm.",
-        "progress": "The realm sees your legend growing."
+        "default": "The road ahead is yours, adventurer. Take the first step.",
+        "new": "A new warrior enters the realm. The King has work for you.",
+        "levelUp": "Your strength has grown. A new chapter of your legend begins.",
+        "streak": "Your flame has survived another day. Guard it well.",
+        "progress": "The realm watches your legend take shape. Stand tall."
       },
       "adventurer": {
-        "default": "A new quest awaits, brave one.",
-        "new": "Your first quest is waiting at the guild.",
-        "levelUp": "Another quest conquered!",
-        "streak": "Your momentum is becoming a force of nature.",
-        "progress": "The guild has taken notice of your courage."
+        "default": "The wilds call to those brave enough to answer. Are you ready?",
+        "new": "First steps into the unknown — the best adventures start exactly like this.",
+        "levelUp": "The trail stretches further than you imagined. Keep climbing.",
+        "streak": "Day after day, you keep moving. That is the mark of a true adventurer.",
+        "progress": "The guild has noticed your name on every board. Well done."
       },
       "scholar": {
-        "default": "Study the rite, then test your limits.",
-        "new": "Observe carefully. Every trial teaches us something.",
-        "levelUp": "Your discipline is becoming measurable.",
-        "streak": "Consistent practice reveals the truest data.",
-        "progress": "Your results are forming a compelling record."
+        "default": "Review the data. The numbers do not lie — and neither does your body.",
+        "new": "Every journey begins with observation. Study the rites carefully.",
+        "levelUp": "Your metrics confirm what the runes already knew. You are growing.",
+        "streak": "Consistency reveals patterns that single efforts cannot. The data is clear.",
+        "progress": "Your results are forming a compelling record. The evidence speaks."
       },
       "sage": {
-        "default": "Ask, and I shall guide your next step.",
-        "new": "Every legend begins with a single deliberate step.",
-        "levelUp": "Your growing power reveals a deeper path.",
-        "streak": "Consistency is the oldest spell of mastery.",
-        "progress": "Your records offer a clear path forward."
+        "default": "The path reveals itself to those who walk it. What question weighs on you?",
+        "new": "Every legend begins with a single deliberate step. Yours starts now.",
+        "levelUp": "Your growing power reveals a deeper path. Walk it wisely.",
+        "streak": "Even the greatest sorcerers mastered one spell at a time. You are no different.",
+        "progress": "I have watched many heroes. Yours is a story worth reading."
       },
       "hero": {
-        "default": "Keep going. Your legend is yours to forge.",
-        "new": "The first step is already a victory.",
-        "levelUp": "A new chapter of your legend begins.",
-        "streak": "Your consistency grows stronger.",
-        "progress": "You are becoming the hero of your own story."
+        "default": "Your journey is your own. But you do not walk it alone.",
+        "new": "The first step is already a victory. I will be beside you for the rest.",
+        "levelUp": "A new level, a new challenge. And I know you will meet it.",
+        "streak": "The flame you carry grows brighter with each passing day.",
+        "progress": "You are becoming the hero this realm needs. Keep going."
       },
       "hakari": {
-        "default": "I will help you too.",
-        "new": "I will help you too.",
-        "levelUp": "Your legend shines brighter!",
-        "streak": "That streak is magical! Keep going!",
-        "progress": "I can feel your legend growing!"
+        "default": "I sense a spark in you! Let us follow it together.",
+        "new": "Oh! A new friend! I will walk beside you, always.",
+        "levelUp": "Your light grew stronger! I could feel it from here!",
+        "streak": "The same flame, burning brighter each day. That is real magic.",
+        "progress": "I am so proud of you! The realm is brighter because of your legend."
       },
       "miri": {
-        "default": "Your legend has a lovely spark.",
-        "new": "Let us make your first steps sparkle!",
-        "levelUp": "Another mark added to your legend.",
-        "streak": "Your steady flame is beautiful.",
-        "progress": "You are glowing brighter every day."
+        "default": "A gentle glow follows those who persevere. Yours is lovely.",
+        "new": "Welcome, new traveler. I will add a little sparkle to your path.",
+        "levelUp": "Another verse added to your legend. Each one more beautiful.",
+        "streak": "Steady as starlight, warm as dawn. Your consistency inspires me.",
+        "progress": "You shine a little brighter every day. The realm notices."
       }
     },
     "welcome": {
-      "king": "Welcome, warrior. Your journey begins now.",
-      "adventurer": "New quests await you at the guild.",
-      "scientist": "Let's see what your body can achieve today.",
-      "wizard": "Ask, and I shall guide you.",
-      "sacred": "The sanctuary welcomes your return.",
-      "maid": "Your chamber is ready, my lord.",
-      "sprite": "Psst! I am Miri, your tiny spark of magic. Let us make your legend shine!",
-      "hakari": "I will help you too"
+      "king": "Warrior. The realm has need of you. Your trial begins at dawn.",
+      "adventurer": "The road ahead is long, but every great journey starts with a single step. Let us move.",
+      "scientist": "Your body is an instrument of precision. Let us measure what it can achieve.",
+      "wizard": "The runes have foretold your arrival. Speak, and I shall illuminate the path.",
+      "sacred": "The sanctuary awaits. Rest here, then rise stronger.",
+      "maid": "Okaeri, goshujin-sama. Your chamber has been prepared. Shall we begin?",
+      "sprite": "A new traveler! How exciting! I am Miri, and I will make your journey sparkle.",
+      "hakari": "I have been waiting for you! Let us begin this adventure together."
     },
     "levelUp": {
       "title": "Congratulations! You reached level {{level}}.",
@@ -644,5 +645,79 @@
     "finisherNote": "Warden's Lower Keep is the finishing blow.",
     "defeated": "The sentinel has crumbled. The mountain pass is yours, champion.",
     "vanquished": "Vanquished"
+  },
+  "lore": {
+    "ageOfCreation": {
+      "title": "The Age of Creation",
+      "content": "In the beginning, Aethora was shaped by the Great Weavers — immortal beings of starlight and song. They carved kingdoms from mountains, rivers from tears of joy, and forests from their own breath. The first mortals emerged from the sacred soil of Valerion, blessed with the spark of potential."
+    },
+    "firstEmpire": {
+      "title": "The First Empire",
+      "content": "For a thousand years, the Empire of Golden Light united the realm under one banner. Its capital stood where Valerion now rises. The empire's fall came not from war, but from forgetting — the rulers lost touch with the land and its people, and the weavers' magic faded into legend."
+    },
+    "greatWeaving": {
+      "title": "The Great Weaving",
+      "content": "When the weavers departed, they left behind threads of power woven into the land itself. These threads became the ley lines that connect Aethora's sacred places. The Silverpine Forest guards the oldest of these threads — a weaver's loom frozen in time beneath its roots."
+    },
+    "blightEra": {
+      "title": "The Era of Blight",
+      "content": "After the empire fell, a corrosive darkness seeped from the ruins of Eldridge. The Blight twisted forests, poisoned waters, and turned friends to foes. It was the Age of Ash — a time when survival mattered more than glory, and legends were made by those who refused to yield."
+    },
+    "reclamation": {
+      "title": "The Age of Reclamation",
+      "content": "From the ashes rose new kingdoms. Valerion reclaimed its throne. Dawnshire became a haven for those who sought peace. The Shattered Waste slowly healed under the watch of brave souls willing to venture into the corruption. Today, Aethora enters a new era — one where mortals shape their own destiny."
+    },
+    "orderOfEternity": {
+      "title": "Order of Eternity",
+      "content": "The Order of Eternity guards the northern passes and the ancient secrets of Frosthold. Their knights take vows of silence and service, believing that some truths are too powerful for words. They seek the Heart of Aethora — the mythical source of all ley line energy."
+    },
+    "wanderersGuild": {
+      "title": "Wanderers' Guild",
+      "content": "Founded in Dawnshire, the Wanderers' Guild helps travelers navigate Aethora's roads and mysteries. Their members range from simple guides to legendary explorers who have mapped the farthest reaches of the realm. The guild's symbol — a compass rose entwined with a vine — represents their belief that every journey leads to growth."
+    },
+    "embercourt": {
+      "title": "Embercourt",
+      "content": "Deep in Emberwood, the Embercourt faction tends the eternal flame that keeps the blight at bay. Their warriors, called Ash Wardens, undergo trials of fire to prove their worth. They believe that destruction and creation are two sides of the same coin — that to build something new, one must first clear away what is old."
+    },
+    "observatory": {
+      "title": "The Observatory",
+      "content": "Perched on the Windscar Cliffs, the Observatory is the highest point in Aethora. Ancient astronomers used it to track the movements of celestial bodies and predict magical tides. The Observatory's star charts are said to reveal not just the position of stars, but the position of destiny itself."
+    },
+    "silentTower": {
+      "title": "The Silent Tower",
+      "content": "In the heart of Eldridge stands a tower that makes no sound. Birds do not nest there. Wind does not whistle through its windows. Those who enter report hearing whispers from their own past — voices they thought forgotten. The Silent Tower is Eldridge's greatest mystery, and some say it holds the key to understanding the blight itself."
+    },
+    "heartStone": {
+      "title": "The Heart Stone",
+      "content": "At the center of the realm, hidden beneath Frosthold, lies the Heart Stone — a crystal the size of a mountain that pulses with the rhythm of Aethora itself. It is the source of all magical energy in the realm, and the reason why some places feel alive with power. Legends say that whoever holds the Heart Stone can reshape the world, but the responsibility is too great for any one mortal."
+    },
+    "kingOfValerion": {
+      "title": "The King of Valerion",
+      "content": "The King rules from the Golden Palace in Valerion, the crown jewel of Aethora. His lineage stretches back to the First Empire, and his wisdom is sought by rulers across the realm. Yet he carries a burden — the knowledge that one day, the Heart Stone will call for a new guardian, and the king must be ready to pass the torch."
+    },
+    "adventurerOrigins": {
+      "title": "The Adventurer's Path",
+      "content": "Every great hero begins as a wanderer. Dawnshire's rolling hills and peaceful villages foster those who dream of more than a quiet life. The Adventurer's Path teaches that courage is not the absence of fear, but the decision that something else is more important than fear."
+    },
+    "scholarResearch": {
+      "title": "Scholar's Research",
+      "content": "In the libraries of Silverpine Forest, scholars study the ancient texts left by the weavers. They seek to understand the magic that flows through Aethora — not to control it, but to cooperate with it. The scholar's role is to preserve knowledge and ensure that each generation builds upon the last."
+    },
+    "sageWisdom": {
+      "title": "Sage's Wisdom",
+      "content": "The Sage of Windscar Cliffs has watched over Aethora for centuries, accumulating wisdom like others accumulate wealth. The sage's teachings emphasize patience, observation, and the understanding that the greatest power comes from knowing when not to act. In the sage's tower, a single candle has burned for a hundred years — proof that small things can illuminate great darkness."
+    },
+    "heroDestiny": {
+      "title": "The Hero's Destiny",
+      "content": "Legend speaks of a hero who will one day unite the realm — not through conquest, but through example. This hero will show that strength and kindness are not opposites, that discipline and compassion can coexist. The hero's destiny is not written in stone, but forged anew by each choice made in the service of others."
+    },
+    "hakariOrigin": {
+      "title": "Hakari's Origin",
+      "content": "Hakari emerged from the ember ashes of Emberwood as a spark of pure potential. Not quite mortal, not quite spirit — Hakari exists in the space between, bringing joy and encouragement wherever the path grows steep. The Embercourt sees Hakari as a sign that the eternal flame still burns bright."
+    },
+    "miriOrigin": {
+      "title": "Miri's Origin",
+      "content": "Miri came from the silver threads of the ancient loom beneath Silverpine Forest — a manifestation of the weavers' creativity. Miri represents the playful, curious side of magic: the belief that wonder is not childish, but essential. Where Hakari brings courage, Miri brings delight."
+    }
   }
 }

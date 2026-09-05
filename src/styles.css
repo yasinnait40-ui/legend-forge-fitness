@@ -215,12 +215,11 @@
   border: 1px solid color-mix(in oklab, var(--primary) 26%, transparent);
   outline: 1px solid color-mix(in oklab, var(--primary) 10%, transparent);
   outline-offset: 3px;
-  background:
-    linear-gradient(
-      165deg,
-      color-mix(in oklab, var(--card) 94%, white 6%) 0%,
-      color-mix(in oklab, var(--card) 78%, var(--secondary) 22%) 100%
-    );
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--card) 94%, white 6%) 0%,
+    color-mix(in oklab, var(--card) 78%, var(--secondary) 22%) 100%
+  );
   box-shadow:
     0 10px 30px -12px color-mix(in oklab, oklch(0.4 0.06 260) 28%, transparent),
     0 2px 6px -2px color-mix(in oklab, oklch(0.4 0.06 260) 14%, transparent),
@@ -977,12 +976,11 @@ html[dir="rtl"] .font-display {
   overflow: hidden;
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in oklab, var(--primary) 32%, transparent);
-  background:
-    linear-gradient(
-      150deg,
-      color-mix(in oklab, var(--card) 92%, white 8%) 0%,
-      color-mix(in oklab, var(--card) 72%, var(--secondary) 28%) 100%
-    );
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--card) 92%, white 8%) 0%,
+    color-mix(in oklab, var(--card) 72%, var(--secondary) 28%) 100%
+  );
   box-shadow:
     0 8px 22px -12px color-mix(in oklab, oklch(0.4 0.06 260) 30%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 0.65);
@@ -1063,12 +1061,11 @@ html[dir="rtl"] .font-display {
   overflow: hidden;
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in oklab, var(--stat-strength) 40%, transparent);
-  background:
-    linear-gradient(
-      165deg,
-      color-mix(in oklab, var(--card) 90%, var(--stat-strength) 6%) 0%,
-      color-mix(in oklab, var(--card) 76%, var(--secondary) 24%) 100%
-    );
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--card) 90%, var(--stat-strength) 6%) 0%,
+    color-mix(in oklab, var(--card) 76%, var(--secondary) 24%) 100%
+  );
   box-shadow:
     0 10px 28px -14px color-mix(in oklab, oklch(0.4 0.06 260) 32%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 0.7);
@@ -1115,10 +1112,370 @@ html[dir="rtl"] .font-display {
   .world-zone-enter,
   .boss-quake,
   .boss-defeated-glow,
-  .fantasy-character.is-entered .fantasy-character-figure {
+  .fantasy-character.is-entered .fantasy-character-figure,
+  .char-breathe,
+  .char-float {
     animation: none;
   }
   .world-zone {
     transition: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Character breathing & grounding                                   */
+/* -------------------------------------------------------------------------- */
+.char-breathe {
+  animation: char-breathe 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes char-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.008);
+  }
+}
+
+.char-float {
+  animation: char-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes char-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Character ground shadow — makes them feel physically present */
+.char-ground-shadow {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 60%;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgb(40 30 10 / 0.25), transparent 70%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+/* Character aura glow — subtle environmental light interaction */
+.char-aura {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 14%, transparent) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  opacity: 0.6;
+  animation: char-aura-pulse 5s ease-in-out infinite;
+}
+
+@keyframes char-aura-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.04);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: RPG Dialogue bubble improvements                                  */
+/* -------------------------------------------------------------------------- */
+.fantasy-character-dialogue {
+  backdrop-filter: blur(10px);
+}
+
+.fantasy-character-line::before {
+  content: "\201C";
+  font-family: Georgia, serif;
+  font-size: 1.6em;
+  line-height: 0;
+  vertical-align: -0.25em;
+  color: color-mix(in oklab, var(--character-accent, var(--primary)) 50%, transparent);
+  margin-right: 0.1em;
+}
+
+.fantasy-character-line::after {
+  content: "\201D";
+  font-family: Georgia, serif;
+  font-size: 1.6em;
+  line-height: 0;
+  vertical-align: -0.25em;
+  color: color-mix(in oklab, var(--character-accent, var(--primary)) 50%, transparent);
+  margin-left: 0.05em;
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Level-up celebration                                             */
+/* -------------------------------------------------------------------------- */
+.level-up-flash {
+  animation: level-up-flash 0.8s ease-out both;
+}
+
+@keyframes level-up-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.level-up-ring {
+  animation: level-up-ring 1.2s ease-out both;
+}
+
+@keyframes level-up-ring {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-15deg);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.08) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Quest card RPG mission styling                                   */
+/* -------------------------------------------------------------------------- */
+.quest-lore {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: color-mix(in oklab, var(--foreground) 70%, var(--muted-foreground));
+  border-left: 2px solid color-mix(in oklab, var(--primary) 30%, transparent);
+  padding-left: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.quest-reward-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 40%, transparent);
+  background: color-mix(in oklab, var(--primary) 8%, transparent);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* Sealed quest stamp */
+.quest-sealed {
+  position: relative;
+}
+
+.quest-sealed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid color-mix(in oklab, var(--primary) 35%, transparent);
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Equipment rarity glow                                            */
+/* -------------------------------------------------------------------------- */
+.equip-rarity-common {
+  border-color: color-mix(in oklab, var(--rarity-common) 35%, transparent);
+}
+.equip-rarity-uncommon {
+  border-color: color-mix(in oklab, var(--rarity-uncommon) 45%, transparent);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--rarity-uncommon) 20%, transparent);
+}
+.equip-rarity-rare {
+  border-color: color-mix(in oklab, var(--rarity-rare) 55%, transparent);
+  box-shadow: 0 0 16px color-mix(in oklab, var(--rarity-rare) 25%, transparent);
+}
+.equip-rarity-epic {
+  border-color: color-mix(in oklab, var(--rarity-epic) 60%, transparent);
+  box-shadow: 0 0 20px color-mix(in oklab, var(--rarity-epic) 30%, transparent);
+}
+.equip-rarity-legendary {
+  border-color: color-mix(in oklab, var(--rarity-legendary) 65%, transparent);
+  box-shadow: 0 0 24px color-mix(in oklab, var(--rarity-legendary) 35%, transparent);
+  animation: equip-legendary-glow 3s ease-in-out infinite;
+}
+
+@keyframes equip-legendary-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px color-mix(in oklab, var(--rarity-legendary) 25%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 32px color-mix(in oklab, var(--rarity-legendary) 45%, transparent);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Screen atmosphere overlays                                       */
+/* -------------------------------------------------------------------------- */
+.screen-atmosphere {
+  position: relative;
+}
+
+.screen-atmosphere::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 6%, transparent),
+    transparent
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Achievement badge glow by rarity                                 */
+/* -------------------------------------------------------------------------- */
+.achievement-unlocked {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+.achievement-unlocked:hover {
+  transform: translateY(-2px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Staggered entrance animation for lists                           */
+/* -------------------------------------------------------------------------- */
+.rpg-stagger-in > * {
+  animation: rpg-stagger-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rpg-stagger-in > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.rpg-stagger-in > *:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.rpg-stagger-in > *:nth-child(3) {
+  animation-delay: 0.19s;
+}
+.rpg-stagger-in > *:nth-child(4) {
+  animation-delay: 0.26s;
+}
+.rpg-stagger-in > *:nth-child(5) {
+  animation-delay: 0.33s;
+}
+.rpg-stagger-in > *:nth-child(6) {
+  animation-delay: 0.4s;
+}
+.rpg-stagger-in > *:nth-child(7) {
+  animation-delay: 0.47s;
+}
+.rpg-stagger-in > *:nth-child(8) {
+  animation-delay: 0.54s;
+}
+
+@keyframes rpg-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.8rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Trial difficulty flame icons                                      */
+/* -------------------------------------------------------------------------- */
+.trial-difficulty {
+  display: inline-flex;
+  gap: 0.15rem;
+}
+
+.trial-difficulty .flame-active {
+  color: var(--primary);
+  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 50%, transparent));
+}
+
+.trial-difficulty .flame-inactive {
+  color: color-mix(in oklab, var(--foreground) 18%, transparent);
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Companions layout (Legend screen Hakari + Miri)                  */
+/* -------------------------------------------------------------------------- */
+.companions-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.companion-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.companion-column .fantasy-character-embedded {
+  width: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Sidebar slide animation for guides/settings                      */
+/* -------------------------------------------------------------------------- */
+.panel-slide-in {
+  animation: panel-slide-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes panel-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
