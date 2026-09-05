@@ -12,6 +12,101 @@ let currentUserId: string | null = null;
 let unobserve: (() => void) | null = null;
 let pushTimer: ReturnType<typeof setTimeout> | null = null;
 
+/* -------------------------------------------------------------------------- */
+/* Offline activity queue                                                      */
+/*                                                                              */
+/* Completions recorded while offline (or while the authoritative RPC fails)    */
+/* are stored durably per user, applied locally, and replayed to the server     */
+/* when connectivity returns. Server-side duplicate protection (UNIQUE          */
+/* constraints in quest_completions / trial_completions) makes replay idempotent. */
+/* -------------------------------------------------------------------------- */
+
+const QUEUE_KEY = "aethora-pending-activities-v1";
+
+interface PendingActivity {
+  kind: "quest" | "trial";
+  activityId: string;
+  day: string; // local day the completion happened
+}
+
+let pendingQueue: PendingActivity[] = [];
+
+function loadQueue() {
+  try {
+    const raw = localStorage.getItem(QUEUE_KEY);
+    pendingQueue = raw ? (JSON.parse(raw) as PendingActivity[]) : [];
+    if (!Array.isArray(pendingQueue)) pendingQueue = [];
+  } catch {
+    pendingQueue = [];
+  }
+}
+
+function saveQueue() {
+  try {
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(pendingQueue));
+  } catch {
+    // storage unavailable — queue lives in memory for this session only
+  }
+}
+
+/** Queue an activity completion for authoritative replay. Returns false if it was already queued. */
+export function queueActivity(
+  kind: "quest" | "trial",
+  activityId: string,
+): boolean {
+  const today = todayKey();
+  if (pendingQueue.some((p) => p.kind === kind && p.activityId === activityId && p.day === today)) {
+    return false;
+  }
+  pendingQueue.push({ kind, activityId, day: today });
+  saveQueue();
+  return true;
+}
+
+export function hasPendingActivities(): boolean {
+  return pendingQueue.length > 0;
+}
+
+export function getPendingCount(): number {
+  return pendingQueue.length;
+}
+
+/** Replay every cached completion to the server. Safe to call repeatedly. */
+export async function replayPendingActivities(): Promise<void> {
+  if (!currentUserId || pendingQueue.length === 0) return;
+
+  const remaining: PendingActivity[] = [];
+  for (const item of pendingQueue) {
+    try {
+      const { data, error } = await supabase.rpc("complete_activity" as never, {
+        p_kind: item.kind,
+        p_activity_id: item.activityId,
+      } as never);
+      // "duplicate" means the server already has it — success for our purposes.
+      if (error || !data) {
+        // Keep queued for a later retry unless the activity is now stale (older day).
+        const stale = item.day !== todayKey();
+        if (!stale) remaining.push(item);
+        continue;
+      }
+      const result = data as { duplicate?: boolean; xp?: number; level?: number };
+      if (!result.duplicate && typeof result.xp === "number") {
+        // Adopt the authoritative XP if the server is ahead of the local estimate.
+        if (result.xp > getGameState().xp) {
+          replaceGameState(
+            { ...getGameState(), xp: result.xp, lastActiveDate: item.day },
+            false,
+          );
+        }
+      }
+    } catch {
+      remaining.push(item);
+    }
+  }
+  pendingQueue = remaining;
+  saveQueue();
+}
+
 function statsRow(userId: string, s: GameState) {
   const row: Record<string, unknown> = {
     user_id: userId,
@@ -37,6 +132,17 @@ function schedulePush(userId: string) {
   pushTimer = setTimeout(() => {
     void pushStats(userId);
   }, 600);
+}
+
+/**
+ * P0.2: reliably persist stat columns after local progress changes. Called by
+ * the game store whenever stats may have moved (authoritative completions,
+ * optimistic offline completions). No-op when signed out — the queue replays
+ * the activity itself and the next pull rebuilds stats from the server.
+ */
+export function notifyStatsChanged(): void {
+  if (!currentUserId) return;
+  schedulePush(currentUserId);
 }
 
 /** Pull the cloud legend, keep whichever is further along, then push the result. */
@@ -86,49 +192,23 @@ async function pullAndMerge(userId: string) {
     .map((row) => row.trial_id);
   replaceGameState({
     ...local,
-    xp: data.xp,
+    xp: Math.max(data.xp ?? 0, local.xp),
     stats: { ...local.stats, ...stats },
     equipment: { ...local.equipment, ...equipment },
-    streak: data.streak,
-    bestStreak: data.best_streak,
-    lastActiveDate: data.last_active_date,
+    streak: data.streak ?? local.streak,
+    bestStreak: data.best_streak ?? local.bestStreak,
+    lastActiveDate: data.last_active_date ?? local.lastActiveDate,
     questsToday: { date: today, ids: questsToday },
     trialsToday: { date: today, ids: trialsToday },
     trialsEver: trialRows.map((row) => row.trial_id),
     achievements: Array.isArray(data.achievements)
-      ? (data.achievements as string[])
-      : local.achievements,
-    totalQuests: data.total_quests,
-    totalTrials: data.total_trials,
+      ? (data.achievements as string[]).concat(
+          local.achievements.filter((a) => !(data.achievements as string[]).includes(a)),
+        )
+    : local.achievements,
+    totalQuests: Math.max(data.total_quests ?? 0, local.totalQuests),
+    totalTrials: Math.max(data.total_trials ?? 0, local.totalTrials),
   });
-}
-
-function logNewCompletions(userId: string, prev: GameState, next: GameState) {
-  const prevQuests = prev.questsToday.date === todayKey() ? prev.questsToday.ids : [];
-  const newQuests = (next.questsToday.date === todayKey() ? next.questsToday.ids : []).filter(
-    (id) => !prevQuests.includes(id),
-  );
-  if (newQuests.length) {
-    void supabase
-      .from("quest_completions")
-      .insert(newQuests.map((id) => ({ user_id: userId, quest_id: id, xp_earned: 0 })) as never)
-      .then(({ error }) => error && console.error("[cloud-sync] quest log failed", error.message));
-  }
-
-  const newWorkouts = next.workoutLog.slice(prev.workoutLog.length);
-  if (newWorkouts.length && next.totalTrials > prev.totalTrials) {
-    void supabase
-      .from("workout_logs")
-      .insert(
-        newWorkouts.map((w, i) => ({
-          user_id: userId,
-          trial_id: `${w.date}-${i}`,
-          trial_name: w.name,
-          xp_earned: w.xp,
-        })) as never,
-      )
-      .then(({ error }) => error && console.error("[cloud-sync] trial log failed", error.message));
-  }
 }
 
 /** Begin syncing the local legend to the signed-in player's cloud save. */
@@ -137,9 +217,18 @@ export function startCloudSync(userId: string) {
   stopCloudSync();
   currentUserId = userId;
 
-  void pullAndMerge(userId);
-  // Completion writes happen in the authoritative transaction; cached commits are not uploaded.
+  loadQueue();
+  void replayPendingActivities().then(() => pullAndMerge(userId));
+
+  // Completion writes happen in the authoritative transaction; cached commits are
+  // not uploaded. The observer stays null — see queueActivity/replay instead.
   unobserve = null;
+}
+
+/** Replay pending activities when connectivity returns. */
+export function handleReconnect(): void {
+  if (!currentUserId) return;
+  void replayPendingActivities();
 }
 
 export function stopCloudSync() {

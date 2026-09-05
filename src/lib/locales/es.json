@@ -583,5 +583,28 @@
     },
     "questComplete": "¡Misión completada! Sigue avanzando.",
     "trialComplete": "¡Prueba conquistada! Tu fuerza crece."
+  },
+  "world": {
+    "title": "El Mapa del Mundo",
+    "kingdom": {
+      "name": "El Reino",
+      "desc": "Forja tu cuerpo en los campos de entrenamiento"
+    },
+    "forest": {
+      "name": "El Bosque Encantado",
+      "desc": "Sella los contratos de hoy con el gremio"
+    },
+    "frozen": {
+      "name": "Las Tierras Heladas",
+      "desc": "Sigue hacia el norte la senda de tu racha"
+    }
+  },
+  "boss": {
+    "title": "El Gólem de Hierro",
+    "sentinelHp": "HP del Centinela",
+    "damageNote": "Cada prueba conquistada golpea al gólem con {{damage}} de daño.",
+    "finisherNote": "La Fortaleza Inferior del Guardián es el golpe final.",
+    "defeated": "El centinela se ha desmoronado. El paso de montaña es tuyo, campeón.",
+    "vanquished": "Derrotado"
   }
 }

@@ -1230,8 +1230,6 @@ AETHORA
 
 FORGE YOUR LEGEND.
 
-API:  AQ.Ab8RN6IzmiXzzzsj_-ggt7JERtqD8Z628gXp1SVmzQ-sowlxKA
-
 This project was built with [Lovable](https://lovable.dev).
 
 **Live app**: https://legend-forge-fitness.lovable.app

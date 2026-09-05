@@ -548,24 +548,3 @@ export function playCharacterIntro(characterId: string) {
   });
 }
 
-/* -------------------------------------------------------------------------- */
-/* Backward compatibility                                                      */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Kept so existing FantasyCharacter/dialogue code does not break.
- *
- * IMPORTANT:
- * This function intentionally does NOTHING.
- *
- * Character sounds are entrance SFX only.
- * We do NOT generate a sound for every word of dialogue.
- */
-export function speakCharacterLine(
-  _characterId: string,
-  _text: string,
-  _langCode: string,
-) {
-  // Intentionally disabled.
-  // Dialogue text must remain completely silent.
-}

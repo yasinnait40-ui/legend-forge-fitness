@@ -559,5 +559,28 @@
     },
     "questComplete": "��エスト完了！前進を続けよ。",
     "trialComplete": "試練を制した！力が増していく。"
+  },
+  "world": {
+    "title": "ワールドマップ",
+    "kingdom": {
+      "name": "王国",
+      "desc": "訓練場で体を鍛えよ"
+    },
+    "forest": {
+      "name": "魔法の森",
+      "desc": "ギルドの今日の契約を封じよ"
+    },
+    "frozen": {
+      "name": "氷結の地",
+      "desc": "連続記録の道を北へ追え"
+    }
+  },
+  "boss": {
+    "title": "鉄のゴーレム",
+    "sentinelHp": "守護者のHP",
+    "damageNote": "制した試練はゴーレムに{{damage}}ダメージを与える。",
+    "finisherNote": "「下層の衛兵所」が止めの一撃だ。",
+    "defeated": "守護者は崩れ去った。山道は王者のものだ。",
+    "vanquished": "撃破"
   }
 }

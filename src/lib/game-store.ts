@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { ACHIEVEMENTS, levelFromXp, STAT_CAP, type StatKey } from "./game-data";
+import { notifyStatsChanged, queueActivity } from "./cloud-sync";
+import { ACHIEVEMENTS, levelFromXp, STAT_CAP, type AchievementContext, type StatKey } from "./game-data";
 
 export interface WorkoutLogEntry {
   date: string;
@@ -149,6 +150,54 @@ export function todayKey(d = new Date()): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+/* -------------------------------------------------------------------------- */
+/* P0.2: midnight rollover synchronization                                     */
+/*                                                                            */
+/* Quest/trial seals are date-scoped. Reading via questsDoneToday() already   */
+/* resets them lazily, but a long-lived tab would keep displaying "Sealed"    */
+/* past midnight until a re-render with a new day. This rolls the local state */
+/* over exactly once per local day, across timers, tab focus, and visibility. */
+/* -------------------------------------------------------------------------- */
+
+let rolloverTimer: ReturnType<typeof setInterval> | null = null;
+
+function rollOverDailySeals(s: GameState): GameState {
+  const t = todayKey();
+  const needsQuestRoll = s.questsToday.date !== "" && s.questsToday.date !== t;
+  const needsTrialRoll = s.trialsToday.date !== "" && s.trialsToday.date !== t;
+  if (!needsQuestRoll && !needsTrialRoll) return s;
+
+  return {
+    ...s,
+    questsToday: needsQuestRoll ? { date: t, ids: [] } : s.questsToday,
+    trialsToday: needsTrialRoll ? { date: t, ids: [] } : s.trialsToday,
+  };
+}
+
+/**
+ * Keep daily seals aligned with the local calendar. Call once on boot; it
+ * installs listeners for midnight ticks, tab focus, and visibility changes.
+ */
+export function ensureDailyRollover() {
+  if (typeof window === "undefined" || rolloverTimer) return;
+
+  const tick = () => {
+    const rolled = rollOverDailySeals(state);
+    if (rolled !== state) {
+      commit(rolled);
+    }
+  };
+
+  tick();
+  // Poll cheaply at the top of each minute; commit() only fires when the day
+  // key actually changes, so this is effectively a no-op 1439 times a day.
+  rolloverTimer = setInterval(tick, 60_000);
+  window.addEventListener("focus", tick);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") tick();
+  });
+}
+
 export function questsDoneToday(s: GameState): string[] {
   return s.questsToday.date === todayKey() ? s.questsToday.ids : [];
 }
@@ -170,6 +219,8 @@ export interface AwardResult {
   newLevel: number;
   unlocked: string[];
   autoCompletedQuest: string | null;
+  /** True when saved locally during offline mode and queued for cloud replay. */
+  optimistic?: boolean;
 }
 
 function applyAward(
@@ -210,29 +261,45 @@ function applyAward(
   return { next, unlocked, leveledUp: newLevel > prevLevel, newLevel };
 }
 
-/** Complete through the transaction-safe Supabase RPC. Client XP/stat inputs are ignored. */
+/** Complete through the transaction-safe Supabase RPC. Falls back to an optimistic local save that replays when connectivity returns. */
 export async function completeQuest(
   questId: string,
-  _xp: number,
-  _stats: Partial<Record<StatKey, number>>,
+  xp: number,
+  stats: Partial<Record<StatKey, number>>,
 ): Promise<AwardResult | null> {
-  return completeActivity("quest", questId);
+  return completeActivity("quest", questId, xp, stats);
 }
 
 async function completeActivity(
   kind: "quest" | "trial",
   activityId: string,
+  fallbackXp = 0,
+  fallbackStats: Partial<Record<StatKey, number>> = {},
+  fallbackName?: string,
 ): Promise<AwardResult | null> {
-  const { data, error } = await supabase.rpc(
-    "complete_activity" as never,
-    {
-      p_kind: kind,
-      p_activity_id: activityId,
-    } as never,
-  );
-  if (error || !data) {
-    console.error("[v0] authoritative activity completion failed", error?.message);
-    return null;
+  let data: unknown = null;
+  let rpcError: { message: string } | null = null;
+  try {
+    const result = await supabase.rpc(
+      "complete_activity" as never,
+      {
+        p_kind: kind,
+        p_activity_id: activityId,
+      } as never,
+    );
+    data = result.data;
+    rpcError = result.error ? { message: result.error.message } : null;
+  } catch (e) {
+    // Network-level failure (offline, fetch rejected).
+    rpcError = { message: e instanceof Error ? e.message : "network unavailable" };
+  }
+
+  if (rpcError || !data) {
+    // Offline (or RPC unavailable): keep the hero moving. Save optimistically,
+    // queue the activity, and let cloud-sync replay it when back online.
+    console.warn("[v0] activity saved offline, queued for sync:", rpcError?.message);
+    queueActivity(kind, activityId);
+    return optimisticComplete(kind, activityId, fallbackXp, fallbackStats, fallbackName);
   }
   const result = data as {
     duplicate?: boolean;
@@ -245,7 +312,7 @@ async function completeActivity(
   };
   if (result.duplicate) return null;
   const xp = result.xp ?? state.xp;
-  const next = {
+  const next: GameState = {
     ...state,
     xp,
     totalQuests: kind === "quest" ? state.totalQuests + 1 : state.totalQuests,
@@ -263,13 +330,92 @@ async function completeActivity(
       ? state.trialsEver
       : [...state.trialsEver, activityId];
   if (result.rewardItem) next.equipment = { ...next.equipment, weapon: result.rewardItem };
+
+  /*
+   * P0.2: keep local stat/achievement progress alive on the authoritative
+   * path. The server owns XP/level/streak, but stats gains and local
+   * achievement badges were previously only applied on the offline path —
+   * meaning signed-in players watched their bars freeze.
+   */
+  for (const k of Object.keys(fallbackStats) as StatKey[]) {
+    const gain = fallbackStats[k] ?? 0;
+    next.stats[k] = Math.min(STAT_CAP, (next.stats[k] ?? 0) + gain);
+  }
+  const t2 = todayKey();
+  const existingActivity = next.activityLog.find((e) => e.date === t2);
+  next.activityLog = existingActivity
+    ? next.activityLog.map((e) => (e.date === t2 ? { ...e, xp: e.xp + (result.xpGained ?? 0) } : e))
+    : [...next.activityLog, { date: t2, xp: result.xpGained ?? 0 }];
+  const newlyUnlocked = ACHIEVEMENTS.filter(
+    (a) => !next.achievements.includes(a.id) && a.test(next as AchievementContext),
+  ).map((a) => a.id);
+  next.achievements = [...next.achievements, ...newlyUnlocked];
+
   commit(next);
+  // Reliably persist stat columns (used by the progress charts) after each
+  // authoritative completion.
+  notifyStatsChanged();
   return {
     xpGained: result.xpGained ?? 0,
     treasure: result.rewardItem ? { type: "cosmetic", itemId: result.rewardItem } : null,
     leveledUp: (result.level ?? 1) > levelFromXp(state.xp),
     newLevel: result.level ?? levelFromXp(xp),
-    unlocked: [],
+    unlocked: newlyUnlocked,
+    autoCompletedQuest: null,
+  };
+}
+
+/**
+ * Optimistic offline completion: grants estimated XP/stats immediately, queues
+ * the activity for authoritative replay, and keeps achievements/streak logic.
+ * The server-side UNIQUE constraints make replay idempotent.
+ */
+function optimisticComplete(
+  kind: "quest" | "trial",
+  activityId: string,
+  xp: number,
+  stats: Partial<Record<StatKey, number>>,
+  name?: string,
+): AwardResult | null {
+  if (kind === "quest") {
+    if (questsDoneToday(state).includes(activityId)) return null;
+  } else if (trialsDoneToday(state).includes(activityId)) {
+    return null;
+  }
+
+  const working: GameState = {
+    ...state,
+    questsToday:
+      kind === "quest"
+        ? { date: todayKey(), ids: [...questsDoneToday(state), activityId] }
+        : state.questsToday,
+    trialsToday:
+      kind === "trial"
+        ? { date: todayKey(), ids: [...trialsDoneToday(state), activityId] }
+        : state.trialsToday,
+    trialsEver:
+      kind === "trial" && !state.trialsEver.includes(activityId)
+        ? [...state.trialsEver, activityId]
+        : state.trialsEver,
+    totalQuests: state.totalQuests + (kind === "quest" ? 1 : 0),
+    totalTrials: state.totalTrials + (kind === "trial" ? 1 : 0),
+    workoutLog:
+      kind === "trial"
+        ? [...state.workoutLog, { date: todayKey(), name: name ?? activityId, xp }].slice(-30)
+        : state.workoutLog,
+  };
+  const { next, unlocked, leveledUp, newLevel } = applyAward(working, xp, stats);
+  commit(next);
+  // Persist stat columns when signed in (no-op offline); the activity itself
+  // is replayed authoritatively from the queue.
+  notifyStatsChanged();
+  return {
+    xpGained: xp,
+    treasure: null,
+    optimistic: true,
+    leveledUp,
+    newLevel,
+    unlocked,
     autoCompletedQuest: null,
   };
 }
@@ -317,11 +463,11 @@ function legacyCompleteQuest(
 /** Mark a training trial complete. Also seals Guardian's Discipline if open. */
 export async function completeTrial(
   trialId: string,
-  _name: string,
-  _xp: number,
-  _stats: Partial<Record<StatKey, number>>,
+  name: string,
+  xp: number,
+  stats: Partial<Record<StatKey, number>>,
 ): Promise<AwardResult | null> {
-  return completeActivity("trial", trialId);
+  return completeActivity("trial", trialId, xp, stats, name);
 }
 
 function legacyCompleteTrial(

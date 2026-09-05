@@ -401,6 +401,26 @@
   transform: translateY(0);
   opacity: 1;
 }
+
+/* P1.2: premium entrance — the figure settles into place with a soft arc    */
+/* while the parent bar rises. Respects reduced motion (disabled below).      */
+.fantasy-character.is-entered .fantasy-character-figure {
+  animation: character-land 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes character-land {
+  0% {
+    transform: translateY(1.4rem) scale(0.965);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
 .fantasy-character-embedded {
   position: relative;
   inset: auto;
@@ -450,7 +470,8 @@
   flex: 1;
   min-width: 0;
   width: min(82%, 46rem);
-  margin: 0 auto 0 1rem;
+  /* Hug the character figure on the inline-start side, centre otherwise. */
+  margin-inline: 1rem auto;
   padding: 2.3rem clamp(3.5rem, 10vw, 6rem) 1.15rem 1.1rem;
   border: 2px solid color-mix(in oklab, var(--character-accent) 55%, var(--border));
   border-radius: 0.75rem 0 0.25rem 0.75rem;
@@ -465,7 +486,8 @@
     inset 0 1px 0 rgb(255 255 255 / 0.75);
   color: inherit;
   font: inherit;
-  text-align: left;
+  /* Logical alignment: follows document direction (RTL-safe, P0.4). */
+  text-align: start;
   cursor: pointer;
   pointer-events: auto;
   position: relative;
@@ -478,7 +500,8 @@
 .fantasy-character-nameplate {
   position: absolute;
   top: -0.95rem;
-  left: 1rem;
+  /* Logical inset: left in LTR, right in RTL (P0.4). */
+  inset-inline-start: 1rem;
   display: grid;
   gap: 0.12rem;
   min-width: 9rem;
@@ -515,7 +538,7 @@
 }
 .fantasy-character-continue {
   position: absolute;
-  right: 0.9rem;
+  inset-inline-end: 0.9rem;
   bottom: 0.65rem;
   color: var(--character-accent);
   font-size: 0.7rem;
@@ -550,6 +573,10 @@
     gap: 0;
     transform: translateY(110%);
   }
+  /* RTL: the nameplate inherits the logical inset above; mirror the arrow. */
+  html[dir="rtl"] .fantasy-character-nameplate {
+    clip-path: polygon(4% 0, 100% 0, 100% 100%, 4% 100%, 0 50%);
+  }
   .fantasy-character.is-entered {
     transform: translateY(0);
   }
@@ -572,7 +599,7 @@
     z-index: 2;
   }
   .fantasy-character-nameplate {
-    left: 0.7rem;
+    inset-inline-start: 0.7rem;
     min-width: 8.5rem;
   }
 }
@@ -597,7 +624,7 @@
     overflow-wrap: anywhere;
   }
   .fantasy-character-embedded .fantasy-character-nameplate {
-    left: 0.45rem;
+    inset-inline-start: 0.45rem;
     min-width: 0;
     width: calc(100% - 0.9rem);
     padding: 0.3rem 0.45rem;
@@ -764,5 +791,334 @@
   .rune-ring,
   .rune-ring-reverse {
     animation: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* P0.4: RTL (Arabic) refinements — mirrored nameplate arrow, correct          */
+/* margins. Flex/grid layouts mirror automatically; only absolute positioning */
+/* and asymmetric decorations need logical overrides.                          */
+/* -------------------------------------------------------------------------- */
+html[dir="rtl"] .fantasy-character-nameplate {
+  clip-path: polygon(4% 0, 100% 0, 100% 100%, 4% 100%, 0 50%);
+}
+
+html[dir="rtl"] .fantasy-character-dialogue {
+  border-radius: 0 0.75rem 0.75rem 0.25rem;
+}
+
+/* Arabic display type at Cinzel's tracking values gets cramped; relax the    */
+/* widest letter-spacing on RTL headings so glyphs don't collide.             */
+html[dir="rtl"] .font-display {
+  letter-spacing: 0.02em;
+}
+
+/* -------------------------------------------------------------------------- */
+/* P0.4: large-screen staging (1024px → 1440px+). The realm column is capped  */
+/* at 32rem and centered; on wide viewports the artwork becomes the stage and */
+/* the dialogue gets breathing room.                                           */
+/* -------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .fantasy-character-figure {
+    height: 24rem;
+  }
+  .fantasy-character-dialogue {
+    width: min(72%, 52rem);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* P1.2: treasure chest opening ceremony                                       */
+/* -------------------------------------------------------------------------- */
+.chest-overlay {
+  animation: chest-overlay-in 0.25s ease both;
+}
+
+@keyframes chest-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chest-card {
+  animation: chest-card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes chest-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Sealed chest: eager little wobble inviting the tap. */
+.chest-sealed-icon {
+  animation: chest-wobble 1.6s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+@keyframes chest-wobble {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(-6deg) scale(1.02);
+  }
+  30% {
+    transform: rotate(5deg);
+  }
+  45% {
+    transform: rotate(-3deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Rotating god-rays revealed behind the opened reward. */
+.chest-rays {
+  position: absolute;
+  inset: -40%;
+  border-radius: 999px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    color-mix(in oklab, var(--primary) 30%, transparent) 12deg,
+    transparent 24deg,
+    color-mix(in oklab, var(--accent) 24%, transparent) 40deg,
+    transparent 52deg,
+    color-mix(in oklab, var(--primary) 30%, transparent) 66deg,
+    transparent 80deg,
+    color-mix(in oklab, var(--accent) 24%, transparent) 96deg,
+    transparent 110deg,
+    color-mix(in oklab, var(--primary) 30%, transparent) 126deg,
+    transparent 140deg,
+    color-mix(in oklab, var(--accent) 24%, transparent) 156deg,
+    transparent 170deg,
+    color-mix(in oklab, var(--primary) 30%, transparent) 186deg,
+    transparent 200deg,
+    color-mix(in oklab, var(--accent) 24%, transparent) 216deg,
+    transparent 230deg,
+    color-mix(in oklab, var(--primary) 30%, transparent) 246deg,
+    transparent 260deg,
+    color-mix(in oklab, var(--accent) 24%, transparent) 276deg,
+    transparent 290deg,
+    color-mix(in oklab, var(--primary) 30%, transparent) 306deg,
+    transparent 320deg,
+    color-mix(in oklab, var(--accent) 24%, transparent) 336deg,
+    transparent 350deg
+  );
+  opacity: 0;
+  animation:
+    chest-rays-in 0.6s ease 0.1s both,
+    rune-spin 14s linear 0.7s infinite;
+  pointer-events: none;
+}
+
+@keyframes chest-rays-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+}
+
+.chest-reveal {
+  animation: chest-reveal-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes chest-reveal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-8deg);
+  }
+  70% {
+    transform: scale(1.12) rotate(2deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.chest-reveal-text {
+  animation: chest-reveal-text-in 0.5s ease 0.25s both;
+}
+
+@keyframes chest-reveal-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* P1.2: world map zones — the three starting regions                          */
+/* -------------------------------------------------------------------------- */
+.world-zone {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in oklab, var(--primary) 32%, transparent);
+  background:
+    linear-gradient(
+      150deg,
+      color-mix(in oklab, var(--card) 92%, white 8%) 0%,
+      color-mix(in oklab, var(--card) 72%, var(--secondary) 28%) 100%
+    );
+  box-shadow:
+    0 8px 22px -12px color-mix(in oklab, oklch(0.4 0.06 260) 30%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.65);
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  cursor: pointer;
+}
+
+.world-zone:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--primary) 55%, transparent);
+  box-shadow:
+    0 14px 30px -12px color-mix(in oklab, var(--primary) 55%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.65);
+}
+
+.world-zone:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.world-zone-aura {
+  position: absolute;
+  inset: -30% -10%;
+  background: radial-gradient(
+    60% 60% at var(--zone-glow-x, 30%) 40%,
+    color-mix(in oklab, var(--zone-color, var(--primary)) 22%, transparent),
+    transparent 70%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.world-zone:hover .world-zone-aura {
+  opacity: 1.15;
+}
+
+.world-zone-icon {
+  position: relative;
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--zone-color, var(--primary)) 45%, transparent);
+  background: color-mix(in oklab, var(--zone-color, var(--primary)) 12%, var(--card) 80%);
+  color: var(--zone-color, var(--primary));
+  box-shadow:
+    0 0 16px color-mix(in oklab, var(--zone-color, var(--primary)) 30%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.6);
+}
+
+/* Staggered entrance for the zone cards. */
+.world-zone-enter {
+  animation: world-zone-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--zone-delay, 0s);
+}
+
+@keyframes world-zone-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* P1.3: boss trial — the Iron Golem                                           */
+/* -------------------------------------------------------------------------- */
+.boss-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in oklab, var(--stat-strength) 40%, transparent);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in oklab, var(--card) 90%, var(--stat-strength) 6%) 0%,
+      color-mix(in oklab, var(--card) 76%, var(--secondary) 24%) 100%
+    );
+  box-shadow:
+    0 10px 28px -14px color-mix(in oklab, oklch(0.4 0.06 260) 32%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.7);
+}
+
+.boss-quake {
+  animation: boss-quake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes boss-quake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-0.4rem);
+  }
+  40% {
+    transform: translateX(0.35rem);
+  }
+  60% {
+    transform: translateX(-0.2rem);
+  }
+  80% {
+    transform: translateX(0.12rem);
+  }
+}
+
+.boss-hp-fill {
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.boss-defeated-glow {
+  animation: glow-pulse 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chest-overlay,
+  .chest-card,
+  .chest-sealed-icon,
+  .chest-rays,
+  .chest-reveal,
+  .chest-reveal-text,
+  .world-zone-enter,
+  .boss-quake,
+  .boss-defeated-glow,
+  .fantasy-character.is-entered .fantasy-character-figure {
+    animation: none;
+  }
+  .world-zone {
+    transition: none;
   }
 }

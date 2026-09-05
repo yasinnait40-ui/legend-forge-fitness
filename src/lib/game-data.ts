@@ -237,6 +237,38 @@ export const TRIALS: Trial[] = [
   },
 ];
 
+/* ---------------- Boss battles (pure gamification) ---------------- */
+
+export interface Boss {
+  id: string;
+  name: string;
+  epithet: string;
+  hp: number;
+  /** HP removed from the boss per conquered trial. Abstract game damage only. */
+  damagePerTrial: number;
+  /** Which trial id, when conquered, is themed as the finishing blow. */
+  finishingTrialId: string;
+}
+
+export const IRON_GOLEM: Boss = {
+  id: "iron-golem",
+  name: "The Iron Golem",
+  epithet: "An ancient sentinel of stone blocks the mountain pass.",
+  hp: 100,
+  damagePerTrial: 10,
+  finishingTrialId: "wardens-keep",
+};
+
+/** Current boss HP for a game state (abstract, gamified — never a health metric). */
+export function bossHpRemaining(boss: Boss, trialsEver: string[]): number {
+  const damage = trialsEver.length * boss.damagePerTrial;
+  return Math.max(0, boss.hp - damage);
+}
+
+export function bossDefeated(boss: Boss, trialsEver: string[]): boolean {
+  return bossHpRemaining(boss, trialsEver) <= 0;
+}
+
 /* ---------------- Achievements ---------------- */
 
 export type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
@@ -347,6 +379,30 @@ export const ACHIEVEMENTS: Achievement[] = [
     rarity: "legendary",
     icon: "gem",
     test: (c) => c.stats.strength >= 60,
+  },
+  {
+    id: "first-blood",
+    name: "First Blood",
+    flavor: "Take up the mantle — complete your first deed.",
+    rarity: "common",
+    icon: "swords",
+    test: (c) => c.totalQuests + c.totalTrials >= 1,
+  },
+  {
+    id: "unbroken",
+    name: "Unbroken",
+    flavor: "Hold a 30-day streak without faltering.",
+    rarity: "legendary",
+    icon: "crown",
+    test: (c) => c.streak >= 30,
+  },
+  {
+    id: "golem-bane",
+    name: "Golem Bane",
+    flavor: "Fell the Iron Golem through ten mighty trials.",
+    rarity: "epic",
+    icon: "shield",
+    test: (c) => c.trialsEver.length >= 10,
   },
 ];
 

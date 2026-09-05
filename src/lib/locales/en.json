@@ -621,5 +621,28 @@
     "agility": "Your swiftness has become legendary.",
     "vitality": "Your vitality pulses with the power of life.",
     "recovery": "Your body heals like the ancients."
+  },
+  "world": {
+    "title": "The World Map",
+    "kingdom": {
+      "name": "The Kingdom",
+      "desc": "Forge your body in the training grounds"
+    },
+    "forest": {
+      "name": "The Enchanted Forest",
+      "desc": "Seal today's contracts with the guild"
+    },
+    "frozen": {
+      "name": "The Frozen Lands",
+      "desc": "Follow the trail of your streak north"
+    }
+  },
+  "boss": {
+    "title": "The Iron Golem",
+    "sentinelHp": "Sentinel HP",
+    "damageNote": "Every conquered trial strikes the golem for {{damage}} damage.",
+    "finisherNote": "Warden's Lower Keep is the finishing blow.",
+    "defeated": "The sentinel has crumbled. The mountain pass is yours, champion.",
+    "vanquished": "Vanquished"
   }
 }

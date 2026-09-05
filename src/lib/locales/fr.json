@@ -583,5 +583,28 @@
     },
     "questComplete": "Quête terminée ! Continue d'avancer.",
     "trialComplete": "Épreuve vaincue ! Ta force augmente."
+  },
+  "world": {
+    "title": "La Carte du Monde",
+    "kingdom": {
+      "name": "Le Royaume",
+      "desc": "Forge ton corps sur les terrains d'entraînement"
+    },
+    "forest": {
+      "name": "La Forêt Enchantée",
+      "desc": "Scealle les contrats du jour avec la guilde"
+    },
+    "frozen": {
+      "name": "Les Terres Gelées",
+      "desc": "Suis vers le nord la piste de ta série"
+    }
+  },
+  "boss": {
+    "title": "Le Golem de Fer",
+    "sentinelHp": "PV du Gardien",
+    "damageNote": "Chaque épreuve vaincue frappe le golem de {{damage}} dégâts.",
+    "finisherNote": "La Basse-Forteresse du Gardien est le coup de grâce.",
+    "defeated": "Le gardien s'est effondré. Le col de la montagne t'appartient, champion.",
+    "vanquished": "Vaincu"
   }
 }

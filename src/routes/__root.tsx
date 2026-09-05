@@ -15,7 +15,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
 import { ReminderMonitor } from "../components/ReminderMonitor";
-import { hydrateGameStore, resetGameStore } from "../lib/game-store";
+import { hydrateGameStore, resetGameStore, ensureDailyRollover } from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
 import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 import "../lib/i18n";
@@ -173,6 +173,10 @@ function RootComponent() {
     hydrateSoundStore();
     hydrateBossStore();
     initBackgroundMusic();
+
+    // P0.2: keep daily quest/trial seals aligned with the local calendar
+    // across midnight ticks, tab focus, and visibility changes.
+    ensureDailyRollover();
 
     // Supabase is optional for the public preview. Keep the local game experience
     // available when the project has not supplied its cloud credentials yet.
