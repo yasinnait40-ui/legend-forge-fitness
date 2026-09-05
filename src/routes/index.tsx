@@ -83,8 +83,28 @@ function HomePage() {
         </p>
       </header>
 
-      <CharacterWelcome kind="king" />
-      <div className="h-[26dvh]" aria-hidden="true" />
+      {/*
+       * CINEMATIC KING — the throne room audience.
+       * A darkened stage behind the King, a light shaft from above, ember
+       * motes drifting at his feet, and a formal dais shadow under him:
+       * he stands IN the kingdom, not in front of a screenshot of it.
+       */}
+      <div className="king-stage relative">
+        {/* Darkened proscenium so the King reads as inside the scene */}
+        <div className="king-stage-shade" aria-hidden="true" />
+        {/* Light shaft from the throne-room windows */}
+        <div className="king-stage-light" aria-hidden="true" />
+        {/* Slow ember motes rising at ground level */}
+        <div className="king-stage-motes" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+        </div>
+        <CharacterWelcome kind="king" />
+        <div className="h-[22dvh]" aria-hidden="true" />
+      </div>
 
       {/* Hero status: level & XP at a glance */}
       <RunePanel className="mt-4">

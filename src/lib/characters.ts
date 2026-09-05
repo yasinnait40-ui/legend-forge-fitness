@@ -2,8 +2,10 @@ import type { TFunction } from "i18next";
 import type { GameState } from "./game-store";
 import { levelFromXp } from "./game-data";
 
-export type CharacterId = "king" | "adventurer" | "scholar" | "sage" | "hero" | "hakari" | "miri";
-export type CharacterScreen = "home" | "quests" | "trials" | "guide" | "character" | "legend";
+export type CharacterId =
+  "king" | "adventurer" | "scholar" | "sage" | "hero" | "hakari" | "miri" | "maid";
+export type CharacterScreen =
+  "home" | "quests" | "trials" | "guide" | "character" | "legend" | "settings";
 
 export interface CharacterDefinition {
   id: CharacterId;
@@ -125,6 +127,21 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
       levelUp: "characters.dialogue.miri.levelUp",
       streak: "characters.dialogue.miri.streak",
       progress: "characters.dialogue.miri.progress",
+    },
+  },
+  maid: {
+    id: "maid",
+    nameKey: "characters.roster.maid.name",
+    roleKey: "characters.roster.maid.role",
+    screen: "settings",
+    artwork: { src: "/characters/Maid.png", altKey: "characters.roster.maid.alt" },
+    accent: "var(--stat-recovery)",
+    dialogueKeys: {
+      default: "characters.dialogue.maid.default",
+      newPlayer: "characters.dialogue.maid.new",
+      levelUp: "characters.dialogue.maid.levelUp",
+      streak: "characters.dialogue.maid.streak",
+      progress: "characters.dialogue.maid.progress",
     },
   },
 };

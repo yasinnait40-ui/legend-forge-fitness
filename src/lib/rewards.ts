@@ -1,8 +1,9 @@
 import { toast } from "sonner";
 import { achievementById, RARITY_LABELS, ACHIEVEMENT_REWARDS, itemById } from "./game-data";
 import type { AwardResult } from "./game-store";
+import { emitCharacterReaction } from "./character-reactions";
 
-/** Announce XP, level-ups, achievements and their rewards via toasts. */
+/** Announce XP, level-ups, achievements and their rewards via toasts — and let the cast react. */
 export function announceRewards(result: AwardResult, label: string) {
   toast.success(label, { description: `+${result.xpGained} XP` });
 
@@ -17,6 +18,15 @@ export function announceRewards(result: AwardResult, label: string) {
       description: `Your legend grows — you are now Level ${result.newLevel}.`,
       duration: 6000,
     });
+    emitCharacterReaction("level-up");
+  }
+
+  if (result.unlocked.length > 0) {
+    emitCharacterReaction("achievement");
+  }
+
+  if (result.treasure) {
+    emitCharacterReaction("reward");
   }
 
   for (const id of result.unlocked) {

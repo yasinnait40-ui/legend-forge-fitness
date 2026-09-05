@@ -539,13 +539,17 @@
         "name": "Hakari",
         "role": "Sacred companion",
         "alt": "Hakari, a cheerful magical companion"
-      },
-      "miri": {
-        "name": "Miri",
-        "role": "Playful companion",
-        "alt": "Miri, an elegant magical companion"
-      }
-    },
+      }, "miri": {
+  "name": "Miri",
+  "role": "Playful companion",
+  "alt": "Miri, an elegant magical companion"
+ },
+ "maid": {
+  "name": "The Maid",
+  "role": "Chamber steward",
+  "alt": "The Maid, an elegant chamber steward of the keep"
+ }
+},
     "actions": { "advance": "Advance dialogue", "dismiss": "Dismiss dialogue" },
     "companionsTitle": "Sacred Companions",
     "companionsDesc": "Two sacred companions walk beside you on this journey.",
@@ -591,15 +595,21 @@
         "levelUp": "Your light grew stronger! I could feel it from here!",
         "streak": "The same flame, burning brighter each day. That is real magic.",
         "progress": "I am so proud of you! The realm is brighter because of your legend."
-      },
-      "miri": {
-        "default": "A gentle glow follows those who persevere. Yours is lovely.",
-        "new": "Welcome, new traveler. I will add a little sparkle to your path.",
-        "levelUp": "Another verse added to your legend. Each one more beautiful.",
-        "streak": "Steady as starlight, warm as dawn. Your consistency inspires me.",
-        "progress": "You shine a little brighter every day. The realm notices."
-      }
-    },
+      }, "miri": {
+ "default": "A gentle glow follows those who persevere. Yours is lovely.",
+ "new": "Welcome, new traveler. I will add a little sparkle to your path.",
+ "levelUp": "Another verse added to your legend. Each one more beautiful.",
+ "streak": "Steady as starlight, warm as dawn. Your consistency inspires me.",
+ "progress": "You shine a little brighter every day. The realm notices."
+ },
+ "maid": {
+ "default": "Okaeri, goshujin-sama. Your chamber has been prepared. Shall we review the realm's settings?",
+ "new": "Okaeri, goshujin-sama. I have kept your chamber ready — rest, then return to the road.",
+ "levelUp": "Magnificent, goshujin-sama. The whole keep will speak of this by evening.",
+ "streak": "Your flame burns daily, goshujin-sama. I shall keep the hearth lit to match it.",
+ "progress": "Every seal and every trial — I have noted each one. Your chamber reflects your rising legend."
+ }
+},
     "welcome": {
       "king": "Warrior. The realm has need of you. Your trial begins at dawn.",
       "adventurer": "The road ahead is long, but every great journey starts with a single step. Let us move.",

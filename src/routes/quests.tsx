@@ -17,6 +17,7 @@ import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeQuest, questsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
+import { emitCharacterReaction } from "@/lib/character-reactions";
 import { playSound } from "@/lib/sound-store";
 import { QUESTS, type Quest, type StatKey } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
@@ -81,6 +82,7 @@ function QuestsPage() {
     const result = await completeQuest(q.id, q.xp, q.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
+      emitCharacterReaction("quest-complete");
       announceRewards(result, t("quests.sealedToast", { name: g.quest(q).name }));
       if (result.treasure) setTreasure(result.treasure);
       if (game.totalQuests + game.totalTrials === 1)

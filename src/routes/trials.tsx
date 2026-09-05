@@ -8,6 +8,7 @@ import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeTrial, trialsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
+import { emitCharacterReaction } from "@/lib/character-reactions";
 import { playSound } from "@/lib/sound-store";
 import { TRIALS, type StatKey, type Trial } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
@@ -64,6 +65,7 @@ function TrialsPage() {
     const result = await completeTrial(trial.id, trial.name, trial.xp, trial.stats);
     if (result) {
       playSound(result.leveledUp ? "levelUp" : "questComplete");
+      emitCharacterReaction("quest-complete");
       announceRewards(result, t("trials.conqueredToast", { name: g.trial(trial).name }));
       if (result.treasure) setTreasure(result.treasure);
       if (game.totalQuests + game.totalTrials === 1)

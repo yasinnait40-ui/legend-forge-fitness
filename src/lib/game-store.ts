@@ -254,6 +254,10 @@ function applyAward(
     next.streak = next.lastActiveDate === yesterday ? next.streak + 1 : 1;
     next.lastActiveDate = t;
     next.bestStreak = Math.max(next.bestStreak, next.streak);
+    // Streak milestones (3/7/14/30) get a small character acknowledgment.
+    if ([3, 7, 14, 30].includes(next.streak)) {
+      void import("./character-reactions").then((m) => m.emitCharacterReaction("streak"));
+    }
   }
 
   // Activity log (for the observatory charts).

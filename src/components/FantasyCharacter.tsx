@@ -10,14 +10,57 @@ import {
 } from "@/lib/characters";
 import { useGame } from "@/lib/game-store";
 import { playCharacterIntro } from "@/lib/sound-store";
+import {
+  subscribeCharacterReactions,
+  type CharacterReaction,
+  type CharacterReactionKind,
+} from "@/lib/character-reactions";
 import { cn } from "@/lib/utils";
 
 export type FantasyCharacterKind = CharacterId | LegacyCharacterId;
 
-// Characters that should have the floating animation (companions, magical beings)
-const FLOATING_CHARACTERS: CharacterId[] = ["hakari", "miri", "sage"];
-// Characters that should have a breathing animation (alive, grounded NPCs)
-const BREATHING_CHARACTERS: CharacterId[] = ["king", "adventurer", "hero", "scholar"];
+/*
+ * PRESENCE SYSTEM — per-character idle personalities.
+ *
+ * Every character gets their own slow, GPU-friendly idle loop (transform +
+ * opacity only). No two idle styles are the same so the roster reads as a
+ * cast of NPCs rather than copies of one sprite.
+ *
+ *  king        — slow, confident sway + gentle breathing (authority)
+ *  adventurer  — livelier breath with a light stance shift (energy)
+ *  scholar     — precise, even breathing with a subtle head-side tilt
+ *  sage        — barely-there float with a slow mystical sway (magic)
+ *  hero        — warm, steady breathing with a small encouraging lean
+ *  hakari      — cheerful bobbing float (small sacred companion)
+ *  miri        — graceful side-drift float, distinct from Hakari
+ *  maid        — composed, elegant, near-imperceptible sway
+ */
+const IDLE_CLASS: Record<CharacterId, string> = {
+  king: "char-idle-king",
+  adventurer: "char-idle-adventurer",
+  scholar: "char-idle-scholar",
+  sage: "char-idle-sage",
+  hero: "char-idle-hero",
+  hakari: "char-idle-hakari",
+  miri: "char-idle-miri",
+  maid: "char-idle-maid",
+};
+
+/** Characters whose idle includes a float — their ground shadow softens. */
+const FLOATING: CharacterId[] = ["hakari", "miri", "sage"];
+
+/** How long a reaction animation stays on the figure (matches CSS timing). */
+const REACTION_MS = 1150;
+
+/** Map a reaction event to a duration bucket so multiple events feel varied. */
+const REACTION_CLASS: Record<CharacterReactionKind, string> = {
+  "quest-accepted": "char-react-nod",
+  "quest-complete": "char-react-triumph",
+  "level-up": "char-react-levelup",
+  achievement: "char-react-triumph",
+  streak: "char-react-nod",
+  reward: "char-react-glow",
+};
 
 export function FantasyCharacter({
   kind,
@@ -36,6 +79,8 @@ export function FantasyCharacter({
 
   const [visible, setVisible] = useState(false);
   const [lineIndex, setLineIndex] = useState(0);
+  const [speaking, setSpeaking] = useState(false);
+  const [reaction, setReaction] = useState<CharacterReaction | null>(null);
 
   /*
    * Prevent the intro sound from playing repeatedly because of:
@@ -45,6 +90,8 @@ export function FantasyCharacter({
    * - game-store updates
    */
   const introPlayedRef = useRef<string | null>(null);
+  const speakTimerRef = useRef<number | null>(null);
+  const reactionTimerRef = useRef<number | null>(null);
 
   const resolvedDialogue = dialogue ?? characterDialogue(id, game, t);
 
@@ -76,6 +123,44 @@ export function FantasyCharacter({
   }, [resolvedDialogue]);
 
   /*
+   * SPEAKING STATE
+   *
+   * While a line is on screen the figure leans toward its dialogue (a tiny
+   * accent-colored emphasis) and the nameplate lights up. It clears when the
+   * dialogue is dismissed so the character returns to pure idle.
+   */
+  useEffect(() => {
+    setSpeaking(visible && lines.length > 0);
+    return () => {
+      if (speakTimerRef.current !== null) {
+        window.clearTimeout(speakTimerRef.current);
+        speakTimerRef.current = null;
+      }
+    };
+  }, [visible, lines.length]);
+
+  useEffect(
+    () => () => {
+      if (reactionTimerRef.current !== null) window.clearTimeout(reactionTimerRef.current);
+    },
+    [],
+  );
+
+  /*
+   * CHARACTER REACTIONS
+   *
+   * Gameplay systems publish events; the mounted character plays one short
+   * animation. Reactions never stack — a newer event replaces an older one.
+   */
+  useEffect(() => {
+    return subscribeCharacterReactions((next) => {
+      setReaction(next);
+      if (reactionTimerRef.current !== null) window.clearTimeout(reactionTimerRef.current);
+      reactionTimerRef.current = window.setTimeout(() => setReaction(null), REACTION_MS);
+    });
+  }, []);
+
+  /*
    * CHARACTER INTRO SOUND
    *
    * Play exactly ONE sound when this character enters.
@@ -104,26 +189,28 @@ export function FantasyCharacter({
       setLineIndex((current) => current + 1);
     } else {
       setVisible(false);
+      setSpeaking(false);
     }
   };
 
   const name = t(character.nameKey);
   const role = t(character.roleKey);
 
-  // Determine animation class for the character figure
-  const figureAnimationClass = FLOATING_CHARACTERS.includes(id)
-    ? "char-float"
-    : BREATHING_CHARACTERS.includes(id)
-      ? "char-breathe"
-      : "";
+  const idleClass = IDLE_CLASS[id] ?? "";
+  const reactionClass = reaction ? REACTION_CLASS[reaction.kind] : "";
+  const floating = FLOATING.includes(id);
 
   const companionDialogueClass = id === "hakari" || id === "miri" ? " companion-dialogue" : "";
 
   return (
     <aside
-      className={`fantasy-character fantasy-character-${id} ${
-        embedded ? "fantasy-character-embedded" : ""
-      } ${visible ? "is-entered" : ""}`}
+      className={cn(
+        "fantasy-character",
+        `fantasy-character-${id}`,
+        embedded && "fantasy-character-embedded",
+        visible && "is-entered",
+        speaking && "is-speaking",
+      )}
       style={
         {
           "--character-accent": character.accent,
@@ -134,16 +221,25 @@ export function FantasyCharacter({
       <div className="fantasy-character-figure">
         {/* Ambient aura glow behind the character */}
         <div className="char-aura" aria-hidden="true" />
+        {/* Backlight halo — separates the figure from the backdrop (depth) */}
+        <div className="char-rim-light" aria-hidden="true" />
         <img
           src={character.artwork.src}
           alt={t(character.artwork.altKey)}
-          className={`fantasy-character-art ${figureAnimationClass}`}
+          className={cn(
+            "fantasy-character-art",
+            idleClass,
+            reactionClass && `char-reacting ${reactionClass}`,
+          )}
           loading="eager"
           decoding="async"
           fetchPriority="high"
         />
-        {/* Ground shadow for physical presence */}
-        <div className="char-ground-shadow" aria-hidden="true" />
+        {/* Ground shadow for physical presence — floats get a softer, wider pool */}
+        <div
+          className={cn("char-ground-shadow", floating && "char-ground-shadow-float")}
+          aria-hidden="true"
+        />
       </div>
 
       <button
@@ -161,7 +257,11 @@ export function FantasyCharacter({
           <small>{role}</small>
         </span>
 
-        {lines.length > 0 && <span className="fantasy-character-line">{lines[lineIndex]}</span>}
+        {lines.length > 0 && (
+          <span className="fantasy-character-line" key={lineIndex}>
+            {lines[lineIndex]}
+          </span>
+        )}
 
         <span className="fantasy-character-continue" aria-hidden="true">
           {lineIndex < lines.length - 1 ? "▼" : "✕"}

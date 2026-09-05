@@ -402,9 +402,9 @@
 }
 
 /* P1.2: premium entrance — the figure settles into place with a soft arc    */
-/* while the parent bar rises. Respects reduced motion (disabled below).      */
+/* while the parent bar rises. 560ms total: fast, cinematic, never blocking.  */
 .fantasy-character.is-entered .fantasy-character-figure {
-  animation: character-land 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: character-land 0.56s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes character-land {
@@ -1123,7 +1123,19 @@ html[dir="rtl"] .font-display {
   .boss-defeated-glow,
   .fantasy-character.is-entered .fantasy-character-figure,
   .char-breathe,
-  .char-float {
+  .char-float,
+  .char-idle-king,
+  .char-idle-adventurer,
+  .char-idle-scholar,
+  .char-idle-sage,
+  .char-idle-hero,
+  .char-idle-maid,
+  .char-idle-hakari,
+  .char-idle-miri,
+  .char-reacting,
+  .char-aura,
+  .fantasy-character-line,
+  .fantasy-character-figure .char-ground-shadow {
     animation: none;
   }
   .world-zone {
@@ -1132,8 +1144,12 @@ html[dir="rtl"] .font-display {
 }
 
 /* -------------------------------------------------------------------------- */
-/* GAME FEEL: Character breathing & grounding                                   */
+/* GAME FEEL: Character presence — per-character idles & grounding              */
 /* -------------------------------------------------------------------------- */
+/* All idles are transform/opacity only (GPU-composited, phone-safe). Each     */
+/* character owns a distinct rhythm so the cast reads as individual NPCs.      */
+
+/* Legacy hooks kept for any ad-hoc usage outside the character system. */
 .char-breathe {
   animation: char-breathe 4s ease-in-out infinite;
   will-change: transform;
@@ -1162,6 +1178,226 @@ html[dir="rtl"] .font-display {
   50% {
     transform: translateY(-8px);
   }
+}
+
+/* KING — slow, confident, authoritative. A deep breath and a settling sway. */
+.char-idle-king {
+  animation: char-idle-king 6.4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+@keyframes char-idle-king {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scaleY(1);
+  }
+  38% {
+    transform: translateY(-3px) rotate(-0.35deg) scaleY(1.006);
+  }
+  62% {
+    transform: translateY(-3px) rotate(0.3deg) scaleY(1.006);
+  }
+}
+
+/* ADVENTURER — energetic: quicker breath, light stance shift. */
+.char-idle-adventurer {
+  animation: char-idle-adventurer 3.6s ease-in-out infinite;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+@keyframes char-idle-adventurer {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-4.5px) rotate(0.5deg);
+  }
+  55% {
+    transform: translateY(-1px) rotate(-0.4deg);
+  }
+}
+
+/* SCHOLAR — calm, precise, even breathing with a measured tilt. */
+.char-idle-scholar {
+  animation: char-idle-scholar 5.2s ease-in-out infinite;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+@keyframes char-idle-scholar {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-2.5px) rotate(0.25deg) scale(1.004);
+  }
+}
+
+/* SAGE — slow, mysterious: barely-there float with a mystical sway. */
+.char-idle-sage {
+  animation: char-idle-sage 7.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes char-idle-sage {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  33% {
+    transform: translateY(-6px) translateX(1.5px);
+  }
+  66% {
+    transform: translateY(-3px) translateX(-1.5px);
+  }
+}
+
+/* HERO — warm, steady, encouraging breathing with a small lean. */
+.char-idle-hero {
+  animation: char-idle-hero 4.4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+@keyframes char-idle-hero {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  45% {
+    transform: translateY(-3.5px) rotate(-0.45deg);
+  }
+}
+
+/* MAID — elegant and composed: near-imperceptible, slow sway. */
+.char-idle-maid {
+  animation: char-idle-maid 6.8s ease-in-out infinite;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+@keyframes char-idle-maid {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(0.2deg);
+  }
+}
+
+/* HAKARI — small, cheerful magical bob. */
+.char-idle-hakari {
+  animation: char-idle-hakari 3.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes char-idle-hakari {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  40% {
+    transform: translateY(-7px) rotate(1.2deg);
+  }
+  70% {
+    transform: translateY(-3px) rotate(-0.8deg);
+  }
+}
+
+/* MIRI — graceful side-drift float, deliberately distinct from Hakari. */
+.char-idle-miri {
+  animation: char-idle-miri 5.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes char-idle-miri {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateX(-3px) translateY(-6px) rotate(-1deg);
+  }
+  65% {
+    transform: translateX(3px) translateY(-2px) rotate(1deg);
+  }
+}
+
+/* Ground shadow breathes with the idle so grounding stays believable. */
+.fantasy-character-figure .char-ground-shadow {
+  transition: opacity 0.4s ease;
+}
+.char-idle-king ~ .char-ground-shadow,
+.char-idle-adventurer ~ .char-ground-shadow,
+.char-idle-scholar ~ .char-ground-shadow,
+.char-idle-hero ~ .char-ground-shadow,
+.char-idle-maid ~ .char-ground-shadow {
+  animation: char-shadow-breathe 6.4s ease-in-out infinite;
+}
+.char-idle-sage ~ .char-ground-shadow,
+.char-idle-hakari ~ .char-ground-shadow,
+.char-idle-miri ~ .char-ground-shadow {
+  animation: char-shadow-float 3.2s ease-in-out infinite;
+}
+
+@keyframes char-shadow-breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 0.82;
+    transform: translateX(-50%) scaleX(0.94);
+  }
+}
+
+@keyframes char-shadow-float {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translateX(-50%) scaleX(0.82);
+  }
+}
+
+/* Rim light — a soft backlight halo separating the figure from the scene. */
+.char-rim-light {
+  position: absolute;
+  inset: -12% -18%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 22%, transparent) 0%,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 8%, transparent) 45%,
+    transparent 72%
+  );
+  filter: blur(2px);
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+/* Soft light pool on the ground beneath the character — environmental light. */
+.char-ground-shadow::after {
+  content: "";
+  position: absolute;
+  inset: -260% -60%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 10%, transparent) 0%,
+    transparent 62%
+  );
+  pointer-events: none;
 }
 
 /* Character ground shadow — makes them feel physically present */
@@ -1206,10 +1442,293 @@ html[dir="rtl"] .font-display {
 }
 
 /* -------------------------------------------------------------------------- */
+/* GAME FEEL: Home throne room — the King stands inside his kingdom            */
+/* -------------------------------------------------------------------------- */
+/* A staged composition: darkened backdrop behind the figure, a soft light     */
+/* shaft from above, ember motes near the ground, and a formal dais shadow.   */
+/* Pure CSS on GPU-friendly properties; disabled under reduced motion.        */
+.king-stage {
+  margin-top: 1.5rem;
+}
+
+.king-stage-shade {
+  position: absolute;
+  inset: -2rem -1rem 0;
+  background: radial-gradient(
+    ellipse 120% 70% at 50% 42%,
+    rgb(12 9 3 / 0.52) 0%,
+    rgb(12 9 3 / 0.24) 55%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.king-stage-light {
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  width: min(120%, 34rem);
+  height: 130%;
+  transform: translateX(-50%);
+  background: conic-gradient(
+    from 180deg at 50% 0%,
+    transparent 40%,
+    color-mix(in oklab, var(--primary) 16%, transparent) 50%,
+    transparent 60%
+  );
+  filter: blur(6px);
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+  animation: king-light-breathe 9s ease-in-out infinite;
+}
+
+@keyframes king-light-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.king-stage .fantasy-character {
+  position: relative;
+  z-index: 2;
+}
+
+.king-stage .fantasy-character-figure::after {
+  /* Dais: a formal stone platform shadow under the King. */
+  content: "";
+  position: absolute;
+  bottom: -1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 84%;
+  height: 1.4rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at center, rgb(10 8 3 / 0.5) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.king-stage-motes {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 14dvh;
+  height: 30dvh;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.king-stage-motes i {
+  position: absolute;
+  bottom: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--accent, gold) 85%, white 15%);
+  box-shadow: 0 0 6px color-mix(in oklab, var(--accent, gold) 80%, transparent);
+  opacity: 0;
+  animation: mote-rise 7s linear infinite;
+}
+
+.king-stage-motes i:nth-child(1) {
+  left: 16%;
+  animation-delay: 0s;
+  animation-duration: 7.5s;
+}
+.king-stage-motes i:nth-child(2) {
+  left: 34%;
+  animation-delay: 2.1s;
+  animation-duration: 6.2s;
+}
+.king-stage-motes i:nth-child(3) {
+  left: 55%;
+  animation-delay: 3.6s;
+  animation-duration: 8.4s;
+}
+.king-stage-motes i:nth-child(4) {
+  left: 72%;
+  animation-delay: 1.2s;
+  animation-duration: 6.8s;
+}
+.king-stage-motes i:nth-child(5) {
+  left: 88%;
+  animation-delay: 4.8s;
+  animation-duration: 7.9s;
+}
+
+@keyframes mote-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+  12% {
+    opacity: 0.75;
+  }
+  80% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-24dvh) scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .king-stage-light,
+  .king-stage-motes i {
+    animation: none;
+    opacity: 0;
+  }
+  .king-stage-motes i:first-child {
+    opacity: 0.4;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /* GAME FEEL: RPG Dialogue bubble improvements                                  */
 /* -------------------------------------------------------------------------- */
 .fantasy-character-dialogue {
   backdrop-filter: blur(10px);
+}
+
+/* New line entrance — the speech feels spoken, not stamped on screen. */
+.fantasy-character-line {
+  animation: dialogue-line-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dialogue-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* SPEAKING STATE — the figure leans toward its words while talking. */
+.is-speaking .fantasy-character-nameplate strong {
+  color: color-mix(in oklab, var(--character-accent, var(--primary)) 65%, var(--foreground));
+  text-shadow: 0 0 10px color-mix(in oklab, var(--character-accent, var(--primary)) 45%, transparent);
+}
+.is-speaking .fantasy-character-dialogue {
+  border-color: color-mix(in oklab, var(--character-accent, var(--primary)) 80%, var(--border));
+  box-shadow:
+    0 10px 26px -12px color-mix(in oklab, oklch(0.4 0.06 260) 35%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.75),
+    0 0 18px color-mix(in oklab, var(--character-accent, var(--primary)) 22%, transparent);
+}
+.is-speaking .char-aura {
+  opacity: 0.85;
+}
+
+/* -------------------------------------------------------------------------- */
+/* GAME FEEL: Character reactions (quest / level-up / achievement / reward)    */
+/* -------------------------------------------------------------------------- */
+/* One class per reaction, applied briefly by the component. Cheap, distinct, */
+/* and impossible to stack — a newer event simply replaces the older one.     */
+/* Cascade note: reaction rules come after the idle shorthands, so the        */
+/* reaction's name/duration win and the idle pauses while reacting.           */
+.char-reacting {
+  animation-duration: 1.1s;
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+
+/* Small positive acknowledgment — quest accepted, streak milestone. */
+.char-react-nod {
+  animation-name: char-react-nod;
+}
+
+@keyframes char-react-nod {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  28% {
+    transform: translateY(-5px) rotate(-1.1deg);
+  }
+  55% {
+    transform: translateY(-2px) rotate(0.7deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Stronger victory beat — quest completed, achievement unlocked. */
+.char-react-triumph {
+  animation-name: char-react-triumph;
+}
+
+@keyframes char-react-triumph {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-8px) scale(1.025);
+  }
+  55% {
+    transform: translateY(-2px) scale(1.005);
+  }
+  75% {
+    transform: translateY(-4px) scale(1.012);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Pride and excitement — level up. Bright accent flare included. */
+.char-react-levelup {
+  animation-name: char-react-levelup;
+}
+
+@keyframes char-react-levelup {
+  0% {
+    transform: translateY(0) scale(1);
+    filter: none;
+  }
+  25% {
+    transform: translateY(-9px) scale(1.035);
+    filter: drop-shadow(0 0 14px color-mix(in oklab, var(--character-accent, var(--primary)) 55%, transparent));
+  }
+  50% {
+    transform: translateY(-3px) scale(1.01);
+  }
+  70% {
+    transform: translateY(-6px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    filter: none;
+  }
+}
+
+/* Reward shimmer — the character presents the spoils. */
+.char-react-glow {
+  animation-name: char-react-glow;
+}
+
+@keyframes char-react-glow {
+  0% {
+    filter: none;
+    transform: translateY(0);
+  }
+  35% {
+    filter: drop-shadow(0 0 12px color-mix(in oklab, var(--accent, gold) 60%, transparent));
+    transform: translateY(-4px);
+  }
+  100% {
+    filter: none;
+    transform: translateY(0);
+  }
 }
 
 .fantasy-character-line::before {
@@ -1551,6 +2070,16 @@ html[dir="rtl"] .font-display {
   transform: translateX(-50%);
   width: 72%;
   opacity: 0.9;
+}
+
+/* Companions get a matching light pool so they read as standing on the same */
+/* ground as the rest of the cast (shared environment, not two cut-outs).    */
+.companion-column .char-ground-shadow::after {
+  background: radial-gradient(
+    ellipse,
+    color-mix(in oklab, var(--character-accent, var(--accent)) 14%, transparent) 0%,
+    transparent 62%
+  );
 }
 
 /* Keep the dialogue arrow readable on small screens */
