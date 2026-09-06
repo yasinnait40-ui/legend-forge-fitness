@@ -1,16 +1,45 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-
+@font-face {
+  font-family: "Cinzel Decorative";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/cinzeldecorative/v15/8vIU7rcO9rQqPyI5ARv0WQ.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Cinzel Decorative";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: local("Cinzel Decorative"), local("Cinzel Decorative-Regular");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/cormorantgaramond/v20/co3bmX5slCNuHLi9vvWhemYBpF5E.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/cormorantgaramond/v20/co3YmxrLk3ountainwdCZ3eY9shXFOqlrB-.woff2")
+    format("woff2");
+}
 @custom-variant dark (&:is(.dark *));
 
 /*
- * AETHORA design system — premium light fantasy RPG.
- * Palette: warm ivory & parchment, celestial blue, emerald forest,
- * lavender mist, and antique gold accents. All colors use oklch.
- * Components must use these semantic tokens only.
+ * AETHORA design system — enchanted forest realm.
+ * Palette: aged parchment, antique copper, warm gold, muted sage,
+ * forest green, and deep forest. Components must use these semantic
+ * tokens only.
  */
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -67,207 +96,146 @@
   --font-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
   --font-roman: "Cormorant Garamond", "Georgia", serif;
 }
-
 :root {
   --radius: 0.75rem;
-  --nav-h: 4.5rem;
-
-  /*
-   * AETHORA palette — warm ancient-forest realm.
-   * Terracotta-rust primary, muted gold secondary, warm-cream surface,
-   * sage / forest-green stat tones, deep forest dark mode.
-   * Text is dark enough to stay readable against the lighter base.
-   */
-
-  /* Paper / parchment base — warm cream */
-  --background: oklch(0.88 0.06 78);
-  --foreground: oklch(0.2 0.028 252);
-
-  /* Panels sit on warm ivory, never pure white */
-  --card: oklch(0.92 0.05 78);
-  --card-foreground: oklch(0.2 0.028 252);
-
-  --popover: oklch(0.92 0.05 78);
-  --popover-foreground: oklch(0.2 0.028 252);
-
-  /* Primary = warm terracotta/rust accent */
-  --primary: oklch(0.58 0.13 42);
-  --primary-foreground: oklch(0.96 0.008 92);
-
-  /* Secondary = soft muted gold */
-  --secondary: oklch(0.78 0.12 84);
-  --secondary-foreground: oklch(0.24 0.03 250);
-
-  /* Muted surfaces */
-  --muted: oklch(0.86 0.045 78);
-  --muted-foreground: oklch(0.36 0.028 255);
-
-  /* Accent = deeper terracotta for destructive/alert sparks, kept restrained */
-  --accent: oklch(0.5 0.14 38);
-  --accent-foreground: oklch(0.96 0.008 92);
-
-  /* Character palettes — earthy hues that read as distinct NPCs on the
-     warm forest base. Kept deliberately different in hue and chroma. */
+  --nav-h: 4.5rem; /* Paper / parchment base — aged parchment, warm cream */
+  --background: #e7d5a4;
+  --foreground: #374d26; /* Panels sit on slightly darker parchment, never pure white */
+  --card: #e7d5a4;
+  --card-foreground: #374d26;
+  --popover: #e7d5a4;
+  --popover-foreground: #374d26; /* Primary = luminous antique copper, used for actions and important labels */
+  --primary: #c57d4a;
+  --primary-foreground: #e7d5a4; /* Secondary = warm golden highlight for magical details and selected states */
+  --secondary: #dbbe63;
+  --secondary-foreground: #374d26; /* Muted surfaces: sage green for secondary/natural surfaces */
+  --muted: #a6b16e;
+  --muted-foreground: #374d26; /* Accent = deeper warm copper-rust for destructive/alert sparks */
+  --accent: #c57d4a;
+  --accent-foreground: #e7d5a4; /* Character palettes — earthy hues that read as distinct NPCs on the     warm forest base. Kept deliberately different in hue and chroma. */
   --accent-king: oklch(0.58 0.15 52);
   --accent-king-overline: oklch(0.7 0.12 52);
   --accent-king-shadow: oklch(0.34 0.13 52);
-
   --accent-adventurer: oklch(0.64 0.2 42);
   --accent-adventurer-overline: oklch(0.76 0.16 42);
   --accent-adventurer-shadow: oklch(0.42 0.18 42);
-
   --accent-scholar: oklch(0.55 0.13 232);
   --accent-scholar-overline: oklch(0.68 0.11 232);
   --accent-scholar-shadow: oklch(0.34 0.12 232);
-
   --accent-sage: oklch(0.48 0.13 148);
   --accent-sage-overline: oklch(0.6 0.11 148);
   --accent-sage-shadow: oklch(0.3 0.11 148);
-
   --accent-hero: oklch(0.54 0.13 148);
   --accent-hero-overline: oklch(0.66 0.11 148);
   --accent-hero-shadow: oklch(0.32 0.12 148);
-
   --accent-hakari: oklch(0.7 0.15 72);
   --accent-hakari-overline: oklch(0.82 0.12 72);
   --accent-hakari-shadow: oklch(0.48 0.14 72);
-
   --accent-miri: oklch(0.56 0.14 188);
   --accent-miri-overline: oklch(0.68 0.11 188);
   --accent-miri-shadow: oklch(0.36 0.12 188);
-
   --accent-maid: oklch(0.5 0.13 320);
   --accent-maid-overline: oklch(0.62 0.1 320);
-  --accent-maid-shadow: oklch(0.32 0.11 320);
-
-  --destructive: oklch(0.5 0.16 26);
-  --destructive-foreground: oklch(0.96 0.008 92);
-
-  --border: oklch(0.5 0.05 48 / 28%);
-  --input: oklch(0.5 0.05 48 / 32%);
-  --ring: oklch(0.58 0.13 42);
-
-  --chart-1: oklch(0.58 0.13 42);
-  --chart-2: oklch(0.5 0.14 38);
-  --chart-3: oklch(0.54 0.12 148);
-  --chart-4: oklch(0.5 0.1 232);
-  --chart-5: oklch(0.6 0.11 72);
-
-  --sidebar: oklch(0.86 0.045 78);
-  --sidebar-foreground: oklch(0.2 0.028 252);
-  --sidebar-primary: oklch(0.58 0.13 42);
-  --sidebar-primary-foreground: oklch(0.96 0.008 92);
-  --sidebar-accent: oklch(0.78 0.12 84);
-  --sidebar-accent-foreground: oklch(0.24 0.03 250);
-  --sidebar-border: oklch(0.5 0.05 48 / 28%);
-  --sidebar-ring: oklch(0.58 0.13 42);
-
-  /* Stat hues — earthy forest set, sage/forest against the warm base */
-  --stat-strength: oklch(0.55 0.15 42);
-  --stat-endurance: oklch(0.52 0.1 232);
-  --stat-agility: oklch(0.54 0.11 148);
-  --stat-vitality: oklch(0.6 0.1 82);
-  --stat-recovery: oklch(0.52 0.11 150);
-
-  /* Rarity hues — muted-forest family so rare/legendary still feel special */
-  --rarity-common: oklch(0.5 0.025 252);
-  --rarity-uncommon: oklch(0.55 0.11 148);
-  --rarity-rare: oklch(0.52 0.11 232);
-  --rarity-epic: oklch(0.5 0.12 300);
-  --rarity-legendary: oklch(0.58 0.13 42);
-}
-
-/* Dark mode: deeper parchment night, earthy forest identity. */
+  --accent-maid-shadow: oklch(
+    0.32 0.11 320
+  ); /* Destructive: deeper forest-magic red, still warm and aged, not neon */
+  --destructive: #7a3a26;
+  --destructive-foreground: #e7d5a4; /* Borders: copper on light parchment, antique gold on highlighted panels */
+  --border: #c57d4a;
+  --input: #c57d4a;
+  --ring: #dbbe63; /* Chart/state hues: copper, antique gold, sage, forest, deep forest */
+  --chart-1: #c57d4a;
+  --chart-2: #dbbe63;
+  --chart-3: #a6b16e;
+  --chart-4: #6b8061;
+  --chart-5: #374d26; /* Sidebar: deep forest panel with copper primary and golden accent */
+  --sidebar: #374d26;
+  --sidebar-foreground: #e7d5a4;
+  --sidebar-primary: #c57d4a;
+  --sidebar-primary-foreground: #e7d5a4;
+  --sidebar-accent: #dbbe63;
+  --sidebar-accent-foreground: #374d26;
+  --sidebar-border: #c57d4a;
+  --sidebar-ring: #dbbe63; /* Stat hues: copper strength, sage vitality, forest endurance/agility/recovery */
+  --stat-strength: #c57d4a;
+  --stat-endurance: #6b8061;
+  --stat-agility: #a6b16e;
+  --stat-vitality: #dbbe63;
+  --stat-recovery: #6b8061; /* Rarity hues: muted copper common/uncommon, gold/forest rare/epic/legendary */
+  --rarity-common: #c57d4a;
+  --rarity-uncommon: #a6b16e;
+  --rarity-rare: #6b8061;
+  --rarity-epic: #c57d4a;
+  --rarity-legendary: #dbbe63;
+} /* Dark mode: deep enchanted forest night — copper/gold still glow warmly. */
 .dark {
-  --background: oklch(0.16 0.02 142);
-  --foreground: oklch(0.85 0.018 92);
-
-  --card: oklch(0.19 0.02 138);
-  --card-foreground: oklch(0.85 0.018 92);
-
-  --popover: oklch(0.19 0.02 138);
-  --popover-foreground: oklch(0.85 0.018 92);
-
-  /* Deep forest dark mode — no near-black, keeping the warm earthy identity. */
-  --primary: oklch(0.66 0.14 50);
-  --primary-foreground: oklch(0.14 0.022 252);
-
-  /* Soft muted gold survives on the dark forest background. */
-  --secondary: oklch(0.42 0.1 82);
-  --secondary-foreground: oklch(0.9 0.018 95);
-
-  --muted: oklch(0.3 0.025 138);
-  --muted-foreground: oklch(0.62 0.022 95);
-
-  /* Deeper rust accent for alerts, vivid on forest dark. */
-  --accent: oklch(0.56 0.15 40);
-  --accent-foreground: oklch(0.92 0.016 92);
-
-  --accent-king: oklch(0.66 0.15 52);
-  --accent-king-overline: oklch(0.76 0.12 52);
-  --accent-king-shadow: oklch(0.42 0.13 52);
-
-  --accent-adventurer: oklch(0.72 0.2 42);
-  --accent-adventurer-overline: oklch(0.82 0.16 42);
-  --accent-adventurer-shadow: oklch(0.5 0.18 42);
-
-  --accent-scholar: oklch(0.62 0.13 232);
-  --accent-scholar-overline: oklch(0.72 0.11 232);
-  --accent-scholar-shadow: oklch(0.42 0.12 232);
-
-  --accent-sage: oklch(0.6 0.12 148);
-  --accent-sage-overline: oklch(0.7 0.1 148);
-  --accent-sage-shadow: oklch(0.4 0.1 148);
-
-  --accent-hero: oklch(0.62 0.13 148);
-  --accent-hero-overline: oklch(0.72 0.11 148);
-  --accent-hero-shadow: oklch(0.42 0.12 148);
-
-  --accent-hakari: oklch(0.74 0.15 72);
-  --accent-hakari-overline: oklch(0.84 0.12 72);
-  --accent-hakari-shadow: oklch(0.54 0.14 72);
-
-  --accent-miri: oklch(0.62 0.14 188);
-  --accent-miri-overline: oklch(0.72 0.11 188);
-  --accent-miri-shadow: oklch(0.42 0.12 188);
-
-  --accent-maid: oklch(0.6 0.13 320);
-  --accent-maid-overline: oklch(0.7 0.1 320);
-  --accent-maid-shadow: oklch(0.38 0.11 320);
-
-  --destructive: oklch(0.52 0.17 28);
-  --destructive-foreground: oklch(0.92 0.016 92);
-
-  --border: oklch(0.42 0.07 44 / 28%);
-  --input: oklch(0.42 0.07 44 / 32%);
-  --ring: oklch(0.66 0.14 50);
-
-  --chart-1: oklch(0.66 0.14 50);
-  --chart-2: oklch(0.56 0.15 40);
-  --chart-3: oklch(0.62 0.12 148);
-  --chart-4: oklch(0.6 0.1 232);
-  --chart-5: oklch(0.66 0.12 72);
-
-  --sidebar: oklch(0.22 0.02 138);
-  --sidebar-foreground: oklch(0.85 0.018 92);
-  --sidebar-primary: oklch(0.66 0.14 50);
-  --sidebar-primary-foreground: oklch(0.14 0.022 252);
-  --sidebar-accent: oklch(0.42 0.1 82);
-  --sidebar-accent-foreground: oklch(0.9 0.018 95);
-  --sidebar-border: oklch(0.42 0.07 44 / 28%);
-  --sidebar-ring: oklch(0.66 0.14 50);
-
-  --stat-strength: oklch(0.64 0.12 42);
-  --stat-endurance: oklch(0.64 0.09 232);
-  --stat-agility: oklch(0.66 0.1 148);
-  --stat-vitality: oklch(0.68 0.1 82);
-  --stat-recovery: oklch(0.64 0.1 150);
-
-  --rarity-common: oklch(0.72 0.015 252);
-  --rarity-uncommon: oklch(0.66 0.1 148);
-  --rarity-rare: oklch(0.64 0.1 232);
-  --rarity-epic: oklch(0.6 0.12 300);
-  --rarity-legendary: oklch(0.66 0.14 50);
+  /* Deep forest night surface — no pure black, warm magical darkness */
+  --background: #374d26;
+  --foreground: #e7d5a4; /* Slightly lighter forest for panels so UI still breathes at night */
+  --card: #2c3b21;
+  --card-foreground: #e7d5a4;
+  --popover: #2c3b21;
+  --popover-foreground: #e7d5a4; /* Copper remains warm and vivid against the forest night */
+  --primary: #c57d4a;
+  --primary-foreground: #e7d5a4; /* Antique gold stays luminous as the magical highlight color */
+  --secondary: #dbbe63;
+  --secondary-foreground: #374d26; /* Muted sage for natural secondary surfaces */
+  --muted: #a6b16e;
+  --muted-foreground: #e7d5a4; /* Accent stays copper-rust for alerts/sparks */
+  --accent: #dbbe63;
+  --accent-foreground: #374d26; /* Character accents keep distinct hues, but now readable on forest night */
+  --accent-king: #c57d4a;
+  --accent-king-overline: #dbbe63;
+  --accent-king-shadow: #374d26;
+  --accent-adventurer: #dbbe63;
+  --accent-adventurer-overline: #e7d5a4;
+  --accent-adventurer-shadow: #374d26;
+  --accent-scholar: #a6b16e;
+  --accent-scholar-overline: #e7d5a4;
+  --accent-scholar-shadow: #374d26;
+  --accent-sage: #6b8061;
+  --accent-sage-overline: #a6b16e;
+  --accent-sage-shadow: #374d26;
+  --accent-hero: #6b8061;
+  --accent-hero-overline: #a6b16e;
+  --accent-hero-shadow: #374d26;
+  --accent-hakari: #dbbe63;
+  --accent-hakari-overline: #e7d5a4;
+  --accent-hakari-shadow: #374d26;
+  --accent-miri: #a6b16e;
+  --accent-miri-overline: #6b8061;
+  --accent-miri-shadow: #374d26;
+  --accent-maid: #c57d4a;
+  --accent-maid-overline: #dbbe63;
+  --accent-maid-shadow: #374d26; /* Destructive: deeper magical ember, still warm, not neon */
+  --destructive: #9a4a2a;
+  --destructive-foreground: #e7d5a4; /* Borders: copper on dark forest, gold for highlight/focus ring */
+  --border: #c57d4a;
+  --input: #c57d4a;
+  --ring: #dbbe63; /* Chart/state hues mirror the light palette for consistency */
+  --chart-1: #c57d4a;
+  --chart-2: #dbbe63;
+  --chart-3: #a6b16e;
+  --chart-4: #6b8061;
+  --chart-5: #374d26; /* Sidebar: deep forest night, copper/gold identity preserved */
+  --sidebar: #22301a;
+  --sidebar-foreground: #e7d5a4;
+  --sidebar-primary: #c57d4a;
+  --sidebar-primary-foreground: #e7d5a4;
+  --sidebar-accent: #dbbe63;
+  --sidebar-accent-foreground: #374d26;
+  --sidebar-border: #c57d4a;
+  --sidebar-ring: #dbbe63; /* Stat hues: copper strength, sage vitality, forest endurance/agility/recovery */
+  --stat-strength: #c57d4a;
+  --stat-endurance: #6b8061;
+  --stat-agility: #a6b16e;
+  --stat-vitality: #dbbe63;
+  --stat-recovery: #6b8061; /* Rarity hues: copper/forest/legendary gold */
+  --rarity-common: #c57d4a;
+  --rarity-uncommon: #a6b16e;
+  --rarity-rare: #6b8061;
+  --rarity-epic: #c57d4a;
+  --rarity-legendary: #dbbe63;
 }
 
 @layer base {
@@ -284,7 +252,7 @@
     color: var(--color-foreground);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
-    /* Layered fantasy atmosphere: parchment sky with gold & lavender bloom */
+    /* Layered warm atmosphere: copper & gold bloom over parchment */
     background-image:
       radial-gradient(
         62rem 40rem at 18% -8%,
@@ -293,10 +261,14 @@
       ),
       radial-gradient(
         48rem 32rem at 90% 2%,
-        color-mix(in oklab, var(--secondary) 18%, transparent),
+        color-mix(in oklab, var(--secondary) 20%, transparent),
         transparent 62%
       ),
-      linear-gradient(180deg, oklch(0.93 0.055 76) 0%, var(--background) 34%);
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, #fff8e4 60%, var(--background)) 0%,
+        var(--background) 34%
+      );
     background-attachment: fixed;
   }
 
@@ -311,155 +283,153 @@
     background: color-mix(in oklab, var(--primary) 30%, transparent);
   }
 }
-
-/* ---------- Fantasy UI primitives ---------- */  .rune-panel {
-    position: relative;
-    border-radius: var(--radius-lg);
-    border: 1px solid color-mix(in oklab, var(--zone-color, var(--primary)) 32%, transparent);
-    outline: 1px solid color-mix(in oklab, var(--zone-color, var(--primary)) 12%, transparent);
-    outline-offset: 3px;
-    background: linear-gradient(
-      165deg,
-      color-mix(in oklab, var(--card) 96%, var(--background) 4%) 0%,
-      color-mix(in oklab, var(--card) 82%, var(--secondary) 18%) 100%
-    );
-    box-shadow:
-      0 10px 30px -12px color-mix(in oklab, oklch(0.35 0.07 40) 30%, transparent),
-      0 2px 6px -2px color-mix(in oklab, oklch(0.35 0.07 40) 14%, transparent),
-      inset 0 1px 0 rgb(255 248 228 / 0.55);
-  }  .rune-panel-soft {
-    border-radius: var(--radius-md);
-    border: 1px solid color-mix(in oklab, var(--primary) 24%, transparent);
-    background: color-mix(in oklab, var(--card) 76%, var(--secondary) 24%);
-  }  .text-glow-gold {
-    text-shadow:
-      0 1px 0 rgb(255 248 228 / 0.55),
-      0 0 18px color-mix(in oklab, var(--primary) 48%, transparent);
-  }
-
-  .text-glow-arcane {
-    text-shadow:
-      0 1px 0 rgb(255 248 228 / 0.55),
-      0 0 18px color-mix(in oklab, var(--accent) 44%, transparent);
-  }
-
-/* Section heading with flanking engraved lines */
+/* ---------- Fantasy UI primitives ---------- */
+.rune-panel {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in oklab, var(--zone-color, var(--primary)) 32%, transparent);
+  outline: 1px solid color-mix(in oklab, var(--zone-color, var(--primary)) 12%, transparent);
+  outline-offset: 3px;
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--card) 96%, var(--background) 4%) 0%,
+    color-mix(in oklab, var(--card) 82%, var(--secondary) 18%) 100%
+  );
+  box-shadow:
+    0 10px 30px -12px color-mix(in oklab, oklch(0.35 0.07 40) 30%, transparent),
+    0 2px 6px -2px color-mix(in oklab, oklch(0.35 0.07 40) 14%, transparent),
+    inset 0 1px 0 rgb(255 248 228 / 0.55);
+}
+.rune-panel-soft {
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, var(--primary) 24%, transparent);
+  background: color-mix(in oklab, var(--card) 76%, var(--secondary) 24%);
+}
+.text-glow-gold {
+  text-shadow:
+    0 1px 0 rgb(255 248 228 / 0.55),
+    0 0 18px color-mix(in oklab, var(--primary) 48%, transparent);
+}
+.text-glow-arcane {
+  text-shadow:
+    0 1px 0 rgb(255 248 228 / 0.55),
+    0 0 18px color-mix(in oklab, var(--accent) 44%, transparent);
+} /* Section heading with flanking engraved lines */
 .rune-heading {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-}  .rune-heading::before,
-  .rune-heading::after {
-    content: "";
-    height: 1px;
-    flex: 1;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      color-mix(in oklab, var(--primary) 62%, transparent),
-      transparent
-    );
-  }
-
-/* Buttons */  .btn-gold {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    width: 100%;
-    padding: 0.85rem 1.2rem;
-    border-radius: var(--radius-md);
-    border: 1px solid color-mix(in oklab, var(--primary) 70%, black 18%);
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--primary-foreground);
-    text-shadow: 0 1px 1px rgb(20 12 4 / 0.4);
-    background: linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--primary) 92%, var(--background) 12%),
-      color-mix(in oklab, var(--primary) 84%, black 18%)
-    );
-    box-shadow:
-      0 6px 18px -6px color-mix(in oklab, var(--primary) 72%, transparent),
-      0 1px 3px rgb(20 12 4 / 0.18),
-      inset 0 1px 0 rgb(255 248 228 / 0.45);
-    transition:
-      filter 0.2s ease,
-      transform 0.15s ease,
-      box-shadow 0.2s ease;
-    cursor: pointer;
-  }
-  .btn-gold:hover {
-    filter: brightness(1.06);
-    box-shadow:
-      0 8px 26px -6px color-mix(in oklab, var(--primary) 84%, transparent),
-      0 1px 3px rgb(20 12 4 / 0.18),
-      inset 0 1px 0 rgb(255 248 228 / 0.45);
-  }
-  .btn-gold:active {
-    transform: translateY(1px) scale(0.99);
-  }
-  .btn-gold:disabled {
-    opacity: 0.5;
-    cursor: default;
-    filter: none;
-  }  .btn-rune-ghost {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    width: 100%;
-    padding: 0.8rem 1.2rem;
-    border-radius: var(--radius-md);
-    border: 1px solid color-mix(in oklab, var(--primary) 50%, transparent);
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: color-mix(in oklab, var(--primary) 82%, black 14%);
-    background: color-mix(in oklab, var(--card) 74%, transparent);
-    backdrop-filter: blur(8px);
-    box-shadow:
-      0 2px 10px -4px color-mix(in oklab, oklch(0.35 0.07 40) 24%, transparent),
-      inset 0 1px 0 rgb(255 248 228 / 0.5);
-    transition:
-      background 0.2s ease,
-      box-shadow 0.2s ease;
-    cursor: pointer;
-  }
-  .btn-rune-ghost:hover {
-    background: color-mix(in oklab, var(--primary) 16%, var(--background));
-    box-shadow: 0 4px 18px -6px color-mix(in oklab, var(--primary) 64%, transparent);
-  }
-
-/* Reward / info chip */  .rune-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.22rem 0.6rem;
-    border-radius: 999px;
-    border: 1px solid color-mix(in oklab, var(--primary) 42%, transparent);
-    background: color-mix(in oklab, var(--primary) 14%, var(--background) 3%);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    color: var(--foreground);
-    white-space: nowrap;
-  }
-
-/* XP / stat bars */  .bar-track {
-    position: relative;
-    height: 0.55rem;
-    border-radius: 999px;
-    overflow: hidden;
-    background: color-mix(in oklab, var(--primary) 16%, var(--background) 5%);
-    border: 1px solid color-mix(in oklab, var(--primary) 24%, transparent);
-    box-shadow: inset 0 1px 3px rgb(20 12 4 / 0.1);
-  }
+}
+.rune-heading::before,
+.rune-heading::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--primary) 62%, transparent),
+    transparent
+  );
+} /* Buttons */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, var(--primary) 70%, black 18%);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary-foreground);
+  text-shadow: 0 1px 1px rgb(20 12 4 / 0.4);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 92%, var(--background) 12%),
+    color-mix(in oklab, var(--primary) 84%, black 18%)
+  );
+  box-shadow:
+    0 6px 18px -6px color-mix(in oklab, var(--primary) 72%, transparent),
+    0 1px 3px rgb(20 12 4 / 0.18),
+    inset 0 1px 0 rgb(255 248 228 / 0.45);
+  transition:
+    filter 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.btn-gold:hover {
+  filter: brightness(1.06);
+  box-shadow:
+    0 8px 26px -6px color-mix(in oklab, var(--primary) 84%, transparent),
+    0 1px 3px rgb(20 12 4 / 0.18),
+    inset 0 1px 0 rgb(255 248 228 / 0.45);
+}
+.btn-gold:active {
+  transform: translateY(1px) scale(0.99);
+}
+.btn-gold:disabled {
+  opacity: 0.5;
+  cursor: default;
+  filter: none;
+}
+.btn-rune-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, var(--primary) 50%, transparent);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--primary) 82%, black 14%);
+  background: color-mix(in oklab, var(--card) 74%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 2px 10px -4px color-mix(in oklab, oklch(0.35 0.07 40) 24%, transparent),
+    inset 0 1px 0 rgb(255 248 228 / 0.5);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.btn-rune-ghost:hover {
+  background: color-mix(in oklab, var(--primary) 16%, var(--background));
+  box-shadow: 0 4px 18px -6px color-mix(in oklab, var(--primary) 64%, transparent);
+} /* Reward / info chip */
+.rune-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 42%, transparent);
+  background: color-mix(in oklab, var(--primary) 14%, var(--background) 3%);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--foreground);
+  white-space: nowrap;
+} /* XP / stat bars */
+.bar-track {
+  position: relative;
+  height: 0.55rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--primary) 16%, var(--background) 5%);
+  border: 1px solid color-mix(in oklab, var(--primary) 24%, transparent);
+  box-shadow: inset 0 1px 3px rgb(20 12 4 / 0.1);
+}
 .bar-fill {
   position: absolute;
   inset: 0 auto 0 0;
@@ -471,9 +441,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgb(255 255 255 / 0.45), transparent 60%);
-}
-
-/* ---------- Unified visual-novel dialogue bar ---------- */
+} /* ---------- Unified visual-novel dialogue bar ---------- */
 .fantasy-character {
   --character-accent: var(--primary);
   position: relative;
@@ -492,14 +460,10 @@
 .fantasy-character.is-entered {
   transform: translateY(0);
   opacity: 1;
-}
-
-/* P1.2: premium entrance — the figure settles into place with a soft arc    */
-/* while the parent bar rises. 560ms total: fast, cinematic, never blocking.  */
+} /* P1.2: premium entrance — the figure settles into place with a soft arc    */ /* while the parent bar rises. 560ms total: fast, cinematic, never blocking.  */
 .fantasy-character.is-entered .fantasy-character-figure {
   animation: character-land 0.56s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 @keyframes character-land {
   0% {
     transform: translateY(1.4rem) scale(0.965);
@@ -561,12 +525,12 @@
 .fantasy-character-dialogue {
   flex: 1;
   min-width: 0;
-  width: min(82%, 46rem);
-  /* Hug the character figure on the inline-start side, centre otherwise. */
+  width: min(82%, 46rem); /* Hug the character figure on the inline-start side, centre otherwise. */
   margin-inline: 1rem auto;
   padding: 2.3rem clamp(3.5rem, 10vw, 6rem) 1.15rem 1.1rem;
   border: 2px solid color-mix(in oklab, var(--character-accent) 55%, var(--border));
-  border-radius: 0.75rem 0 0.25rem 0.75rem;    background: linear-gradient(
+  border-radius: 0.75rem 0 0.25rem 0.75rem;
+  background: linear-gradient(
     135deg,
     color-mix(in oklab, var(--card) 96%, var(--background) 4%),
     color-mix(in oklab, var(--secondary) 18%, var(--card) 82%)
@@ -576,8 +540,7 @@
     0 10px 26px -12px color-mix(in oklab, oklch(0.35 0.07 40) 36%, transparent),
     inset 0 1px 0 rgb(255 248 228 / 0.6);
   color: inherit;
-  font: inherit;
-  /* Logical alignment: follows document direction (RTL-safe, P0.4). */
+  font: inherit; /* Logical alignment: follows document direction (RTL-safe, P0.4). */
   text-align: start;
   cursor: pointer;
   pointer-events: auto;
@@ -590,8 +553,7 @@
 }
 .fantasy-character-nameplate {
   position: absolute;
-  top: -0.95rem;
-  /* Logical inset: left in LTR, right in RTL (P0.4). */
+  top: -0.95rem; /* Logical inset: left in LTR, right in RTL (P0.4). */
   inset-inline-start: 1rem;
   display: grid;
   gap: 0.12rem;
@@ -635,7 +597,6 @@
   font-size: 0.7rem;
   animation: continue-pulse 1.2s ease-in-out infinite;
 }
-
 @keyframes continue-pulse {
   50% {
     opacity: 0.35;
@@ -663,8 +624,7 @@
     align-items: stretch;
     gap: 0;
     transform: translateY(110%);
-  }
-  /* RTL: the nameplate inherits the logical inset above; mirror the arrow. */
+  } /* RTL: the nameplate inherits the logical inset above; mirror the arrow. */
   html[dir="rtl"] .fantasy-character-nameplate {
     clip-path: polygon(4% 0, 100% 0, 100% 100%, 4% 100%, 0 50%);
   }
@@ -737,8 +697,7 @@
     margin-left: 0.375rem;
     margin-right: 0.375rem;
     padding: 2rem 5.5rem 0.8rem 0.7rem;
-  }
-  /* 360px: embedded companions must fit side-by-side without overlap. */
+  } /* 360px: embedded companions must fit side-by-side without overlap. */
   .companion-column .fantasy-character-embedded .fantasy-character-figure {
     width: min(100%, 4.75rem);
     height: 6.5rem;
@@ -756,23 +715,21 @@
     animation: none;
     transition: none;
   }
-}
-
-/* ---------- Magic effects ---------- */  .ember {
-    position: absolute;
-    bottom: -2rem;
-    border-radius: 999px;
-    background: radial-gradient(
-      circle,
-      color-mix(in oklab, var(--primary) 82%, var(--background) 18%),
-      color-mix(in oklab, var(--primary) 34%, transparent) 70%
-    );
-    box-shadow: 0 0 8px 2px color-mix(in oklab, var(--primary) 58%, transparent);
+} /* ---------- Magic effects ---------- */
+.ember {
+  position: absolute;
+  bottom: -2rem;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--primary) 82%, var(--background) 18%),
+    color-mix(in oklab, var(--primary) 34%, transparent) 70%
+  );
+  box-shadow: 0 0 8px 2px color-mix(in oklab, var(--primary) 58%, transparent);
   opacity: 0;
   animation: ember-rise linear infinite;
   will-change: transform, opacity;
 }
-
 @keyframes ember-rise {
   0% {
     transform: translateY(0) translateX(0) scale(1);
@@ -789,7 +746,6 @@
     opacity: 0;
   }
 }
-
 @keyframes glow-pulse {
   0%,
   100% {
@@ -799,11 +755,9 @@
     opacity: 1;
   }
 }
-
 .glow-pulse {
   animation: glow-pulse 2.4s ease-in-out infinite;
 }
-
 @keyframes float-slow {
   0%,
   100% {
@@ -813,12 +767,9 @@
     transform: translateY(-9px);
   }
 }
-
 .float-slow {
   animation: float-slow 5s ease-in-out infinite;
-}
-
-/* Rotating rune ring used while the Arcane Guide weaves an answer */
+} /* Rotating rune ring used while the Arcane Guide weaves an answer */
 .rune-ring {
   position: relative;
   border-radius: 999px;
@@ -843,7 +794,6 @@
   color: var(--primary);
   text-shadow: 0 0 10px color-mix(in oklab, var(--primary) 60%, transparent);
 }
-
 @keyframes rune-spin {
   to {
     transform: rotate(360deg);
@@ -853,33 +803,30 @@
   to {
     transform: rotate(-360deg);
   }
+} /* Chat bubbles of the Arcane Library */
+.scroll-bubble-guide {
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
+  border: 1px solid color-mix(in oklab, var(--accent) 36%, transparent);
+  background: color-mix(in oklab, var(--accent) 10%, var(--card) 88%);
+  box-shadow: 0 4px 14px -8px color-mix(in oklab, oklch(0.35 0.07 40) 30%, transparent);
 }
-
-/* Chat bubbles of the Arcane Library */  .scroll-bubble-guide {
-    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
-    border: 1px solid color-mix(in oklab, var(--accent) 36%, transparent);
-    background: color-mix(in oklab, var(--accent) 10%, var(--card) 88%);
-    box-shadow: 0 4px 14px -8px color-mix(in oklab, oklch(0.35 0.07 40) 30%, transparent);
-  }
-  .scroll-bubble-user {
-    border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
-    border: 1px solid color-mix(in oklab, var(--primary) 42%, transparent);
-    background: color-mix(in oklab, var(--primary) 14%, var(--card) 84%);
-    box-shadow: 0 4px 14px -8px color-mix(in oklab, oklch(0.35 0.07 40) 30%, transparent);
-  }
-
-/* Thin fantasy scrollbar */
+.scroll-bubble-user {
+  border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+  border: 1px solid color-mix(in oklab, var(--primary) 42%, transparent);
+  background: color-mix(in oklab, var(--primary) 14%, var(--card) 84%);
+  box-shadow: 0 4px 14px -8px color-mix(in oklab, oklch(0.35 0.07 40) 30%, transparent);
+} /* Thin fantasy scrollbar */
 .fancy-scroll {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--primary) 45%, transparent) transparent;
 }
 .fancy-scroll::-webkit-scrollbar {
   width: 5px;
-}  .fancy-scroll::-webkit-scrollbar-thumb {
-    background: color-mix(in oklab, var(--primary) 55%, transparent);
-    border-radius: 999px;
-  }
-
+}
+.fancy-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--primary) 55%, transparent);
+  border-radius: 999px;
+}
 @media (prefers-reduced-motion: reduce) {
   .ember,
   .glow-pulse,
@@ -888,32 +835,16 @@
   .rune-ring-reverse {
     animation: none;
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* P0.4: RTL (Arabic) refinements — mirrored nameplate arrow, correct          */
-/* margins. Flex/grid layouts mirror automatically; only absolute positioning */
-/* and asymmetric decorations need logical overrides.                          */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* P0.4: RTL (Arabic) refinements — mirrored nameplate arrow, correct          */ /* margins. Flex/grid layouts mirror automatically; only absolute positioning */ /* and asymmetric decorations need logical overrides.                          */ /* -------------------------------------------------------------------------- */
 html[dir="rtl"] .fantasy-character-nameplate {
   clip-path: polygon(4% 0, 100% 0, 100% 100%, 4% 100%, 0 50%);
 }
-
 html[dir="rtl"] .fantasy-character-dialogue {
   border-radius: 0 0.75rem 0.75rem 0.25rem;
-}
-
-/* Arabic display type at Cinzel's tracking values gets cramped; relax the    */
-/* widest letter-spacing on RTL headings so glyphs don't collide.             */
+} /* Arabic display type at Cinzel's tracking values gets cramped; relax the    */ /* widest letter-spacing on RTL headings so glyphs don't collide.             */
 html[dir="rtl"] .font-display {
   letter-spacing: 0.02em;
-}
-
-/* -------------------------------------------------------------------------- */
-/* P0.4: large-screen staging (1024px → 1440px+). The realm column is capped  */
-/* at 32rem and centered; on wide viewports the artwork becomes the stage and */
-/* the dialogue gets breathing room.                                           */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* P0.4: large-screen staging (1024px → 1440px+). The realm column is capped  */ /* at 32rem and centered; on wide viewports the artwork becomes the stage and */ /* the dialogue gets breathing room.                                           */ /* -------------------------------------------------------------------------- */
 @media (min-width: 1024px) {
   .fantasy-character-figure {
     height: 24rem;
@@ -921,15 +852,10 @@ html[dir="rtl"] .font-display {
   .fantasy-character-dialogue {
     width: min(72%, 52rem);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* P1.2: treasure chest opening ceremony                                       */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* P1.2: treasure chest opening ceremony                                       */ /* -------------------------------------------------------------------------- */
 .chest-overlay {
   animation: chest-overlay-in 0.25s ease both;
 }
-
 @keyframes chest-overlay-in {
   from {
     opacity: 0;
@@ -938,11 +864,9 @@ html[dir="rtl"] .font-display {
     opacity: 1;
   }
 }
-
 .chest-card {
   animation: chest-card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 @keyframes chest-card-in {
   from {
     opacity: 0;
@@ -952,14 +876,11 @@ html[dir="rtl"] .font-display {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-/* Sealed chest: eager little wobble inviting the tap. */
+} /* Sealed chest: eager little wobble inviting the tap. */
 .chest-sealed-icon {
   animation: chest-wobble 1.6s ease-in-out infinite;
   transform-origin: 50% 90%;
 }
-
 @keyframes chest-wobble {
   0%,
   100% {
@@ -977,9 +898,7 @@ html[dir="rtl"] .font-display {
   60% {
     transform: rotate(0deg);
   }
-}
-
-/* Rotating god-rays revealed behind the opened reward. */
+} /* Rotating god-rays revealed behind the opened reward. */
 .chest-rays {
   position: absolute;
   inset: -40%;
@@ -1018,7 +937,6 @@ html[dir="rtl"] .font-display {
     rune-spin 14s linear 0.7s infinite;
   pointer-events: none;
 }
-
 @keyframes chest-rays-in {
   from {
     opacity: 0;
@@ -1029,11 +947,9 @@ html[dir="rtl"] .font-display {
     transform: scale(1);
   }
 }
-
 .chest-reveal {
   animation: chest-reveal-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-
 @keyframes chest-reveal-in {
   from {
     opacity: 0;
@@ -1047,11 +963,9 @@ html[dir="rtl"] .font-display {
     transform: scale(1) rotate(0deg);
   }
 }
-
 .chest-reveal-text {
   animation: chest-reveal-text-in 0.5s ease 0.25s both;
 }
-
 @keyframes chest-reveal-text-in {
   from {
     opacity: 0;
@@ -1061,11 +975,7 @@ html[dir="rtl"] .font-display {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* P1.2: world map zones — the three starting regions                          */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* P1.2: world map zones — the three starting regions                          */ /* -------------------------------------------------------------------------- */
 .world-zone {
   position: relative;
   display: block;
@@ -1087,7 +997,6 @@ html[dir="rtl"] .font-display {
     border-color 0.25s ease;
   cursor: pointer;
 }
-
 .world-zone:hover {
   transform: translateY(-3px);
   border-color: color-mix(in oklab, var(--primary) 55%, transparent);
@@ -1095,11 +1004,9 @@ html[dir="rtl"] .font-display {
     0 14px 30px -12px color-mix(in oklab, var(--primary) 55%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 0.65);
 }
-
 .world-zone:active {
   transform: translateY(-1px) scale(0.99);
 }
-
 .world-zone-aura {
   position: absolute;
   inset: -30% -10%;
@@ -1112,11 +1019,9 @@ html[dir="rtl"] .font-display {
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
-
 .world-zone:hover .world-zone-aura {
   opacity: 1.15;
 }
-
 .world-zone-icon {
   position: relative;
   display: flex;
@@ -1131,14 +1036,11 @@ html[dir="rtl"] .font-display {
   box-shadow:
     0 0 16px color-mix(in oklab, var(--zone-color, var(--primary)) 30%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 0.6);
-}
-
-/* Staggered entrance for the zone cards. */
+} /* Staggered entrance for the zone cards. */
 .world-zone-enter {
   animation: world-zone-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: var(--zone-delay, 0s);
 }
-
 @keyframes world-zone-in {
   from {
     opacity: 0;
@@ -1148,11 +1050,7 @@ html[dir="rtl"] .font-display {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* P1.3: boss trial — the Iron Golem                                           */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* P1.3: boss trial — the Iron Golem                                           */ /* -------------------------------------------------------------------------- */
 .boss-panel {
   position: relative;
   overflow: hidden;
@@ -1167,23 +1065,18 @@ html[dir="rtl"] .font-display {
     0 10px 28px -14px color-mix(in oklab, oklch(0.4 0.06 260) 32%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 0.7);
 }
-
 .boss-quake {
   animation: boss-quake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
-
 .boss-breathing {
   animation: boss-breathing 4.4s ease-in-out infinite;
 }
-
 .boss-latent-glow {
   animation: boss-latent-glow 3.4s ease-in-out infinite;
 }
-
 .boss-defeated-settle {
   animation: boss-defeated-settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 @keyframes boss-quake {
   0%,
   100% {
@@ -1202,25 +1095,24 @@ html[dir="rtl"] .font-display {
     transform: translateX(0.12rem);
   }
 }
-
 @keyframes boss-breathing {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.012);
   }
 }
-
 @keyframes boss-latent-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.55;
   }
   50% {
     opacity: 0.85;
   }
 }
-
 @keyframes boss-defeated-settle {
   0% {
     transform: scale(1.02);
@@ -1231,15 +1123,12 @@ html[dir="rtl"] .font-display {
     filter: grayscale(0.55) brightness(0.96);
   }
 }
-
 .boss-hp-fill {
   transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
 .boss-defeated-glow {
   animation: glow-pulse 2.2s ease-in-out infinite;
 }
-
 @media (prefers-reduced-motion: reduce) {
   .chest-overlay,
   .chest-card,
@@ -1272,20 +1161,11 @@ html[dir="rtl"] .font-display {
   .world-zone {
     transition: none;
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Character presence — per-character idles & grounding              */
-/* -------------------------------------------------------------------------- */
-/* All idles are transform/opacity only (GPU-composited, phone-safe). Each     */
-/* character owns a distinct rhythm so the cast reads as individual NPCs.      */
-
-/* Legacy hooks kept for any ad-hoc usage outside the character system. */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Character presence — per-character idles & grounding              */ /* -------------------------------------------------------------------------- */ /* All idles are transform/opacity only (GPU-composited, phone-safe). Each     */ /* character owns a distinct rhythm so the cast reads as individual NPCs.      */ /* Legacy hooks kept for any ad-hoc usage outside the character system. */
 .char-breathe {
   animation: char-breathe 4s ease-in-out infinite;
   will-change: transform;
 }
-
 @keyframes char-breathe {
   0%,
   100% {
@@ -1295,12 +1175,10 @@ html[dir="rtl"] .font-display {
     transform: translateY(-4px) scale(1.008);
   }
 }
-
 .char-float {
   animation: char-float 6s ease-in-out infinite;
   will-change: transform;
 }
-
 @keyframes char-float {
   0%,
   100% {
@@ -1309,15 +1187,12 @@ html[dir="rtl"] .font-display {
   50% {
     transform: translateY(-8px);
   }
-}
-
-/* KING — slow, confident, authoritative. A deep breath and a settling sway. */
+} /* KING — slow, confident, authoritative. A deep breath and a settling sway. */
 .char-idle-king {
   animation: char-idle-king 6.4s ease-in-out infinite;
   transform-origin: 50% 100%;
   will-change: transform;
 }
-
 @keyframes char-idle-king {
   0%,
   100% {
@@ -1329,15 +1204,12 @@ html[dir="rtl"] .font-display {
   62% {
     transform: translateY(-3px) rotate(0.3deg) scaleY(1.006);
   }
-}
-
-/* ADVENTURER — energetic: quicker breath, light stance shift. */
+} /* ADVENTURER — energetic: quicker breath, light stance shift. */
 .char-idle-adventurer {
   animation: char-idle-adventurer 3.6s ease-in-out infinite;
   transform-origin: 50% 100%;
   will-change: transform;
 }
-
 @keyframes char-idle-adventurer {
   0%,
   100% {
@@ -1349,15 +1221,12 @@ html[dir="rtl"] .font-display {
   55% {
     transform: translateY(-1px) rotate(-0.4deg);
   }
-}
-
-/* SCHOLAR — calm, precise, even breathing with a measured tilt. */
+} /* SCHOLAR — calm, precise, even breathing with a measured tilt. */
 .char-idle-scholar {
   animation: char-idle-scholar 5.2s ease-in-out infinite;
   transform-origin: 50% 100%;
   will-change: transform;
 }
-
 @keyframes char-idle-scholar {
   0%,
   100% {
@@ -1366,14 +1235,11 @@ html[dir="rtl"] .font-display {
   50% {
     transform: translateY(-2.5px) rotate(0.25deg) scale(1.004);
   }
-}
-
-/* SAGE — slow, mysterious: barely-there float with a mystical sway. */
+} /* SAGE — slow, mysterious: barely-there float with a mystical sway. */
 .char-idle-sage {
   animation: char-idle-sage 7.2s ease-in-out infinite;
   will-change: transform;
 }
-
 @keyframes char-idle-sage {
   0%,
   100% {
@@ -1385,15 +1251,12 @@ html[dir="rtl"] .font-display {
   66% {
     transform: translateY(-3px) translateX(-1.5px);
   }
-}
-
-/* HERO — warm, steady, encouraging breathing with a small lean. */
+} /* HERO — warm, steady, encouraging breathing with a small lean. */
 .char-idle-hero {
   animation: char-idle-hero 4.4s ease-in-out infinite;
   transform-origin: 50% 100%;
   will-change: transform;
 }
-
 @keyframes char-idle-hero {
   0%,
   100% {
@@ -1402,15 +1265,12 @@ html[dir="rtl"] .font-display {
   45% {
     transform: translateY(-3.5px) rotate(-0.45deg);
   }
-}
-
-/* MAID — elegant and composed: near-imperceptible, slow sway. */
+} /* MAID — elegant and composed: near-imperceptible, slow sway. */
 .char-idle-maid {
   animation: char-idle-maid 6.8s ease-in-out infinite;
   transform-origin: 50% 100%;
   will-change: transform;
 }
-
 @keyframes char-idle-maid {
   0%,
   100% {
@@ -1419,14 +1279,11 @@ html[dir="rtl"] .font-display {
   50% {
     transform: translateY(-2px) rotate(0.2deg);
   }
-}
-
-/* HAKARI — small, cheerful magical bob. */
+} /* HAKARI — small, cheerful magical bob. */
 .char-idle-hakari {
   animation: char-idle-hakari 3.2s ease-in-out infinite;
   will-change: transform;
 }
-
 @keyframes char-idle-hakari {
   0%,
   100% {
@@ -1438,14 +1295,11 @@ html[dir="rtl"] .font-display {
   70% {
     transform: translateY(-3px) rotate(-0.8deg);
   }
-}
-
-/* MIRI — graceful side-drift float, deliberately distinct from Hakari. */
+} /* MIRI — graceful side-drift float, deliberately distinct from Hakari. */
 .char-idle-miri {
   animation: char-idle-miri 5.6s ease-in-out infinite;
   will-change: transform;
 }
-
 @keyframes char-idle-miri {
   0%,
   100% {
@@ -1457,9 +1311,7 @@ html[dir="rtl"] .font-display {
   65% {
     transform: translateX(3px) translateY(-2px) rotate(1deg);
   }
-}
-
-/* Ground shadow breathes with the idle so grounding stays believable. */
+} /* Ground shadow breathes with the idle so grounding stays believable. */
 .fantasy-character-figure .char-ground-shadow {
   transition: opacity 0.4s ease;
 }
@@ -1475,7 +1327,6 @@ html[dir="rtl"] .font-display {
 .char-idle-miri ~ .char-ground-shadow {
   animation: char-shadow-float 3.2s ease-in-out infinite;
 }
-
 @keyframes char-shadow-breathe {
   0%,
   100% {
@@ -1487,7 +1338,6 @@ html[dir="rtl"] .font-display {
     transform: translateX(-50%) scaleX(0.94);
   }
 }
-
 @keyframes char-shadow-float {
   0%,
   100% {
@@ -1498,9 +1348,7 @@ html[dir="rtl"] .font-display {
     opacity: 0.55;
     transform: translateX(-50%) scaleX(0.82);
   }
-}
-
-/* Rim light — a soft backlight halo separating the figure from the scene. */
+} /* Rim light — a soft backlight halo separating the figure from the scene. */
 .char-rim-light {
   position: absolute;
   inset: -12% -18%;
@@ -1515,9 +1363,7 @@ html[dir="rtl"] .font-display {
   pointer-events: none;
   opacity: 0.65;
   mix-blend-mode: screen;
-}
-
-/* Soft light pool on the ground beneath the character — environmental light. */
+} /* Soft light pool on the ground beneath the character — environmental light. */
 .char-ground-shadow::after {
   content: "";
   position: absolute;
@@ -1529,9 +1375,7 @@ html[dir="rtl"] .font-display {
     transparent 62%
   );
   pointer-events: none;
-}
-
-/* Character ground shadow — makes them feel physically present */
+} /* Character ground shadow — makes them feel physically present */
 .char-ground-shadow {
   position: absolute;
   bottom: -4px;
@@ -1543,9 +1387,7 @@ html[dir="rtl"] .font-display {
   background: radial-gradient(ellipse, rgb(40 30 10 / 0.25), transparent 70%);
   filter: blur(4px);
   pointer-events: none;
-}
-
-/* Character aura glow — subtle environmental light interaction */
+} /* Character aura glow — subtle environmental light interaction */
 .char-aura {
   position: absolute;
   inset: -20%;
@@ -1559,7 +1401,6 @@ html[dir="rtl"] .font-display {
   opacity: 0.65;
   animation: char-aura-pulse 5s ease-in-out infinite;
 }
-
 @keyframes char-aura-pulse {
   0%,
   100% {
@@ -1570,18 +1411,10 @@ html[dir="rtl"] .font-display {
     opacity: 0.7;
     transform: scale(1.04);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Home throne room — the King stands inside his kingdom            */
-/* -------------------------------------------------------------------------- */
-/* A staged composition: darkened backdrop behind the figure, a soft light     */
-/* shaft from above, ember motes near the ground, and a formal dais shadow.   */
-/* Pure CSS on GPU-friendly properties; disabled under reduced motion.        */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Home throne room — the King stands inside his kingdom            */ /* -------------------------------------------------------------------------- */ /* A staged composition: darkened backdrop behind the figure, a soft light     */ /* shaft from above, ember motes near the ground, and a formal dais shadow.   */ /* Pure CSS on GPU-friendly properties; disabled under reduced motion.        */
 .king-stage {
   margin-top: 1.5rem;
 }
-
 .king-stage-shade {
   position: absolute;
   inset: -2rem -1rem 0;
@@ -1594,7 +1427,6 @@ html[dir="rtl"] .font-display {
   pointer-events: none;
   z-index: 0;
 }
-
 .king-stage-light {
   position: absolute;
   top: -2rem;
@@ -1614,7 +1446,6 @@ html[dir="rtl"] .font-display {
   z-index: 0;
   animation: king-light-breathe 9s ease-in-out infinite;
 }
-
 @keyframes king-light-breathe {
   0%,
   100% {
@@ -1624,12 +1455,10 @@ html[dir="rtl"] .font-display {
     opacity: 0.8;
   }
 }
-
 .king-stage .fantasy-character {
   position: relative;
   z-index: 2;
 }
-
 .king-stage .fantasy-character-figure::after {
   /* Dais: a formal stone platform shadow under the King. */
   content: "";
@@ -1640,11 +1469,9 @@ html[dir="rtl"] .font-display {
   width: 84%;
   height: 1.4rem;
   border-radius: 50%;
-  background:
-    radial-gradient(ellipse at center, rgb(10 8 3 / 0.5) 0%, transparent 68%);
+  background: radial-gradient(ellipse at center, rgb(10 8 3 / 0.5) 0%, transparent 68%);
   pointer-events: none;
 }
-
 .king-stage-motes {
   position: absolute;
   inset-inline: 0;
@@ -1654,7 +1481,6 @@ html[dir="rtl"] .font-display {
   z-index: 1;
   overflow: hidden;
 }
-
 .king-stage-motes i {
   position: absolute;
   bottom: 0;
@@ -1666,7 +1492,6 @@ html[dir="rtl"] .font-display {
   opacity: 0;
   animation: mote-rise 7s linear infinite;
 }
-
 .king-stage-motes i:nth-child(1) {
   left: 16%;
   animation-delay: 0s;
@@ -1692,7 +1517,6 @@ html[dir="rtl"] .font-display {
   animation-delay: 4.8s;
   animation-duration: 7.9s;
 }
-
 @keyframes mote-rise {
   0% {
     opacity: 0;
@@ -1709,7 +1533,6 @@ html[dir="rtl"] .font-display {
     transform: translateY(-24dvh) scale(0.6);
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .king-stage-light,
   .king-stage-motes i {
@@ -1719,20 +1542,13 @@ html[dir="rtl"] .font-display {
   .king-stage-motes i:first-child {
     opacity: 0.4;
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: RPG Dialogue bubble improvements                                  */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: RPG Dialogue bubble improvements                                  */ /* -------------------------------------------------------------------------- */
 .fantasy-character-dialogue {
   backdrop-filter: blur(10px);
-}
-
-/* New line entrance — the speech feels spoken, not stamped on screen. */
+} /* New line entrance — the speech feels spoken, not stamped on screen. */
 .fantasy-character-line {
   animation: dialogue-line-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 @keyframes dialogue-line-in {
   from {
     opacity: 0;
@@ -1742,12 +1558,11 @@ html[dir="rtl"] .font-display {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* SPEAKING STATE — the figure leans toward its words while talking. */
+} /* SPEAKING STATE — the figure leans toward its words while talking. */
 .is-speaking .fantasy-character-nameplate strong {
   color: color-mix(in oklab, var(--character-accent, var(--primary)) 88%, var(--foreground));
-  text-shadow: 0 0 12px color-mix(in oklab, var(--character-accent, var(--primary)) 60%, transparent);
+  text-shadow: 0 0 12px
+    color-mix(in oklab, var(--character-accent, var(--primary)) 60%, transparent);
 }
 .is-speaking .fantasy-character-dialogue {
   border-color: color-mix(in oklab, var(--character-accent, var(--primary)) 92%, var(--border));
@@ -1758,26 +1573,15 @@ html[dir="rtl"] .font-display {
 }
 .is-speaking .char-aura {
   opacity: 0.9;
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Character reactions (quest / level-up / achievement / reward)    */
-/* -------------------------------------------------------------------------- */
-/* One class per reaction, applied briefly by the component. Cheap, distinct, */
-/* and impossible to stack — a newer event simply replaces the older one.     */
-/* Cascade note: reaction rules come after the idle shorthands, so the        */
-/* reaction's name/duration win and the idle pauses while reacting.           */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Character reactions (quest / level-up / achievement / reward)    */ /* -------------------------------------------------------------------------- */ /* One class per reaction, applied briefly by the component. Cheap, distinct, */ /* and impossible to stack — a newer event simply replaces the older one.     */ /* Cascade note: reaction rules come after the idle shorthands, so the        */ /* reaction's name/duration win and the idle pauses while reacting.           */
 .char-reacting {
   animation-duration: 1.1s;
   animation-fill-mode: both;
   animation-iteration-count: 1;
-}
-
-/* Small positive acknowledgment — quest accepted, streak milestone. */
+} /* Small positive acknowledgment — quest accepted, streak milestone. */
 .char-react-nod {
   animation-name: char-react-nod;
 }
-
 @keyframes char-react-nod {
   0% {
     transform: translateY(0) rotate(0deg);
@@ -1791,13 +1595,10 @@ html[dir="rtl"] .font-display {
   100% {
     transform: translateY(0) rotate(0deg);
   }
-}
-
-/* Stronger victory beat — quest completed, achievement unlocked. */
+} /* Stronger victory beat — quest completed, achievement unlocked. */
 .char-react-triumph {
   animation-name: char-react-triumph;
 }
-
 @keyframes char-react-triumph {
   0% {
     transform: translateY(0) scale(1);
@@ -1814,13 +1615,10 @@ html[dir="rtl"] .font-display {
   100% {
     transform: translateY(0) scale(1);
   }
-}
-
-/* Pride and excitement — level up. Bright accent flare included. */
+} /* Pride and excitement — level up. Bright accent flare included. */
 .char-react-levelup {
   animation-name: char-react-levelup;
 }
-
 @keyframes char-react-levelup {
   0% {
     transform: translateY(0) scale(1);
@@ -1828,7 +1626,9 @@ html[dir="rtl"] .font-display {
   }
   25% {
     transform: translateY(-9px) scale(1.035);
-    filter: drop-shadow(0 0 14px color-mix(in oklab, var(--character-accent, var(--primary)) 55%, transparent));
+    filter: drop-shadow(
+      0 0 14px color-mix(in oklab, var(--character-accent, var(--primary)) 55%, transparent)
+    );
   }
   50% {
     transform: translateY(-3px) scale(1.01);
@@ -1840,13 +1640,10 @@ html[dir="rtl"] .font-display {
     transform: translateY(0) scale(1);
     filter: none;
   }
-}
-
-/* Reward shimmer — the character presents the spoils. */
+} /* Reward shimmer — the character presents the spoils. */
 .char-react-glow {
   animation-name: char-react-glow;
 }
-
 @keyframes char-react-glow {
   0% {
     filter: none;
@@ -1861,7 +1658,6 @@ html[dir="rtl"] .font-display {
     transform: translateY(0);
   }
 }
-
 .fantasy-character-line::before {
   content: "\201C";
   font-family: Georgia, serif;
@@ -1871,7 +1667,6 @@ html[dir="rtl"] .font-display {
   color: color-mix(in oklab, var(--character-accent, var(--primary)) 72%, transparent);
   margin-right: 0.1em;
 }
-
 .fantasy-character-line::after {
   content: "\201D";
   font-family: Georgia, serif;
@@ -1880,15 +1675,10 @@ html[dir="rtl"] .font-display {
   vertical-align: -0.25em;
   color: color-mix(in oklab, var(--character-accent, var(--primary)) 72%, transparent);
   margin-left: 0.05em;
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Level-up celebration                                             */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Level-up celebration                                             */ /* -------------------------------------------------------------------------- */
 .level-up-flash {
   animation: level-up-flash 0.8s ease-out both;
 }
-
 @keyframes level-up-flash {
   0% {
     opacity: 0;
@@ -1903,11 +1693,9 @@ html[dir="rtl"] .font-display {
     transform: scale(1);
   }
 }
-
 .level-up-ring {
   animation: level-up-ring 1.2s ease-out both;
 }
-
 @keyframes level-up-ring {
   0% {
     opacity: 0;
@@ -1921,11 +1709,7 @@ html[dir="rtl"] .font-display {
     opacity: 1;
     transform: scale(1) rotate(0deg);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Quest card RPG mission styling                                   */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Quest card RPG mission styling                                   */ /* -------------------------------------------------------------------------- */
 .quest-lore {
   font-family: Georgia, serif;
   font-style: italic;
@@ -1936,7 +1720,6 @@ html[dir="rtl"] .font-display {
   padding-left: 0.75rem;
   margin-top: 0.5rem;
 }
-
 .quest-reward-badge {
   display: inline-flex;
   align-items: center;
@@ -1951,13 +1734,10 @@ html[dir="rtl"] .font-display {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--primary);
-}
-
-/* Sealed quest stamp */
+} /* Sealed quest stamp */
 .quest-sealed {
   position: relative;
 }
-
 .quest-sealed::after {
   content: "";
   position: absolute;
@@ -1965,11 +1745,7 @@ html[dir="rtl"] .font-display {
   border-radius: inherit;
   border: 2px solid color-mix(in oklab, var(--primary) 35%, transparent);
   pointer-events: none;
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Equipment rarity glow                                            */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Equipment rarity glow                                            */ /* -------------------------------------------------------------------------- */
 .equip-rarity-common {
   border-color: color-mix(in oklab, var(--rarity-common) 35%, transparent);
 }
@@ -1990,7 +1766,6 @@ html[dir="rtl"] .font-display {
   box-shadow: 0 0 24px color-mix(in oklab, var(--rarity-legendary) 35%, transparent);
   animation: equip-legendary-glow 3s ease-in-out infinite;
 }
-
 @keyframes equip-legendary-glow {
   0%,
   100% {
@@ -1999,15 +1774,10 @@ html[dir="rtl"] .font-display {
   50% {
     box-shadow: 0 0 32px color-mix(in oklab, var(--rarity-legendary) 45%, transparent);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Screen atmosphere overlays                                       */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Screen atmosphere overlays                                       */ /* -------------------------------------------------------------------------- */
 .screen-atmosphere {
   position: relative;
 }
-
 .screen-atmosphere::before {
   content: "";
   position: absolute;
@@ -2022,28 +1792,18 @@ html[dir="rtl"] .font-display {
   );
   pointer-events: none;
   z-index: 0;
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Achievement badge glow by rarity                                 */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Achievement badge glow by rarity                                 */ /* -------------------------------------------------------------------------- */
 .achievement-unlocked {
   transition:
     transform 0.2s ease,
     box-shadow 0.3s ease;
 }
-
 .achievement-unlocked:hover {
   transform: translateY(-2px);
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Staggered entrance animation for lists                           */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Staggered entrance animation for lists                           */ /* -------------------------------------------------------------------------- */
 .rpg-stagger-in > * {
   animation: rpg-stagger-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 .rpg-stagger-in > *:nth-child(1) {
   animation-delay: 0.05s;
 }
@@ -2068,7 +1828,6 @@ html[dir="rtl"] .font-display {
 .rpg-stagger-in > *:nth-child(8) {
   animation-delay: 0.54s;
 }
-
 @keyframes rpg-stagger-in {
   from {
     opacity: 0;
@@ -2078,28 +1837,18 @@ html[dir="rtl"] .font-display {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Trial difficulty flame icons                                      */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Trial difficulty flame icons                                      */ /* -------------------------------------------------------------------------- */
 .trial-difficulty {
   display: inline-flex;
   gap: 0.15rem;
 }
-
 .trial-difficulty .flame-active {
   color: var(--primary);
   filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 50%, transparent));
 }
-
 .trial-difficulty .flame-inactive {
   color: color-mix(in oklab, var(--foreground) 18%, transparent);
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Companions layout (Legend screen Hakari + Miri)                  */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Companions layout (Legend screen Hakari + Miri)                  */ /* -------------------------------------------------------------------------- */
 .companions-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2107,32 +1856,25 @@ html[dir="rtl"] .font-display {
   width: 100%;
   max-width: 100%;
 }
-
 .companion-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-width: 0;
 }
-
 .companion-column .fantasy-character {
   margin-top: 0;
 }
-
 .companion-column .fantasy-character.is-entered {
   transform: translateY(0);
 }
-
 .companion-column .fantasy-character-dialogue {
   width: min(100%, 22rem);
   max-width: 100%;
-}
-
-/* Companions sit low in their columns like figures on shared ground. */
+} /* Companions sit low in their columns like figures on shared ground. */
 .companion-column .fantasy-character-figure {
   margin-bottom: 0;
 }
-
 @media (max-width: 720px) {
   .companions-container {
     grid-template-columns: 1fr 1fr;
@@ -2142,15 +1884,13 @@ html[dir="rtl"] .font-display {
     width: min(100%, 14rem);
   }
 }
-
 @media (max-width: 420px) {
   .companions-container {
     gap: 0.4rem;
   }
   .companion-column .fantasy-character-dialogue {
     width: min(100%, 12rem);
-  }
-  /* Tight columns: nameplates must never overlap the neighboring companion. */
+  } /* Tight columns: nameplates must never overlap the neighboring companion. */
   .companion-column .fantasy-character-nameplate {
     min-width: 0;
     width: calc(100% - 0.9rem);
@@ -2161,21 +1901,15 @@ html[dir="rtl"] .font-display {
   .companion-column .fantasy-character-nameplate small {
     display: none;
   }
-}
-
-/* Companion-specific presentation */
-
+} /* Companion-specific presentation */
 .char-companion-figure .fantasy-character-art {
   filter: drop-shadow(0.2rem 0.5rem 0.4rem rgb(30 25 12 / 0.45));
 }
-
 .char-companion-figure .fantasy-character-ground-shadow {
   opacity: 0.9;
   width: 72%;
   height: 10px;
-}
-
-/* Companion dialogue nameplate placement mirror for Miri/Hakari */
+} /* Companion dialogue nameplate placement mirror for Miri/Hakari */
 .companion-dialogue .fantasy-character-nameplate {
   inset-inline-start: 0.6rem;
   min-width: 0;
@@ -2185,15 +1919,12 @@ html[dir="rtl"] .font-display {
   right: auto;
   bottom: auto;
 }
-
 .companion-dialogue .fantasy-character-nameplate strong {
   letter-spacing: 0.08em;
 }
-
 .companion-dialogue .fantasy-character-figure {
   margin-right: 0;
 }
-
 .companion-dialogue .fantasy-character-ground-shadow {
   bottom: -4px;
   height: 10px;
@@ -2201,24 +1932,14 @@ html[dir="rtl"] .font-display {
   transform: translateX(-50%);
   width: 72%;
   opacity: 0.9;
-}
-
-/* Companions get a matching light pool so they read as standing on the same */
-/* ground as the rest of the cast (shared environment, not two cut-outs).    */
+} /* Companions get a matching light pool so they read as standing on the same */ /* ground as the rest of the cast (shared environment, not two cut-outs).    */
 .companion-column .char-ground-shadow::after {
   background: radial-gradient(
     ellipse,
     color-mix(in oklab, var(--character-accent, var(--accent)) 14%, transparent) 0%,
     transparent 62%
   );
-}
-/* -------------------------------------------------------------------------- */
-/* AETHORA BATTLE ENCOUNTER — trial guardian UI tokens                         */
-/* -------------------------------------------------------------------------- */
-/* The duel is a stylized metaphor: the player overcoming their own           */
-/* resistance to working out, not fighting an external villain.               */
-
-/* Two tokens facing each other inside the duel panel. */
+} /* -------------------------------------------------------------------------- */ /* AETHORA BATTLE ENCOUNTER — trial guardian UI tokens                         */ /* -------------------------------------------------------------------------- */ /* The duel is a stylized metaphor: the player overcoming their own           */ /* resistance to working out, not fighting an external villain.               */ /* Two tokens facing each other inside the duel panel. */
 .player-side,
 .enemy-side {
   display: flex;
@@ -2226,16 +1947,13 @@ html[dir="rtl"] .font-display {
   justify-content: space-between;
   gap: 0.75rem;
 }
-
 .player-side {
   flex-direction: row;
 }
-
 .enemy-side {
   flex-direction: row-reverse;
   text-align: right;
 }
-
 .player-token,
 .enemy-token {
   flex: 0 0 auto;
@@ -2253,7 +1971,6 @@ html[dir="rtl"] .font-display {
     0 0 18px color-mix(in oklab, oklch(0.62 0.16 48) 45%, transparent);
   position: relative;
 }
-
 .player-token::after,
 .enemy-token::after {
   content: "";
@@ -2267,7 +1984,6 @@ html[dir="rtl"] .font-display {
   );
   opacity: 0.7;
 }
-
 .enemy-token[data-element="stone"] {
   background: radial-gradient(
     circle at 35% 28%,
@@ -2286,7 +2002,6 @@ html[dir="rtl"] .font-display {
     transparent 55%
   );
 }
-
 .enemy-token[data-element="ember"] {
   background: radial-gradient(
     circle at 35% 28%,
@@ -2306,7 +2021,6 @@ html[dir="rtl"] .font-display {
   );
   animation: ember-pulse 2s ease-in-out infinite;
 }
-
 .enemy-token[data-element="storm"] {
   background: radial-gradient(
     circle at 35% 28%,
@@ -2326,7 +2040,6 @@ html[dir="rtl"] .font-display {
   );
   animation: storm-gleam 1.8s ease-in-out infinite;
 }
-
 .enemy-token[data-element="shadow"] {
   background: radial-gradient(
     circle at 35% 28%,
@@ -2338,7 +2051,6 @@ html[dir="rtl"] .font-display {
     0 0 16px color-mix(in oklab, oklch(0.28 0.16 295) 58%, transparent);
   filter: grayscale(0.08);
 }
-
 .enemy-token[data-element="mist"] {
   background: radial-gradient(
     circle at 35% 28%,
@@ -2358,7 +2070,6 @@ html[dir="rtl"] .font-display {
   );
   animation: mist-gleam 2.4s ease-in-out infinite;
 }
-
 .enemy-token[data-element="frost"] {
   background: radial-gradient(
     circle at 35% 28%,
@@ -2377,7 +2088,6 @@ html[dir="rtl"] .font-display {
     transparent 55%
   );
 }
-
 .enemy-token[data-element="arcane"] {
   background: radial-gradient(
     circle at 35% 28%,
@@ -2396,10 +2106,7 @@ html[dir="rtl"] .font-display {
     transparent 55%
   );
   animation: arcane-pulse 2.6s ease-in-out infinite;
-}
-
-
-/* Center verse divider between player and enemy tokens. */
+} /* Center verse divider between player and enemy tokens. */
 .verse-divider {
   position: relative;
   height: 1.2rem;
@@ -2409,7 +2116,6 @@ html[dir="rtl"] .font-display {
   align-items: center;
   justify-content: center;
 }
-
 .verse-mark {
   width: 6px;
   height: 6px;
@@ -2418,7 +2124,6 @@ html[dir="rtl"] .font-display {
   box-shadow: 0 0 12px color-mix(in oklab, var(--accent) 70%, transparent);
   position: relative;
 }
-
 .verse-mark::before,
 .verse-mark::after {
   content: "";
@@ -2433,7 +2138,6 @@ html[dir="rtl"] .font-display {
   );
   transform: translateY(-50%);
 }
-
 .verse-mark::before {
   right: 100%;
   left: 100%;
@@ -2443,7 +2147,6 @@ html[dir="rtl"] .font-display {
     transparent
   );
 }
-
 .verse-mark::after {
   left: 100%;
   background: linear-gradient(
@@ -2453,9 +2156,7 @@ html[dir="rtl"] .font-display {
     transparent
   );
   right: 100%;
-}
-
-/* Elemental pulse animations — lightweight, go/no-go only. */
+} /* Elemental pulse animations — lightweight, go/no-go only. */
 @keyframes ember-pulse {
   0%,
   100% {
@@ -2467,7 +2168,6 @@ html[dir="rtl"] .font-display {
     transform: scale(1.08);
   }
 }
-
 @keyframes storm-gleam {
   0%,
   100% {
@@ -2479,7 +2179,6 @@ html[dir="rtl"] .font-display {
     transform: scale(1.04);
   }
 }
-
 @keyframes mist-gleam {
   0%,
   100% {
@@ -2491,7 +2190,6 @@ html[dir="rtl"] .font-display {
     transform: scale(1.06);
   }
 }
-
 @keyframes arcane-pulse {
   0%,
   100% {
@@ -2503,7 +2201,6 @@ html[dir="rtl"] .font-display {
     transform: scale(1.06) rotate(8deg);
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .enemy-token[data-element="ember"]::after,
   .enemy-token[data-element="storm"]::after,
@@ -2511,15 +2208,11 @@ html[dir="rtl"] .font-display {
   .enemy-token[data-element="arcane"]::after {
     animation: none;
   }
-}
-
-
-/* Keep the dialogue arrow readable on small screens */
+} /* Keep the dialogue arrow readable on small screens */
 .fantasy-character-continue {
   inset-inline-end: 0.6rem;
   bottom: 0.4rem;
 }
-
 @media (max-width: 360px) {
   .companions-container {
     grid-template-columns: 1fr 1fr;
@@ -2528,15 +2221,10 @@ html[dir="rtl"] .font-display {
   .companion-column .fantasy-character-dialogue {
     width: min(100%, 10rem);
   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* GAME FEEL: Sidebar slide animation for guides/settings                      */
-/* -------------------------------------------------------------------------- */
+} /* -------------------------------------------------------------------------- */ /* GAME FEEL: Sidebar slide animation for guides/settings                      */ /* -------------------------------------------------------------------------- */
 .panel-slide-in {
   animation: panel-slide-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 @keyframes panel-slide-in {
   from {
     opacity: 0;
