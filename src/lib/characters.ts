@@ -30,7 +30,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.king.role",
     screen: "home",
     artwork: { src: "/characters/king.png", altKey: "characters.roster.king.alt" },
-    accent: "var(--primary)",
+    accent: "var(--accent-king)",
     dialogueKeys: {
       default: "characters.dialogue.king.default",
       newPlayer: "characters.dialogue.king.new",
@@ -45,7 +45,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.adventurer.role",
     screen: "quests",
     artwork: { src: "/characters/adventurer.png", altKey: "characters.roster.adventurer.alt" },
-    accent: "var(--stat-strength)",
+    accent: "var(--accent-adventurer)",
     dialogueKeys: {
       default: "characters.dialogue.adventurer.default",
       newPlayer: "characters.dialogue.adventurer.new",
@@ -60,7 +60,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.scholar.role",
     screen: "trials",
     artwork: { src: "/characters/scientist.png", altKey: "characters.roster.scholar.alt" },
-    accent: "var(--stat-endurance)",
+    accent: "var(--accent-scholar)",
     dialogueKeys: {
       default: "characters.dialogue.scholar.default",
       newPlayer: "characters.dialogue.scholar.new",
@@ -75,7 +75,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.sage.role",
     screen: "guide",
     artwork: { src: "/characters/wizard.png", altKey: "characters.roster.sage.alt" },
-    accent: "var(--accent)",
+    accent: "var(--accent-sage)",
     dialogueKeys: {
       default: "characters.dialogue.sage.default",
       newPlayer: "characters.dialogue.sage.new",
@@ -90,7 +90,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.hero.role",
     screen: "character",
     artwork: { src: "/characters/sacred.png", altKey: "characters.roster.hero.alt" },
-    accent: "var(--primary)",
+    accent: "var(--accent-hero)",
     dialogueKeys: {
       default: "characters.dialogue.hero.default",
       newPlayer: "characters.dialogue.hero.new",
@@ -105,7 +105,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.hakari.role",
     screen: "legend",
     artwork: { src: "/characters/hakari.png", altKey: "characters.roster.hakari.alt" },
-    accent: "var(--stat-vitality)",
+    accent: "var(--accent-hakari)",
     dialogueKeys: {
       default: "characters.dialogue.hakari.default",
       newPlayer: "characters.dialogue.hakari.new",
@@ -120,7 +120,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.miri.role",
     screen: "legend",
     artwork: { src: "/characters/sprite.png", altKey: "characters.roster.miri.alt" },
-    accent: "var(--accent)",
+    accent: "var(--accent-miri)",
     dialogueKeys: {
       default: "characters.dialogue.miri.default",
       newPlayer: "characters.dialogue.miri.new",
@@ -135,7 +135,7 @@ export const CHARACTERS: Record<CharacterId, CharacterDefinition> = {
     roleKey: "characters.roster.maid.role",
     screen: "settings",
     artwork: { src: "/characters/Maid.png", altKey: "characters.roster.maid.alt" },
-    accent: "var(--stat-recovery)",
+    accent: "var(--accent-maid)",
     dialogueKeys: {
       default: "characters.dialogue.maid.default",
       newPlayer: "characters.dialogue.maid.new",

@@ -103,6 +103,40 @@
   --accent: oklch(0.5 0.155 36);
   --accent-foreground: oklch(0.99 0.008 95);
 
+  /* Character palettes — each companion owns a clearly different hue,
+     saturation, and lightness so the roster reads as distinct individuals. */
+  --accent-king: oklch(0.6 0.16 78);
+  --accent-king-overline: oklch(0.72 0.13 78);
+  --accent-king-shadow: oklch(0.38 0.14 78);
+
+  --accent-adventurer: oklch(0.66 0.22 42);
+  --accent-adventurer-overline: oklch(0.78 0.18 42);
+  --accent-adventurer-shadow: oklch(0.45 0.19 42);
+
+  --accent-scholar: oklch(0.55 0.14 232);
+  --accent-scholar-overline: oklch(0.68 0.12 232);
+  --accent-scholar-shadow: oklch(0.35 0.13 232);
+
+  --accent-sage: oklch(0.45 0.16 310);
+  --accent-sage-overline: oklch(0.58 0.13 310);
+  --accent-sage-shadow: oklch(0.28 0.15 310);
+
+  --accent-hero: oklch(0.64 0.17 120);
+  --accent-hero-overline: oklch(0.75 0.14 120);
+  --accent-hero-shadow: oklch(0.42 0.15 120);
+
+  --accent-hakari: oklch(0.7 0.18 72);
+  --accent-hakari-overline: oklch(0.82 0.14 72);
+  --accent-hakari-shadow: oklch(0.5 0.16 72);
+
+  --accent-miri: oklch(0.58 0.16 195);
+  --accent-miri-overline: oklch(0.7 0.13 195);
+  --accent-miri-shadow: oklch(0.38 0.14 195);
+
+  --accent-maid: oklch(0.48 0.15 330);
+  --accent-maid-overline: oklch(0.6 0.12 330);
+  --accent-maid-shadow: oklch(0.3 0.14 330);
+
   --destructive: oklch(0.5 0.17 25);
   --destructive-foreground: oklch(0.99 0.008 95);
 
@@ -165,6 +199,38 @@
   /* Persimmon accent stays vivid on dark. */
   --accent: oklch(0.6 0.15 36);
   --accent-foreground: oklch(0.985 0.008 95);
+
+  --accent-king: oklch(0.7 0.155 78);
+  --accent-king-overline: oklch(0.8 0.13 78);
+  --accent-king-shadow: oklch(0.5 0.14 78);
+
+  --accent-adventurer: oklch(0.76 0.22 42);
+  --accent-adventurer-overline: oklch(0.86 0.18 42);
+  --accent-adventurer-shadow: oklch(0.55 0.2 42);
+
+  --accent-scholar: oklch(0.62 0.13 232);
+  --accent-scholar-overline: oklch(0.74 0.11 232);
+  --accent-scholar-shadow: oklch(0.42 0.12 232);
+
+  --accent-sage: oklch(0.55 0.16 310);
+  --accent-sage-overline: oklch(0.68 0.13 310);
+  --accent-sage-shadow: oklch(0.35 0.15 310);
+
+  --accent-hero: oklch(0.72 0.17 120);
+  --accent-hero-overline: oklch(0.83 0.14 120);
+  --accent-hero-shadow: oklch(0.5 0.15 120);
+
+  --accent-hakari: oklch(0.78 0.18 72);
+  --accent-hakari-overline: oklch(0.88 0.14 72);
+  --accent-hakari-shadow: oklch(0.56 0.16 72);
+
+  --accent-miri: oklch(0.64 0.15 195);
+  --accent-miri-overline: oklch(0.75 0.12 195);
+  --accent-miri-shadow: oklch(0.42 0.13 195);
+
+  --accent-maid: oklch(0.56 0.14 330);
+  --accent-maid-overline: oklch(0.67 0.11 330);
+  --accent-maid-shadow: oklch(0.36 0.13 330);
 
   --destructive: oklch(0.52 0.18 25);
   --destructive-foreground: oklch(0.985 0.008 95);
