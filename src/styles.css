@@ -1264,6 +1264,8 @@ html[dir="rtl"] .font-display {
   .world-zone-enter,
   .boss-quake,
   .boss-defeated-glow,
+  .boss-breathing,
+  .boss-latent-glow,
   .fantasy-character.is-entered .fantasy-character-figure,
   .char-breathe,
   .char-float,
