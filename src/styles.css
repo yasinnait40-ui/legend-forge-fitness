@@ -63,7 +63,9 @@
   --color-rarity-epic: var(--rarity-epic);
   --color-rarity-legendary: var(--rarity-legendary);
   --font-display: "Cinzel", "Georgia", serif;
+  --font-display-decorative: "Cinzel Decorative", "Cinzel", serif;
   --font-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --font-roman: "Cormorant Garamond", "Georgia", serif;
 }
 
 :root {
