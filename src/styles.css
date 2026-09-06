@@ -9,29 +9,6 @@
   src: url("https://fonts.gstatic.com/s/cinzeldecorative/v15/8vIU7rcO9rQqPyI5ARv0WQ.woff2")
     format("woff2");
 }
-@font-face {
-  font-family: "Cinzel Decorative";
-  font-style: normal;
-  font-weight: 400 900;
-  font-display: swap;
-  src: local("Cinzel Decorative"), local("Cinzel Decorative-Regular");
-}
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: italic;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/cormorantgaramond/v20/co3bmX5slCNuHLi9vvWhemYBpF5E.woff2")
-    format("woff2");
-}
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/cormorantgaramond/v20/co3YmxrLk3ountainwdCZ3eY9shXFOqlrB-.woff2")
-    format("woff2");
-}
 @custom-variant dark (&:is(.dark *));
 
 /*
