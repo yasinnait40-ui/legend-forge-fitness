@@ -67,7 +67,7 @@ function BossPage() {
     if (!boss) return;
     const killedNow = damageBoss(boss.id, boss.maxHp, trial.xp);
     if (killedNow) {
-      playSound("levelUp");
+      playSound("battleVictory");
       setTimeout(() => setJustDefeated(true), 500);
     }
   }
@@ -174,10 +174,10 @@ function BossPage() {
               width: `${Math.max(defeated ? 0 : 3, hpRatio * 100)}%`,
               background: defeated
                 ? "var(--muted-foreground)"
-                : "linear-gradient(90deg, color-mix(in oklab, #b23b3b 60%, black 10%), #b23b3b)",
+                : "linear-gradient(90deg, color-mix(in oklab, var(--boss-accent) 60%, black 10%), var(--boss-accent))",
               boxShadow: defeated
                 ? "none"
-                : "0 0 14px color-mix(in oklab, #b23b3b 65%, transparent)",
+                : "0 0 14px color-mix(in oklab, var(--boss-accent) 65%, transparent)",
             }}
           />
         </div>
@@ -224,7 +224,7 @@ function BossPage() {
                         <span className="rune-chip">
                           <Clock className="h-3 w-3" /> {trial.minutes} {t("trials.minutes", "min")}
                         </span>
-                        <span className="rune-chip" style={{ color: "#b23b3b" }}>
+                        <span className="rune-chip" style={{ color: "var(--boss-accent)" }}>
                           <Skull className="h-3 w-3" /> -{trial.xp} HP
                         </span>
                       </div>
@@ -261,14 +261,16 @@ function BossPage() {
                             onClick={() => handleAttack(trial)}
                             className="flex w-full items-center justify-center gap-2 rounded-md border py-2.5 transition active:scale-95"
                             style={{
-                              borderColor: "color-mix(in oklab, #b23b3b 45%, transparent)",
-                              background: "color-mix(in oklab, #b23b3b 12%, transparent)",
+                              borderColor:
+                                "color-mix(in oklab, var(--boss-accent) 45%, transparent)",
+                              background:
+                                "color-mix(in oklab, var(--boss-accent) 12%, transparent)",
                             }}
                           >
-                            <Skull className="h-4 w-4" style={{ color: "#b23b3b" }} />
+                            <Skull className="h-4 w-4" style={{ color: "var(--boss-accent)" }} />
                             <span
                               className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em]"
-                              style={{ color: "#b23b3b" }}
+                              style={{ color: "var(--boss-accent)" }}
                             >
                               {t("boss.strike", "Strike the Beast")}
                             </span>
