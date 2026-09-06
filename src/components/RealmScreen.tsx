@@ -13,13 +13,14 @@ interface RealmScreenProps {
 }
 
 /**
- * Bright, airy veils: the artwork stays luminous while panels and text
- * remain readable on top of it. Layers tint the scene with warm ivory.
+ * Atmospheric veils over the fantasy artwork. Tints the scene with
+ * the active theme surface so panels and text stay readable regardless
+ * of the route.
  */
 const VEILS = {
-  soft: "bg-gradient-to-b from-white/25 via-white/10 to-background/60",
-  normal: "bg-gradient-to-b from-white/35 via-white/15 to-background/75",
-  strong: "bg-gradient-to-b from-white/45 via-white/25 to-background/85",
+  soft: "bg-gradient-to-b from-background/25 via-background/10 to-background/60",
+  normal: "bg-gradient-to-b from-background/35 via-background/15 to-background/75",
+  strong: "bg-gradient-to-b from-background/45 via-background/25 to-background/85",
 } as const;
 
 /**
@@ -47,8 +48,8 @@ export function RealmScreen({
           className="h-full w-full object-cover brightness-[1.08] saturate-[1.06]"
           style={{ objectPosition: imagePosition }}
         />
-        {/* Warm sunlit wash so every scene reads as golden-hour, never gloomy */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/12 via-transparent to-secondary/25 mix-blend-soft-light" />
+        {/* Warm atmospheric wash over the scene, tinted by the active theme */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-secondary/20 mix-blend-soft-light" />
         <div className={`absolute inset-0 ${VEILS[veil]}`} />
       </div>
       {embers && (
