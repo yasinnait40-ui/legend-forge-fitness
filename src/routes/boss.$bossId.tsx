@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useState } from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -111,12 +112,13 @@ function BossPage() {
           shaking && "boss-shaking",
         )}
         style={{
+          "--boss-accent": `oklch(0.62 0.16 ${boss.accentHue})` as const,
           borderColor: defeated
             ? "color-mix(in oklab, var(--muted-foreground) 50%, transparent)"
-            : "color-mix(in oklab, #b23b3b 55%, transparent)",
+            : `color-mix(in oklab, var(--boss-accent) 60%, transparent)`,
           boxShadow: defeated
             ? "none"
-            : "0 0 30px -6px color-mix(in oklab, #b23b3b 55%, transparent)",
+            : `0 0 34px -6px color-mix(in oklab, var(--boss-accent) 65%, transparent)`,
         }}
       >
         <img

@@ -9,6 +9,8 @@ export interface Boss {
   regionId: string; // matches WorldRegion.id in world-map-data.ts
   maxHp: number;
   image: string;
+  /** Per-boss accent hue so each foe has its own color identity on the battlefield. */
+  accentHue: number;
 }
 
 export const BOSSES: Boss[] = [
@@ -19,6 +21,7 @@ export const BOSSES: Boss[] = [
     regionId: "emberwood",
     maxHp: 300,
     image: ashenWolfImg,
+    accentHue: 28,
   },
   {
     id: "hollow-knight",
@@ -27,6 +30,7 @@ export const BOSSES: Boss[] = [
     regionId: "eldridge",
     maxHp: 500,
     image: hollowKnightImg,
+    accentHue: 270,
   },
   {
     id: "frost-wyrm",
@@ -35,6 +39,7 @@ export const BOSSES: Boss[] = [
     regionId: "frosthold",
     maxHp: 800,
     image: frostWyrmImg,
+    accentHue: 205,
   },
 ];
 

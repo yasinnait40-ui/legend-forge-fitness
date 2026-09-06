@@ -314,8 +314,8 @@
 .rune-panel {
   position: relative;
   border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in oklab, var(--primary) 26%, transparent);
-  outline: 1px solid color-mix(in oklab, var(--primary) 10%, transparent);
+  border: 1px solid color-mix(in oklab, var(--zone-color, var(--primary)) 26%, transparent);
+  outline: 1px solid color-mix(in oklab, var(--zone-color, var(--primary)) 10%, transparent);
   outline-offset: 3px;
   background: linear-gradient(
     165deg,
@@ -2215,13 +2215,13 @@ html[dir="rtl"] .font-display {
   border-radius: 50%;
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, var(--accent) 35%, transparent) 0%,
-    color-mix(in oklab, var(--character-accent, var(--primary)) 18%, transparent) 55%,
+    color-mix(in oklab, oklch(0.62 0.16 48) 35%, transparent) 0%,
+    color-mix(in oklab, oklch(0.62 0.16 48) 18%, transparent) 55%,
     transparent 78%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--character-accent, var(--primary)) 40%, transparent),
-    0 0 18px color-mix(in oklab, var(--accent) 45%, transparent);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.62 0.16 48) 40%, transparent),
+    0 0 18px color-mix(in oklab, oklch(0.62 0.16 48) 45%, transparent);
   position: relative;
 }
 
@@ -2233,7 +2233,7 @@ html[dir="rtl"] .font-display {
   border-radius: 50%;
   background: radial-gradient(
     circle at 40% 30%,
-    color-mix(in oklab, var(--accent) 60%, white 20%) 0%,
+    color-mix(in oklab, oklch(0.72 0.14 48) 60%, white 20%) 0%,
     transparent 55%
   );
   opacity: 0.7;
@@ -2242,18 +2242,18 @@ html[dir="rtl"] .font-display {
 .enemy-token[data-element="stone"] {
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, var(--stat-strength) 40%, transparent) 0%,
-    color-mix(in oklab, var(--stat-strength) 22%, transparent) 55%,
+    color-mix(in oklab, oklch(0.58 0.15 28) 44%, transparent) 0%,
+    color-mix(in oklab, oklch(0.58 0.15 28) 24%, transparent) 55%,
     transparent 78%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--stat-strength) 40%, transparent),
-    0 0 18px color-mix(in oklab, var(--stat-strength) 45%, transparent);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.58 0.15 28) 44%, transparent),
+    0 0 18px color-mix(in oklab, oklch(0.58 0.15 28) 50%, transparent);
 }
 .enemy-token[data-element="stone"]::after {
   background: radial-gradient(
     circle at 40% 30%,
-    color-mix(in oklab, var(--stat-strength) 60%, white 20%) 0%,
+    color-mix(in oklab, oklch(0.7 0.12 28) 68%, white 20%) 0%,
     transparent 55%
   );
 }
@@ -2261,18 +2261,18 @@ html[dir="rtl"] .font-display {
 .enemy-token[data-element="ember"] {
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, var(--stat-vitality) 40%, transparent) 0%,
-    color-mix(in oklab, var(--stat-vitality) 22%, transparent) 55%,
+    color-mix(in oklab, oklch(0.62 0.24 38) 44%, transparent) 0%,
+    color-mix(in oklab, oklch(0.62 0.24 38) 24%, transparent) 55%,
     transparent 78%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--stat-vitality) 40%, transparent),
-    0 0 22px 4px color-mix(in oklab, var(--stat-vitality) 45%, transparent);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.62 0.24 38) 44%, transparent),
+    0 0 24px 5px color-mix(in oklab, oklch(0.62 0.24 38) 50%, transparent);
 }
 .enemy-token[data-element="ember"]::after {
   background: radial-gradient(
     circle at 40% 30%,
-    color-mix(in oklab, var(--stat-vitality) 70%, white 20%) 0%,
+    color-mix(in oklab, oklch(0.74 0.2 38) 74%, white 20%) 0%,
     transparent 55%
   );
   animation: ember-pulse 2s ease-in-out infinite;
@@ -2281,18 +2281,18 @@ html[dir="rtl"] .font-display {
 .enemy-token[data-element="storm"] {
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, var(--primary) 35%, transparent) 0%,
-    color-mix(in oklab, var(--primary) 20%, transparent) 55%,
+    color-mix(in oklab, oklch(0.6 0.17 220) 44%, transparent) 0%,
+    color-mix(in oklab, oklch(0.6 0.17 220) 24%, transparent) 55%,
     transparent 78%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--primary) 45%, transparent),
-    0 0 20px 6px color-mix(in oklab, var(--primary) 40%, transparent);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.6 0.17 220) 48%, transparent),
+    0 0 22px 7px color-mix(in oklab, oklch(0.6 0.17 220) 44%, transparent);
 }
 .enemy-token[data-element="storm"]::after {
   background: radial-gradient(
     circle at 40% 30%,
-    color-mix(in oklab, var(--primary) 70%, white 20%) 0%,
+    color-mix(in oklab, oklch(0.72 0.15 220) 74%, white 20%) 0%,
     transparent 55%
   );
   animation: storm-gleam 1.8s ease-in-out infinite;
@@ -2301,30 +2301,30 @@ html[dir="rtl"] .font-display {
 .enemy-token[data-element="shadow"] {
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, rgb(40 30 50 / 0.8) 45%, transparent) 0%,
+    color-mix(in oklab, oklch(0.28 0.16 295) 52%, transparent) 0%,
     transparent 62%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, rgb(40 30 50 / 0.7) 40%, transparent),
-    0 0 16px color-mix(in oklab, rgb(40 30 50 / 0.6) 50%, transparent);
-  filter: grayscale(0.15);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.28 0.16 295) 44%, transparent),
+    0 0 16px color-mix(in oklab, oklch(0.28 0.16 295) 58%, transparent);
+  filter: grayscale(0.08);
 }
 
 .enemy-token[data-element="mist"] {
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, var(--stat-recovery) 40%, transparent) 0%,
-    color-mix(in oklab, var(--stat-recovery) 20%, transparent) 55%,
+    color-mix(in oklab, oklch(0.56 0.16 175) 44%, transparent) 0%,
+    color-mix(in oklab, oklch(0.56 0.16 175) 24%, transparent) 55%,
     transparent 78%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--stat-recovery) 40%, transparent),
-    0 0 18px color-mix(in oklab, var(--stat-recovery) 45%, transparent);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.56 0.16 175) 46%, transparent),
+    0 0 18px color-mix(in oklab, oklch(0.56 0.16 175) 52%, transparent);
 }
 .enemy-token[data-element="mist"]::after {
   background: radial-gradient(
     circle at 40% 30%,
-    color-mix(in oklab, var(--stat-recovery) 60%, white 20%) 0%,
+    color-mix(in oklab, oklch(0.68 0.13 175) 68%, white 20%) 0%,
     transparent 55%
   );
   animation: mist-gleam 2.4s ease-in-out infinite;
@@ -2333,18 +2333,18 @@ html[dir="rtl"] .font-display {
 .enemy-token[data-element="frost"] {
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, var(--stat-endurance) 40%, transparent) 0%,
-    color-mix(in oklab, var(--stat-endurance) 22%, transparent) 55%,
+    color-mix(in oklab, oklch(0.62 0.17 195) 44%, transparent) 0%,
+    color-mix(in oklab, oklch(0.62 0.17 195) 24%, transparent) 55%,
     transparent 78%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--stat-endurance) 40%, transparent),
-    0 0 18px color-mix(in oklab, var(--stat-endurance) 45%, transparent);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.62 0.17 195) 46%, transparent),
+    0 0 18px color-mix(in oklab, oklch(0.62 0.17 195) 52%, transparent);
 }
 .enemy-token[data-element="frost"]::after {
   background: radial-gradient(
     circle at 40% 30%,
-    color-mix(in oklab, var(--stat-endurance) 60%, white 20%) 0%,
+    color-mix(in oklab, oklch(0.74 0.14 195) 68%, white 20%) 0%,
     transparent 55%
   );
 }
@@ -2352,22 +2352,23 @@ html[dir="rtl"] .font-display {
 .enemy-token[data-element="arcane"] {
   background: radial-gradient(
     circle at 35% 28%,
-    color-mix(in oklab, var(--stat-agility) 40%, transparent) 0%,
-    color-mix(in oklab, var(--stat-agility) 20%, transparent) 55%,
+    color-mix(in oklab, oklch(0.56 0.18 125) 44%, transparent) 0%,
+    color-mix(in oklab, oklch(0.56 0.18 125) 22%, transparent) 55%,
     transparent 78%
   );
   box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--stat-agility) 45%, transparent),
-    0 0 22px 5px color-mix(in oklab, var(--stat-agility) 45%, transparent);
+    inset 0 0 0 2px color-mix(in oklab, oklch(0.56 0.18 125) 48%, transparent),
+    0 0 22px 6px color-mix(in oklab, oklch(0.56 0.18 125) 50%, transparent);
 }
 .enemy-token[data-element="arcane"]::after {
   background: radial-gradient(
     circle at 40% 30%,
-    color-mix(in oklab, var(--stat-agility) 70%, white 20%) 0%,
+    color-mix(in oklab, oklch(0.7 0.15 125) 74%, white 20%) 0%,
     transparent 55%
   );
   animation: arcane-pulse 2.6s ease-in-out infinite;
 }
+
 
 /* Center verse divider between player and enemy tokens. */
 .verse-divider {

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, Compass, Crown, Lock, ScrollText, Sparkles, Swords } from "lucide-react";
@@ -29,6 +30,15 @@ export const Route = createFileRoute("/map")({
 });
 
 const DIFFICULTY_LABELS = ["", "Common", "Uncommon", "Rare", "Epic", "Legendary"] as const;
+
+/** Per-difficulty accent hue so each region tier reads with a distinct color on the map. */
+const ZONE_COLOR: Record<1 | 2 | 3 | 4 | 5, string> = {
+  1: "oklch(0.62 0.15 78)", // gold
+  2: "oklch(0.58 0.16 232)", // blue
+  3: "oklch(0.6 0.17 150)", // emerald
+  4: "oklch(0.55 0.17 300)", // violet
+  5: "oklch(0.62 0.15 18)", // deep red
+};
 
 /** Narrating character per region — introduces the land in its own voice. */
 const NARRATOR_LINES = {
@@ -150,8 +160,7 @@ function MapPage() {
                     maskImage: "radial-gradient(circle, black 38%, transparent 72%)",
                   }}
                 />
-              )}
-
+              )}{" "}
               <button
                 type="button"
                 onClick={() => interactable && setSelected(region)}
@@ -162,28 +171,33 @@ function MapPage() {
                 <span
                   className="flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300"
                   style={{
+                    "--zone-color": ZONE_COLOR[region.difficulty],
                     borderColor:
                       state === "locked"
                         ? "rgba(255,255,255,0.55)"
                         : state === "mastered"
                           ? "var(--rarity-legendary)"
-                          : "var(--primary)",
+                          : "var(--zone-color)",
                     background:
                       state === "locked"
                         ? "rgba(10,10,10,0.5)"
-                        : "color-mix(in oklab, var(--primary) 30%, rgba(20,15,5,0.55))",
+                        : "color-mix(in oklab, var(--zone-color) 32%, rgba(20,15,5,0.55))",
                     boxShadow:
                       state === "locked"
                         ? "none"
                         : state === "mastered"
                           ? "0 0 16px color-mix(in oklab, var(--rarity-legendary) 75%, transparent)"
-                          : "0 0 14px color-mix(in oklab, var(--primary) 65%, transparent)",
+                          : "0 0 14px color-mix(in oklab, var(--zone-color) 65%, transparent)",
                   }}
                 >
                   {state === "locked" ? (
                     <Lock className="h-4 w-4 text-white/80" strokeWidth={2.4} />
                   ) : state === "available" ? (
-                    <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
+                    <Sparkles
+                      className="h-4 w-4"
+                      style={{ color: "var(--zone-color)" }}
+                      aria-hidden="true"
+                    />
                   ) : state === "mastered" ? (
                     <CheckCircle2
                       className="h-4 w-4"
@@ -191,7 +205,10 @@ function MapPage() {
                       aria-hidden="true"
                     />
                   ) : (
-                    <span className="h-2.5 w-2.5 rounded-full bg-primary" />
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ background: "var(--zone-color)" }}
+                    />
                   )}
                 </span>
                 <span
@@ -202,8 +219,8 @@ function MapPage() {
                       state === "locked"
                         ? "rgba(0,0,0,0.55)"
                         : state === "available"
-                          ? "color-mix(in oklab, var(--accent) 88%, transparent)"
-                          : "color-mix(in oklab, var(--primary) 88%, transparent)",
+                          ? "color-mix(in oklab, var(--zone-color) 88%, transparent)"
+                          : "color-mix(in oklab, var(--zone-color) 88%, transparent)",
                   }}
                 >
                   {state === "locked"
@@ -244,20 +261,37 @@ function RegionPanel({ region, onEnter }: { region: WorldRegion; onEnter: () => 
   const narratorKey = NARRATOR_LINES[region.narrator];
 
   return (
-    <div className="rune-panel mx-auto mt-6 max-w-md p-4" role="region" aria-label={region.name}>
+    <div
+      className="rune-panel mx-auto mt-6 max-w-md p-4"
+      role="region"
+      aria-label={region.name}
+      style={{ "--zone-color": ZONE_COLOR[region.difficulty] }}
+    >
       <RuneHeading>{t("map.region", "Region")}</RuneHeading>{" "}
-      <h2 className="font-display mt-2 flex items-center gap-2 text-xl font-black text-primary">
+      <h2
+        className="font-display mt-2 flex items-center gap-2 text-xl font-black"
+        style={{ color: "var(--zone-color)" }}
+      >
         {region.narrator === "king" && <Crown className="h-5 w-5" aria-hidden="true" />}
         {region.name}
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">{region.description}</p>
-      <p className="mt-2 border-l-2 border-primary/40 pl-3 text-xs italic leading-snug text-foreground/80">
+      <p
+        className="mt-2 border-l-2 pl-3 text-xs italic leading-snug text-foreground/80"
+        style={{ borderColor: "color-mix(in oklab, var(--zone-color) 45%, transparent)" }}
+      >
         {region.lore}
       </p>
       {/* The region's narrator introduces the land in character. */}
       <FantasyCharacter kind={region.narrator} dialogue={t(narratorKey)} embedded />
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className="rune-chip">
+        <span
+          className="rune-chip"
+          style={{
+            color: "var(--zone-color)",
+            borderColor: "color-mix(in oklab, var(--zone-color) 40%, transparent)",
+          }}
+        >
           <Swords className="h-3 w-3" aria-hidden="true" />
           {t("map.difficulty", "Difficulty")}:{" "}
           {t(`map.difficultyName.${region.difficulty}`, DIFFICULTY_LABELS[region.difficulty])}
