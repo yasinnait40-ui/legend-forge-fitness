@@ -67,7 +67,7 @@ function BossPage() {
     if (!boss) return;
     const killedNow = damageBoss(boss.id, boss.maxHp, trial.xp);
     if (killedNow) {
-      playSound("battleVictory");
+      playSound("bossHit");
       setTimeout(() => setJustDefeated(true), 500);
     }
   }

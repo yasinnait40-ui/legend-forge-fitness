@@ -204,7 +204,7 @@ function tone(
 /* General game sounds                                                         */
 /* -------------------------------------------------------------------------- */
 
-export type SoundKey = "questComplete" | "levelUp" | "battleHit" | "battleVictory";
+export type SoundKey = "questComplete" | "levelUp" | "battleHit" | "battleVictory" | "bossHit";
 
 export function playSound(key: SoundKey) {
   if (state.muted) return;
@@ -243,6 +243,18 @@ export function playSound(key: SoundKey) {
         tone(210, 0, 0.14, ctx, master, "sine", 0.3);
         tone(1200, 0.06, 0.2, ctx, master, "triangle", 0.18);
         tone(1560, 0.08, 0.24, ctx, master, "sine", 0.12);
+      }
+
+      if (key === "bossHit") {
+        /*
+         * Boss strike: warm percussive impact, slightly heavier than the
+         * generic trial hit, with a low brass-like pulse behind a bright chime.
+         * Designed to feel decisive and encouraging, not aggressive.
+         */
+        tone(160, 0, 0.22, ctx, master, "sawtooth", 0.4);
+        tone(190, 0, 0.18, ctx, master, "sine", 0.35);
+        tone(1100, 0.05, 0.22, ctx, master, "triangle", 0.2);
+        tone(1650, 0.07, 0.28, ctx, master, "sine", 0.16);
       }
 
       if (key === "battleVictory") {
