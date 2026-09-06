@@ -1478,13 +1478,13 @@ html[dir="rtl"] .font-display {
   border-radius: 50%;
   background: radial-gradient(
     ellipse at 50% 60%,
-    color-mix(in oklab, var(--character-accent, var(--primary)) 22%, transparent) 0%,
-    color-mix(in oklab, var(--character-accent, var(--primary)) 8%, transparent) 45%,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 38%, transparent) 0%,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 14%, transparent) 45%,
     transparent 72%
   );
   filter: blur(2px);
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.65;
   mix-blend-mode: screen;
 }
 
@@ -1523,11 +1523,11 @@ html[dir="rtl"] .font-display {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    color-mix(in oklab, var(--character-accent, var(--primary)) 14%, transparent) 0%,
+    color-mix(in oklab, var(--character-accent, var(--primary)) 26%, transparent) 0%,
     transparent 65%
   );
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.65;
   animation: char-aura-pulse 5s ease-in-out infinite;
 }
 
@@ -1717,18 +1717,18 @@ html[dir="rtl"] .font-display {
 
 /* SPEAKING STATE — the figure leans toward its words while talking. */
 .is-speaking .fantasy-character-nameplate strong {
-  color: color-mix(in oklab, var(--character-accent, var(--primary)) 65%, var(--foreground));
-  text-shadow: 0 0 10px color-mix(in oklab, var(--character-accent, var(--primary)) 45%, transparent);
+  color: color-mix(in oklab, var(--character-accent, var(--primary)) 88%, var(--foreground));
+  text-shadow: 0 0 12px color-mix(in oklab, var(--character-accent, var(--primary)) 60%, transparent);
 }
 .is-speaking .fantasy-character-dialogue {
-  border-color: color-mix(in oklab, var(--character-accent, var(--primary)) 80%, var(--border));
+  border-color: color-mix(in oklab, var(--character-accent, var(--primary)) 92%, var(--border));
   box-shadow:
     0 10px 26px -12px color-mix(in oklab, oklch(0.4 0.06 260) 35%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 0.75),
-    0 0 18px color-mix(in oklab, var(--character-accent, var(--primary)) 22%, transparent);
+    0 0 22px color-mix(in oklab, var(--character-accent, var(--primary)) 42%, transparent);
 }
 .is-speaking .char-aura {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1839,7 +1839,7 @@ html[dir="rtl"] .font-display {
   font-size: 1.6em;
   line-height: 0;
   vertical-align: -0.25em;
-  color: color-mix(in oklab, var(--character-accent, var(--primary)) 50%, transparent);
+  color: color-mix(in oklab, var(--character-accent, var(--primary)) 72%, transparent);
   margin-right: 0.1em;
 }
 
@@ -1849,7 +1849,7 @@ html[dir="rtl"] .font-display {
   font-size: 1.6em;
   line-height: 0;
   vertical-align: -0.25em;
-  color: color-mix(in oklab, var(--character-accent, var(--primary)) 50%, transparent);
+  color: color-mix(in oklab, var(--character-accent, var(--primary)) 72%, transparent);
   margin-left: 0.05em;
 }
 
