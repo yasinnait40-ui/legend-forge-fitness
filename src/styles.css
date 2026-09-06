@@ -69,100 +69,136 @@
 :root {
   --radius: 0.75rem;
   --nav-h: 4.5rem;
-  /* Warm ivory daylight with a whisper of celestial blue */
-  --background: oklch(0.97 0.012 95);
-  --foreground: oklch(0.32 0.035 260);
-  --card: oklch(0.99 0.008 95);
-  --card-foreground: oklch(0.32 0.035 260);
-  --popover: oklch(0.99 0.008 95);
-  --popover-foreground: oklch(0.32 0.035 260);
-  /* Antique gold — the hero accent of the realm */
-  --primary: oklch(0.66 0.13 80);
-  --primary-foreground: oklch(0.99 0.01 95);
-  /* Soft celestial blue */
-  --secondary: oklch(0.93 0.035 245);
-  --secondary-foreground: oklch(0.35 0.07 250);
-  --muted: oklch(0.94 0.02 95);
-  --muted-foreground: oklch(0.5 0.03 260);
-  /* Magical violet-lavender */
-  --accent: oklch(0.55 0.13 290);
-  --accent-foreground: oklch(0.99 0.01 95);
-  --destructive: oklch(0.55 0.19 25);
-  --destructive-foreground: oklch(0.99 0.01 95);
-  --border: oklch(0.45 0.06 80 / 22%);
-  --input: oklch(0.45 0.06 80 / 30%);
-  --ring: oklch(0.66 0.13 80);
-  --chart-1: oklch(0.66 0.13 80);
-  --chart-2: oklch(0.55 0.14 250);
-  --chart-3: oklch(0.62 0.14 150);
-  --chart-4: oklch(0.6 0.13 290);
-  --chart-5: oklch(0.7 0.15 50);
-  --sidebar: oklch(0.98 0.01 95);
-  --sidebar-foreground: oklch(0.32 0.035 260);
-  --sidebar-primary: oklch(0.66 0.13 80);
-  --sidebar-primary-foreground: oklch(0.99 0.01 95);
-  --sidebar-accent: oklch(0.93 0.035 245);
-  --sidebar-accent-foreground: oklch(0.35 0.07 250);
-  --sidebar-border: oklch(0.45 0.06 80 / 22%);
-  --sidebar-ring: oklch(0.66 0.13 80);
-  /* Stat hues — vivid but readable on light parchment */
-  --stat-strength: oklch(0.6 0.17 45);
-  --stat-endurance: oklch(0.55 0.13 245);
-  --stat-agility: oklch(0.58 0.13 155);
-  --stat-vitality: oklch(0.68 0.13 85);
+
+  /*
+   * AETHORA palette — cohesive fantasy RPG look across every screen.
+   * Warm parchment base, one dominant gold, one cool contrast accent,
+   * and stat/rarity hues chosen to read as a single world, not a mix.
+   */
+
+  /* Paper / parchment base */
+  --background: oklch(0.975 0.012 82);
+  --foreground: oklch(0.265 0.028 252);
+
+  /* Panels sit on warm ivory, never pure white */
+  --card: oklch(0.985 0.008 82);
+  --card-foreground: oklch(0.265 0.028 252);
+
+  --popover: oklch(0.985 0.008 82);
+  --popover-foreground: oklch(0.265 0.028 252);
+
+  /* Primary = antique gold (soul color of the realm) */
+  --primary: oklch(0.62 0.135 78);
+  --primary-foreground: oklch(0.99 0.006 95);
+
+  /* Secondary = muted cool slate-blue for contrast without stealing focus */
+  --secondary: oklch(0.9 0.025 242);
+  --secondary-foreground: oklch(0.45 0.05 250);
+
+  /* Muted surfaces */
+  --muted: oklch(0.925 0.015 82);
+  --muted-foreground: oklch(0.48 0.028 255);
+
+  /* Accent = warm persimmon-red, kept restrained and used sparingly */
+  --accent: oklch(0.5 0.155 36);
+  --accent-foreground: oklch(0.99 0.008 95);
+
+  --destructive: oklch(0.5 0.17 25);
+  --destructive-foreground: oklch(0.99 0.008 95);
+
+  --border: oklch(0.55 0.05 82 / 25%);
+  --input: oklch(0.55 0.05 82 / 32%);
+  --ring: oklch(0.62 0.135 78);
+
+  --chart-1: oklch(0.62 0.135 78);
+  --chart-2: oklch(0.5 0.155 36);
+  --chart-3: oklch(0.55 0.13 150);
+  --chart-4: oklch(0.52 0.11 258);
+  --chart-5: oklch(0.6 0.12 150);
+
+  --sidebar: oklch(0.965 0.01 82);
+  --sidebar-foreground: oklch(0.265 0.028 252);
+  --sidebar-primary: oklch(0.62 0.135 78);
+  --sidebar-primary-foreground: oklch(0.99 0.006 95);
+  --sidebar-accent: oklch(0.9 0.025 242);
+  --sidebar-accent-foreground: oklch(0.45 0.05 250);
+  --sidebar-border: oklch(0.55 0.05 82 / 25%);
+  --sidebar-ring: oklch(0.62 0.135 78);
+
+  /* Stat hues — warm, saturated, but unified on the parchment base */
+  --stat-strength: oklch(0.58 0.17 42);
+  --stat-endurance: oklch(0.55 0.12 232);
+  --stat-agility: oklch(0.56 0.13 152);
+  --stat-vitality: oklch(0.62 0.13 88);
   --stat-recovery: oklch(0.55 0.13 300);
-  /* Rarity hues */
-  --rarity-common: oklch(0.52 0.02 260);
-  --rarity-uncommon: oklch(0.55 0.12 150);
-  --rarity-rare: oklch(0.55 0.14 250);
-  --rarity-epic: oklch(0.53 0.16 305);
-  --rarity-legendary: oklch(0.66 0.13 80);
+
+  /* Rarity hues — gold family for common/uncommon/rare/epic/legendary read */
+  --rarity-common: oklch(0.5 0.025 252);
+  --rarity-uncommon: oklch(0.55 0.13 150);
+  --rarity-rare: oklch(0.54 0.13 250);
+  --rarity-epic: oklch(0.52 0.16 300);
+  --rarity-legendary: oklch(0.62 0.135 78);
 }
 
-/* The optional dark class keeps a moonlit-gold variant for future use. */
+/* Dark mode: deeper parchment night, same gold + persimmon identity. */
 .dark {
-  --background: oklch(0.22 0.03 260);
-  --foreground: oklch(0.93 0.02 95);
-  --card: oklch(0.26 0.03 258);
-  --card-foreground: oklch(0.93 0.02 95);
-  --popover: oklch(0.24 0.03 258);
-  --popover-foreground: oklch(0.93 0.02 95);
-  --primary: oklch(0.8 0.13 88);
-  --primary-foreground: oklch(0.22 0.04 260);
-  --secondary: oklch(0.3 0.03 258);
-  --secondary-foreground: oklch(0.92 0.02 95);
-  --muted: oklch(0.3 0.025 258);
-  --muted-foreground: oklch(0.72 0.03 90);
-  --accent: oklch(0.68 0.13 285);
-  --accent-foreground: oklch(0.95 0.02 95);
-  --destructive: oklch(0.62 0.2 25);
-  --destructive-foreground: oklch(0.95 0.02 95);
-  --border: oklch(0.8 0.1 88 / 16%);
-  --input: oklch(0.8 0.1 88 / 24%);
-  --ring: oklch(0.8 0.13 88);
-  --chart-1: oklch(0.8 0.13 88);
-  --chart-2: oklch(0.68 0.13 250);
-  --chart-3: oklch(0.72 0.15 155);
-  --chart-4: oklch(0.7 0.13 290);
-  --chart-5: oklch(0.75 0.15 50);
-  --sidebar: oklch(0.25 0.03 258);
-  --sidebar-foreground: oklch(0.93 0.02 95);
-  --sidebar-primary: oklch(0.8 0.13 88);
-  --sidebar-primary-foreground: oklch(0.22 0.04 260);
-  --sidebar-accent: oklch(0.3 0.03 258);
-  --sidebar-accent-foreground: oklch(0.93 0.02 95);
-  --sidebar-border: oklch(0.8 0.1 88 / 16%);
-  --sidebar-ring: oklch(0.8 0.13 88);
-  --stat-strength: oklch(0.75 0.15 48);
-  --stat-endurance: oklch(0.75 0.1 220);
-  --stat-agility: oklch(0.78 0.12 160);
-  --stat-vitality: oklch(0.8 0.12 92);
-  --stat-recovery: oklch(0.7 0.13 305);
-  --rarity-common: oklch(0.72 0.015 260);
-  --rarity-uncommon: oklch(0.74 0.13 155);
-  --rarity-rare: oklch(0.7 0.13 255);
-  --rarity-epic: oklch(0.66 0.17 310);
-  --rarity-legendary: oklch(0.8 0.13 88);
+  --background: oklch(0.15 0.022 255);
+  --foreground: oklch(0.88 0.02 92);
+
+  --card: oklch(0.18 0.022 252);
+  --card-foreground: oklch(0.88 0.02 92);
+
+  --popover: oklch(0.18 0.022 252);
+  --popover-foreground: oklch(0.88 0.02 92);
+
+  /* Gold still works on deep background, kept slightly brighter. */
+  --primary: oklch(0.72 0.125 78);
+  --primary-foreground: oklch(0.18 0.025 252);
+
+  /* Cool contrast stays muted. */
+  --secondary: oklch(0.28 0.03 248);
+  --secondary-foreground: oklch(0.85 0.02 95);
+
+  --muted: oklch(0.24 0.022 252);
+  --muted-foreground: oklch(0.62 0.022 95);
+
+  /* Persimmon accent stays vivid on dark. */
+  --accent: oklch(0.6 0.15 36);
+  --accent-foreground: oklch(0.985 0.008 95);
+
+  --destructive: oklch(0.52 0.18 25);
+  --destructive-foreground: oklch(0.985 0.008 95);
+
+  --border: oklch(0.6 0.08 78 / 22%);
+  --input: oklch(0.6 0.08 78 / 28%);
+  --ring: oklch(0.72 0.125 78);
+
+  --chart-1: oklch(0.72 0.125 78);
+  --chart-2: oklch(0.6 0.15 36);
+  --chart-3: oklch(0.62 0.14 150);
+  --chart-4: oklch(0.58 0.12 258);
+  --chart-5: oklch(0.65 0.13 150);
+
+  --sidebar: oklch(0.18 0.022 252);
+  --sidebar-foreground: oklch(0.88 0.02 92);
+  --sidebar-primary: oklch(0.72 0.125 78);
+  --sidebar-primary-foreground: oklch(0.18 0.025 252);
+  --sidebar-accent: oklch(0.28 0.03 248);
+  --sidebar-accent-foreground: oklch(0.85 0.02 95);
+  --sidebar-border: oklch(0.6 0.08 78 / 22%);
+  --sidebar-ring: oklch(0.72 0.125 78);
+
+  --stat-strength: oklch(0.68 0.14 42);
+  --stat-endurance: oklch(0.68 0.1 232);
+  --stat-agility: oklch(0.7 0.12 152);
+  --stat-vitality: oklch(0.72 0.12 88);
+  --stat-recovery: oklch(0.66 0.12 300);
+
+  --rarity-common: oklch(0.72 0.015 252);
+  --rarity-uncommon: oklch(0.72 0.12 150);
+  --rarity-rare: oklch(0.7 0.12 250);
+  --rarity-epic: oklch(0.66 0.14 300);
+  --rarity-legendary: oklch(0.72 0.125 78);
 }
 
 @layer base {
