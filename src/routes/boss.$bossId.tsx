@@ -110,6 +110,9 @@ function BossPage() {
         className={cn(
           "relative mx-auto mt-6 aspect-square w-full max-w-xs overflow-hidden rounded-2xl border-2",
           shaking && "boss-shaking",
+          !defeated && "boss-breathing",
+          !defeated && "boss-latent-glow",
+          defeated && "boss-defeated-settle",
         )}
         style={{
           "--boss-accent": `oklch(0.62 0.16 ${boss.accentHue})` as const,
