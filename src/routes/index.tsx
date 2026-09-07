@@ -7,7 +7,6 @@ import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
-import { WorldMap } from "@/components/WorldMap";
 import { IronGolem } from "@/components/IronGolem";
 import { questsDoneToday, todayKey, useGame } from "@/lib/game-store";
 import { levelProgress, QUESTS, STAT_ORDER } from "@/lib/game-data";
@@ -187,10 +186,7 @@ function HomePage() {
         </div>
       </RunePanel>
 
-      {/* P1.2: the three starting regions. */}
-      <WorldMap />
-
-      {/* P1.3: the abstract boss sentinel guarding the mountain pass. */}
+      {/* P1.2: the abstract boss sentinel guarding the mountain pass. */}
       <div className="mt-4">
         <IronGolem />
       </div>

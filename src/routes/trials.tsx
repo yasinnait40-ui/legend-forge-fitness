@@ -63,6 +63,8 @@ function TrialsPage() {
   const [treasure, setTreasure] =
     useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
 
+  const [openTrialId, setOpenTrialId] = useState<string | null>(null);
+
   async function handleComplete(trial: Trial) {
     const result = await completeTrial(trial.id, trial.name, trial.xp, trial.stats);
     if (result) {
@@ -86,8 +88,6 @@ function TrialsPage() {
   function exitBattle() {
     setOpenTrialId(null);
   }
-
-  const [openTrialId, setOpenTrialId] = useState<string | null>(null);
 
   return (
     <RealmScreen
