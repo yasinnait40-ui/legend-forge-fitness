@@ -60,7 +60,7 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
     >
       {/* Full-screen splash artwork */}
       <img
-        src="/images/backgrounds/splash-gate.jpg"
+        src="/images/backgrounds/splash-gate.png"
         alt="A massive stone gateway flanked by horned guardian statues, torches glowing in the dark"
         style={{
           position: "absolute",
