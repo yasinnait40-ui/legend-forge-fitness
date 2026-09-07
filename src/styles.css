@@ -203,7 +203,8 @@
   --accent-miri-shadow: #374d26;
   --accent-maid: #c57d4a;
   --accent-maid-overline: #dbbe63;
-  --accent-maid-shadow: #374d26; /* Destructive: deeper magical ember, still warm, not neon */
+  --accent-maid-shadow: #374d26;
+  --gold-accent: #d4af37; /* Destructive: deeper magical ember, still warm, not neon */
   --destructive: #9a4a2a;
   --destructive-foreground: #e7d5a4; /* Borders: copper on dark forest, gold for highlight/focus ring */
   --border: #c57d4a;

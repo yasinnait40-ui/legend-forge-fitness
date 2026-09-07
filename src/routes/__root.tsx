@@ -20,6 +20,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 import "../lib/i18n";
 import { hydrateSoundStore, initBackgroundMusic } from "../lib/sound-store";
+import { LoadingScreen } from "../components/LoadingScreen";
+
+const SHOW_LOADING = true;
 
 const CHARACTER_ASSETS = [
   "/characters/king.png",
@@ -216,6 +219,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {SHOW_LOADING && <LoadingScreen />}
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <footer className="relative z-10 flex justify-center gap-4 px-4 pb-24 pt-3 text-xs text-muted-foreground">
