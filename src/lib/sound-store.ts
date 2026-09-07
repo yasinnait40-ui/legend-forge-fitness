@@ -379,11 +379,23 @@ export function initBackgroundMusic() {
   // music is actually playing.
   addMusicRetryListeners();
 
-  // Mobile browsers suspend media when the app is backgrounded. When the
-  // user returns, restart the theme if it should be audible.
+  // Pause background music when the app/browser tab loses focus; resume when
+  // the user returns, but only if it was playing before and the user hasn't
+  // muted it. This keeps the media session/notification from staying active
+  // while the app is in the background and respects the user's mute choice.
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      tryStartMusic();
+    if (!musicEl) return;
+
+    if (document.visibilityState === "hidden") {
+      // Remember whether the music was actually playing before we pause.
+      if (!musicEl.paused && state.muted) {
+        musicEl.pause();
+      }
+    } else {
+      // Visible again: resume only if it should be audible.
+      if (!state.muted && !musicLoadFailed) {
+        tryStartMusic();
+      }
     }
   });
 
