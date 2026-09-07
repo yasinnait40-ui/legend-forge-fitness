@@ -25,6 +25,8 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrialsRouteImport } from './routes/trials'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as BossBossIdRouteImport } from './routes/boss.$bossId'
+import { Route as FriendsRouteImport } from './routes/friends'
+import { Route as ChatFriendIdRouteImport } from './routes/chat.$friendId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -106,12 +108,24 @@ const BossBossIdRoute = BossBossIdRouteImport.update({
   path: '/boss/$bossId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FriendsRoute = FriendsRouteImport.update({
+  id: '/friends',
+  path: '/friends',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatFriendIdRoute = ChatFriendIdRouteImport.update({
+  id: '/chat/$friendId',
+  path: '/chat/$friendId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
+  '/friends': typeof FriendsRoute
+  '/chat/$friendId': typeof ChatFriendIdRoute
   '/guide': typeof GuideRoute
   '/legend': typeof LegendRoute
   '/map': typeof MapRoute
@@ -130,6 +144,8 @@ export interface FileRoutesByTo {
   '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
+  '/friends': typeof FriendsRoute
+  '/chat/$friendId': typeof ChatFriendIdRoute
   '/guide': typeof GuideRoute
   '/legend': typeof LegendRoute
   '/map': typeof MapRoute
@@ -149,6 +165,8 @@ export interface FileRoutesById {
   '/achievements': typeof AchievementsRoute
   '/auth': typeof AuthRouteWithChildren
   '/character': typeof CharacterRoute
+  '/friends': typeof FriendsRoute
+  '/chat/$friendId': typeof ChatFriendIdRoute
   '/guide': typeof GuideRoute
   '/legend': typeof LegendRoute
   '/map': typeof MapRoute
@@ -169,6 +187,8 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/auth'
     | '/character'
+    | '/friends'
+    | '/chat/$friendId'
     | '/guide'
     | '/legend'
     | '/map'
@@ -187,6 +207,8 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/auth'
     | '/character'
+    | '/friends'
+    | '/chat/$friendId'
     | '/guide'
     | '/legend'
     | '/map'
@@ -205,6 +227,8 @@ export interface FileRouteTypes {
     | '/achievements'
     | '/auth'
     | '/character'
+    | '/friends'
+    | '/chat/$friendId'
     | '/guide'
     | '/legend'
     | '/map'
@@ -224,6 +248,8 @@ export interface RootRouteChildren {
   AchievementsRoute: typeof AchievementsRoute
   AuthRoute: typeof AuthRouteWithChildren
   CharacterRoute: typeof CharacterRoute
+  FriendsRoute: typeof FriendsRoute
+  ChatFriendIdRoute: typeof ChatFriendIdRoute
   GuideRoute: typeof GuideRoute
   LegendRoute: typeof LegendRoute
   MapRoute: typeof MapRoute
@@ -344,6 +370,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/friends': {
+      id: '/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof FriendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat/$friendId': {
+      id: '/chat/$friendId'
+      path: '/chat/$friendId'
+      fullPath: '/chat/$friendId'
+      preLoaderRoute: typeof ChatFriendIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/boss/$bossId': {
       id: '/boss/$bossId'
       path: '/boss/$bossId'
@@ -369,6 +409,8 @@ const rootRouteChildren: RootRouteChildren = {
   AchievementsRoute: AchievementsRoute,
   AuthRoute: AuthRouteWithChildren,
   CharacterRoute: CharacterRoute,
+  FriendsRoute: FriendsRoute,
+  ChatFriendIdRoute: ChatFriendIdRoute,
   GuideRoute: GuideRoute,
   LegendRoute: LegendRoute,
   MapRoute: MapRoute,

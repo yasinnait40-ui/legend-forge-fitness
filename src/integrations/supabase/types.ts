@@ -147,6 +147,7 @@ export type Database = {
           avatar_url: string | null;
           created_at: string;
           display_name: string | null;
+          friend_code: string;
           id: string;
           updated_at: string;
         };
@@ -154,6 +155,7 @@ export type Database = {
           avatar_url?: string | null;
           created_at?: string;
           display_name?: string | null;
+          friend_code: string;
           id: string;
           updated_at?: string;
         };
@@ -161,8 +163,75 @@ export type Database = {
           avatar_url?: string | null;
           created_at?: string;
           display_name?: string | null;
+          friend_code?: string;
           id?: string;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      friend_requests: {
+        Row: {
+          id: string;
+          sender_id: string;
+          receiver_id: string;
+          status: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          sender_id: string;
+          receiver_id: string;
+          status?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          sender_id?: string;
+          receiver_id?: string;
+          status?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      friendships: {
+        Row: {
+          user_id_1: string;
+          user_id_2: string;
+          created_at: string;
+        };
+        Insert: {
+          user_id_1: string;
+          user_id_2: string;
+          created_at?: string;
+        };
+        Update: {
+          user_id_1?: string;
+          user_id_2?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      messages: {
+        Row: {
+          id: string;
+          sender_id: string;
+          recipient_id: string;
+          content: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          sender_id: string;
+          recipient_id: string;
+          content: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          sender_id?: string;
+          recipient_id?: string;
+          content?: string;
+          created_at?: string;
         };
         Relationships: [];
       };

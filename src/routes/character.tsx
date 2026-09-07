@@ -29,6 +29,8 @@ import { StatBar } from "@/components/StatBar";
 import { equipItem, resetLegend, useGame } from "@/lib/game-store";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { Copy, Users } from "lucide-react";
 import { stopCloudSync } from "@/lib/cloud-sync";
 import { EQUIPMENT, levelFromXp, levelProgress, STAT_ORDER, type EquipSlot } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
@@ -213,6 +215,9 @@ function CharacterPage() {
         </RunePanel>
       ))}
 
+      {/* Friend Code */}
+      <FriendCodePanel userId={user?.id ?? null} />
+
       {/* Hall of Legends */}
       <Link to="/achievements" className="mt-4 block">
         <RunePanel className="flex items-center gap-4 transition-shadow hover:shadow-[0_0_28px_color-mix(in_oklab,var(--primary)_25%,transparent)]">
@@ -270,5 +275,65 @@ function CharacterPage() {
         <RotateCcw className="h-4 w-4" /> {t("character.beginAnew", "Begin Anew")}
       </button>
     </RealmScreen>
+  );
+}
+
+function FriendCodePanel({ userId }: { userId: string | null }) {
+  const [friendCode, setFriendCode] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!userId) return;
+    void supabase
+      .from("profiles")
+      .select("friend_code")
+      .eq("id", userId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.friend_code) setFriendCode(data.friend_code);
+      });
+  }, [userId]);
+
+  async function copyCode() {
+    if (!friendCode) return;
+    await navigator.clipboard?.writeText(friendCode);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  }
+
+  if (!friendCode) return null;
+
+  return (
+    <RunePanel className="mt-4">
+      <div className="flex items-center gap-2">
+        <Users className="h-5 w-5 text-primary" />
+        <RuneHeading>Your Friend Code</RuneHeading>
+      </div>
+      <div className="mt-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
+        <div className="flex items-center justify-between gap-2">
+          <code className="font-mono text-lg font-bold tracking-widest text-primary">
+            {friendCode}
+          </code>
+          <button
+            type="button"
+            onClick={() => void copyCode()}
+            className="btn-rune-ghost !w-auto px-3 py-2"
+            aria-label="Copy friend code"
+          >
+            {copied ? (
+              <Check className="h-4 w-4 text-green-400" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Share this code to add friends.
+        </p>
+      </div>
+      <Link to="/friends" className="btn-rune-ghost mt-3">
+        <Users className="h-4 w-4" /> View Allies
+      </Link>
+    </RunePanel>
   );
 }
