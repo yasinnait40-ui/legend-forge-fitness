@@ -372,9 +372,12 @@
     0 1px 3px color-mix(in oklab, var(--background) 18%, transparent),
     inset 0 1px 0 color-mix(in oklab, var(--card-foreground) 45%, transparent);
   background-color: color-mix(in oklab, var(--primary) 10%, var(--card) 90%);
+}
+
 .btn-gold:active {
   transform: translateY(1px) scale(0.99);
 }
+
 .btn-gold:disabled {
   opacity: 0.5;
   cursor: default;
