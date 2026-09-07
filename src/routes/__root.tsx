@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import i18n, { applyDirection } from "../lib/i18n";
 import { Toaster } from "sonner";
 
@@ -22,7 +22,7 @@ import "../lib/i18n";
 import { hydrateSoundStore, initBackgroundMusic } from "../lib/sound-store";
 import { LoadingScreen } from "../components/LoadingScreen";
 
-const SHOW_LOADING = true;
+
 
 const CHARACTER_ASSETS = [
   "/characters/king.png",
@@ -162,6 +162,8 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [showSplash, setShowSplash] = useState(true);
+  const dismissSplash = useCallback(() => setShowSplash(false), []);
 
   useEffect(() => {
     const savedLanguage = window.localStorage.getItem("aethora_lang");
@@ -219,7 +221,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {SHOW_LOADING && <LoadingScreen />}
+      {showSplash && <LoadingScreen onDone={dismissSplash} />}
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <footer className="relative z-10 flex justify-center gap-4 px-4 pb-24 pt-3 text-xs text-muted-foreground">
