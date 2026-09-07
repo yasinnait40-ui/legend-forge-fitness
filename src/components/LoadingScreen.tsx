@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 
 /*
  * AETHORA loading/splash screen — dark fantasy grimdark aesthetic.
- * - Near-black background with deep charcoal/blood-red undertones
- * - Massive stone gate atmosphere (inspired by the reference image)
- * - Weathered gold title with embossed/carved-stone feel
- * - Sparse, muted embers instead of a bright star field
+ * - Full-screen demon-gate artwork as background
+ * - Dark vignette for readability
+ * - Weathered gold "AETHORA" title
+ * - Rising ember/fire-spark particles drifting upward from the bottom
  * - Thin gold-bordered progress bar
- * - Calls onDone() when the animation completes so the parent can unmount it
+ * - Calls onDone() when complete so the parent can unmount it
  */
 
 const GOLD = "#d4af37";
@@ -19,20 +19,26 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
   const [progress, setProgress] = useState(0);
   const [fading, setFading] = useState(false);
   const frameRef = useRef<number | null>(null);
-  const emberSeedRef = useRef<number[]>([]);
+  const emberSeedRef = useRef<Array<{ x: number; delay: number; duration: number; size: number; drift: number }>>([]);
 
   useEffect(() => {
     if (emberSeedRef.current.length === 0) {
-      const seed: number[] = [];
-      // Sparse ember particles — only 18, not 80
-      for (let i = 0; i < 18; i++) {
-        seed.push(Math.random());
+      const seed: Array<{ x: number; delay: number; duration: number; size: number; drift: number }> = [];
+      for (let i = 0; i < 24; i++) {
+        const r = Math.random();
+        seed.push({
+          x: 10 + Math.random() * 80,
+          delay: r * 6,
+          duration: 4 + r * 5,
+          size: 1.2 + r * 2,
+          drift: (Math.random() - 0.5) * 30,
+        });
       }
       emberSeedRef.current = seed;
     }
 
     const start = performance.now();
-    const DURATION_MS = 1800;
+    const DURATION_MS = 2200;
 
     const tick = (now: number) => {
       const elapsed = now - start;
@@ -42,11 +48,10 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
       if (raw < 1) {
         frameRef.current = requestAnimationFrame(tick);
       } else {
-        // Progress complete — start fade out, then dismiss
         setFading(true);
         setTimeout(() => {
           onDone?.();
-        }, 600);
+        }, 700);
       }
     };
 
@@ -69,38 +74,41 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background:
-          "linear-gradient(180deg, #080503 0%, #0d0a07 30%, #100c08 60%, #0a0706 100%)",
+        background: "#080503",
         color: GOLD,
         overflow: "hidden",
         textAlign: "center",
         opacity: fading ? 0 : 1,
-        transition: "opacity 0.55s ease-out",
+        transition: "opacity 0.65s ease-out",
       }}
       role="status"
       aria-busy="true"
       aria-label="Loading the realm"
     >
-      {/* Deep atmospheric fog / vignette layers */}
+      {/* Full-screen demon-gate background image */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "url(/images/backgrounds/demon-gate.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center 30%",
+          filter: "brightness(0.35) saturate(0.8)",
+        }}
+      />
+
+      {/* Dark vignette for readability */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse at 50% 60%, rgba(40,20,8,0.3) 0%, transparent 70%)",
+            "radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(8,5,3,0.6) 70%, rgba(8,5,3,0.92) 100%)",
         }}
       />
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(60,30,10,0.15) 0%, transparent 50%)",
-        }}
-      />
-      {/* Blood-red ember glow from below */}
+      {/* Bottom darkness to anchor the ember origin */}
       <div
         aria-hidden="true"
         style={{
@@ -108,73 +116,51 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
           bottom: 0,
           left: 0,
           right: 0,
-          height: "40%",
+          height: "50%",
           background:
-            "radial-gradient(ellipse at 50% 100%, rgba(80,25,5,0.12) 0%, transparent 65%)",
+            "linear-gradient(to top, rgba(8,5,3,0.95) 0%, rgba(30,15,5,0.4) 50%, transparent 100%)",
         }}
       />
 
-      {/* Sparse floating embers — not a star field */}
+      {/* Rising ember / fire-spark particles — drift upward from the bottom */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
           overflow: "hidden",
+          pointerEvents: "none",
         }}
       >
-        {emberSeedRef.current.map((seed, i) => {
-          const x = 15 + (i * 37 + 13) % 70;
-          const y = 20 + (i * 53 + 7) % 60;
-          const size = 1.5 + seed * 1.5;
-          const delay = seed * 8;
-          const duration = 5 + seed * 5;
-          return (
-            <span
-              key={i}
-              style={{
-                position: "absolute",
-                left: `${x}%`,
-                top: `${y}%`,
-                width: size,
-                height: size,
-                background: i % 3 === 0 ? "#8b3a0a" : i % 3 === 1 ? "#6b2d08" : GOLD_WEATHERED,
-                borderRadius: "50%",
-                opacity: 0.2 + seed * 0.25,
-                animation: `emberFloat ${duration}s ease-in-out ${delay}s infinite alternate`,
-                filter: "blur(0.6px)",
-                willChange: "opacity, transform",
-              }}
-            />
-          );
-        })}
+        {emberSeedRef.current.map((ember, i) => (
+          <span
+            key={i}
+            className="ember-particle"
+            style={{
+              position: "absolute",
+              left: `${ember.x}%`,
+              bottom: "-5%",
+              width: ember.size,
+              height: ember.size,
+              borderRadius: "50%",
+              background:
+                i % 4 === 0
+                  ? "#d4af37"
+                  : i % 4 === 1
+                    ? "#8b3a0a"
+                    : i % 4 === 2
+                      ? "#c47020"
+                      : "#6b2d08",
+              opacity: 0,
+              // @ts-expect-error CSS custom property for per-particle drift
+              ["--drift"]: `${ember.drift}px`,
+              animation: `emberRise ${ember.duration}s ease-out ${ember.delay}s infinite`,
+              filter: `blur(${0.3 + (i % 3) * 0.2}px)`,
+              willChange: "transform, opacity",
+            }}
+          />
+        ))}
       </div>
-
-      {/* Stone gate silhouette lines — vertical columns flanking the title */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: "12%",
-          top: "15%",
-          bottom: "15%",
-          width: "1px",
-          background:
-            "linear-gradient(180deg, transparent, rgba(60,40,15,0.12) 30%, rgba(60,40,15,0.08) 70%, transparent)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          right: "12%",
-          top: "15%",
-          bottom: "15%",
-          width: "1px",
-          background:
-            "linear-gradient(180deg, transparent, rgba(60,40,15,0.12) 30%, rgba(60,40,15,0.08) 70%, transparent)",
-        }}
-      />
 
       {/* Title block — weathered carved-stone feel */}
       <div
@@ -182,6 +168,7 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
           position: "relative",
           marginBottom: "2rem",
           textAlign: "center",
+          zIndex: 2,
         }}
       >
         <div
@@ -193,10 +180,9 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
             textTransform: "uppercase",
             color: GOLD_WEATHERED,
             textShadow: [
-              "0 1px 0 rgba(0,0,0,0.8)",
-              "0 2px 4px rgba(0,0,0,0.6)",
-              "0 0 30px rgba(140,100,30,0.15)",
-              "inset 0 -1px 0 rgba(255,255,255,0.04)",
+              "0 1px 0 rgba(0,0,0,0.9)",
+              "0 2px 6px rgba(0,0,0,0.7)",
+              "0 0 40px rgba(140,100,30,0.12)",
             ].join(", "),
           }}
         >
@@ -218,8 +204,8 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
             fontStyle: "italic",
             fontSize: "clamp(0.6rem, 2.8vw, 0.85rem)",
             letterSpacing: "0.3em",
-            color: "rgba(160,130,60,0.6)",
-            textShadow: "0 1px 3px rgba(0,0,0,0.7)",
+            color: "rgba(160,130,60,0.55)",
+            textShadow: "0 1px 3px rgba(0,0,0,0.8)",
           }}
         >
           Forge Your Legend
@@ -232,18 +218,18 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
           width: "min(220px, 65vw)",
           height: "6px",
           borderRadius: "999px",
-          border: `1px solid rgba(140,110,35,0.4)`,
-          boxShadow: `inset 0 0 0 1px rgba(0,0,0,0.6), 0 0 8px rgba(100,75,20,0.2)`,
+          border: "1px solid rgba(140,110,35,0.4)",
+          boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.6), 0 0 8px rgba(100,75,20,0.2)",
           background: EMBER_BG,
           position: "relative",
           overflow: "hidden",
+          zIndex: 2,
         }}
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progress * 100)}
       >
-        {/* progress fill */}
         <div
           aria-hidden="true"
           style={{
@@ -253,7 +239,7 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
             bottom: 0,
             width: `${progress * 100}%`,
             background: `linear-gradient(90deg, rgba(60,40,10,0.6), ${GOLD_WEATHERED} 70%, ${GOLD})`,
-            boxShadow: `0 0 6px rgba(140,100,30,0.3)`,
+            boxShadow: "0 0 6px rgba(140,100,30,0.3)",
             transition: "width 0.08s linear",
           }}
         />
@@ -266,21 +252,29 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
           fontSize: "0.55rem",
           letterSpacing: "0.25em",
           textTransform: "uppercase",
-          color: "rgba(140,110,40,0.45)",
+          color: "rgba(140,110,40,0.4)",
+          position: "relative",
+          zIndex: 2,
         }}
       >
         Forging your legend…
       </div>
 
       <style>{`
-        @keyframes emberFloat {
+        @keyframes emberRise {
           0% {
-            opacity: 0.1;
-            transform: translateY(0) scale(0.9);
+            opacity: 0;
+            transform: translateY(0) translateX(0) scale(1);
+          }
+          8% {
+            opacity: 0.7;
+          }
+          50% {
+            opacity: 0.4;
           }
           100% {
-            opacity: 0.45;
-            transform: translateY(-8px) scale(1.1);
+            opacity: 0;
+            transform: translateY(-100vh) translateX(var(--drift, 0px)) scale(0.2);
           }
         }
       `}</style>

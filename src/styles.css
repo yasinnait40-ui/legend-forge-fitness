@@ -12,10 +12,10 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * AETHORA design system — enchanted forest realm.
- * Palette: aged parchment, antique copper, warm gold, muted sage,
- * forest green, and deep forest. Components must use these semantic
- * tokens only.
+ * AETHORA design system — dark fantasy realm.
+ * Palette: near-black base, warm cream text, antique copper primary,
+ * weathered gold accent, dark charcoal panels. Components must use
+ * these semantic tokens only.
  */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -76,163 +76,160 @@
 :root {
   --radius: 0.75rem;
   --nav-h: 4.5rem;
-  /* Realm surface: dark enchanted forest base for every page. Inner panels keep the    */
-  /* dark forest green surface with cream/parchment text on top, matching the Home hero   */
-  /* so the world feels one consistent realm rather than beige vs forest.                  */
-  --background: #374d26;
-  --foreground: #e7d5a4;
-  --card: #2c3b21;
-  --card-foreground: #e7d5a4;
-  --popover: #2c3b21;
-  --popover-foreground: #e7d5a4;
-  /* Primary = luminous antique copper, used for actions and important labels */
+  /* Realm surface: near-black base for every page. Dark charcoal panels with    */
+  /* cream text on top — gold is used only for accents/highlights, not panels.     */
+  --background: #0f0f0f;
+  --foreground: #e0dcd4;
+  --card: #1a1a1a;
+  --card-foreground: #e0dcd4;
+  --popover: #1a1a1a;
+  --popover-foreground: #e0dcd4;
+  /* Primary = antique copper, used for actions and important labels */
   --primary: #c57d4a;
-  --primary-foreground: #e7d5a4;
-  /* Secondary = warm golden highlight for magical details and selected states */
-  --secondary: #dbbe63;
-  --secondary-foreground: #374d26;
-  /* Muted surfaces: sage green for secondary/natural surfaces */
-  --muted: #a6b16e;
-  --muted-foreground: #e7d5a4;
-  /* Accent = deeper warm copper-rust for destructive/alert sparks */
-  --accent: #dbbe63;
-  --accent-foreground: #374d26;
-  /* Character palettes — earthy hues that read as distinct NPCs on the forest base. */
-  --accent-king: oklch(0.58 0.15 52);
-  --accent-king-overline: oklch(0.7 0.12 52);
-  --accent-king-shadow: oklch(0.34 0.13 52);
-  --accent-adventurer: oklch(0.64 0.2 42);
-  --accent-adventurer-overline: oklch(0.76 0.16 42);
-  --accent-adventurer-shadow: oklch(0.42 0.18 42);
-  --accent-scholar: oklch(0.55 0.13 232);
-  --accent-scholar-overline: oklch(0.68 0.11 232);
-  --accent-scholar-shadow: oklch(0.34 0.12 232);
-  --accent-sage: oklch(0.48 0.13 148);
-  --accent-sage-overline: oklch(0.6 0.11 148);
-  --accent-sage-shadow: oklch(0.3 0.11 148);
-  --accent-hero: oklch(0.54 0.13 148);
-  --accent-hero-overline: oklch(0.66 0.11 148);
-  --accent-hero-shadow: oklch(0.32 0.12 148);
-  --accent-hakari: oklch(0.7 0.15 72);
-  --accent-hakari-overline: oklch(0.82 0.12 72);
-  --accent-hakari-shadow: oklch(0.48 0.14 72);
-  --accent-miri: oklch(0.56 0.14 188);
-  --accent-miri-overline: oklch(0.68 0.11 188);
-  --accent-miri-shadow: oklch(0.36 0.12 188);
-  --accent-maid: oklch(0.5 0.13 320);
-  --accent-maid-overline: oklch(0.62 0.1 320);
-  --accent-maid-shadow: oklch(0.32 0.11 320);
-  /* Destructive: deeper forest-magic red, still warm and aged, not neon */
+  --primary-foreground: #0f0f0f;
+  /* Secondary = weathered gold for magical details and selected states */
+  --secondary: #d4af37;
+  --secondary-foreground: #0f0f0f;
+  /* Muted surfaces: dark charcoal for secondary surfaces */
+  --muted: #2a2a2a;
+  --muted-foreground: #999;
+  /* Accent = gold for highlights and interactive elements */
+  --accent: #d4af37;
+  --accent-foreground: #0f0f0f;
+  /* Character palettes — warm metallics that read as distinct NPCs on dark base. */
+  --accent-king: #c57d4a;
+  --accent-king-overline: #d4af37;
+  --accent-king-shadow: #1a1a1a;
+  --accent-adventurer: #d4af37;
+  --accent-adventurer-overline: #e0dcd4;
+  --accent-adventurer-shadow: #1a1a1a;
+  --accent-scholar: #7a9ec2;
+  --accent-scholar-overline: #a8c8e8;
+  --accent-scholar-shadow: #1a1a1a;
+  --accent-sage: #8a7a5a;
+  --accent-sage-overline: #b8a878;
+  --accent-sage-shadow: #1a1a1a;
+  --accent-hero: #b8962e;
+  --accent-hero-overline: #d4af37;
+  --accent-hero-shadow: #1a1a1a;
+  --accent-hakari: #d4af37;
+  --accent-hakari-overline: #f0d060;
+  --accent-hakari-shadow: #1a1a1a;
+  --accent-miri: #6a8aaa;
+  --accent-miri-overline: #8ab0d0;
+  --accent-miri-shadow: #1a1a1a;
+  --accent-maid: #9a6a8a;
+  --accent-maid-overline: #c090b0;
+  --accent-maid-shadow: #1a1a1a;
+  /* Destructive: ember red, still warm */
   --destructive: #7a3a26;
-  --destructive-foreground: #e7d5a4;
-  /* Borders: copper on dark forest, gold for highlight/focus ring */
+  --destructive-foreground: #e0dcd4;
+  /* Borders: copper for structure, gold for highlight/focus ring */
   --border: #c57d4a;
   --input: #c57d4a;
-  --ring: #dbbe63;
-  /* Warm surface tint: deep forest green for every page so the world stays consistent   */
-  /* and inner pages no longer fall back to beige/parchment.                          */
+  --ring: #d4af37;
+  /* Surface tint: dark for every page */
   --warm-surface: linear-gradient(
     180deg,
     var(--background) 0%,
     var(--background) 100%
   );
-  /* Chart/state hues: copper, antique gold, sage, forest, deep forest */
+  /* Chart/state hues: copper, gold, warm neutrals */
   --chart-1: #c57d4a;
-  --chart-2: #dbbe63;
-  --chart-3: #a6b16e;
-  --chart-4: #6b8061;
-  --chart-5: #374d26;
-  /* Sidebar: deep forest panel with copper primary and golden accent */
-  --sidebar: #22301a;
-  --sidebar-foreground: #e7d5a4;
+  --chart-2: #d4af37;
+  --chart-3: #8a7a5a;
+  --chart-4: #666;
+  --chart-5: #333;
+  /* Sidebar: dark panel */
+  --sidebar: #111;
+  --sidebar-foreground: #e0dcd4;
   --sidebar-primary: #c57d4a;
-  --sidebar-primary-foreground: #e7d5a4;
-  --sidebar-accent: #dbbe63;
-  --sidebar-accent-foreground: #374d26;
+  --sidebar-primary-foreground: #0f0f0f;
+  --sidebar-accent: #d4af37;
+  --sidebar-accent-foreground: #0f0f0f;
   --sidebar-border: #c57d4a;
-  --sidebar-ring: #dbbe63;
-  /* Stat hues: copper strength, sage vitality, forest endurance/agility/recovery */
+  --sidebar-ring: #d4af37;
+  /* Stat hues: warm metallics */
   --stat-strength: #c57d4a;
-  --stat-endurance: #6b8061;
-  --stat-agility: #a6b16e;
-  --stat-vitality: #dbbe63;
-  --stat-recovery: #6b8061;
-  /* Rarity hues: copper/forest/legendary gold */
-  --rarity-common: #c57d4a;
-  --rarity-uncommon: #a6b16e;
-  --rarity-rare: #6b8061;
-  --rarity-epic: #c57d4a;
-  --rarity-legendary: #dbbe63;
-} /* Dark mode: deep enchanted forest night — copper/gold still glow warmly. */
+  --stat-endurance: #6a8aaa;
+  --stat-agility: #8a7a5a;
+  --stat-vitality: #d4af37;
+  --stat-recovery: #9a6a8a;
+  /* Rarity hues */
+  --rarity-common: #888;
+  --rarity-uncommon: #6a8aaa;
+  --rarity-rare: #c57d4a;
+  --rarity-epic: #9a6a8a;
+  --rarity-legendary: #d4af37;
+} /* Dark mode: same black/gold scheme — the app is always dark. */
 .dark {
-  /* Deep forest night surface — no pure black, warm magical darkness */
-  --background: #374d26;
-  --foreground: #e7d5a4; /* Slightly lighter forest for panels so UI still breathes at night */
-  --card: #2c3b21;
-  --card-foreground: #e7d5a4;
-  --popover: #2c3b21;
-  --popover-foreground: #e7d5a4; /* Copper remains warm and vivid against the forest night */
+  --background: #0f0f0f;
+  --foreground: #e0dcd4;
+  --card: #1a1a1a;
+  --card-foreground: #e0dcd4;
+  --popover: #1a1a1a;
+  --popover-foreground: #e0dcd4;
   --primary: #c57d4a;
-  --primary-foreground: #e7d5a4; /* Antique gold stays luminous as the magical highlight color */
-  --secondary: #dbbe63;
-  --secondary-foreground: #374d26; /* Muted sage for natural secondary surfaces */
-  --muted: #a6b16e;
-  --muted-foreground: #e7d5a4; /* Accent stays copper-rust for alerts/sparks */
-  --accent: #dbbe63;
-  --accent-foreground: #374d26; /* Character accents keep distinct hues, but now readable on forest night */
+  --primary-foreground: #0f0f0f;
+  --secondary: #d4af37;
+  --secondary-foreground: #0f0f0f;
+  --muted: #2a2a2a;
+  --muted-foreground: #999;
+  --accent: #d4af37;
+  --accent-foreground: #0f0f0f;
   --accent-king: #c57d4a;
-  --accent-king-overline: #dbbe63;
-  --accent-king-shadow: #374d26;
-  --accent-adventurer: #dbbe63;
-  --accent-adventurer-overline: #e7d5a4;
-  --accent-adventurer-shadow: #374d26;
-  --accent-scholar: #a6b16e;
-  --accent-scholar-overline: #e7d5a4;
-  --accent-scholar-shadow: #374d26;
-  --accent-sage: #6b8061;
-  --accent-sage-overline: #a6b16e;
-  --accent-sage-shadow: #374d26;
-  --accent-hero: #6b8061;
-  --accent-hero-overline: #a6b16e;
-  --accent-hero-shadow: #374d26;
-  --accent-hakari: #dbbe63;
-  --accent-hakari-overline: #e7d5a4;
-  --accent-hakari-shadow: #374d26;
-  --accent-miri: #a6b16e;
-  --accent-miri-overline: #6b8061;
-  --accent-miri-shadow: #374d26;
-  --accent-maid: #c57d4a;
-  --accent-maid-overline: #dbbe63;
-  --accent-maid-shadow: #374d26;
-  --gold-accent: #d4af37; /* Destructive: deeper magical ember, still warm, not neon */
+  --accent-king-overline: #d4af37;
+  --accent-king-shadow: #1a1a1a;
+  --accent-adventurer: #d4af37;
+  --accent-adventurer-overline: #e0dcd4;
+  --accent-adventurer-shadow: #1a1a1a;
+  --accent-scholar: #7a9ec2;
+  --accent-scholar-overline: #a8c8e8;
+  --accent-scholar-shadow: #1a1a1a;
+  --accent-sage: #8a7a5a;
+  --accent-sage-overline: #b8a878;
+  --accent-sage-shadow: #1a1a1a;
+  --accent-hero: #b8962e;
+  --accent-hero-overline: #d4af37;
+  --accent-hero-shadow: #1a1a1a;
+  --accent-hakari: #d4af37;
+  --accent-hakari-overline: #f0d060;
+  --accent-hakari-shadow: #1a1a1a;
+  --accent-miri: #6a8aaa;
+  --accent-miri-overline: #8ab0d0;
+  --accent-miri-shadow: #1a1a1a;
+  --accent-maid: #9a6a8a;
+  --accent-maid-overline: #c090b0;
+  --accent-maid-shadow: #1a1a1a;
+  --gold-accent: #d4af37;
   --destructive: #9a4a2a;
-  --destructive-foreground: #e7d5a4; /* Borders: copper on dark forest, gold for highlight/focus ring */
+  --destructive-foreground: #e0dcd4;
   --border: #c57d4a;
   --input: #c57d4a;
-  --ring: #dbbe63; /* Chart/state hues mirror the light palette for consistency */
+  --ring: #d4af37;
   --chart-1: #c57d4a;
-  --chart-2: #dbbe63;
-  --chart-3: #a6b16e;
-  --chart-4: #6b8061;
-  --chart-5: #374d26; /* Sidebar: deep forest night, copper/gold identity preserved */
-  --sidebar: #22301a;
-  --sidebar-foreground: #e7d5a4;
+  --chart-2: #d4af37;
+  --chart-3: #8a7a5a;
+  --chart-4: #666;
+  --chart-5: #333;
+  --sidebar: #111;
+  --sidebar-foreground: #e0dcd4;
   --sidebar-primary: #c57d4a;
-  --sidebar-primary-foreground: #e7d5a4;
-  --sidebar-accent: #dbbe63;
-  --sidebar-accent-foreground: #374d26;
+  --sidebar-primary-foreground: #0f0f0f;
+  --sidebar-accent: #d4af37;
+  --sidebar-accent-foreground: #0f0f0f;
   --sidebar-border: #c57d4a;
-  --sidebar-ring: #dbbe63; /* Stat hues: copper strength, sage vitality, forest endurance/agility/recovery */
+  --sidebar-ring: #d4af37;
   --stat-strength: #c57d4a;
-  --stat-endurance: #6b8061;
-  --stat-agility: #a6b16e;
-  --stat-vitality: #dbbe63;
-  --stat-recovery: #6b8061; /* Rarity hues: copper/forest/legendary gold */
-  --rarity-common: #c57d4a;
-  --rarity-uncommon: #a6b16e;
-  --rarity-rare: #6b8061;
-  --rarity-epic: #c57d4a;
-  --rarity-legendary: #dbbe63;
+  --stat-endurance: #6a8aaa;
+  --stat-agility: #8a7a5a;
+  --stat-vitality: #d4af37;
+  --stat-recovery: #9a6a8a;
+  --rarity-common: #888;
+  --rarity-uncommon: #6a8aaa;
+  --rarity-rare: #c57d4a;
+  --rarity-epic: #9a6a8a;
+  --rarity-legendary: #d4af37;
 }
 
 @layer base {
@@ -249,9 +246,8 @@
     color: var(--color-foreground);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
-    /* Single consistent realm atmosphere across every page: dark enchanted forest     */
-    /* base with soft copper/gold light pools. No per-page light/dark split — the      */
-    /* world is one kingdom, so the background stays forest green everywhere.          */
+    /* Single consistent dark fantasy atmosphere across every page: near-black base    */
+    /* with copper/gold light pools. No per-page split — the world stays dark.         */
     background-image:
       radial-gradient(
         62rem 40rem at 18% -8%,
