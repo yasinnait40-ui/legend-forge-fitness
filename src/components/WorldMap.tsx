@@ -17,16 +17,13 @@ import {
 import { useTranslation } from "react-i18next";
 import { RuneHeading } from "@/components/RunePanel";
 import { discoverRegion, questsDoneToday, trialsDoneToday, useGame } from "@/lib/game-store";
+import { QUESTS, TRIALS, levelFromXp } from "@/lib/game-data";
 import {
-  QUESTS,
-  TRIALS,
-  levelFromXp,
-  titleForLevel,
   WORLD_REGIONS,
   regionState,
-  regionMasteryProgress,
+  type RegionState,
   type WorldRegion,
-} from "@/lib/game-data";
+} from "@/lib/world-map-data";
 import type { CSSProperties } from "react";
 import worldMapImage from "@/assets/world-map.png";
 
@@ -82,6 +79,23 @@ const LEGEND_MARKER: Record<MapLegendKind, typeof Crown> = {
   bridge: CheckCircle2,
   port: Anchor,
 };
+
+/** Small symbol inside each region marker, chosen from the legend set by difficulty tier. */
+function regionMarkerIcon(region: WorldRegion, state: RegionState) {
+  const Icon = LEGEND_MARKER[LEGEND_KIND[region.difficulty]];
+  return (
+    <Icon
+      className="h-3.5 w-3.5"
+      strokeWidth={2.2}
+      style={
+        state === "available"
+          ? { color: "var(--rarity-legendary)" }
+          : undefined
+      }
+      aria-hidden="true"
+    />
+  );
+}
 
 const ZONE_REGION_IDS = [
   "valerion",
@@ -158,6 +172,9 @@ export function WorldMap() {
         <div className="rounded-xl border-2 border-primary/35 bg-card/70 p-2" style={{ aspectRatio: MAP_KEEP_ASPECT }}>
           <InteractiveMap
             zoneWidth={zoneWidth}
+            xp={game.xp}
+            discoveredRegions={game.discoveredRegions}
+            trialsEver={game.trialsEver}
             enterRegion={enterRegion}
             focusRegion={focusedRegion}
             onFocusChange={() => {
@@ -184,6 +201,9 @@ export function WorldMap() {
 
 interface InteractiveMapProps {
   zoneWidth: number;
+  xp: number;
+  discoveredRegions: string[];
+  trialsEver: string[];
   enterRegion: (region: WorldRegion) => void;
   focusRegion: WorldRegion | null;
   onFocusChange: () => void;
@@ -196,6 +216,9 @@ interface InteractiveMapProps {
 
 function InteractiveMap({
   zoneWidth,
+  xp,
+  discoveredRegions,
+  trialsEver,
   enterRegion,
   focusRegion,
   pulsingId,
@@ -213,7 +236,7 @@ function InteractiveMap({
         ref={mapRef}
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `url(${worldMapImage.src})`,
+          backgroundImage: `url(${worldMapImage})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -292,7 +315,7 @@ function InteractiveMap({
 
       {/* Region markers */}
       {WORLD_REGIONS.map((region) => {
-        const state = regionState(region, game.xp, game.discoveredRegions, game.trialsEver);
+        const state = regionState(region, xp, discoveredRegions, trialsEver);
         const isLocked = state === "locked";
         const isFocused = focusRegion?.id === region.id;
         const isBrandNew = pulsingId === region.id;
