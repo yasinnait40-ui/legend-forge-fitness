@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { LogIn, Mail, UserPlus } from "lucide-react";
 import { toast } from "sonner";
-import guildHall from "@/assets/guild-hall.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { supabase } from "@/integrations/supabase/client";
@@ -164,9 +163,9 @@ function AuthPage() {
 
   return (
     <RealmScreen
-      image={guildHall}
-      alt="A candlelit guild hall of ancient stone where oaths are sworn"
-      imagePosition="center 35%"
+      image="/images/backgrounds/demon-gate.jpg"
+      alt="A massive dark stone gate flanked by horned guardian statues, torchlight flickering in the mist"
+      imagePosition="center 30%"
       veil="strong"
     >
       <header className="pt-12 text-center">
