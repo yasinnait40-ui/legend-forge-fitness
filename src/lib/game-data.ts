@@ -403,7 +403,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     test: (c) => c.totalTrials >= 10,
   },
   {
-    id: "dragon-slayer",
+    id: "dragon-slayer-achievement",
     name: "Dragon Slayer",
     flavor: "Survive the Dragon Slayer's Gauntlet.",
     rarity: "epic",
@@ -501,6 +501,12 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
+export const ACHIEVEMENT_KEYS = ACHIEVEMENTS.map((a) => a.id);
+
+// ----- World map (P1.3): re-export from world-map-data so existing consumers
+// compile. Aliased here for convenience only.
+export { WORLD_REGIONS, isRegionUnlocked, regionState } from "./world-map-data";
+
 export function achievementById(id: string): Achievement | undefined {
   return ACHIEVEMENTS.find((a) => a.id === id);
 }
@@ -529,7 +535,7 @@ export const ACHIEVEMENT_REWARDS: Record<string, string> = {
   "rune-awakened": "emberforged-sword",
   "seven-day-flame": "whispering-amulet",
   "iron-will": "squires-plate",
-  "dragon-slayer": "dragonfang-greatblade",
+  "dragon-slayer-achievement": "dragonfang-greatblade",
   stormheart: "eye-of-the-observatory",
   "legendary-discipline": "celestial-warplate",
   "titan-physique": "heart-of-aethora",

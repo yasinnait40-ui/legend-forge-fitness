@@ -3,12 +3,23 @@ import { Castle, MountainSnow, ScrollText, Swords, Telescope, Trees } from "luci
 import { useTranslation } from "react-i18next";
 import { RuneHeading } from "@/components/RunePanel";
 import { questsDoneToday, trialsDoneToday, useGame } from "@/lib/game-store";
-import { QUESTS, TRIALS } from "@/lib/game-data";
+import {
+  QUESTS,
+  TRIALS,
+  levelFromXp,
+  titleForLevel,
+  WORLD_REGIONS,
+  regionState,
+  regionMasteryProgress,
+  type WorldRegion,
+} from "@/lib/game-data";
 import type { CSSProperties } from "react";
 
 /*
- * P1.2: the World Map — three starting regions. Each zone is a doorway into
- * one part of the daily loop, tinted with its own regional hue.
+ * P1.3: the World Map gateway on the home screen.
+ * Three starting regions remain the primary doorway, but the card also previews
+ * how many further regions are waiting beyond the fog so the world feels alive
+ * even before the player reaches the full map.
  */
 
 interface WorldZone {
@@ -49,12 +60,28 @@ const ZONES: WorldZone[] = [
   },
 ];
 
+const ZONE_REGION_IDS = [
+  "valerion",
+  "silverpine-forest",
+  "frosthold",
+] as const;
+
 export function WorldMap() {
   const { t } = useTranslation();
   const game = useGame();
 
   const questsSealed = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
   const trialsConquered = TRIALS.filter((tr) => trialsDoneToday(game).includes(tr.id)).length;
+  const level = levelFromXp(game.xp);
+
+  const discoveredInZones = game.discoveredRegions.filter((id) =>
+    ZONE_REGION_IDS.includes(id as (typeof ZONE_REGION_IDS)[number]),
+  ).length;
+  const unlockedBeyondZones = WORLD_REGIONS.filter(
+    (region) =>
+      !ZONE_REGION_IDS.includes(region.id as (typeof ZONE_REGION_IDS)[number]) &&
+      regionState(region, game.xp, game.discoveredRegions, game.trialsEver) !== "locked",
+  ).length;
 
   return (
     <section className="mt-4" aria-labelledby="world-map-heading">
@@ -76,7 +103,7 @@ export function WorldMap() {
               ? `${trialsConquered}/${TRIALS.length}`
               : zone.to === "/quests"
                 ? `${questsSealed}/${QUESTS.length}`
-                : String(game.streak);
+                : titleForLevel(level);
 
           return (
             <Link key={zone.to} to={zone.to} className="world-zone-enter block" style={zoneStyle}>
@@ -95,7 +122,10 @@ export function WorldMap() {
                     </span>
                   </span>
                   <span className="flex shrink-0 flex-col items-end gap-1">
-                    <span className="rune-chip text-[0.66rem]" style={{ color: zone.color }}>
+                    <span
+                      className="rune-chip text-[0.66rem]"
+                      style={{ color: zone.color }}
+                    >
                       {zone.to === "/trials" ? (
                         <Swords className="h-3 w-3" aria-hidden="true" />
                       ) : zone.to === "/quests" ? (
@@ -105,6 +135,17 @@ export function WorldMap() {
                       )}
                       {activity}
                     </span>
+                    {unlockedBeyondZones > 0 && (
+                      <span
+                        className="rune-chip text-[0.6rem]"
+                        style={{
+                          color: "var(--muted-foreground)",
+                          background: "color-mix(in oklab, var(--primary) 10%, transparent)",
+                        }}
+                      >
+                        +{unlockedBeyondZones} {t("world.unknownRegions", "unexplored")}
+                      </span>
+                    )}
                   </span>
                 </div>
               </div>
@@ -112,6 +153,13 @@ export function WorldMap() {
           );
         })}
       </div>
+
+      <p className="mt-3 text-[0.62rem] italic tracking-wide text-muted-foreground">
+        {t(
+          "world.mapNote",
+          "The realm extends far beyond these borders. Travel grows with your legend.",
+        )}
+      </p>
     </section>
   );
 }

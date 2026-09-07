@@ -7,6 +7,8 @@ import {
   itemById,
   levelFromXp,
   STAT_CAP,
+  WORLD_REGIONS,
+  isRegionUnlocked,
   type AchievementContext,
   type StatKey,
 } from "./game-data";
@@ -485,14 +487,27 @@ function legacyCompleteQuest(
   };
 }
 
-/** Mark a training trial complete. Also seals Guardian's Discipline if open. */
+/**
+ * Mark a training trial complete. Also seals Guardian's Discipline if open.
+ * When the trial unlocks a region for the first time on its map connection,
+ * that region is discovered immediately as part of the completion.
+ */
 export async function completeTrial(
   trialId: string,
   name: string,
   xp: number,
   stats: Partial<Record<StatKey, number>>,
 ): Promise<AwardResult | null> {
-  return completeActivity("trial", trialId, xp, stats, name);
+  const result = await completeActivity("trial", trialId, xp, stats, name);
+  if (result && !result.optimistic) {
+    const linkedRegions = regionsForTrial(trialId);
+    for (const regionId of linkedRegions) {
+      if (!state.discoveredRegions.includes(regionId)) {
+        void discoverRegion(regionId);
+      }
+    }
+  }
+  return result;
 }
 
 function legacyCompleteTrial(
@@ -596,7 +611,6 @@ export function discoverRegion(regionId: string): boolean {
     ...state,
     discoveredRegions: [...state.discoveredRegions, regionId],
   };
-  // Achievements re-evaluate so exploration honors unlock from real state.
   const newlyUnlocked = ACHIEVEMENTS.filter(
     (a) => !next.achievements.includes(a.id) && a.test(next as AchievementContext),
   ).map((a) => a.id);
@@ -610,6 +624,34 @@ export function discoverRegion(regionId: string): boolean {
   commit(next);
   notifyRegionsChanged();
   return true;
+}
+
+/** All region ids the player can currently enter. */
+export function unlockableRegions(): string[] {
+  return WORLD_REGIONS
+    .filter((region) => isRegionUnlocked(region, state.xp))
+    .map((region) => region.id);
+}
+
+/** Regions available now but not yet entered. */
+export function availableRegions(): string[] {
+  return WORLD_REGIONS
+    .filter(
+      (region) =>
+        isRegionUnlocked(region, state.xp) &&
+        !state.discoveredRegions.includes(region.id),
+    )
+    .map((region) => region.id);
+}
+
+/** Region ids connected to a given quest id. */
+export function regionsForQuest(questId: string): string[] {
+  return WORLD_REGIONS.filter((region) => region.questIds.includes(questId)).map((region) => region.id);
+}
+
+/** Region ids connected to a given trial id. */
+export function regionsForTrial(trialId: string): string[] {
+  return WORLD_REGIONS.filter((region) => region.trialIds.includes(trialId)).map((region) => region.id);
 }
 
 /** Add an item to inventory if not already owned. Does not grant by default - used for reward distribution. */

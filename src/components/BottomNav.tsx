@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { useMobile } from "@/hooks/use-mobile";
 import {
   Castle,
   ScrollText,
@@ -18,14 +19,17 @@ const ITEMS = [
   { to: "/quests", labelKey: "nav.quests", icon: ScrollText, exact: false },
   { to: "/trials", labelKey: "nav.trials", icon: Swords, exact: false },
   { to: "/progress", labelKey: "nav.legend", icon: Telescope, exact: false },
-  { to: "/guide", labelKey: "nav.guide", icon: WandSparkles, exact: false },
   { to: "/character", labelKey: "nav.hero", icon: UserRound, exact: false },
   { to: "/settings", labelKey: "nav.settings", icon: Settings, exact: false },
+  { to: "/guide", labelKey: "nav.guide", icon: WandSparkles, exact: false },
 ] as const;
+
+const HIDDEN_ON_TALL_SCREENS = new Set(["/character", "/settings", "/guide"]);
 
 export function BottomNav() {
   const { t } = useTranslation();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isMobile = useMobile();
 
   return (
     <nav
@@ -37,11 +41,15 @@ export function BottomNav() {
         <div className="mx-auto flex h-[var(--nav-h)] max-w-lg items-stretch justify-between px-1">
           {ITEMS.map(({ to, labelKey, icon: Icon, exact }) => {
             const active = exact ? pathname === to : pathname.startsWith(to);
+            const hideOnDesktop = !isMobile && HIDDEN_ON_TALL_SCREENS.has(to);
             return (
               <Link
                 key={to}
                 to={to}
-                className="relative flex flex-1 flex-col items-center justify-center gap-1"
+                className={cn(
+                  "relative flex flex-1 flex-col items-center justify-center gap-1 transition-opacity duration-300",
+                  hideOnDesktop && "opacity-0 pointer-events-none",
+                )}
                 aria-current={active ? "page" : undefined}
               >
                 <span
