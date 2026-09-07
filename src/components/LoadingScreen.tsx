@@ -85,6 +85,29 @@ export function LoadingScreen({ onDone }: { onDone?: () => void }) {
         }}
       />
 
+      {/* AETHORA wordmark above the loading bar */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          marginBottom: "1.4rem",
+          fontSize: "clamp(2.1rem, 9vw, 3rem)",
+          lineHeight: 1.05,
+          letterSpacing: "0.32em",
+          textIndent: "0.32em",
+          textTransform: "uppercase",
+          fontFamily: '"Cinzel", Georgia, serif',
+          fontWeight: 700,
+          color: "#d4af37",
+          textShadow:
+            "0 0 22px rgba(212,175,55,0.4), 0 2px 4px rgba(0,0,0,0.65)",
+          textAlign: "center",
+        }}
+      >
+        Aethora
+      </div>
+
       {/* ----------------------------------
           Loading bar — ornate stone/sconce frame
           with pulsing gold rune-fill and shimmer sweep.
