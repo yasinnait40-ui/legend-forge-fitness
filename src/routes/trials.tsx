@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, ChevronDown, Clock, Star } from "lucide-react";
-import trainingArena from "@/assets/training-arena.jpg";
+import trainingArena from "@/assets/training-arena.png";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { TreasureChest } from "@/components/TreasureChest";

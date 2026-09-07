@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { RotateCcw, Send, Sparkles, WandSparkles } from "lucide-react";
-import arcaneLibrary from "@/assets/arcane-library.jpg";
+import arcaneLibrary from "@/assets/arcane-library.png";
 import { Particles } from "@/components/Particles";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { consultArcaneGuide } from "@/lib/arcane.functions";

@@ -315,7 +315,7 @@ export function TrialBattle({ trial, guardian, onExit }: TrialBattleProps) {
 
 function trainingArenaFallback(): string {
   try {
-    return new URL("/assets/training-arena.jpg", window.location.href).href;
+    return new URL("/assets/training-arena.png", window.location.href).href;
   } catch {
     return "";
   }
