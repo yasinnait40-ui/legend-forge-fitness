@@ -64,6 +64,15 @@ const DEFAULT_STATE: GameState = {
 };
 
 const STORAGE_KEY = "aethora-legend-v1";
+const OWNER_KEY = "aethora-legend-owner-v1";
+
+function storedLegendOwner(): string {
+  try {
+    return localStorage.getItem(OWNER_KEY) ?? "anon";
+  } catch {
+    return "anon";
+  }
+}
 
 let state: GameState = DEFAULT_STATE;
 const listeners = new Set<() => void>();
@@ -119,6 +128,41 @@ export function replaceGameState(next: GameState, notifyObservers = false) {
   }
   emit();
   if (notifyObservers) observers.forEach((o) => o(prev, next));
+}
+
+/**
+ * Adopt the device-cached legend for `userId`. Keeps the cached progress when
+ * it belongs to this user or to anonymous play on this device; wipes it (and
+ * returns false) when the cache belongs to a different account, so one
+ * player's legend can never bleed into another's.
+ */
+export function claimLegendFor(userId: string): boolean {
+  const owner = storedLegendOwner();
+  if (owner === userId || owner === "anon") {
+    try {
+      localStorage.setItem(OWNER_KEY, userId);
+    } catch {
+      // storage unavailable — in-memory state still applies
+    }
+    return true;
+  }
+  resetGameStore();
+  try {
+    localStorage.setItem(OWNER_KEY, userId);
+  } catch {
+    // ignore
+  }
+  return false;
+}
+
+/** Clear the cached legend on explicit sign-out: fresh state, anonymous owner. */
+export function releaseLegend(): void {
+  resetGameStore();
+  try {
+    localStorage.setItem(OWNER_KEY, "anon");
+  } catch {
+    // ignore
+  }
 }
 
 /** Load persisted legend from localStorage. Call once on the client after mount. */

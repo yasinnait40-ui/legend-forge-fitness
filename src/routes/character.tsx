@@ -31,7 +31,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { Copy, Users } from "lucide-react";
-import { stopCloudSync } from "@/lib/cloud-sync";
 import { EQUIPMENT, levelFromXp, levelProgress, STAT_ORDER, type EquipSlot } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
@@ -245,8 +244,9 @@ function CharacterPage() {
             <button
               className="btn-rune-ghost mt-3"
               onClick={async () => {
+                // The root auth listener reacts to SIGNED_OUT by stopping cloud
+                // sync and releasing the legend — no manual store fiddling here.
                 await supabase.auth.signOut();
-                stopCloudSync();
                 toast(t("character.oathReleased"));
               }}
             >

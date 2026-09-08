@@ -16,7 +16,11 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BottomNav } from "../components/BottomNav";
 import { ReminderMonitor } from "../components/ReminderMonitor";
-import { hydrateGameStore, resetGameStore } from "../lib/game-store";
+import {
+  claimLegendFor,
+  hydrateGameStore,
+  releaseLegend,
+} from "../lib/game-store";
 import { supabase } from "@/integrations/supabase/client";
 import { startCloudSync, stopCloudSync } from "../lib/cloud-sync";
 import "../lib/i18n";
@@ -197,6 +201,9 @@ function RootComponent() {
 
     hydrateSoundStore();
     initBackgroundMusic();
+    // Load the device-cached legend into memory BEFORE any auth resolution so
+    // the UI never renders level-1 defaults while the session is restored.
+    hydrateGameStore();
 
     // Supabase is optional for the public preview. Keep the local game experience
     // available when the project has not supplied its cloud credentials yet.
@@ -214,32 +221,36 @@ function RootComponent() {
     }
 
     let activeUserId: string | null = null;
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       const nextUserId = session?.user?.id ?? null;
       if (nextUserId && nextUserId !== activeUserId) {
-        // New login or different user — reset local state then pull cloud.
+        // New login or account switch. claimLegendFor keeps the device-cached
+        // legend when it belongs to this user (or to anonymous play on this
+        // device) and wipes it only when it belongs to a DIFFERENT account —
+        // so re-login can never show level 1 while the cloud pull runs.
         activeUserId = nextUserId;
-        resetGameStore();
+        claimLegendFor(nextUserId);
         startCloudSync(nextUserId);
       } else if (!nextUserId && activeUserId) {
-        // Signed out — clear everything.
+        // Explicit sign-out — clear in-memory state and mark the device cache
+        // anonymous so the next account starts clean.
         activeUserId = null;
         stopCloudSync();
-        resetGameStore();
+        releaseLegend();
       }
     });
     void supabase.auth.getSession().then(({ data, error }) => {
-      if (error || !data.session?.user) {
-        if (error) console.error("[v0] session restoration failed", error.message);
-        resetGameStore();
+      if (error) console.error("[aethora] session restoration failed", error.message);
+      if (!data.session?.user) {
+        // No session: keep the hydrated anonymous legend on this device.
         stopCloudSync();
         return;
       }
-      // Returning user — hydrateGameStore() already loaded localStorage.
-      // Do NOT resetGameStore() here; it would flash level 1 before
-      // pullAndMerge restores the real XP.  Cloud sync will overwrite
-      // local state if the server is further along.
+      // Returning user with a stored session — adopt ownership (no-op when it
+      // already matches) and resume cloud sync; pullAndMerge takes the max of
+      // local and cloud so nothing regresses.
       activeUserId = data.session.user.id;
+      claimLegendFor(activeUserId);
       startCloudSync(activeUserId);
     });
     return () => sub.subscription.unsubscribe();
