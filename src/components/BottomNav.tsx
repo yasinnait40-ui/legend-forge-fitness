@@ -8,7 +8,6 @@ import {
   Telescope,
   UserRound,
   WandSparkles,
-  Settings,
   Map as MapIcon,
   Users,
 } from "lucide-react";
@@ -22,11 +21,10 @@ const ITEMS = [
   { to: "/progress", labelKey: "nav.legend", icon: Telescope, exact: false },
   { to: "/friends", labelKey: "nav.friends", icon: Users, exact: false },
   { to: "/character", labelKey: "nav.hero", icon: UserRound, exact: false },
-  { to: "/settings", labelKey: "nav.settings", icon: Settings, exact: false },
   { to: "/guide", labelKey: "nav.guide", icon: WandSparkles, exact: false },
 ] as const;
 
-const HIDDEN_ON_TALL_SCREENS = new Set(["/character", "/settings", "/guide"]);
+const HIDDEN_ON_TALL_SCREENS = new Set(["/character", "/guide"]);
 
 export function BottomNav() {
   const { t } = useTranslation();

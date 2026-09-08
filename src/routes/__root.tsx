@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { Settings } from "lucide-react";
 import i18n, { applyDirection } from "../lib/i18n";
 import { Toaster } from "sonner";
 
@@ -160,6 +161,26 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Persistent settings access — a small gear in the top-right corner of every
+ * screen. Subtle by design: it never competes with page titles or headers.
+ */
+function SettingsGearButton() {
+  return (
+    <Link
+      to="/settings"
+      aria-label="Settings"
+      className="fixed right-3 z-[95] flex h-10 w-10 items-center justify-center rounded-full border border-primary/25 bg-card/70 text-muted-foreground backdrop-blur-md transition-all duration-200 hover:border-primary/50 hover:text-primary active:scale-95"
+      style={{
+        top: "calc(env(safe-area-inset-top, 0px) + 0.75rem)",
+        boxShadow: "0 2px 12px rgb(0 0 0 / 0.35)",
+      }}
+    >
+      <Settings className="h-[18px] w-[18px]" strokeWidth={1.8} />
+    </Link>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const [showSplash, setShowSplash] = useState(true);
@@ -237,6 +258,7 @@ function RootComponent() {
           Terms of Service
         </Link>
       </footer>
+      <SettingsGearButton />
       <BottomNav />
       <ReminderMonitor />
       <Toaster theme="light" position="top-center" />
