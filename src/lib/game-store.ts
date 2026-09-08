@@ -499,11 +499,21 @@ export async function completeTrial(
   stats: Partial<Record<StatKey, number>>,
 ): Promise<AwardResult | null> {
   const result = await completeActivity("trial", trialId, xp, stats, name);
-  if (result && !result.optimistic) {
-    const linkedRegions = regionsForTrial(trialId);
-    for (const regionId of linkedRegions) {
-      if (!state.discoveredRegions.includes(regionId)) {
-        void discoverRegion(regionId);
+  if (result) {
+    // Guardian's Discipline auto-seals when any trial is conquered. It must go
+    // through the same completion path so the seal is recorded in
+    // quest_completions and survives re-login; the server UNIQUE constraint
+    // makes it idempotent. (The RPC path previously never sealed it, leaving
+    // the quest stuck on "Conquer a trial to seal" forever.)
+    if (!questsDoneToday(getGameState()).includes("guardians-discipline")) {
+      void completeActivity("quest", "guardians-discipline", 0, {});
+    }
+    if (!result.optimistic) {
+      const linkedRegions = regionsForTrial(trialId);
+      for (const regionId of linkedRegions) {
+        if (!state.discoveredRegions.includes(regionId)) {
+          void discoverRegion(regionId);
+        }
       }
     }
   }

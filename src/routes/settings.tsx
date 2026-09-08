@@ -5,7 +5,6 @@ import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { FriendsPanel } from "@/components/FriendsPanel";
-import { HealthSyncInfo } from "@/components/HealthSyncInfo";
 import { useSound, toggleMuted, setVolume } from "@/lib/sound-store";
 import { useTranslation } from "react-i18next";
 import i18n from "@/lib/i18n";
@@ -148,8 +147,6 @@ function SettingsPage() {
         </RunePanel>
 
         <FriendsPanel />
-
-        <HealthSyncInfo />
       </div>
     </RealmScreen>
   );
