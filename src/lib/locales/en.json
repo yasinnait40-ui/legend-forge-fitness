@@ -448,7 +448,10 @@
     }
   },
   "ads": {
-    "watchReward": "Watch an ad for a blessing"
+    "watchReward": "Watch an ad for a blessing",
+    "chestLocked": "Finish a quest or trial to unlock today's bonus chest",
+    "watchChest": "Watch an ad for a bonus chest",
+    "chestLevelUp": "The chest's power surges through you — Level {{level}}!"
   },
   "notifications": {
     "permissionPrompt": "The kingdom awaits your return. Allow daily reminders?",
@@ -649,30 +652,30 @@
     },
     "questComplete": "Quest complete! Keep moving forward.",
     "trialComplete": "Trial conquered! Your strength grows.",
-  "trialBattle": {
-    "title": "The Circle Opens",
-    "shield": "A trial guardian steps into the circle against you.",
-    "tip": "Confirm each set as you do it. Every real effort weakens the guardian's resolve.",
-    "strike": "{{part}} — strike landed",
-    "victory": "Trial shattered. The circle remembers your effort.",
-    "victoryFlavor": "You did not fight an external enemy — you kept going when part of you wanted to stop. That is the real contest.",
-    "enter": "Step into the circle.",
-    "enterConfirm": "I'm ready to begin",
-    "active": "The guardian holds.",
-    "confirm": "Confirm this set",
-    "confirmAll": "All sets done",
-    "exit": "Pause the circle",
-    "exitLabel": "Not yet — I'll continue",
-    "resolve": "Resolve",
-    "resolveFull": "Resolve steady",
-    "resolveLow": "Resolve crumbling",
-    "resolveBroken": "Resolve shattered",
-    "player": "You",
-    "enemy": "Trial Guardian"
-  },
-  "trialBattleComplete": "The trial is complete. The guardian yields.",
-  "battleHit": "hit",
-  "battleVictory": "victory"
+    "trialBattle": {
+      "title": "The Circle Opens",
+      "shield": "A trial guardian steps into the circle against you.",
+      "tip": "Confirm each set as you do it. Every real effort weakens the guardian's resolve.",
+      "strike": "{{part}} — strike landed",
+      "victory": "Trial shattered. The circle remembers your effort.",
+      "victoryFlavor": "You did not fight an external enemy — you kept going when part of you wanted to stop. That is the real contest.",
+      "enter": "Step into the circle.",
+      "enterConfirm": "I'm ready to begin",
+      "active": "The guardian holds.",
+      "confirm": "Confirm this set",
+      "confirmAll": "All sets done",
+      "exit": "Pause the circle",
+      "exitLabel": "Not yet — I'll continue",
+      "resolve": "Resolve",
+      "resolveFull": "Resolve steady",
+      "resolveLow": "Resolve crumbling",
+      "resolveBroken": "Resolve shattered",
+      "player": "You",
+      "enemy": "Trial Guardian"
+    },
+    "trialBattleComplete": "The trial is complete. The guardian yields.",
+    "battleHit": "hit",
+    "battleVictory": "victory"
   },
   "statMastery": {
     "strength": "Your strength surpasses mortal limits.",
@@ -708,7 +711,13 @@
     "damageNote": "Every conquered trial strikes the golem for {{damage}} damage.",
     "finisherNote": "Warden's Lower Keep is the finishing blow.",
     "defeated": "The sentinel has crumbled. The mountain pass is yours, champion.",
-    "vanquished": "Vanquished"
+    "vanquished": "Vanquished",
+    "yourHp": "Your HP",
+    "armorBlocks": "Blocks {{amount}} dmg",
+    "fallenTag": "The battle turns",
+    "fallen": "The hero falls",
+    "fallenDesc": "Defeat claims no reward. The foe keeps its wounds — rise and strike again.",
+    "retry": "Rise Again"
   },
   "lore": {
     "ageOfCreation": {

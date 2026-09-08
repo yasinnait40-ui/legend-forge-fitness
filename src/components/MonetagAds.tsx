@@ -1,9 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { Sparkles } from "lucide-react";
+import { Gift, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { completeQuest } from "@/lib/game-store";
+import {
+  awardAdChest,
+  adRewardCooldownRemaining,
+  dailyChestClaimedToday,
+  markAdRewardGranted,
+  useGame,
+  type TreasureReward,
+} from "@/lib/game-store";
 
 /*
  * Monetag ad integration.
@@ -20,6 +26,9 @@ import { completeQuest } from "@/lib/game-store";
 const MONETAG_TAG_HOST = "https://inklinkor.com/tag.min.js";
 const BANNER_ZONE = "a1vqtk2vytm3017u";
 const REWARDED_ZONE = "1fya3mwg7wkwjbkc";
+
+/** Minimum time between rewarded ads, in milliseconds. */
+const AD_COOLDOWN_MS = 90_000;
 
 /** The global show function Monetag's SDK installs (typed loosely on purpose). */
 type MonetagShowFn = (options?: Record<string, unknown>) => Promise<void>;
@@ -72,16 +81,30 @@ export async function showRewardedAd(): Promise<void> {
   await fn();
 }
 
+function formatCountdown(ms: number): string {
+  const total = Math.ceil(ms / 1000);
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return m > 0 ? `${m}:${String(s).padStart(2, "0")}` : `${s}s`;
+}
+
 /**
- * "Watch an ad for a blessing" — plays a Monetag rewarded ad and, on
- * completion, seals the daily blessing quest (+XP) through the same
- * authoritative path as every other quest, so the reward survives
- * logout/login like all progression.
+ * "Watch an ad for a bonus chest" — available after the day's free chest has
+ * been claimed (first quest/trial completed). Each completed ad rolls one
+ * bonus chest through awardAdChest, unlimited (gated only by the persisted
+ * 90-second cooldown) and independent of the once-per-day free chest.
  */
-export function MonetagRewardedButton() {
+export function MonetagRewardedButton({
+  onReward,
+}: {
+  onReward?: (treasure: TreasureReward | null) => void;
+}) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  useGame(); // re-render when the daily-chest claim state changes
   const [state, setState] = useState<"idle" | "loading" | "playing">("idle");
+  const [cooldownLeft, setCooldownLeft] = useState(() =>
+    adRewardCooldownRemaining(AD_COOLDOWN_MS),
+  );
   const mounted = useRef(true);
 
   useEffect(() => {
@@ -91,46 +114,69 @@ export function MonetagRewardedButton() {
     };
   }, []);
 
+  // Tick the countdown every second while a cooldown is active.
+  useEffect(() => {
+    if (cooldownLeft <= 0) return;
+    const timer = setInterval(() => {
+      if (!mounted.current) return;
+      setCooldownLeft(adRewardCooldownRemaining(AD_COOLDOWN_MS));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldownLeft]);
+
+  const dailyClaimed = dailyChestClaimedToday();
+
   const onClick = useCallback(async () => {
-    if (state !== "idle") return;
+    if (state !== "idle" || adRewardCooldownRemaining(AD_COOLDOWN_MS) > 0) return;
+    if (!dailyChestClaimedToday()) return;
     setState("loading");
     try {
       await showRewardedAd();
-      // Ad watched — grant the blessing. Idempotent server-side (daily UNIQUE).
-      const result = await completeQuest("daily-blessing", 25, {});
-      if (result && !mounted.current) return;
-      if (result) {
-        toast.success(t("ads.blessingEarned", "A blessing settles upon you · +25 XP"));
-      } else {
-        toast(t("ads.blessingAlready", "Today's blessing is already sealed."));
+      markAdRewardGranted();
+      const result = awardAdChest();
+      if (mounted.current) setCooldownLeft(adRewardCooldownRemaining(AD_COOLDOWN_MS));
+      onReward?.(result.treasure);
+      if (result.leveledUp) {
+        toast.success(
+          t("ads.chestLevelUp", "The chest's power surges through you — Level {{level}}!", {
+            level: result.newLevel,
+          }),
+        );
       }
     } catch {
       if (mounted.current) {
-        toast.error(
-          t("ads.blessingFailed", "The blessing did not answer. Please try again."),
-        );
+        toast.error(t("ads.blessingFailed", "The blessing did not answer. Please try again."));
       }
     } finally {
       if (mounted.current) setState("idle");
     }
-  }, [state, t, navigate]);
+  }, [state, t, onReward]);
 
   const label =
     state === "loading"
       ? t("ads.summoning", "Summoning…")
       : state === "playing"
         ? t("ads.watching", "Watch closely…")
-        : t("ads.watchReward", "Watch an ad for a blessing");
+        : dailyClaimed
+          ? t("ads.watchChest", "Watch an ad for a bonus chest")
+          : t("ads.chestLocked", "Finish a quest or trial to unlock today's bonus chest");
 
   return (
     <button
       type="button"
       onClick={() => void onClick()}
-      disabled={state !== "idle"}
+      disabled={state !== "idle" || cooldownLeft > 0 || !dailyClaimed}
       className="rune-button mt-3 inline-flex items-center gap-2 px-4 py-2 text-[0.65rem] uppercase tracking-[0.2em] disabled:opacity-60"
+      aria-disabled={state !== "idle" || cooldownLeft > 0 || !dailyClaimed}
     >
-      <Sparkles className="size-3.5" />
-      {label}
+      {dailyClaimed ? <Sparkles className="size-3.5" /> : <Gift className="size-3.5" />}
+      {cooldownLeft > 0 ? (
+        <span className="tabular-nums">
+          {t("ads.cooldown", "Restore in {{time}}", { time: formatCountdown(cooldownLeft) })}
+        </span>
+      ) : (
+        label
+      )}
     </button>
   );
 }

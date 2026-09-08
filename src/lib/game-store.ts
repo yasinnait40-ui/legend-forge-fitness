@@ -4,6 +4,8 @@ import { notifyRegionsChanged, notifyStatsChanged, queueActivity } from "./cloud
 import {
   ACHIEVEMENTS,
   ACHIEVEMENT_REWARDS,
+  EQUIPMENT,
+  RARITY_WEIGHTS,
   itemById,
   levelFromXp,
   STAT_CAP,
@@ -341,12 +343,168 @@ export async function completeQuest(
   return completeActivity("quest", questId, xp, stats);
 }
 
+/** localStorage key holding the epoch-ms timestamp of the last ad reward. */
+const AD_REWARD_KEY = "aethora-ad-reward-last-v1";
+
+function readLastAdRewardAt(): number {
+  try {
+    const raw = localStorage.getItem(AD_REWARD_KEY);
+    const n = raw ? Number.parseInt(raw, 10) : 0;
+    return Number.isFinite(n) && n > 0 ? n : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function writeLastAdRewardAt(at: number): void {
+  try {
+    localStorage.setItem(AD_REWARD_KEY, String(at));
+  } catch {
+    // storage unavailable — cooldown becomes session-only
+  }
+}
+
+/** Milliseconds remaining before the next ad reward is allowed (0 = ready). */
+export function adRewardCooldownRemaining(cooldownMs: number): number {
+  const remaining = readLastAdRewardAt() + cooldownMs - Date.now();
+  return remaining > 0 ? remaining : 0;
+}
+
+/** Record that an ad reward was just granted, starting the cooldown clock. */
+export function markAdRewardGranted(): void {
+  writeLastAdRewardAt(Date.now());
+}
+
+/**
+ * Ad-reward XP: deliberately NOT the daily-quest path (that is idempotent to
+ * once per day server-side). Ads are unlimited-with-cooldown, so this grants
+ * XP locally through the same applyAward pipeline (level-ups, streak, activity
+ * log, achievements) and pushes stats to the cloud for signed-in players.
+ * The pullAndMerge max(local, cloud) rule keeps re-login from regressing.
+ */
+export function awardAdReward(xp: number): AwardResult {
+  const { next, unlocked, leveledUp, newLevel } = applyAward(getGameState(), xp, {});
+  commit(next);
+  notifyStatsChanged();
+  return {
+    xpGained: xp,
+    treasure: null,
+    leveledUp,
+    newLevel,
+    unlocked,
+    autoCompletedQuest: null,
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/* P1.4: Treasure chests                                                       */
+/*                                                                            */
+/* The original 25%-chance chest roll lived only in the legacy complete        */
+/* functions, which nothing calls anymore — so treasure never appeared. The    */
+/* roll is now wired into the authoritative/optimistic completion paths,       */
+/* with one guaranteed FREE chest on the first completion of each day and a    */
+/* 25% chance on every completion after that. Chests grant bonus XP or a       */
+/* real equipment item (rarity-weighted, level-gated).                         */
+/* -------------------------------------------------------------------------- */
+
+const DAILY_CHEST_KEY = "aethora-daily-chest-v1";
+
+/** True once the day's free chest has been claimed (first completion of the day). */
+export function dailyChestClaimedToday(): boolean {
+  try {
+    return localStorage.getItem(DAILY_CHEST_KEY) === todayKey();
+  } catch {
+    return false;
+  }
+}
+
+function markDailyChestClaimed(): void {
+  try {
+    localStorage.setItem(DAILY_CHEST_KEY, todayKey());
+  } catch {
+    // storage unavailable — the free chest becomes session-scoped
+  }
+}
+
+/** Rarity-weighted pick from the equipment the player can currently use. */
+function rollChestItem(): string | null {
+  const pool = EQUIPMENT.filter((i) => levelFromXp(getGameState().xp) >= i.levelReq);
+  if (pool.length === 0) return null;
+  const total = pool.reduce((sum, i) => sum + (RARITY_WEIGHTS[i.rarity] ?? 1), 0);
+  let pick = Math.random() * total;
+  for (const item of pool) {
+    pick -= RARITY_WEIGHTS[item.rarity] ?? 1;
+    if (pick <= 0) return item.id;
+  }
+  return pool[pool.length - 1]?.id ?? null;
+}
+
+/**
+ * Roll a treasure chest. Same table the legacy complete functions used:
+ * 70% → +25 XP, ~25% → an equipment item, ~5% → +100 XP.
+ */
+export function rollTreasureChest(): TreasureReward {
+  const r = Math.random();
+  if (r < 0.7) return { type: "xp", amount: 25 };
+  if (r < 0.949) {
+    const itemId = rollChestItem();
+    if (itemId) return { type: "cosmetic", itemId };
+    return { type: "xp", amount: 25 };
+  }
+  return { type: "xp", amount: 100 };
+}
+
+/** Apply a chest reward to a game state (XP bonus or grant+equip an item). */
+function applyTreasure(s: GameState, treasure: TreasureReward): GameState {
+  if (treasure.type === "xp") return { ...s, xp: s.xp + (treasure.amount ?? 0) };
+  const itemId = treasure.itemId;
+  if (!itemId) return s;
+  if (s.inventory.includes(itemId)) {
+    // Already owned — a duplicate becomes bonus XP instead of a dead roll.
+    return { ...s, xp: s.xp + 25 };
+  }
+  const item = itemById(itemId);
+  return {
+    ...s,
+    inventory: [...s.inventory, itemId],
+    equipment: item ? { ...s.equipment, [item.slot]: itemId } : s.equipment,
+  };
+}
+
+/**
+ * Bonus treasure chest earned by watching a rewarded ad. Unlimited (gated only
+ * by the ad cooldown) and independent of the once-per-day free chest — this
+ * deliberately bypasses the daily-quest idempotency, like awardAdReward.
+ */
+export function awardAdChest(): AwardResult {
+  const treasure = rollTreasureChest();
+  const before = getGameState();
+  const chestXp = treasure.type === "xp" ? (treasure.amount ?? 0) : 0;
+  const rewarded = applyTreasure(before, treasure);
+  const extraUnlocked = ACHIEVEMENTS.filter(
+    (a) => !rewarded.achievements.includes(a.id) && a.test(rewarded as AchievementContext),
+  ).map((a) => a.id);
+  const next = { ...rewarded, achievements: [...rewarded.achievements, ...extraUnlocked] };
+  const leveledUp = levelFromXp(next.xp) > levelFromXp(before.xp);
+  commit(next);
+  notifyStatsChanged();
+  return {
+    xpGained: chestXp,
+    treasure,
+    leveledUp,
+    newLevel: levelFromXp(next.xp),
+    unlocked: extraUnlocked,
+    autoCompletedQuest: null,
+  };
+}
+
 async function completeActivity(
   kind: "quest" | "trial",
   activityId: string,
   fallbackXp = 0,
   fallbackStats: Partial<Record<StatKey, number>> = {},
   fallbackName?: string,
+  rollChest = true,
 ): Promise<AwardResult | null> {
   let data: unknown = null;
   let rpcError: { message: string } | null = null;
@@ -370,7 +528,7 @@ async function completeActivity(
     // queue the activity, and let cloud-sync replay it when back online.
     console.warn("[v0] activity saved offline, queued for sync:", rpcError?.message);
     queueActivity(kind, activityId);
-    return optimisticComplete(kind, activityId, fallbackXp, fallbackStats, fallbackName);
+    return optimisticComplete(kind, activityId, fallbackXp, fallbackStats, fallbackName, rollChest);
   }
   const result = data as {
     duplicate?: boolean;
@@ -417,20 +575,29 @@ async function completeActivity(
   next.activityLog = existingActivity
     ? next.activityLog.map((e) => (e.date === t2 ? { ...e, xp: e.xp + (result.xpGained ?? 0) } : e))
     : [...next.activityLog, { date: t2, xp: result.xpGained ?? 0 }];
+  // P1.4: treasure chest — guaranteed free chest on the first completion of
+  // the day, then the classic 25% chance on every completion after that.
+  // Internal completions (e.g. the auto-seal of Guardian's Discipline) pass
+  // rollChest = false so they never double-roll or consume the daily chest.
+  const firstToday = rollChest && !dailyChestClaimedToday();
+  const treasure = rollChest && (firstToday || Math.random() < 0.25) ? rollTreasureChest() : null;
+  if (firstToday) markDailyChestClaimed();
+  const chestXp = treasure?.type === "xp" ? (treasure.amount ?? 0) : 0;
+  const rewarded = treasure ? applyTreasure(next, treasure) : next;
   const newlyUnlocked = ACHIEVEMENTS.filter(
-    (a) => !next.achievements.includes(a.id) && a.test(next as AchievementContext),
+    (a) => !rewarded.achievements.includes(a.id) && a.test(rewarded as AchievementContext),
   ).map((a) => a.id);
-  next.achievements = [...next.achievements, ...newlyUnlocked];
+  rewarded.achievements = [...rewarded.achievements, ...newlyUnlocked];
 
-  commit(next);
+  commit(rewarded);
   // Reliably persist stat columns (used by the progress charts) after each
   // authoritative completion.
   notifyStatsChanged();
   return {
-    xpGained: result.xpGained ?? 0,
-    treasure: result.rewardItem ? { type: "cosmetic", itemId: result.rewardItem } : null,
-    leveledUp: (result.level ?? 1) > levelFromXp(state.xp),
-    newLevel: result.level ?? levelFromXp(xp),
+    xpGained: (result.xpGained ?? 0) + chestXp,
+    treasure,
+    leveledUp: levelFromXp(rewarded.xp) > levelFromXp(state.xp),
+    newLevel: levelFromXp(rewarded.xp),
     unlocked: newlyUnlocked,
     autoCompletedQuest: null,
   };
@@ -447,6 +614,7 @@ function optimisticComplete(
   xp: number,
   stats: Partial<Record<StatKey, number>>,
   name?: string,
+  rollChest = true,
 ): AwardResult | null {
   if (kind === "quest") {
     if (questsDoneToday(state).includes(activityId)) return null;
@@ -476,17 +644,28 @@ function optimisticComplete(
         : state.workoutLog,
   };
   const { next, unlocked, leveledUp, newLevel } = applyAward(working, xp, stats);
-  commit(next);
+  // P1.4: treasure chest — same rules as the authoritative path: guaranteed
+  // free chest on the first completion of the day, 25% chance after that.
+  const firstToday = rollChest && !dailyChestClaimedToday();
+  const treasure = rollChest && (firstToday || Math.random() < 0.25) ? rollTreasureChest() : null;
+  if (firstToday) markDailyChestClaimed();
+  const chestXp = treasure?.type === "xp" ? (treasure.amount ?? 0) : 0;
+  const rewarded = treasure ? applyTreasure(next, treasure) : next;
+  const extraUnlocked = ACHIEVEMENTS.filter(
+    (a) => !rewarded.achievements.includes(a.id) && a.test(rewarded as AchievementContext),
+  ).map((a) => a.id);
+  rewarded.achievements = [...rewarded.achievements, ...extraUnlocked];
+  commit(rewarded);
   // Persist stat columns when signed in (no-op offline); the activity itself
   // is replayed authoritatively from the queue.
   notifyStatsChanged();
   return {
-    xpGained: xp,
-    treasure: null,
+    xpGained: xp + chestXp,
+    treasure,
     optimistic: true,
-    leveledUp,
-    newLevel,
-    unlocked,
+    leveledUp: levelFromXp(rewarded.xp) > levelFromXp(working.xp) || leveledUp,
+    newLevel: levelFromXp(rewarded.xp),
+    unlocked: [...new Set([...unlocked, ...extraUnlocked])],
     autoCompletedQuest: null,
   };
 }
@@ -550,7 +729,8 @@ export async function completeTrial(
     // makes it idempotent. (The RPC path previously never sealed it, leaving
     // the quest stuck on "Conquer a trial to seal" forever.)
     if (!questsDoneToday(getGameState()).includes("guardians-discipline")) {
-      void completeActivity("quest", "guardians-discipline", 0, {});
+      // Internal auto-seal: no chest roll — the conquered trial just rolled one.
+      void completeActivity("quest", "guardians-discipline", 0, {}, undefined, false);
     }
     if (!result.optimistic) {
       const linkedRegions = regionsForTrial(trialId);

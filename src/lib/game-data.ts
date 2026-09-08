@@ -528,7 +528,21 @@ export interface EquipmentItem {
   flavor: string;
   levelReq: number;
   icon: string;
+  rarity: Rarity;
+  /** Flat bonus added to every boss-battle attack while equipped. */
+  damageBonus?: number;
+  /** Flat damage reduction against boss counter-attacks while equipped. */
+  defenseBonus?: number;
 }
+
+/** Rarity → display accent color (used for item chips in the armory). */
+export const RARITY_COLORS: Record<Rarity, string> = {
+  common: "oklch(0.74 0.04 235)",
+  uncommon: "oklch(0.76 0.12 150)",
+  rare: "oklch(0.76 0.13 225)",
+  epic: "oklch(0.74 0.16 290)",
+  legendary: "oklch(0.86 0.15 85)",
+};
 
 // Achievement reward items - unlocked when achievements are earned
 export const ACHIEVEMENT_REWARDS: Record<string, string> = {
@@ -543,7 +557,7 @@ export const ACHIEVEMENT_REWARDS: Record<string, string> = {
 };
 
 export const EQUIPMENT: EquipmentItem[] = [
-  // Weapons
+  // Weapons — rarity tiers with a damageBonus applied to boss battles.
   {
     id: "worn-iron-blade",
     slot: "weapon",
@@ -551,6 +565,28 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Every legend begins with humble steel.",
     levelReq: 1,
     icon: "sword",
+    rarity: "common",
+    damageBonus: 0,
+  },
+  {
+    id: "rusty-dagger",
+    slot: "weapon",
+    name: "Rusty Dagger",
+    flavor: "Small, chipped, and surprisingly eager.",
+    levelReq: 1,
+    icon: "sword",
+    rarity: "common",
+    damageBonus: 1,
+  },
+  {
+    id: "wardens-longsword",
+    slot: "weapon",
+    name: "Warden's Longsword",
+    flavor: "Balanced steel carried by the old wardens of the pass.",
+    levelReq: 3,
+    icon: "sword",
+    rarity: "uncommon",
+    damageBonus: 4,
   },
   {
     id: "emberforged-sword",
@@ -559,6 +595,18 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Quenched in dragonfire, warm to the touch.",
     levelReq: 5,
     icon: "flame-sword",
+    rarity: "rare",
+    damageBonus: 7,
+  },
+  {
+    id: "stormforged-halberd",
+    slot: "weapon",
+    name: "Stormforged Halberd",
+    flavor: "Forged in a thunderhead; it still hums with static.",
+    levelReq: 8,
+    icon: "swords",
+    rarity: "rare",
+    damageBonus: 10,
   },
   {
     id: "moonlit-runesaber",
@@ -567,6 +615,18 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Its runes glow beneath a full moon.",
     levelReq: 10,
     icon: "moon-sword",
+    rarity: "epic",
+    damageBonus: 14,
+  },
+  {
+    id: "shadowfang-katana",
+    slot: "weapon",
+    name: "Shadowfang Katana",
+    flavor: "Cut from a wraith's fang, quiet as nightfall.",
+    levelReq: 14,
+    icon: "moon-sword",
+    rarity: "epic",
+    damageBonus: 18,
   },
   {
     id: "dragonfang-greatblade",
@@ -575,8 +635,20 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Carved from the fang of Vharos the Ashwing.",
     levelReq: 18,
     icon: "swords",
+    rarity: "legendary",
+    damageBonus: 24,
   },
-  // Armor
+  {
+    id: "sunsedge-greatsword",
+    slot: "weapon",
+    name: "Sunsedge Greatsword",
+    flavor: "Its edge drinks the dawn. Only legends lift it.",
+    levelReq: 22,
+    icon: "flame-sword",
+    rarity: "legendary",
+    damageBonus: 30,
+  },
+  // Armor — defenseBonus reduces boss counter-attack damage.
   {
     id: "travelers-garb",
     slot: "armor",
@@ -584,6 +656,18 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Dusty, patched, and dependable.",
     levelReq: 1,
     icon: "shirt",
+    rarity: "common",
+    defenseBonus: 0,
+  },
+  {
+    id: "leather-vanguard",
+    slot: "armor",
+    name: "Leather Vanguard",
+    flavor: "Stiffened hide that has already saved its wearer once.",
+    levelReq: 2,
+    icon: "shirt",
+    rarity: "common",
+    defenseBonus: 1,
   },
   {
     id: "squires-plate",
@@ -592,6 +676,18 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "First true armor of the Keep.",
     levelReq: 4,
     icon: "shield",
+    rarity: "uncommon",
+    defenseBonus: 3,
+  },
+  {
+    id: "wardens-chainmail",
+    slot: "armor",
+    name: "Warden's Chainmail",
+    flavor: "Rings of old iron, each one earned in the pass.",
+    levelReq: 8,
+    icon: "shield",
+    rarity: "rare",
+    defenseBonus: 5,
   },
   {
     id: "runebound-aegis",
@@ -600,6 +696,18 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Wards hum softly across the plates.",
     levelReq: 12,
     icon: "shield-glow",
+    rarity: "epic",
+    defenseBonus: 8,
+  },
+  {
+    id: "dragonhide-cuirass",
+    slot: "armor",
+    name: "Dragonhide Cuirass",
+    flavor: "Scale from the first wyrm the realm ever feared.",
+    levelReq: 16,
+    icon: "shield-glow",
+    rarity: "epic",
+    defenseBonus: 11,
   },
   {
     id: "celestial-warplate",
@@ -608,6 +716,8 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Forged from a fallen star's heart.",
     levelReq: 22,
     icon: "star-shield",
+    rarity: "legendary",
+    defenseBonus: 15,
   },
   // Relics
   {
@@ -617,6 +727,7 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "It still hums with faint power.",
     levelReq: 1,
     icon: "gem",
+    rarity: "common",
   },
   {
     id: "whispering-amulet",
@@ -625,6 +736,7 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "It murmurs advice only you can hear.",
     levelReq: 6,
     icon: "amulet",
+    rarity: "uncommon",
   },
   {
     id: "eye-of-the-observatory",
@@ -633,6 +745,7 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "Sees the path before you walk it.",
     levelReq: 14,
     icon: "eye",
+    rarity: "rare",
   },
   {
     id: "heart-of-aethora",
@@ -641,8 +754,18 @@ export const EQUIPMENT: EquipmentItem[] = [
     flavor: "The realm's own pulse, carried in your palm.",
     levelReq: 25,
     icon: "heart",
+    rarity: "legendary",
   },
 ];
+
+/** Weight per rarity used by treasure-chest item rolls. */
+export const RARITY_WEIGHTS: Record<Rarity, number> = {
+  common: 42,
+  uncommon: 30,
+  rare: 18,
+  epic: 8,
+  legendary: 2,
+};
 
 export function itemById(id: string): EquipmentItem | undefined {
   return EQUIPMENT.find((i) => i.id === id);

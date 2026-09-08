@@ -476,7 +476,10 @@
     }
   },
   "ads": {
-    "watchReward": "Mira un anuncio para recibir una bendición"
+    "watchReward": "Mira un anuncio para recibir una bendición",
+    "chestLocked": "Completa una misión o prueba para desbloquear el cofre extra de hoy",
+    "watchChest": "Mira un anuncio para recibir un cofre extra",
+    "chestLevelUp": "¡El poder del cofre te recorre — Nivel {{level}}!"
   },
   "notifications": {
     "permissionPrompt": "El reino aguarda tu regreso. ¿Permitir recordatorios diarios?",
@@ -655,7 +658,13 @@
     "damageNote": "Cada prueba conquistada golpea al gólem con {{damage}} de daño.",
     "finisherNote": "La Fortaleza Inferior del Guardián es el golpe final.",
     "defeated": "El centinela se ha desmoronado. El paso de montaña es tuyo, campeón.",
-    "vanquished": "Derrotado"
+    "vanquished": "Derrotado",
+    "yourHp": "Tu HP",
+    "armorBlocks": "Bloquea {{amount}} de daño",
+    "fallenTag": "La batalla cambia",
+    "fallen": "El héroe cae",
+    "fallenDesc": "La derrota no otorga recompensa. El enemigo conserva sus heridas: levántate y vuelve a golpear.",
+    "retry": "Levantarse"
   },
   "lore": {
     "ageOfCreation": {

@@ -2,16 +2,26 @@ import type { CSSProperties } from "react";
 import { useState } from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Skull, Check, Star, Clock } from "lucide-react";
+import { Heart, HeartCrack, RotateCcw, Shield, Skull, Swords, Check, Star, Clock } from "lucide-react";
 import { RunePanel } from "@/components/RunePanel";
 import { completeTrial, trialsDoneToday, useGame } from "@/lib/game-store";
-import { TRIALS, type Trial } from "@/lib/game-data";
+import { itemById, TRIALS, type Trial } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { playSound } from "@/lib/sound-store";
 import { announceRewards } from "@/lib/rewards";
 import { cn } from "@/lib/utils";
 import { bossById } from "@/lib/boss-data";
-import { damageBoss, isBossDefeated, remainingHp, useBossStore } from "@/lib/boss-store";
+import {
+  PLAYER_MAX_HP,
+  damageBoss,
+  damagePlayer,
+  healPlayer,
+  isBossDefeated,
+  isPlayerFallen,
+  playerHpRemaining,
+  remainingHp,
+  useBossStore,
+} from "@/lib/boss-store";
 
 export const Route = createFileRoute("/boss/$bossId")({
   head: () => ({ meta: [{ title: "Boss Trial — AETHORA" }] }),
@@ -21,6 +31,8 @@ export const Route = createFileRoute("/boss/$bossId")({
 interface FloatingHit {
   id: number;
   amount: number;
+  /** True when the damage landed on the hero (boss counter-attack). */
+  player?: boolean;
 }
 
 function BossPage() {
@@ -33,9 +45,17 @@ function BossPage() {
   const done = trialsDoneToday(game);
   const [openId, setOpenId] = useState<string | null>(TRIALS[0]?.id ?? null);
   const [justDefeated, setJustDefeated] = useState(false);
+  const [fallen, setFallen] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [flashing, setFlashing] = useState(false);
   const [hits, setHits] = useState<FloatingHit[]>([]);
+
+  // Equipped gear shapes this battle: the weapon's damageBonus adds to every
+  // strike, and the armor's defenseBonus shaves the boss's counter-attacks.
+  const weapon = itemById(game.equipment.weapon);
+  const armor = itemById(game.equipment.armor);
+  const weaponBonus = weapon?.damageBonus ?? 0;
+  const armorBonus = armor?.defenseBonus ?? 0;
 
   if (!boss) {
     return (
@@ -48,6 +68,8 @@ function BossPage() {
   const hp = remainingHp(boss.id, boss.maxHp);
   const defeated = isBossDefeated(boss.id);
   const hpRatio = Math.max(0, hp / boss.maxHp);
+  const playerHp = playerHpRemaining(boss.id);
+  const playerRatio = Math.max(0, playerHp / PLAYER_MAX_HP);
 
   async function handleAttack(trial: Trial) {
     const result = await completeTrial(trial.id, trial.name, trial.xp, trial.stats);
@@ -55,21 +77,44 @@ function BossPage() {
     playSound(result.leveledUp ? "levelUp" : "questComplete");
     announceRewards(result, t("trials.conqueredToast", { name: g.trial(trial).name }));
 
+    // The equipped weapon's damageBonus is added to every strike.
+    const damage = trial.xp + weaponBonus;
+
     // Impact feedback: shake, flash, floating damage number.
     setShaking(true);
     setFlashing(true);
     const hitId = Date.now();
-    setHits((prev) => [...prev, { id: hitId, amount: trial.xp }]);
+    setHits((prev) => [...prev, { id: hitId, amount: damage }]);
     setTimeout(() => setShaking(false), 400);
     setTimeout(() => setFlashing(false), 200);
     setTimeout(() => setHits((prev) => prev.filter((h) => h.id !== hitId)), 1200);
 
     if (!boss) return;
-    const killedNow = damageBoss(boss.id, boss.maxHp, trial.xp);
+    const killedNow = damageBoss(boss.id, boss.maxHp, damage);
     if (killedNow) {
       playSound("bossHit");
       setTimeout(() => setJustDefeated(true), 500);
+      return;
     }
+
+    // The boss fights back — a random counter-attack, softened by armor.
+    const raw = 12 + Math.floor(Math.random() * 17); // 12–28
+    const mitigated = Math.max(2, raw - armorBonus);
+    const fell = damagePlayer(boss.id, mitigated);
+    playSound("battleHit");
+    const playerHitId = Date.now() + 1;
+    setHits((prev) => [...prev, { id: playerHitId, amount: mitigated, player: true }]);
+    setTimeout(() => setHits((prev) => prev.filter((h) => h.id !== playerHitId)), 1200);
+    if (fell) {
+      setTimeout(() => setFallen(true), 450);
+    }
+  }
+
+  function riseAgain() {
+    if (!boss) return;
+    healPlayer(boss.id);
+    setFallen(false);
+    setHits([]);
   }
 
   return (
@@ -139,11 +184,14 @@ function BossPage() {
           style={{ opacity: flashing ? 0.35 : 0 }}
         />
 
-        {/* Floating damage numbers */}
+        {/* Floating damage numbers — boss hits from the center, counter-attacks from below */}
         {hits.map((hit) => (
           <span
             key={hit.id}
-            className="damage-number pointer-events-none absolute left-1/2 top-1/2 font-display text-2xl font-black text-red-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
+            className={cn(
+              "damage-number pointer-events-none absolute left-1/2 font-display text-2xl font-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]",
+              hit.player ? "top-[78%] text-red-400" : "top-1/2 text-red-500",
+            )}
           >
             -{hit.amount}
           </span>
@@ -160,8 +208,9 @@ function BossPage() {
 
       <RunePanel className="mx-auto mt-5 max-w-xs">
         <div className="flex items-center justify-between">
-          <span className="font-display text-[0.6rem] uppercase tracking-[0.24em] text-muted-foreground">
-            {t("boss.hp", "HP")}
+          <span className="font-display flex items-center gap-1.5 text-[0.6rem] uppercase tracking-[0.24em] text-muted-foreground">
+            <Skull className="h-3 w-3" style={{ color: "var(--boss-accent)" }} />
+            {boss.name}
           </span>
           <span className="font-display text-xs font-bold">
             {hp} / {boss.maxHp}
@@ -180,6 +229,52 @@ function BossPage() {
                 : "0 0 14px color-mix(in oklab, var(--boss-accent) 65%, transparent)",
             }}
           />
+        </div>
+      </RunePanel>
+
+      {/* Player HP — the boss fights back, armor softens the blows */}
+      <RunePanel className="mx-auto mt-3 max-w-xs">
+        <div className="flex items-center justify-between">
+          <span className="font-display flex items-center gap-1.5 text-[0.6rem] uppercase tracking-[0.24em] text-muted-foreground">
+            <Heart
+              className={cn(
+                "h-3 w-3",
+                isPlayerFallen(boss.id) ? "text-muted-foreground" : "text-red-400",
+              )}
+            />
+            {t("boss.yourHp", "Your HP")}
+          </span>
+          <span className="font-display text-xs font-bold">
+            {playerHp} / {PLAYER_MAX_HP}
+          </span>
+        </div>
+        <div className="bar-track mt-2 !h-3">
+          <div
+            className="bar-fill transition-all duration-700 ease-out"
+            style={{
+              width: `${Math.max(isPlayerFallen(boss.id) ? 0 : 3, playerRatio * 100)}%`,
+              background: isPlayerFallen(boss.id)
+                ? "var(--muted-foreground)"
+                : "linear-gradient(90deg, oklch(0.62 0.19 25) 0%, oklch(0.66 0.2 25) 100%)",
+              boxShadow: isPlayerFallen(boss.id)
+                ? "none"
+                : "0 0 14px color-mix(in oklab, oklch(0.62 0.19 25) 65%, transparent)",
+            }}
+          />
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-2">
+          {weaponBonus > 0 ? (
+            <span className="rune-chip" style={{ color: "var(--boss-accent)" }}>
+              <Swords className="h-3 w-3" /> +{weaponBonus} DMG
+            </span>
+          ) : (
+            <span />
+          )}
+          {armorBonus > 0 ? (
+            <span className="rune-chip text-primary">
+              <Shield className="h-3 w-3" /> {t("boss.armorBlocks", "Blocks {{amount}} dmg", { amount: armorBonus })}
+            </span>
+          ) : null}
         </div>
       </RunePanel>
 
@@ -225,7 +320,7 @@ function BossPage() {
                           <Clock className="h-3 w-3" /> {trial.minutes} {t("trials.minutes", "min")}
                         </span>
                         <span className="rune-chip" style={{ color: "var(--boss-accent)" }}>
-                          <Skull className="h-3 w-3" /> -{trial.xp} HP
+                          <Skull className="h-3 w-3" /> -{trial.xp + weaponBonus} HP
                         </span>
                       </div>
                     </div>
@@ -324,6 +419,34 @@ function BossPage() {
             </h2>
             <button onClick={() => setJustDefeated(false)} className="btn-gold mt-5 !w-auto px-8">
               {t("boss.claim", "Claim Victory")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Defeat — the boss struck you down first. No reward from defeat; rise and try again. */}
+      {fallen && !defeated && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-6">
+          <div className="relative max-w-sm rounded-2xl border-2 border-red-500/60 bg-card p-6 text-center shadow-[0_0_60px_-12px_color-mix(in_oklab,oklch(0.62_0.19_25)_70%,transparent)]">
+            <HeartCrack className="mx-auto h-10 w-10 text-red-400" />
+            <p className="font-display mt-3 text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
+              {t("boss.fallenTag", "The battle turns")}
+            </p>
+            <h2 className="font-display mt-1 text-2xl font-black text-red-400">
+              {t("boss.fallen", "The hero falls")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t(
+                "boss.fallenDesc",
+                "Defeat claims no reward. The foe keeps its wounds — rise and strike again.",
+              )}
+            </p>
+            <button
+              onClick={riseAgain}
+              className="btn-gold mt-5 inline-flex !w-auto items-center gap-2 px-8"
+            >
+              <RotateCcw className="h-4 w-4" />
+              {t("boss.retry", "Rise Again")}
             </button>
           </div>
         </div>

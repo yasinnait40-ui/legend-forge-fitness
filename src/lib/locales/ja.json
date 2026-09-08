@@ -536,7 +536,10 @@
     }
   },
   "ads": {
-    "watchReward": "広告を見て加護を得る"
+    "watchReward": "広告を見て加護を得る",
+    "chestLocked": "クエストか試練を完了して今日のボーナス宝箱を解放",
+    "watchChest": "広告を見てボーナス宝箱を獲得",
+    "chestLevelUp": "宝箱の力が全身を駆け抜ける — レベル{{level}}！"
   },
   "notifications": {
     "permissionPrompt": "王国は君の帰還を待っている。毎日の通知を許可しますか？",
@@ -715,7 +718,13 @@
     "damageNote": "制した試練はゴーレムに{{damage}}ダメージを与える。",
     "finisherNote": "「下層の衛兵所」が止めの一撃だ。",
     "defeated": "守護者は崩れ去った。山道は王者のものだ。",
-    "vanquished": "撃破"
+    "vanquished": "撃破",
+    "yourHp": "あなたのHP",
+    "armorBlocks": "{{amount}}ダメージ軽減",
+    "fallenTag": "戦局が変わる",
+    "fallen": "勇者は倒れる",
+    "fallenDesc": "敗北に報酬はない。敵は傷を抱えたまま — 立ち上がり、再び打ち込め。",
+    "retry": "立ち上がる"
   },
   "lore": {
     "ageOfCreation": {

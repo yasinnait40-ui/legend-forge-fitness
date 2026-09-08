@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Gift, Sparkles } from "lucide-react";
+import { itemById, RARITY_COLORS, RARITY_LABELS } from "@/lib/game-data";
 import type { TreasureReward } from "@/lib/game-store";
 import { playSound } from "@/lib/sound-store";
 import { useTranslation } from "react-i18next";
@@ -47,9 +48,21 @@ export function TreasureChest({
               </h2>
             </div>
             <p className="chest-reveal-text relative mt-4 text-lg font-semibold text-foreground">
-              {reward.type === "xp"
-                ? t("treasure.xp", { amount: reward.amount })
-                : t("treasure.cosmetic")}
+              {reward.type === "xp" ? (
+                t("treasure.xp", { amount: reward.amount })
+              ) : reward.itemId && itemById(reward.itemId) ? (
+                <span
+                  className="text-glow-gold"
+                  style={{ color: RARITY_COLORS[itemById(reward.itemId)!.rarity] }}
+                >
+                  {itemById(reward.itemId)!.name}
+                  <span className="ml-2 align-middle text-[0.6rem] font-bold uppercase tracking-[0.2em]">
+                    {RARITY_LABELS[itemById(reward.itemId)!.rarity]}
+                  </span>
+                </span>
+              ) : (
+                t("treasure.cosmetic")
+              )}
             </p>
             <button onClick={onClose} className="btn-rune-ghost chest-reveal-text relative mt-5">
               {t("treasure.claim")}

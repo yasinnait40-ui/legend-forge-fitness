@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronRight, Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide-react";
@@ -5,6 +6,7 @@ import homeKingdom from "@/assets/home-kingdom.png";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
+import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
 import { IronGolem } from "@/components/IronGolem";
@@ -50,6 +52,8 @@ function HomePage() {
   const { t } = useTranslation();
   const game = useGame();
   const { user, loading } = useAuth();
+  const [treasure, setTreasure] =
+    useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
   const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
   const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
   const yesterday = todayKey(new Date(Date.now() - 86400000));
@@ -205,7 +209,8 @@ function HomePage() {
       </div>
 
       <MonetagBanner />
-      <MonetagRewardedButton />
+      <MonetagRewardedButton onReward={(r) => r && setTreasure(r)} />
+      {treasure && <TreasureChest reward={treasure} onClose={() => setTreasure(null)} />}
     </RealmScreen>
   );
 }

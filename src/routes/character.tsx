@@ -31,7 +31,15 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { Copy, Users } from "lucide-react";
-import { EQUIPMENT, levelFromXp, levelProgress, STAT_ORDER, type EquipSlot } from "@/lib/game-data";
+import {
+  EQUIPMENT,
+  RARITY_COLORS,
+  RARITY_LABELS,
+  levelFromXp,
+  levelProgress,
+  STAT_ORDER,
+  type EquipSlot,
+} from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -193,11 +201,35 @@ function CharacterPage() {
                     )}
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-semibold">
-                      {g.item(item).name}
+                    <span className="flex items-center gap-1.5">
+                      <span
+                        className="h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ background: RARITY_COLORS[item.rarity] }}
+                      />
+                      <span className="truncate text-sm font-semibold">
+                        {g.item(item).name}
+                      </span>
+                      <span
+                        className="shrink-0 text-[0.55rem] font-bold uppercase tracking-[0.14em]"
+                        style={{ color: RARITY_COLORS[item.rarity] }}
+                      >
+                        {RARITY_LABELS[item.rarity]}
+                      </span>
                     </span>
-                    <span className="block text-[0.7rem] italic text-muted-foreground">
-                      {g.item(item).flavor}
+                    <span className="mt-0.5 flex items-center gap-1.5">
+                      <span className="block truncate text-[0.7rem] italic text-muted-foreground">
+                        {g.item(item).flavor}
+                      </span>
+                      {(item.damageBonus ?? 0) > 0 && (
+                        <span className="rune-chip shrink-0 text-[0.58rem]">
+                          ⚔ +{item.damageBonus} DMG
+                        </span>
+                      )}
+                      {(item.defenseBonus ?? 0) > 0 && (
+                        <span className="rune-chip shrink-0 text-[0.58rem]">
+                          🛡 +{item.defenseBonus} DEF
+                        </span>
+                      )}
                     </span>
                   </span>
                   {locked ? (
