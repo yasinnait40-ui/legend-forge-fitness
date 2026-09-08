@@ -118,10 +118,29 @@ function statsRow(userId: string, s: GameState) {
 }
 
 async function pushStats(userId: string) {
+  const s = getGameState();
+  const row = statsRow(userId, s);
+  // Write to character_stats (individual stat columns).
   const { error } = await supabase
     .from("character_stats")
-    .upsert(statsRow(userId, getGameState()) as never, { onConflict: "user_id" });
+    .upsert(row as never, { onConflict: "user_id" });
   if (error) console.error("[cloud-sync] stats push failed", error.message);
+  // Also keep game_states.xp/streak in sync so pullAndMerge reads
+  // the latest values regardless of which table it hits.
+  const { error: gsErr } = await supabase
+    .from("game_states")
+    .upsert(
+      {
+        user_id: userId,
+        xp: s.xp,
+        streak: s.streak,
+        best_streak: s.bestStreak,
+        last_active_date: s.lastActiveDate,
+        updated_at: new Date().toISOString(),
+      } as never,
+      { onConflict: "user_id" },
+    );
+  if (gsErr) console.error("[cloud-sync] game_states sync failed", gsErr.message);
 }
 
 function schedulePush(userId: string) {
@@ -166,25 +185,21 @@ export function notifyStatsChanged(): void {
 
 /** Pull the cloud legend, keep whichever is further along, then push the result. */
 async function pullAndMerge(userId: string) {
-  const { data, error } = await supabase
-    .from("game_states")
-    .select(
-      "xp, level, streak, best_streak, last_active_date, stats, equipment, total_quests, total_trials, achievements, discovered_regions",
-    )
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  if (error) {
-    console.error("[cloud-sync] pull failed", error.message);
-    return;
-  }
-
-  const local = getGameState();
-  if (!data) return;
-
-  const stats = (data.stats ?? {}) as Partial<GameState["stats"]>;
-  const equipment = (data.equipment ?? {}) as Partial<GameState["equipment"]>;
-  const [questResult, trialResult] = await Promise.all([
+  // Read from BOTH tables and take the max — writes go to character_stats
+  // (pushStats), while the complete_activity RPC may update game_states.
+  const [gsResult, csResult, questResult, trialResult] = await Promise.all([
+    supabase
+      .from("game_states")
+      .select(
+        "xp, level, streak, best_streak, last_active_date, stats, equipment, total_quests, total_trials, achievements, discovered_regions",
+      )
+      .eq("user_id", userId)
+      .maybeSingle(),
+    supabase
+      .from("character_stats")
+      .select("xp, streak, best_streak, last_active_date, strength, endurance, agility, vitality, recovery")
+      .eq("user_id", userId)
+      .maybeSingle(),
     supabase
       .from("quest_completions")
       .select("quest_id, quest_date" as never)
@@ -194,6 +209,34 @@ async function pullAndMerge(userId: string) {
       .select("trial_id, completed_at" as never)
       .eq("user_id", userId),
   ]);
+
+  if (gsResult.error) {
+    console.error("[cloud-sync] game_states pull failed", gsResult.error.message);
+  }
+
+  const local = getGameState();
+  const gs = gsResult.data;
+  const cs = csResult.data;
+
+  // If neither table has data, nothing to merge.
+  if (!gs && !cs) return;
+
+  // Prefer the higher XP from either source — this covers the case where
+  // the RPC writes to game_states but pushStats writes to character_stats.
+  const cloudXp = Math.max(gs?.xp ?? 0, cs?.xp ?? 0);
+  const cloudStreak = Math.max(gs?.streak ?? 0, cs?.streak ?? 0);
+  const cloudBestStreak = Math.max(gs?.best_streak ?? 0, cs?.best_streak ?? 0);
+  const cloudLastActive = gs?.last_active_date ?? cs?.last_active_date ?? null;
+
+  const stats = (gs?.stats ?? {}) as Partial<GameState["stats"]>;
+  // Merge individual stat columns from character_stats if the JSON stats map is empty.
+  const csStatKeys = ["strength", "endurance", "agility", "vitality", "recovery"] as const;
+  for (const k of csStatKeys) {
+    if (cs && cs[k] && !(stats as Record<string, unknown>)[k]) {
+      (stats as Record<string, number>)[k] = cs[k] as number;
+    }
+  }
+  const equipment = (gs?.equipment ?? {}) as Partial<GameState["equipment"]>;
   const today = todayKey();
   const questRows = (questResult.data ?? []) as unknown as Array<{
     quest_id: string;
@@ -211,26 +254,26 @@ async function pullAndMerge(userId: string) {
     .map((row) => row.trial_id);
   replaceGameState({
     ...local,
-    xp: Math.max(data.xp ?? 0, local.xp),
+    xp: Math.max(cloudXp, local.xp),
     stats: { ...local.stats, ...stats },
     equipment: { ...local.equipment, ...equipment },
-    streak: data.streak ?? local.streak,
-    bestStreak: data.best_streak ?? local.bestStreak,
-    lastActiveDate: data.last_active_date ?? local.lastActiveDate,
+    streak: Math.max(cloudStreak, local.streak),
+    bestStreak: Math.max(cloudBestStreak, local.bestStreak),
+    lastActiveDate: cloudLastActive ?? local.lastActiveDate,
     questsToday: { date: today, ids: questsToday },
     trialsToday: { date: today, ids: trialsToday },
     trialsEver: trialRows.map((row) => row.trial_id),
-    achievements: Array.isArray(data.achievements)
-      ? (data.achievements as string[]).concat(
-          local.achievements.filter((a) => !(data.achievements as string[]).includes(a)),
+    achievements: Array.isArray(gs?.achievements)
+      ? (gs!.achievements as string[]).concat(
+          local.achievements.filter((a) => !(gs!.achievements as string[]).includes(a)),
         )
       : local.achievements,
-    totalQuests: Math.max(data.total_quests ?? 0, local.totalQuests),
-    totalTrials: Math.max(data.total_trials ?? 0, local.totalTrials),
-    discoveredRegions: Array.isArray(data.discovered_regions)
+    totalQuests: Math.max(gs?.total_quests ?? 0, local.totalQuests),
+    totalTrials: Math.max(gs?.total_trials ?? 0, local.totalTrials),
+    discoveredRegions: Array.isArray(gs?.discovered_regions)
       ? Array.from(
           new Set(
-            [...(data.discovered_regions as string[]), ...local.discoveredRegions].filter(
+            [...(gs!.discovered_regions as string[]), ...local.discoveredRegions].filter(
               (id): id is string => typeof id === "string",
             ),
           ),

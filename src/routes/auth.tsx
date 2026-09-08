@@ -163,7 +163,7 @@ function AuthPage() {
 
   return (
     <RealmScreen
-      image="/images/backgrounds/demon-gate.jpg"
+      image="/images/backgrounds/splash-gate.jpg"
       alt="A massive dark stone gate flanked by horned guardian statues, torchlight flickering in the mist"
       imagePosition="center 30%"
       veil="strong"

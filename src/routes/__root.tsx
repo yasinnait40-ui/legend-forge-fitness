@@ -196,10 +196,12 @@ function RootComponent() {
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       const nextUserId = session?.user?.id ?? null;
       if (nextUserId && nextUserId !== activeUserId) {
+        // New login or different user — reset local state then pull cloud.
         activeUserId = nextUserId;
         resetGameStore();
         startCloudSync(nextUserId);
-      } else if (!nextUserId) {
+      } else if (!nextUserId && activeUserId) {
+        // Signed out — clear everything.
         activeUserId = null;
         stopCloudSync();
         resetGameStore();
@@ -212,8 +214,11 @@ function RootComponent() {
         stopCloudSync();
         return;
       }
+      // Returning user — hydrateGameStore() already loaded localStorage.
+      // Do NOT resetGameStore() here; it would flash level 1 before
+      // pullAndMerge restores the real XP.  Cloud sync will overwrite
+      // local state if the server is further along.
       activeUserId = data.session.user.id;
-      resetGameStore();
       startCloudSync(activeUserId);
     });
     return () => sub.subscription.unsubscribe();
