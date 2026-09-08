@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Apple,
   Check,
@@ -162,12 +162,15 @@ function QuestsPage() {
                     </span>
                   </div>
                 ) : q.auto ? (
-                  <div className="flex items-center justify-center gap-2 rounded-md border border-border py-2.5 text-muted-foreground">
-                    <Swords className="h-4 w-4" />
-                    <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em]">
+                  <Link
+                    to="/trials"
+                    className="flex items-center justify-center gap-2 rounded-md border border-primary/40 bg-primary/10 py-2.5 transition hover:bg-primary/20 active:scale-[0.98]"
+                  >
+                    <Swords className="h-4 w-4 text-primary" />
+                    <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em] text-primary">
                       {t("quests.conquerToSeal", "Conquer a trial to seal")}
                     </span>
-                  </div>
+                  </Link>
                 ) : (
                   <button
                     onClick={() => handleComplete(q)}
