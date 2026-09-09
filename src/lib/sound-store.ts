@@ -340,6 +340,29 @@ function applyMusicState() {
   }
 }
 
+function setupMinimalMediaSession() {
+  // Present this as ambient background sound, not a "song" with a
+  // scrubbable track — disable the transport buttons Chrome adds by
+  // default and give it a plain, minimal label instead of the full
+  // page title.
+  if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: "Ambient",
+      artist: "AETHORA",
+      album: "",
+    });
+    navigator.mediaSession.setActionHandler("seekbackward", null);
+    navigator.mediaSession.setActionHandler("seekforward", null);
+    navigator.mediaSession.setActionHandler("previoustrack", null);
+    navigator.mediaSession.setActionHandler("nexttrack", null);
+    navigator.mediaSession.setActionHandler("stop", null);
+  } catch {
+    // Media Session API not fully supported on this browser — ignore.
+  }
+}
+
 export function initBackgroundMusic() {
   if (typeof window === "undefined") return;
   if (musicEl) {
@@ -360,6 +383,8 @@ export function initBackgroundMusic() {
 
   musicEl.loop = true;
   musicEl.preload = "auto";
+
+  setupMinimalMediaSession();
 
   // Do not remove or replace the existing AETHORA background music.
   // Browser autoplay policies may block playback until the user interacts.
