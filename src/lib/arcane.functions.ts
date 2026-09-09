@@ -1,12 +1,15 @@
 /**
- * Arcane Guide — placeholder channel.
+ * Arcane Guide — client-safe facade.
  *
- * The previous Gemini integration (server fetch + GEMINI_API_KEY) has been
- * removed. `consultArcaneGuide` is now a safe no-op that always resolves with
- * a gentle "the Guide is resting" reply, so no page can crash while a new
- * provider is being wired in. Swap the body of `consultArcaneGuide` for the
- * new provider's call when it is ready — `guide.tsx` only consumes
- * `{ reply: string }`.
+ * Web (SSR/Nitro): routes through the TanStack Start server function in
+ * arcane.remote.ts, which calls Google Gemini with the server-side
+ * NEW_API_KEY. The key itself never reaches the browser.
+ *
+ * Native / offline: the dynamic import keeps `@tanstack/react-start` out of
+ * the mobile SPA's eager bundle, and any failure resolves to the gentle
+ * placeholder reply instead of throwing — the Guide page can never crash.
+ *
+ * `guide.tsx` only consumes `{ reply: string }`.
  */
 
 export interface ArcaneMessage {
@@ -14,12 +17,22 @@ export interface ArcaneMessage {
   text: string;
 }
 
+const PLACEHOLDER_REPLY =
+  "The Arcane Guide rests his quill for a moment. His voice will return to the library soon, traveler — ask again once the new channel is open.";
+
 export async function consultArcaneGuide(
-  _messages: ArcaneMessage[],
+  messages: ArcaneMessage[],
 ): Promise<{ reply: string }> {
-  void _messages;
-  return {
-    reply:
-      "The Arcane Guide rests his quill for a moment. His voice will return to the library soon, traveler — ask again once the new channel is open.",
-  };
+  try {
+    const { consultArcaneGuide: remote } = await import("./arcane.remote");
+    const result = await remote({ data: { messages } });
+    if (result && typeof result.reply === "string" && result.reply.trim()) {
+      return result;
+    }
+    return { reply: PLACEHOLDER_REPLY };
+  } catch {
+    // Server function unavailable (native app, offline, missing key) — the
+    // Guide answers with the resting-quill message instead of crashing.
+    return { reply: PLACEHOLDER_REPLY };
+  }
 }
