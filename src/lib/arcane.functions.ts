@@ -1,21 +1,25 @@
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
-import { askArcaneGuide, type ArcaneMessage } from "./arcane.server";
+/**
+ * Arcane Guide — placeholder channel.
+ *
+ * The previous Gemini integration (server fetch + GEMINI_API_KEY) has been
+ * removed. `consultArcaneGuide` is now a safe no-op that always resolves with
+ * a gentle "the Guide is resting" reply, so no page can crash while a new
+ * provider is being wired in. Swap the body of `consultArcaneGuide` for the
+ * new provider's call when it is ready — `guide.tsx` only consumes
+ * `{ reply: string }`.
+ */
 
-const messageSchema = z.object({
-  role: z.enum(["user", "model"]),
-  text: z.string().min(1).max(4000),
-});
+export interface ArcaneMessage {
+  role: "user" | "model";
+  text: string;
+}
 
-export const consultArcaneGuide = createServerFn({ method: "POST" })
-  .validator((data) => z.object({ messages: z.array(messageSchema).min(1).max(40) }).parse(data))
-  .handler(async ({ data }) => {
-    const apiKey = process.env["GEMINI_API_KEY"];
-    if (!apiKey) {
-      throw new Error(
-        "The Arcane Guide cannot be reached — the GEMINI_API_KEY secret is not configured.",
-      );
-    }
-    const reply = await askArcaneGuide(data.messages as ArcaneMessage[], apiKey);
-    return { reply };
-  });
+export async function consultArcaneGuide(
+  _messages: ArcaneMessage[],
+): Promise<{ reply: string }> {
+  void _messages;
+  return {
+    reply:
+      "The Arcane Guide rests his quill for a moment. His voice will return to the library soon, traveler — ask again once the new channel is open.",
+  };
+}

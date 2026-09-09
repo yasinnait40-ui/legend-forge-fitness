@@ -105,7 +105,7 @@ function GuidePage() {
     const payload = next.slice(-20);
     lastPayload.current = payload;
     try {
-      const { reply } = await consultArcaneGuide({ data: { messages: payload } });
+      const { reply } = await consultArcaneGuide(payload);
       setMessages((m) => [...m, { role: "model", text: reply }]);
     } catch (e) {
       setError(e instanceof Error ? e.message : "The arcane channel faltered.");
@@ -123,7 +123,7 @@ function GuidePage() {
     setLoading(true);
     setError(null);
     try {
-      const { reply } = await consultArcaneGuide({ data: { messages: lastPayload.current } });
+      const { reply } = await consultArcaneGuide(lastPayload.current);
       setMessages((m) => [...m, { role: "model", text: reply }]);
     } catch (e) {
       setError(e instanceof Error ? e.message : "The arcane channel faltered.");
