@@ -16,14 +16,6 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release.storeFile != null ? signingConfigs.release : signingConfigs.debug
-        }
-    }
-
     signingConfigs {
         release {
             def ksPath = System.getenv("ANDROID_KEYSTORE_PATH") ?: "release.keystore"
@@ -31,6 +23,15 @@ android {
             storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD") ?: ""
             keyAlias System.getenv("ANDROID_KEY_ALIAS") ?: ""
             keyPassword System.getenv("ANDROID_KEY_PASSWORD") ?: ""
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Fall back to the debug key when no CI signing secrets are set.
+            signingConfig signingConfigs.release.storeFile != null && signingConfigs.release.storeFile.exists() ? signingConfigs.release : signingConfigs.debug
         }
     }
 }
