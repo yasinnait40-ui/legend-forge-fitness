@@ -19,11 +19,11 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.unity3d.mediation.LevelPlay;
 import com.unity3d.mediation.LevelPlayAdInfo;
 import com.unity3d.mediation.LevelPlayAdError;
+import com.unity3d.mediation.LevelPlayAdSize;
 import com.unity3d.mediation.LevelPlayConfiguration;
 import com.unity3d.mediation.LevelPlayInitError;
 import com.unity3d.mediation.LevelPlayInitListener;
 import com.unity3d.mediation.LevelPlayInitRequest;
-import com.unity3d.mediation.banner.LevelPlayAdSize;
 import com.unity3d.mediation.banner.LevelPlayBannerAdView;
 import com.unity3d.mediation.banner.LevelPlayBannerAdViewListener;
 import com.unity3d.mediation.interstitial.LevelPlayInterstitialAd;
@@ -31,8 +31,6 @@ import com.unity3d.mediation.interstitial.LevelPlayInterstitialAdListener;
 import com.unity3d.mediation.rewarded.LevelPlayReward;
 import com.unity3d.mediation.rewarded.LevelPlayRewardedAd;
 import com.unity3d.mediation.rewarded.LevelPlayRewardedAdListener;
-
-import org.json.JSONObject;
 
 /**
  * Capacitor plugin providing Unity LevelPlay ad integration for AETHORA.
@@ -70,13 +68,11 @@ public class AethoraAdsPlugin extends Plugin {
     @Override
     public void load() {
         super.load();
-        // Read plugin config from capacitor.config.json
-        JSONObject config = getConfig().getPlugin("AethoraAds");
-        if (config != null) {
-            rewardedAdUnitId = config.optString("rewardedAdUnitId", "");
-            interstitialAdUnitId = config.optString("interstitialAdUnitId", "");
-            bannerAdUnitId = config.optString("bannerAdUnitId", "");
-        }
+        // Read plugin config from capacitor.config.json — getConfig() returns
+        // this plugin's own config section, so values are read directly.
+        rewardedAdUnitId = getConfig().getString("rewardedAdUnitId", "");
+        interstitialAdUnitId = getConfig().getString("interstitialAdUnitId", "");
+        bannerAdUnitId = getConfig().getString("bannerAdUnitId", "");
     }
 
     @Override
@@ -99,10 +95,8 @@ public class AethoraAdsPlugin extends Plugin {
             return;
         }
 
-        String appKey = call.getString("appKey", getConfig().getPlugin("AethoraAds")
-                .optString("appKey", ""));
-        boolean testMode = call.getBoolean("testMode", getConfig().getPlugin("AethoraAds")
-                .optBoolean("testMode", true));
+        String appKey = call.getString("appKey", getConfig().getString("appKey", ""));
+        boolean testMode = call.getBoolean("testMode", getConfig().getBoolean("testMode", true));
 
         if (appKey.isEmpty()) {
             call.reject("LevelPlay app key is not configured. Set UNITY_LEVELPLAY_APP_KEY in capacitor.config.ts.");
@@ -342,7 +336,9 @@ public class AethoraAdsPlugin extends Plugin {
                     call.reject("Banner load failed: " + error.getErrorMessage());
                 }
                 @Override public void onAdDisplayed(@NonNull LevelPlayAdInfo adInfo) {}
-                @Override public void onAdDisplayFailed(@NonNull LevelPlayAdError error, @NonNull LevelPlayAdInfo adInfo) {}
+                // NOTE: the banner listener's displayFailed signature reverses
+                // the argument order used by the rewarded/interstitial listeners.
+                @Override public void onAdDisplayFailed(@NonNull LevelPlayAdInfo adInfo, @NonNull LevelPlayAdError error) {}
                 @Override public void onAdClicked(@NonNull LevelPlayAdInfo adInfo) {}
                 @Override public void onAdCollapsed(@NonNull LevelPlayAdInfo adInfo) {}
                 @Override public void onAdExpanded(@NonNull LevelPlayAdInfo adInfo) {}
@@ -373,6 +369,8 @@ public class AethoraAdsPlugin extends Plugin {
 
     @PluginMethod
     public void hideBanner(PluginCall call) {
+        Activity activity = getActivity();
+        if (activity == null) { call.resolve(); return; }
         activity.runOnUiThread(() -> {
             if (bannerContainer != null) {
                 bannerContainer.setVisibility(View.GONE);
@@ -383,7 +381,9 @@ public class AethoraAdsPlugin extends Plugin {
 
     @PluginMethod
     public void destroyBanner(PluginCall call) {
-        activity.runOnUiThread(() -> destroyBannerView());
+        Activity activity = getActivity();
+        if (activity == null) { destroyBannerView(); call.resolve(); return; }
+        activity.runOnUiThread(this::destroyBannerView);
         call.resolve();
     }
 
