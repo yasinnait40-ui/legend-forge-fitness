@@ -11,4 +11,11 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     server: { entry: "server" },
   },
+  vite: {
+    optimizeDeps: {
+      // @capacitor/core must be excluded from dep optimization — Vite's
+      // pre-bundler fails on it and breaks the client bundle (white screen).
+      exclude: ["@capacitor/core"],
+    },
+  },
 });
