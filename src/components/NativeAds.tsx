@@ -212,10 +212,10 @@ export function FreeBoostButton({
       type="button"
       onClick={() => void onClick()}
       disabled={state !== "idle" || cooldownLeft > 0 || !dailyClaimed}
-      className="rune-button mt-3 inline-flex items-center gap-2 px-4 py-2 text-[0.65rem] uppercase tracking-[0.2em] disabled:opacity-60"
+      className="btn-arcane-boost mt-4"
       aria-disabled={state !== "idle" || cooldownLeft > 0 || !dailyClaimed}
     >
-      {dailyClaimed ? <Sparkles className="size-3.5" /> : <Gift className="size-3.5" />}
+      {dailyClaimed ? <Sparkles className="size-4" /> : <Gift className="size-4" />}
       {cooldownLeft > 0 ? (
         <span className="tabular-nums">
           {t("ads.cooldown", "Restore in {{time}}", { time: formatCountdown(cooldownLeft) })}

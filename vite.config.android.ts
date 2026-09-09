@@ -19,6 +19,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   root: "android-spa",
+  // Vite resolves publicDir relative to root; with root=android-spa it would
+  // look for android-spa/public/ (missing), dropping ALL static assets
+  // (splash art, characters, audio, icons) from dist/. Point it back at the
+  // repo-root public/ directory explicitly.
+  publicDir: "../public",
   plugins: [react(), tailwindcss(), tsconfigPaths()],
   optimizeDeps: {
     // Same Capacitor/Vite pre-bundler incompatibility as the main config.

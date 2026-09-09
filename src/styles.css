@@ -408,6 +408,78 @@
 .btn-rune-ghost:hover {
   background: color-mix(in oklab, var(--primary) 16%, var(--background));
   box-shadow: 0 4px 18px -6px color-mix(in oklab, var(--primary) 64%, transparent);
+}
+
+/*
+ * Free Boost rewarded-ad CTA — a special reward action, intentionally distinct
+ * from the copper/gold action buttons. Deep arcane violet panel with a soft
+ * enchanted glow so it reads clearly over the artwork without becoming neon.
+ */
+.btn-arcane-boost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.95rem 1.3rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, #a78bfa 55%, transparent);
+  outline: 1px solid color-mix(in oklab, #8b5cf6 18%, transparent);
+  outline-offset: 3px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e9deff;
+  text-shadow: 0 1px 2px color-mix(in oklab, #14092b 70%, transparent);
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, #3b2166 82%, transparent) 0%,
+    color-mix(in oklab, #241238 78%, transparent) 100%
+  );
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 6px 22px -8px color-mix(in oklab, #8b5cf6 55%, transparent),
+    0 1px 3px color-mix(in oklab, #14092b 30%, transparent),
+    inset 0 1px 0 color-mix(in oklab, #c4b5fd 35%, transparent);
+  transition:
+    filter 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+  animation: arcane-boost-pulse 3.8s ease-in-out infinite;
+  cursor: pointer;
+}
+.btn-arcane-boost:hover:not(:disabled) {
+  filter: brightness(1.12);
+  box-shadow:
+    0 8px 28px -8px color-mix(in oklab, #8b5cf6 70%, transparent),
+    0 1px 3px color-mix(in oklab, #14092b 30%, transparent),
+    inset 0 1px 0 color-mix(in oklab, #c4b5fd 45%, transparent);
+}
+.btn-arcane-boost:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+.btn-arcane-boost:disabled {
+  opacity: 0.55;
+  cursor: default;
+  filter: none;
+  animation: none;
+}
+@keyframes arcane-boost-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 6px 22px -8px color-mix(in oklab, #8b5cf6 55%, transparent),
+      0 1px 3px color-mix(in oklab, #14092b 30%, transparent),
+      inset 0 1px 0 color-mix(in oklab, #c4b5fd 35%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 6px 26px -8px color-mix(in oklab, #8b5cf6 75%, transparent),
+      0 1px 3px color-mix(in oklab, #14092b 30%, transparent),
+      inset 0 1px 0 color-mix(in oklab, #c4b5fd 45%, transparent);
+  }
 } /* Reward / info chip */
 .rune-chip {
   display: inline-flex;
@@ -837,7 +909,8 @@
   .glow-pulse,
   .float-slow,
   .rune-ring,
-  .rune-ring-reverse {
+  .rune-ring-reverse,
+  .btn-arcane-boost:not(:disabled) {
     animation: none;
   }
 } /* -------------------------------------------------------------------------- */ /* P0.4: RTL (Arabic) refinements — mirrored nameplate arrow, correct          */ /* margins. Flex/grid layouts mirror automatically; only absolute positioning */ /* and asymmetric decorations need logical overrides.                          */ /* -------------------------------------------------------------------------- */
@@ -1105,7 +1178,7 @@ html[dir="rtl"] .font-display {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.012);
+    transform: scale(1.03);
   }
 }
 @keyframes boss-latent-glow {
@@ -1145,6 +1218,8 @@ html[dir="rtl"] .font-display {
   .boss-defeated-glow,
   .boss-breathing,
   .boss-latent-glow,
+  .strike-pressed,
+  .spark-particle,
   .fantasy-character.is-entered .fantasy-character-figure,
   .char-breathe,
   .char-float,

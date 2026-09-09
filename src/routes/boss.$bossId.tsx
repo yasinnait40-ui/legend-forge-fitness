@@ -36,6 +36,15 @@ interface FloatingHit {
   player?: boolean;
 }
 
+/** One particle in the spark burst fired when a strike button is pressed. */
+interface Spark {
+  id: number;
+  trialId: string;
+  dx: number;
+  dy: number;
+  delay: number;
+}
+
 function BossPage() {
   const { t } = useTranslation();
   const g = useGameText();
@@ -50,6 +59,8 @@ function BossPage() {
   const [shaking, setShaking] = useState(false);
   const [flashing, setFlashing] = useState(false);
   const [hits, setHits] = useState<FloatingHit[]>([]);
+  const [sparks, setSparks] = useState<Spark[]>([]);
+  const [pressedId, setPressedId] = useState<string | null>(null);
 
   // Equipped gear shapes this battle: the weapon's damageBonus adds to every
   // strike, and the armor's defenseBonus shaves the boss's counter-attacks.
@@ -71,6 +82,32 @@ function BossPage() {
   const hpRatio = Math.max(0, hp / boss.maxHp);
   const playerHp = playerHpRemaining(boss.id);
   const playerRatio = Math.max(0, playerHp / PLAYER_MAX_HP);
+
+  /** Satisfying press feedback: glow pulse + spark burst around the button. */
+  function fireStrikeEffects(trialId: string) {
+    const base = Date.now();
+    const burst: Spark[] = Array.from({ length: 8 }, (_, i) => {
+      const angle = (i / 8) * Math.PI * 2 + Math.random() * 0.6;
+      const dist = 26 + Math.random() * 22;
+      return {
+        id: base + i,
+        trialId,
+        dx: Math.cos(angle) * dist,
+        dy: Math.sin(angle) * dist,
+        delay: Math.floor(Math.random() * 60),
+      };
+    });
+    setSparks((prev) => [...prev, ...burst]);
+    setPressedId(trialId);
+    setTimeout(
+      () => setPressedId((cur) => (cur === trialId ? null : cur)),
+      360,
+    );
+    setTimeout(
+      () => setSparks((prev) => prev.filter((s) => !burst.some((b) => b.id === s.id))),
+      700,
+    );
+  }
 
   async function handleAttack(trial: Trial) {
     const result = await completeTrial(trial.id, trial.name, trial.xp, trial.stats);
@@ -137,9 +174,20 @@ function BossPage() {
           0% { opacity: 0.8; transform: scale(0.3); }
           100% { opacity: 0; transform: scale(2.4); }
         }
+        @keyframes spark-fly {
+          0% { opacity: 0.95; transform: translate(0, 0) scale(1); }
+          100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0.3); }
+        }
+        @keyframes strike-press-glow {
+          0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--boss-accent) 55%, transparent); }
+          45% { box-shadow: 0 0 18px 4px color-mix(in oklab, var(--boss-accent) 55%, transparent); }
+          100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--boss-accent) 55%, transparent); }
+        }
         .boss-shaking { animation: boss-shake 0.4s ease-in-out; }
         .damage-number { animation: damage-float 1.1s ease-out forwards; }
         .burst-ring { animation: burst-ring 1.4s ease-out infinite; }
+        .strike-pressed { animation: strike-press-glow 0.36s ease-out; }
+        .spark-particle { animation: spark-fly 0.55s ease-out forwards; }
       `}</style>
 
       <header className="text-center">
@@ -152,38 +200,68 @@ function BossPage() {
         <p className="mt-2 text-xs italic text-muted-foreground">{boss.epithet}</p>
       </header>
 
+      {/* The beast in its pool of magical light — centered, moderate size,
+          breathing slowly. The shake lives on this wrapper so it can't fight
+          the image's breathing animation (both would set `animation`). */}
       <div
         className={cn(
-          "relative mx-auto mt-6 aspect-square w-full max-w-xs overflow-hidden rounded-2xl border-2",
+          "relative mx-auto mt-6 flex aspect-square w-full max-w-[17rem] items-center justify-center",
           shaking && "boss-shaking",
-          !defeated && "boss-breathing",
-          !defeated && "boss-latent-glow",
-          defeated && "boss-defeated-settle",
         )}
-        style={{
-          "--boss-accent": `oklch(0.62 0.16 ${boss.accentHue})` as const,
-          borderColor: defeated
-            ? "color-mix(in oklab, var(--muted-foreground) 50%, transparent)"
-            : `color-mix(in oklab, var(--boss-accent) 60%, transparent)`,
-          boxShadow: defeated
-            ? "none"
-            : `0 0 34px -6px color-mix(in oklab, var(--boss-accent) 65%, transparent)`,
-        }}
       >
-        <img
-          src={boss.image}
-          alt={boss.name}
-          className={cn(
-            "h-full w-full object-cover transition-all duration-700",
-            defeated && "grayscale opacity-60",
-          )}
-        />
-
-        {/* Hit flash overlay */}
+        {/* Soft radial aura in the boss's accent hue */}
         <div
-          className="pointer-events-none absolute inset-0 bg-red-500 transition-opacity duration-150"
-          style={{ opacity: flashing ? 0.35 : 0 }}
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute inset-0 rounded-full transition-opacity duration-700",
+            defeated ? "opacity-0" : "boss-latent-glow",
+          )}
+          style={{
+            "--boss-accent": `oklch(0.62 0.16 ${boss.accentHue})` as const,
+            background:
+              "radial-gradient(circle, color-mix(in oklab, var(--boss-accent) 34%, transparent) 0%, color-mix(in oklab, var(--boss-accent) 14%, transparent) 45%, transparent 70%)",
+          }}
         />
+        {/* Inner glow ring hugging the portrait */}
+        <div
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute inset-8 rounded-full transition-opacity duration-700",
+            defeated ? "opacity-0" : "",
+          )}
+          style={{
+            "--boss-accent": `oklch(0.62 0.16 ${boss.accentHue})` as const,
+            boxShadow:
+              "0 0 44px -4px color-mix(in oklab, var(--boss-accent) 55%, transparent), inset 0 0 30px -6px color-mix(in oklab, var(--boss-accent) 30%, transparent)",
+          }}
+        />
+        {/* Framed circular portrait — breathing via the img's own animation,
+            never on this wrapper (shake owns it). */}
+        <div
+          className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border-2 sm:h-48 sm:w-48"
+          style={{
+            "--boss-accent": `oklch(0.62 0.16 ${boss.accentHue})` as const,
+            borderColor: defeated
+              ? "color-mix(in oklab, var(--muted-foreground) 50%, transparent)"
+              : "color-mix(in oklab, var(--boss-accent) 55%, transparent)",
+          }}
+        >
+          <img
+            src={boss.image}
+            alt={boss.name}
+            className={cn(
+              "h-full w-full scale-[1.08] object-cover transition-all duration-700",
+              !defeated && "boss-breathing",
+              defeated && "grayscale opacity-60 boss-defeated-settle",
+            )}
+          />
+
+          {/* Hit flash overlay */}
+          <div
+            className="pointer-events-none absolute inset-0 bg-red-500 transition-opacity duration-150"
+            style={{ opacity: flashing ? 0.35 : 0 }}
+          />
+        </div>
 
         {/* Floating damage numbers — boss hits from the center, counter-attacks from below */}
         {hits.map((hit) => (
@@ -199,7 +277,7 @@ function BossPage() {
         ))}
 
         {defeated && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+          <div className="absolute inset-0 flex items-center justify-center">
             <span className="font-display rounded-full border-2 border-primary bg-background/80 px-4 py-1.5 text-sm font-black uppercase tracking-[0.2em] text-primary">
               {t("boss.defeated", "Defeated")}
             </span>
@@ -353,24 +431,50 @@ function BossPage() {
                             </span>
                           </div>
                         ) : (
-                          <button
-                            onClick={() => handleAttack(trial)}
-                            className="flex w-full items-center justify-center gap-2 rounded-md border py-2.5 transition active:scale-95"
-                            style={{
-                              borderColor:
-                                "color-mix(in oklab, var(--boss-accent) 45%, transparent)",
-                              background:
-                                "color-mix(in oklab, var(--boss-accent) 12%, transparent)",
-                            }}
-                          >
-                            <Skull className="h-4 w-4" style={{ color: "var(--boss-accent)" }} />
-                            <span
-                              className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em]"
-                              style={{ color: "var(--boss-accent)" }}
+                          <div className="relative">
+                            <button
+                              onClick={() => {
+                                fireStrikeEffects(trial.id);
+                                void handleAttack(trial);
+                              }}
+                              className={cn(
+                                "flex w-full items-center justify-center gap-2 rounded-md border py-2.5 transition active:scale-[0.97]",
+                                pressedId === trial.id && "strike-pressed",
+                              )}
+                              style={{
+                                borderColor:
+                                  "color-mix(in oklab, var(--boss-accent) 45%, transparent)",
+                                background:
+                                  "color-mix(in oklab, var(--boss-accent) 12%, transparent)",
+                              }}
                             >
-                              {t("boss.strike", "Strike the Beast")}
-                            </span>
-                          </button>
+                              <Skull className="h-4 w-4" style={{ color: "var(--boss-accent)" }} />
+                              <span
+                                className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em]"
+                                style={{ color: "var(--boss-accent)" }}
+                              >
+                                {t("boss.strike", "Strike the Beast")}
+                              </span>
+                            </button>
+                            {/* Spark burst on press — offsets driven by CSS vars */}
+                            {sparks
+                              .filter((s) => s.trialId === trial.id)
+                              .map((s) => (
+                                <span
+                                  key={s.id}
+                                  aria-hidden
+                                  className="spark-particle pointer-events-none absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full"
+                                  style={{
+                                    "--sx": `${s.dx}px`,
+                                    "--sy": `${s.dy}px`,
+                                    animationDelay: `${s.delay}ms`,
+                                    background: "var(--boss-accent)",
+                                    boxShadow:
+                                      "0 0 6px 1px color-mix(in oklab, var(--boss-accent) 70%, transparent)",
+                                  } as CSSProperties}
+                                />
+                              ))}
+                          </div>
                         )}
                       </div>
                     </div>
