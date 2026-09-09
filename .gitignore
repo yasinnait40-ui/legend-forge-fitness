@@ -32,3 +32,10 @@ dist-ssr
 *.sw?
 .env
 tsconfig.tsbuildinfo
+
+# Release keystore (never commit)
+android/release.keystore
+
+# Local env overrides
+.env.local
+.env.*.local

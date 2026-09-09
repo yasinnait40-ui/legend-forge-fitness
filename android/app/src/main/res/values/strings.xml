@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Aethora</string>
+    <string name="title_activity_main">Aethora</string>
+    <string name="package_name">com.aethora.app</string>
+    <string name="custom_url_scheme">com.aethora.app</string>
+</resources>

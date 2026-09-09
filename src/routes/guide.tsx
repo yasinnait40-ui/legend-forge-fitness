@@ -7,6 +7,7 @@ import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { consultArcaneGuide } from "@/lib/arcane.functions";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { isNativeAds } from "@/lib/native-ads";
 
 export const Route = createFileRoute("/guide")({
   head: () => ({
@@ -92,6 +93,10 @@ function GuidePage() {
   async function send(override?: string) {
     const text = (override ?? input).trim();
     if (!text || loading) return;
+    if (isNativeAds()) {
+      setError("The Arcane Guide whispers from the web realm only — open AETHORA in your browser to consult him.");
+      return;
+    }
     const next: ChatMessage[] = [...messages, { role: "user", text }];
     setMessages(next);
     setInput("");
@@ -111,6 +116,10 @@ function GuidePage() {
 
   async function retry() {
     if (!lastPayload.current || loading) return;
+    if (isNativeAds()) {
+      setError("The Arcane Guide is only available on the web. Visit AETHORA in your browser.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
