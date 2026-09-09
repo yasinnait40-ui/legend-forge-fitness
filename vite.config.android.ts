@@ -25,7 +25,9 @@ export default defineConfig({
     exclude: ["@capacitor/core"],
   },
   build: {
-    outDir: "dist",
+    // Relative to root (android-spa/) — resolve to the project-root dist/
+    // that capacitor.config.ts expects as webDir.
+    outDir: "../dist",
     emptyOutDir: true,
     target: "es2020",
   },
