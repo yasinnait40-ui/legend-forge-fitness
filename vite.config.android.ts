@@ -15,6 +15,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths()],
+  optimizeDeps: {
+    // Same Capacitor/Vite pre-bundler incompatibility as the main config.
+    exclude: ["@capacitor/core"],
+  },
   build: {
     outDir: "dist",
     emptyOutDir: true,
