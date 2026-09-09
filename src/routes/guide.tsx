@@ -143,6 +143,8 @@ function GuidePage() {
     }
   }
 
+  const conversationStarted = messages.length > 1;
+
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden">
       {/* Library atmosphere */}
@@ -188,8 +190,14 @@ function GuidePage() {
           </button>
         </div>
 
-        {/* Spacer where the wizard sits — spell effects gather while he thinks */}
-        <div className="relative h-[24dvh]">
+        {/* Spacer where the wizard sits — spell effects gather while he thinks.
+            Shrinks once the conversation is underway to give the chat more room. */}
+        <div
+          className={cn(
+            "relative transition-[height] duration-300",
+            conversationStarted ? "h-[8dvh]" : "h-[24dvh]",
+          )}
+        >
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative h-24 w-24">
@@ -204,9 +212,11 @@ function GuidePage() {
         </div>
       </header>
 
-      <div className="relative z-10 mx-auto w-full max-w-lg px-4">
-        <CharacterWelcome kind="sage" />
-      </div>
+      {!conversationStarted && (
+        <div className="relative z-10 mx-auto w-full max-w-lg px-4">
+          <CharacterWelcome kind="sage" />
+        </div>
+      )}
 
       {/* Conversation scroll */}
       <main
