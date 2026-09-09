@@ -23,10 +23,10 @@ const config: CapacitorConfig = {
   },
   plugins: {
     AethoraAds: {
-      appKey: process.env.UNITY_LEVELPLAY_APP_KEY ?? "",
-      rewardedAdUnitId: process.env.UNITY_REWARDED_AD_UNIT_ID ?? "",
-      interstitialAdUnitId: process.env.UNITY_INTERSTITIAL_AD_UNIT_ID ?? "",
-      bannerAdUnitId: process.env.UNITY_BANNER_AD_UNIT_ID ?? "",
+      appKey: process.env.UNITY_LEVELPLAY_APP_KEY ?? "800370118",
+      rewardedAdUnitId: process.env.UNITY_REWARDED_AD_UNIT_ID ?? "Rewarded_Android",
+      interstitialAdUnitId: process.env.UNITY_INTERSTITIAL_AD_UNIT_ID ?? "Interstitial_Android",
+      bannerAdUnitId: "",
       testMode: process.env.UNITY_ADS_TEST_MODE !== "false",
     },
   },

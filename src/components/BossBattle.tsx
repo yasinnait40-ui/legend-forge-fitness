@@ -4,7 +4,7 @@ import { Swords, Shield, Sparkles, X, Check } from "lucide-react";
 import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { damageBoss, isBossDefeated, remainingHp } from "@/lib/boss-store";
-import { awardBossVictory } from "@/lib/game-store";
+import { completeTrial } from "@/lib/game-store";
 import { playSound } from "@/lib/sound-store";
 import { useTranslation } from "react-i18next";
 import type { Boss } from "@/lib/boss-data";
@@ -64,7 +64,7 @@ export function BossBattle({ boss, onExit, onVictory }: BossBattleProps) {
         if (!rewarded) {
           setRewarded(true);
           const xp = Math.round(boss.maxHp * 0.6);
-          void awardBossVictory(xp, { strength: 3, vitality: 2 });
+          void completeTrial("boss-fight", "Boss Fight", xp, { strength: 3, vitality: 2 });
         }
       }
     },

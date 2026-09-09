@@ -5,7 +5,7 @@ import { ChevronRight, Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide
 import homeKingdom from "@/assets/home-kingdom.png";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
-import { MonetagBanner, MonetagRewardedButton } from "@/components/MonetagAds";
+import { FreeBoostButton } from "@/components/NativeAds";
 import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { StatBar } from "@/components/StatBar";
@@ -208,8 +208,7 @@ function HomePage() {
         </Link>
       </div>
 
-      <MonetagBanner />
-      <MonetagRewardedButton onReward={(r) => r && setTreasure(r)} />
+      <FreeBoostButton onReward={(r) => r && setTreasure(r)} />
       {treasure && <TreasureChest reward={treasure} onClose={() => setTreasure(null)} />}
     </RealmScreen>
   );

@@ -4,6 +4,7 @@ import { RealmScreen } from "@/components/RealmScreen";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import type { AwardResult, TreasureReward } from "@/lib/game-store";
 import { completeTrial, useGame } from "@/lib/game-store";
+import { showInterstitialAd } from "@/components/NativeAds";
 import { playSound } from "@/lib/sound-store";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -93,6 +94,8 @@ export function TrialBattle({ trial, guardian, onExit }: TrialBattleProps) {
     const t0 = setTimeout(() => {
       setStrikeNow(false);
       setResolve(0);
+      // Show interstitial at natural transition (fire-and-forget)
+      void showInterstitialAd();
       // Auto-advance into the final completeTrial call.
       completeTrial(trial.id, trial.name, trial.xp, trial.stats).then((result) => {
         if (result) {

@@ -9,6 +9,7 @@ import { itemById, TRIALS, type Trial } from "@/lib/game-data";
 import { useGameText } from "@/lib/game-i18n";
 import { playSound } from "@/lib/sound-store";
 import { announceRewards } from "@/lib/rewards";
+import { showInterstitialAd } from "@/components/NativeAds";
 import { cn } from "@/lib/utils";
 import { bossById } from "@/lib/boss-data";
 import {
@@ -417,7 +418,14 @@ function BossPage() {
             <h2 className="text-glow-gold font-display mt-2 text-2xl font-black text-primary">
               {boss.name}
             </h2>
-            <button onClick={() => setJustDefeated(false)} className="btn-gold mt-5 !w-auto px-8">
+            <button
+              onClick={() => {
+                // Show interstitial at natural transition (fire-and-forget)
+                void showInterstitialAd();
+                setJustDefeated(false);
+              }}
+              className="btn-gold mt-5 !w-auto px-8"
+            >
               {t("boss.claim", "Claim Victory")}
             </button>
           </div>
