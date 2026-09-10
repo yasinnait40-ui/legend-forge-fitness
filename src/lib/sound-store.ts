@@ -274,29 +274,74 @@ export function playSound(key: SoundKey) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Background music                                                            */
+/* Background music — Web Audio only, deliberately NOT an <audio> element.    */
+/*                                                                            */
+/* Chrome/Android attach a full "media session" transport UI (title,         */
+/* duration, seek bar, rewind/fast-forward buttons) to any playing <audio>   */
+/* or <video> element automatically — there is no reliable way to suppress   */
+/* that once it exists. Playing the loop through Web Audio (decoded buffer   */
+/* + gain node) avoids the media element entirely, so no such UI is ever     */
+/* created. Muting/backgrounding is handled by ramping this gain node, not   */
+/* by pausing an element.                                                    */
 /* -------------------------------------------------------------------------- */
 
-let musicEl: HTMLAudioElement | null = null;
+let musicGain: GainNode | null = null;
+let musicSource: AudioBufferSourceNode | null = null;
+let musicBuffer: AudioBuffer | null = null;
 let musicLoadFailed = false;
+let musicStarted = false;
 let musicRetryBound = false;
 
 const MUSIC_RETRY_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
 
+function musicTargetGain(): number {
+  if (state.muted) return 0;
+  return clampVolume(state.volume * 0.5);
+}
+
+function startMusicPlayback(ctx: AudioContext): void {
+  if (!musicBuffer || musicStarted) return;
+
+  try {
+    const gain = musicGain ?? ctx.createGain();
+    if (!musicGain) {
+      gain.gain.value = musicTargetGain();
+      gain.connect(ctx.destination);
+      musicGain = gain;
+    }
+
+    const source = ctx.createBufferSource();
+    source.buffer = musicBuffer;
+    source.loop = true;
+    source.connect(musicGain);
+    source.start(0);
+
+    musicSource = source;
+    musicStarted = true;
+  } catch {
+    // Never let background music setup crash the caller.
+  }
+}
+
 function tryStartMusic(): void {
-  const el = musicEl;
+  if (musicLoadFailed || !musicBuffer) return;
 
-  if (!el || state.muted || musicLoadFailed || !el.paused) return;
+  const ctx = getCtx();
+  if (!ctx) return;
 
-  void el
-    .play()
-    .then(() => {
-      // Autoplay unlocked — stop listening for further retry triggers.
+  void resumeAudioContext(ctx).then((ready) => {
+    if (!ready) return;
+
+    if (!musicStarted) {
+      startMusicPlayback(ctx);
+    }
+
+    applyMusicState();
+
+    if (musicStarted) {
       removeMusicRetryListeners();
-    })
-    .catch(() => {
-      // Still blocked (or the media failed). The next interaction retries.
-    });
+    }
+  });
 }
 
 function onMusicRetryEvent(): void {
@@ -326,102 +371,59 @@ function removeMusicRetryListeners(): void {
 }
 
 function applyMusicState() {
-  if (!musicEl) return;
+  if (!musicGain) return;
 
-  musicEl.muted = state.muted;
-  musicEl.volume = clampVolume(state.volume * 0.5);
+  const ctx = musicGain.context;
+  const target = document.visibilityState === "hidden" ? 0 : musicTargetGain();
 
-  // P0.1 fix: previously, if the browser blocked the very first autoplay
-  // attempt while muted (or the first interaction was consumed while muted),
-  // unmuting would never start the music until a full page reload. Now any
-  // unmute/volume change re-attempts playback, which is itself a user gesture.
-  if (!state.muted && !musicLoadFailed && musicEl.paused) {
+  try {
+    // Short ramp instead of an instant jump — avoids an audible click.
+    musicGain.gain.linearRampToValueAtTime(target, ctx.currentTime + 0.15);
+  } catch {
+    musicGain.gain.value = target;
+  }
+
+  if (!state.muted && !musicLoadFailed && !musicStarted) {
     tryStartMusic();
   }
 }
 
-function setupMinimalMediaSession() {
-  // Present this as ambient background sound, not a "song" with a
-  // scrubbable track — disable the transport buttons Chrome adds by
-  // default and give it a plain, minimal label instead of the full
-  // page title.
-  if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
-
-  try {
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: "Ambient",
-      artist: "AETHORA",
-      album: "",
-    });
-    navigator.mediaSession.setActionHandler("seekbackward", null);
-    navigator.mediaSession.setActionHandler("seekforward", null);
-    navigator.mediaSession.setActionHandler("previoustrack", null);
-    navigator.mediaSession.setActionHandler("nexttrack", null);
-    navigator.mediaSession.setActionHandler("stop", null);
-  } catch {
-    // Media Session API not fully supported on this browser — ignore.
-  }
-}
-
-export function initBackgroundMusic() {
+export async function initBackgroundMusic() {
   if (typeof window === "undefined") return;
-  if (musicEl) {
+  if (musicBuffer || musicLoadFailed) {
     applyMusicState();
     return;
   }
 
   const musicPath = "/audio/fantasy-theme.mp3";
-
-  // P0.1 hardening: new Audio() can throw in rare embedded environments.
-  try {
-    musicEl = new Audio(musicPath);
-  } catch {
-    musicEl = null;
+  const ctx = getCtx();
+  if (!ctx) {
+    musicLoadFailed = true;
+    return;
   }
 
-  if (!musicEl) return;
-
-  musicEl.loop = true;
-  musicEl.preload = "auto";
-
-  setupMinimalMediaSession();
-
-  // Do not remove or replace the existing AETHORA background music.
-  // Browser autoplay policies may block playback until the user interacts.
-  musicEl.addEventListener("error", () => {
-    // Missing/broken asset: stop retrying play() on every interaction.
+  try {
+    const response = await fetch(musicPath);
+    const arrayBuffer = await response.arrayBuffer();
+    musicBuffer = await ctx.decodeAudioData(arrayBuffer);
+  } catch {
+    // Missing/broken asset: stop retrying on every interaction.
     musicLoadFailed = true;
     removeMusicRetryListeners();
-  });
+    return;
+  }
 
-  applyMusicState();
-
-  void musicEl.play().catch(() => undefined);
-
-  // P0.1 fix: the old retry used `once: true`, so a single interaction
-  // (even one that happened while muted, or a gesture the browser ignored)
-  // consumed the only retry forever. Retry on every interaction until the
-  // music is actually playing.
+  // Try immediately — this only produces sound once the context is
+  // actually running, so it's safe even before any user gesture.
+  tryStartMusic();
   addMusicRetryListeners();
 
-  // Pause background music when the app/browser tab loses focus; resume when
-  // the user returns, but only if it was playing before and the user hasn't
-  // muted it. This keeps the media session/notification from staying active
-  // while the app is in the background and respects the user's mute choice.
+  // Silence (not literally pause) background music when the app/browser tab
+  // loses focus; restore when the user returns, but only if it should be
+  // audible (not muted). There is no element/media-session to keep alive
+  // here, so this is just a gain ramp.
   document.addEventListener("visibilitychange", () => {
-    if (!musicEl) return;
-
-    if (document.visibilityState === "hidden") {
-      // Remember whether the music was actually playing before we pause.
-      if (!musicEl.paused && state.muted) {
-        musicEl.pause();
-      }
-    } else {
-      // Visible again: resume only if it should be audible.
-      if (!state.muted && !musicLoadFailed) {
-        tryStartMusic();
-      }
-    }
+    applyMusicState();
   });
 
   listeners.add(applyMusicState);
