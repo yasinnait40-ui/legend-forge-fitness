@@ -1,4 +1,4 @@
-import { createAPIFileRoute } from "@tanstack/react-start/api";
+import { createServerFileRoute } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { askArcaneGuide, type ArcaneMessage } from "@/lib/arcane.server";
 
@@ -15,7 +15,7 @@ function withCors(res: Response): Response {
   return res;
 }
 
-export const APIRoute = createAPIFileRoute("/api/guide")({
+export const ServerRoute = createServerFileRoute("/api/guide").methods({
   OPTIONS: async () => {
     return withCors(new Response(null, { status: 204 }));
   },
