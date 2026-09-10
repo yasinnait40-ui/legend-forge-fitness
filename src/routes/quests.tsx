@@ -14,6 +14,7 @@ import guildHall from "@/assets/guild-hall.jpg";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { TreasureChest } from "@/components/TreasureChest";
+import { FreeBoostButton } from "@/components/NativeAds";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
 import { completeQuest, questsDoneToday, useGame } from "@/lib/game-store";
 import { announceRewards } from "@/lib/rewards";
@@ -191,6 +192,11 @@ function QuestsPage() {
         {t("quests.renewNote", "The board renews at midnight, traveler.")}
       </p>
       {treasure && <TreasureChest reward={treasure} onClose={() => setTreasure(null)} />}
+
+      {/* Free Boost — watch an ad for bonus rewards */}
+      <div className="mt-6">
+        <FreeBoostButton onReward={(r) => { if (r) setTreasure(r); }} />
+      </div>
     </RealmScreen>
   );
 }
