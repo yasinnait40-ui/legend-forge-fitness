@@ -1,4 +1,4 @@
-import { createServerFileRoute } from "@tanstack/react-start/server";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { askArcaneGuide, type ArcaneMessage } from "@/lib/arcane.server";
 
@@ -15,37 +15,41 @@ function withCors(res: Response): Response {
   return res;
 }
 
-export const ServerRoute = createServerFileRoute("/api/guide").methods({
-  OPTIONS: async () => {
-    return withCors(new Response(null, { status: 204 }));
-  },
-  POST: async ({ request }) => {
-    const apiKey = process.env["NEW_API_KEY"];
-    if (!apiKey) {
-      return withCors(
-        new Response(JSON.stringify({ error: "missing key" }), {
-          status: 500,
-          headers: { "content-type": "application/json" },
-        }),
-      );
-    }
-    try {
-      const text = await request.text();
-      const json = JSON.parse(text);
-      const parsed = bodySchema.parse(json);
-      const reply = await askArcaneGuide(parsed.messages as ArcaneMessage[], apiKey);
-      return withCors(
-        new Response(JSON.stringify({ reply }), {
-          headers: { "content-type": "application/json" },
-        }),
-      );
-    } catch {
-      return withCors(
-        new Response(JSON.stringify({ error: "bad request" }), {
-          status: 400,
-          headers: { "content-type": "application/json" },
-        }),
-      );
-    }
+export const Route = createFileRoute("/api/guide")({
+  server: {
+    handlers: {
+      OPTIONS: async () => {
+        return withCors(new Response(null, { status: 204 }));
+      },
+      POST: async ({ request }) => {
+        const apiKey = process.env["NEW_API_KEY"];
+        if (!apiKey) {
+          return withCors(
+            new Response(JSON.stringify({ error: "missing key" }), {
+              status: 500,
+              headers: { "content-type": "application/json" },
+            }),
+          );
+        }
+        try {
+          const text = await request.text();
+          const json = JSON.parse(text);
+          const parsed = bodySchema.parse(json);
+          const reply = await askArcaneGuide(parsed.messages as ArcaneMessage[], apiKey);
+          return withCors(
+            new Response(JSON.stringify({ reply }), {
+              headers: { "content-type": "application/json" },
+            }),
+          );
+        } catch {
+          return withCors(
+            new Response(JSON.stringify({ error: "bad request" }), {
+              status: 400,
+              headers: { "content-type": "application/json" },
+            }),
+          );
+        }
+      },
+    },
   },
 });
