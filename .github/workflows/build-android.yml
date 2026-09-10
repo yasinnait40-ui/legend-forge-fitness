@@ -30,9 +30,13 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+      - name: Patch AI Code for Android
+        run: node .github/workflows/patch-ai.js
 
       - name: Build client SPA for Android
         run: bunx vite build --config vite.config.android.ts
+
+        
 
       - name: Capacitor sync
         run: bunx cap sync android
