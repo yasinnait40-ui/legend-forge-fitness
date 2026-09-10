@@ -22,17 +22,44 @@ export async function consultArcaneGuide(
 ): Promise<{ reply: string }> {
   try {
     if (await isNative()) {
-      const res = await fetch(`${PROD_BASE_URL}/api/guide`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages }),
-      });
-      if (!res.ok) return { reply: PLACEHOLDER_REPLY };
-      const result = (await res.json()) as { reply?: string };
+      let res: Response;
+      try {
+        res = await fetch(`${PROD_BASE_URL}/api/guide`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages }),
+        });
+      } catch (fetchErr) {
+        const msg = fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
+        return { reply: `DEBUG ERROR (fetch failed): ${msg}` };
+      }
+
+      if (!res.ok) {
+        let bodyText = "";
+        try {
+          bodyText = await res.text();
+        } catch {
+          // ignore
+        }
+        return {
+          reply: `DEBUG ERROR (HTTP ${res.status}): ${bodyText.slice(0, 300)}`,
+        };
+      }
+
+      let result: { reply?: string; error?: string };
+      try {
+        result = (await res.json()) as { reply?: string; error?: string };
+      } catch (jsonErr) {
+        const msg = jsonErr instanceof Error ? jsonErr.message : String(jsonErr);
+        return { reply: `DEBUG ERROR (bad JSON): ${msg}` };
+      }
+
       if (result && typeof result.reply === "string" && result.reply.trim()) {
         return { reply: result.reply };
       }
-      return { reply: PLACEHOLDER_REPLY };
+      return {
+        reply: `DEBUG ERROR (no reply field): ${JSON.stringify(result)}`,
+      };
     }
 
     const { consultArcaneGuide: remote } = await import("./arcane.remote");
@@ -41,7 +68,9 @@ export async function consultArcaneGuide(
       return result;
     }
     return { reply: PLACEHOLDER_REPLY };
-  } catch {
-    return { reply: PLACEHOLDER_REPLY };
+  } catch (e) {
+    console.error("[arcane] consult failed:", e);
+    const msg = e instanceof Error ? e.message : String(e);
+    return { reply: `DEBUG ERROR (outer catch): ${msg}` };
   }
 }
