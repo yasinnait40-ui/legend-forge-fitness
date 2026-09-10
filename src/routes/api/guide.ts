@@ -30,7 +30,8 @@ export const APIRoute = createAPIFileRoute("/api/guide")({
       );
     }
     try {
-      const json = await request.json();
+      const text = await request.text();
+      const json = JSON.parse(text);
       const parsed = bodySchema.parse(json);
       const reply = await askArcaneGuide(parsed.messages as ArcaneMessage[], apiKey);
       return withCors(
