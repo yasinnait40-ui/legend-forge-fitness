@@ -8,39 +8,43 @@ const messageSchema = z.object({
 });
 const bodySchema = z.object({ messages: z.array(messageSchema).min(1).max(40) });
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+function withCors(res: Response): Response {
+  res.headers.set("Access-Control-Allow-Origin", "*");
+  res.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  return res;
+}
 
 export const APIRoute = createAPIFileRoute("/api/guide")({
   OPTIONS: async () => {
-    return new Response(null, {
-      status: 204,
-      headers: CORS_HEADERS,
-    });
+    return withCors(new Response(null, { status: 204 }));
   },
   POST: async ({ request }) => {
     const apiKey = process.env["NEW_API_KEY"];
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "missing key" }), {
-        status: 500,
-        headers: { "content-type": "application/json", ...CORS_HEADERS },
-      });
+      return withCors(
+        new Response(JSON.stringify({ error: "missing key" }), {
+          status: 500,
+          headers: { "content-type": "application/json" },
+        }),
+      );
     }
     try {
       const json = await request.json();
       const parsed = bodySchema.parse(json);
       const reply = await askArcaneGuide(parsed.messages as ArcaneMessage[], apiKey);
-      return new Response(JSON.stringify({ reply }), {
-        headers: { "content-type": "application/json", ...CORS_HEADERS },
-      });
+      return withCors(
+        new Response(JSON.stringify({ reply }), {
+          headers: { "content-type": "application/json" },
+        }),
+      );
     } catch {
-      return new Response(JSON.stringify({ error: "bad request" }), {
-        status: 400,
-        headers: { "content-type": "application/json", ...CORS_HEADERS },
-      });
+      return withCors(
+        new Response(JSON.stringify({ error: "bad request" }), {
+          status: 400,
+          headers: { "content-type": "application/json" },
+        }),
+      );
     }
   },
 });
