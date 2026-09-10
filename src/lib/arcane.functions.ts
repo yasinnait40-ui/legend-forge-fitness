@@ -10,6 +10,11 @@
  * surface as "DEBUG ERROR (...)" replies that pinpoint the exact stage:
  * fetch failure, HTTP status, bad JSON, or missing reply field.
  *
+ * Uses Content-Type: text/plain (not application/json) on the native POST
+ * so the browser/WebView treats it as a "simple request" and skips the
+ * CORS preflight (OPTIONS) entirely — the server still parses the body as
+ * JSON manually.
+ *
  * Any unexpected failure resolves to the gentle placeholder reply — the
  * Guide page can never crash.
  *
@@ -54,7 +59,7 @@ export async function consultArcaneGuide(
       try {
         res = await fetch(`${PROD_BASE_URL}/api/guide`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "text/plain" },
           body: JSON.stringify({ messages }),
         });
       } catch (fetchErr) {
