@@ -16,6 +16,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { execSync } from "node:child_process";
 
 export default defineConfig({
   root: "android-spa",
@@ -28,6 +29,20 @@ export default defineConfig({
   optimizeDeps: {
     // Same Capacitor/Vite pre-bundler incompatibility as the main config.
     exclude: ["@capacitor/core"],
+  },
+  define: {
+    // Inject build-time values: the Gemini API key (for native direct calls)
+    // and the git SHA (for build verification).
+    __NATIVE_API_KEY__: JSON.stringify(process.env.NEW_API_KEY ?? ""),
+    __BUILD_SHA__: JSON.stringify(
+      (() => {
+        try {
+          return execSync("git rev-parse --short HEAD", { encoding: "utf-8" }).trim();
+        } catch {
+          return "unknown";
+        }
+      })(),
+    ),
   },
   build: {
     // Relative to root (android-spa/) — resolve to the project-root dist/

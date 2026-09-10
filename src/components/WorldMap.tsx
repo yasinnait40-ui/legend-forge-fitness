@@ -25,7 +25,7 @@ import {
   type WorldRegion,
 } from "@/lib/world-map-data";
 import type { CSSProperties } from "react";
-import worldMapImage from "@/assets/world-map.png";
+import worldMapImage from "@/assets/world-map.webp";
 
 /*
  * P1.4: the World Map — illustrated map with absolutely positioned region markers.

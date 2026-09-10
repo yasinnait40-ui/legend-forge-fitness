@@ -14,7 +14,7 @@ import {
   WORLD_REGIONS,
   type WorldRegion,
 } from "@/lib/world-map-data";
-import worldMapImg from "@/assets/world-map.png";
+import worldMapImg from "@/assets/world-map.webp";
 
 export const Route = createFileRoute("/map")({
   head: () => ({

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronRight, Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide-react";
-import homeKingdom from "@/assets/home-kingdom.png";
+import homeKingdom from "@/assets/home-kingdom.webp";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
 import { FreeBoostButton } from "@/components/NativeAds";

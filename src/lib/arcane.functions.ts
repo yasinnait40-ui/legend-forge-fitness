@@ -1,6 +1,34 @@
+/**
+ * Arcane Guide — client-safe facade.
+ *
+ * Web (SSR/Nitro): routes through the TanStack Start server function in
+ * arcane.remote.ts, which calls Google Gemini with the server-side
+ * NEW_API_KEY. The key itself never reaches the browser.
+ *
+ * Native (Capacitor Android): POSTs to the production /api/guide endpoint
+ * (the key stays server-side on Vercel — never in the APK). Failures
+ * surface as "DEBUG ERROR (...)" replies that pinpoint the exact stage:
+ * fetch failure, HTTP status, bad JSON, or missing reply field.
+ *
+ * Any unexpected failure resolves to the gentle placeholder reply — the
+ * Guide page can never crash.
+ *
+ * `guide.tsx` only consumes `{ reply: string }`.
+ */
+
 export interface ArcaneMessage {
   role: "user" | "model";
   text: string;
+}
+
+/* ---- Build version marker (injected by vite.config.android.ts) ---- */
+declare const __BUILD_SHA__: string | undefined;
+
+const BUILD_SHA: string = __BUILD_SHA__ ?? "dev";
+
+/** Returns the short git SHA of the build that produced this bundle. */
+export function getBuildSha(): string {
+  return BUILD_SHA;
 }
 
 const PLACEHOLDER_REPLY =

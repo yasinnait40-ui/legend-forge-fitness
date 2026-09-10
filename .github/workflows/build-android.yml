@@ -24,6 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Print build info
+        run: echo "=== BUILD INFO ===" && echo "Branch: ${{ github.ref_name }}" && echo "SHA: $(git rev-parse --short HEAD)" && echo "Full SHA: $(git rev-parse HEAD)" && echo "Timestamp: $(date -u)" && echo "==================="
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
@@ -35,6 +38,15 @@ jobs:
 
       - name: Build client SPA for Android
         run: bunx vite build --config vite.config.android.ts
+        env:
+          # Gemini API key for native Guide — injected into the JS bundle at build time.
+          NEW_API_KEY: ${{ secrets.NEW_API_KEY }}
+
+      - name: Write build-info.json into dist
+        run: |
+          echo "{\"sha\":\"$(git rev-parse --short HEAD)\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > dist/build-info.json
+          echo "Build info written to dist/build-info.json"
+          cat dist/build-info.json
 
       - name: Capacitor sync
         run: bunx cap sync android

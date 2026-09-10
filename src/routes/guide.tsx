@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { RotateCcw, Send, Sparkles, WandSparkles } from "lucide-react";
-import arcaneLibrary from "@/assets/arcane-library.png";
+import arcaneLibrary from "@/assets/arcane-library.webp";
 import { Particles } from "@/components/Particles";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
-import { consultArcaneGuide } from "@/lib/arcane.functions";
+import { consultArcaneGuide, getBuildSha } from "@/lib/arcane.functions";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
-import { isNativeAds } from "@/lib/native-ads";
 
 export const Route = createFileRoute("/guide")({
   head: () => ({
@@ -93,10 +92,6 @@ function GuidePage() {
   async function send(override?: string) {
     const text = (override ?? input).trim();
     if (!text || loading) return;
-    if (isNativeAds()) {
-      setError("The Arcane Guide whispers from the web realm only — open AETHORA in your browser to consult him.");
-      return;
-    }
     const next: ChatMessage[] = [...messages, { role: "user", text }];
     setMessages(next);
     setInput("");
@@ -116,10 +111,6 @@ function GuidePage() {
 
   async function retry() {
     if (!lastPayload.current || loading) return;
-    if (isNativeAds()) {
-      setError("The Arcane Guide is only available on the web. Visit AETHORA in your browser.");
-      return;
-    }
     setLoading(true);
     setError(null);
     try {
@@ -325,6 +316,13 @@ function GuidePage() {
           <Sparkles className="float-slow h-5 w-5 text-accent/70" />
         </div>
       )}
+
+      {/* Build version marker (visible in dev/native for debugging) */}
+      <div className="pointer-events-none fixed bottom-1 left-1/2 z-50 -translate-x-1/2 select-none">
+        <span className="rounded bg-black/40 px-2 py-0.5 font-mono text-[0.5rem] text-white/25">
+          build:{getBuildSha()}
+        </span>
+      </div>
     </div>
   );
 }
