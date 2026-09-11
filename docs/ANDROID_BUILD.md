@@ -94,6 +94,25 @@ When `UNITY_ADS_TEST_MODE` is `true` (default), the plugin calls:
 
 These enable test ad behavior. For full control, use the **LevelPlay Integration Test Suite** — it's accessible via `AethoraAds.launchTestSuite()` from the JavaScript bridge.
 
+### App Key vs Game ID — they are DIFFERENT identifiers
+
+`LevelPlay.init()` requires the **LevelPlay App Key**, NOT the Unity Ads Game ID:
+
+- **Unity Ads Game ID** — a 9-digit number (e.g. `800370118`) found in the Unity Dashboard under the app's *Monetization / Ads* settings. This is used by the legacy Unity Ads SDK (`com.unity3d.ads`), not by LevelPlay.
+- **LevelPlay App Key** — an 8–12 character alphanumeric string found in the **LevelPlay platform** (levelplay.unity.com or the Ads Mediation section of the Unity Dashboard) under **Apps → (your app) → Integration / Settings → App Key**. There is one per platform (Android/iOS).
+
+Passing the Game ID to `LevelPlay.init()` fails with **error 2110 "Bad Request - 400"** — this is the most common cause of that error. `800370118` is a Game ID, so init with it as the LevelPlay App Key will always fail with 2110.
+
+Ad unit placement names (`Rewarded_Android`, `Interstitial_Android`) are only checked after a successful init, so they cannot be the cause of a 2110.
+
+### Init diagnostics
+
+The plugin logs the appKey, its length, and the LevelPlay SDK version before init, and logs the numeric error code plus the appKey used on failure. Filter logcat by `AethoraAds`:
+
+```bash
+adb logcat -s AethoraAds
+```
+
 ### JavaScript API
 
 ```ts

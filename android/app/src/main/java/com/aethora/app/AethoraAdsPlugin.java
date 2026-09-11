@@ -123,15 +123,21 @@ public class AethoraAdsPlugin extends Plugin {
             LevelPlay.setAdaptersDebug(true);
         }
 
+        Log.i(TAG, "LevelPlay init starting: appKey=" + appKey
+                + " (length=" + appKey.length() + ")"
+                + " testMode=" + testMode
+                + " sdk=" + LevelPlay.getSdkVersion());
+
         // Build init request
         LevelPlayInitRequest.Builder builder = new LevelPlayInitRequest.Builder(appKey);
         LevelPlayInitRequest request = builder.build();
 
+        final String usedAppKey = appKey;
         LevelPlay.init(activity, request, new LevelPlayInitListener() {
             @Override
             public void onInitSuccess(@NonNull LevelPlayConfiguration configuration) {
                 initialized = true;
-                Log.i(TAG, "LevelPlay initialized successfully");
+                Log.i(TAG, "LevelPlay initialized successfully (appKey=" + usedAppKey + ")");
                 JSObject result = new JSObject();
                 result.put("ok", true);
                 result.put("version", LevelPlay.getSdkVersion());
@@ -140,8 +146,16 @@ public class AethoraAdsPlugin extends Plugin {
 
             @Override
             public void onInitFailed(@NonNull LevelPlayInitError error) {
-                Log.e(TAG, "LevelPlay init failed: " + error.getErrorCode() + " — " + error.getErrorMessage());
-                call.reject("LevelPlay init failed: " + error.getErrorMessage());
+                Log.e(TAG, "LevelPlay init failed: code=" + error.getErrorCode()
+                        + " message=" + error.getErrorMessage()
+                        + " | appKey used=" + usedAppKey
+                        + " (length=" + usedAppKey.length() + ")");
+                Log.e(TAG, "2110/400 usually means the appKey is NOT a LevelPlay App Key — "
+                        + "e.g. a Unity Ads Game ID was passed instead. The LevelPlay App Key "
+                        + "is a different identifier (8-12 chars) found in the LevelPlay "
+                        + "platform under Apps → Integration → App Key.");
+                call.reject("LevelPlay init failed: code=" + error.getErrorCode()
+                        + " — " + error.getErrorMessage());
             }
         });
     }

@@ -89,20 +89,64 @@ export function isNativeAds(): boolean {
 /*  Convenience wrappers                                              */
 /* ------------------------------------------------------------------ */
 
-let initialized = false;
+/* ------------------------------------------------------------------ */
+/*  Init state + readiness gate                                        */
+/* ------------------------------------------------------------------ */
 
 /**
- * Initialize LevelPlay ads. Safe to call multiple times (idempotent).
- * On web this is a no-op.
+ * Single shared init promise. `null` = init has not started yet.
+ * Resolves `true` when the native plugin reports success, `false` on
+ * failure (never rejects, so awaiters need no try/catch). A failed init
+ * is retryable: the next caller gets a fresh native init attempt.
  */
-export async function initNativeAds(config?: AethoraAdsConfig): Promise<void> {
-  if (initialized || !isNativeAds()) return;
-  try {
-    const result = await AethoraAds.initialize(config ?? {});
-    initialized = result.ok;
-  } catch (err) {
-    console.warn("[aethora-ads] native init failed:", err);
+let initPromise: Promise<boolean> | null = null;
+
+/** Whether a native init has been started (successfully or not). */
+export function isNativeAdsInitStarted(): boolean {
+  return isNativeAds() && initPromise !== null;
+}
+
+/**
+ * Resolve once LevelPlay init has finished (or the timeout expired).
+ * `true` = safe to call show*/load* methods. Auto-starts init when no
+ * entry-point call has happened yet, so ad calls can never race it.
+ */
+export function waitForNativeAdsInit(timeoutMs = 10_000): Promise<boolean> {
+  if (!isNativeAds()) return Promise.resolve(false);
+  if (!initPromise) void initNativeAds();
+  if (timeoutMs <= 0) return initPromise!;
+  return Promise.race([
+    initPromise!,
+    new Promise<boolean>((resolve) => setTimeout(() => resolve(false), timeoutMs)),
+  ]);
+}
+
+/**
+ * Initialize LevelPlay ads. Safe to call multiple times (idempotent):
+ * concurrent and repeat calls share one native init.
+ * On web this is a no-op resolving false.
+ *
+ * NOTE: a failure here is almost always a Unity-dashboard config problem,
+ * not a code problem. Error 2110 "Bad Request - 400" from LevelPlay init
+ * typically means the appKey is not a valid LevelPlay App Key (e.g. a
+ * Unity Ads Game ID was used instead — they are different identifiers).
+ */
+export async function initNativeAds(config?: AethoraAdsConfig): Promise<boolean> {
+  if (!isNativeAds()) return false;
+  if (!initPromise) {
+    initPromise = (async () => {
+      try {
+        const result = await AethoraAds.initialize(config ?? {});
+        console.log("[aethora-ads] LevelPlay initialized, SDK version:", result.version);
+        return true;
+      } catch (err) {
+        console.error("[aethora-ads] LevelPlay init failed:", err);
+        initPromise = null; // allow retry on the next ad call
+        return false;
+      }
+    })();
   }
+  return initPromise;
 }
 
 /**
@@ -112,6 +156,9 @@ export async function initNativeAds(config?: AethoraAdsConfig): Promise<void> {
  */
 export async function showNativeRewarded(adUnitId?: string): Promise<RewardResult> {
   if (!isNativeAds()) return { completed: false };
+  // Never show before the SDK finished initializing.
+  const ready = await waitForNativeAdsInit();
+  if (!ready) return { completed: false };
   return AethoraAds.showRewarded(adUnitId ? { adUnitId } : {});
 }
 
@@ -121,6 +168,9 @@ export async function showNativeRewarded(adUnitId?: string): Promise<RewardResul
  */
 export async function showNativeInterstitial(adUnitId?: string): Promise<{ shown: boolean }> {
   if (!isNativeAds()) return { shown: false };
+  // Never show before the SDK finished initializing.
+  const ready = await waitForNativeAdsInit();
+  if (!ready) return { shown: false };
   return AethoraAds.showInterstitial(adUnitId ? { adUnitId } : {});
 }
 

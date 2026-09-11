@@ -23,7 +23,7 @@ const config: CapacitorConfig = {
   },
   plugins: {
     AethoraAds: {
-      appKey: process.env.UNITY_LEVELPLAY_APP_KEY ?? "800370118",
+      appKey: process.env.UNITY_LEVELPLAY_APP_KEY ?? "27d91be0d",
       rewardedAdUnitId: process.env.UNITY_REWARDED_AD_UNIT_ID ?? "Rewarded_Android",
       interstitialAdUnitId: process.env.UNITY_INTERSTITIAL_AD_UNIT_ID ?? "Interstitial_Android",
       bannerAdUnitId: "",
