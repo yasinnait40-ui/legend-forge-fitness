@@ -163,12 +163,7 @@ export function FreeBoostButton({
       if (!completed) {
         // Ad was skipped, closed early, failed to load, or failed to show
         if (mounted.current) {
-          toast.error(
-            t(
-              "ads.boostFailed",
-              "The boost did not answer. Watch the full ad to receive your reward.",
-            ),
-          );
+          toast.error("DEBUG: Ad resolved completed=false");
         }
         return;
       }
@@ -186,11 +181,10 @@ export function FreeBoostButton({
           ),
         );
       }
-    } catch {
+    } catch (e) {
       if (mounted.current) {
-        toast.error(
-          t("ads.boostFailed", "The boost did not answer. Watch the full ad to receive your reward."),
-        );
+        const msg = e instanceof Error ? e.message : String(e);
+        toast.error(`DEBUG ERROR: ${msg}`);
       }
     } finally {
       if (mounted.current) setState("idle");
