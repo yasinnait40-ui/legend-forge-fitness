@@ -25,6 +25,7 @@ import {
   isNativeAds,
   showNativeRewarded,
   showNativeInterstitial,
+  waitForNativeAdsInit,
 } from "@/lib/native-ads";
 
 /* ------------------------------------------------------------------ */
@@ -90,6 +91,7 @@ async function showWebRewardedAd(): Promise<void> {
 
 async function showRewardedAdUnified(): Promise<boolean> {
   if (isNativeAds()) {
+    await waitForNativeAdsInit();
     const result = await showNativeRewarded();
     return result.completed;
   }
