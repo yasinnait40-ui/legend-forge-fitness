@@ -26,6 +26,8 @@ import {
   showNativeRewarded,
   showNativeInterstitial,
   waitForNativeAdsInit,
+  getNativeAdsInitError,
+  isNativeAdsInitialized,
 } from "@/lib/native-ads";
 
 /* ------------------------------------------------------------------ */
@@ -92,6 +94,9 @@ async function showWebRewardedAd(): Promise<void> {
 async function showRewardedAdUnified(): Promise<boolean> {
   if (isNativeAds()) {
     await waitForNativeAdsInit();
+    if (!isNativeAdsInitialized()) {
+      throw new Error(`INIT FAILED: ${getNativeAdsInitError() ?? "unknown reason"}`);
+    }
     const result = await showNativeRewarded();
     return result.completed;
   }
