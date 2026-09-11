@@ -90,6 +90,7 @@ export function isNativeAds(): boolean {
 /* ------------------------------------------------------------------ */
 
 let initialized = false;
+let initPromise: Promise<void> | null = null;
 
 /**
  * Initialize LevelPlay ads. Safe to call multiple times (idempotent).
@@ -97,11 +98,26 @@ let initialized = false;
  */
 export async function initNativeAds(config?: AethoraAdsConfig): Promise<void> {
   if (initialized || !isNativeAds()) return;
-  try {
-    const result = await AethoraAds.initialize(config ?? {});
-    initialized = result.ok;
-  } catch (err) {
-    console.warn("[aethora-ads] native init failed:", err);
+  if (initPromise) return initPromise;
+  initPromise = (async () => {
+    try {
+      const result = await AethoraAds.initialize(config ?? {});
+      initialized = result.ok;
+    } catch (err) {
+      console.warn("[aethora-ads] native init failed:", err);
+    }
+  })();
+  return initPromise;
+}
+
+/**
+ * Wait for native ad initialization to complete (if in progress or not
+ * yet started). Safe to call even if initNativeAds() was never invoked.
+ */
+export async function waitForNativeAdsInit(): Promise<void> {
+  if (initialized || !isNativeAds()) return;
+  if (initPromise) {
+    await initPromise;
   }
 }
 
