@@ -86,10 +86,6 @@ export function isNativeAds(): boolean {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Convenience wrappers                                              */
-/* ------------------------------------------------------------------ */
-
-/* ------------------------------------------------------------------ */
 /*  Init state + readiness gate                                        */
 /* ------------------------------------------------------------------ */
 
@@ -100,6 +96,7 @@ export function isNativeAds(): boolean {
  * is retryable: the next caller gets a fresh native init attempt.
  */
 let initPromise: Promise<boolean> | null = null;
+let lastInitError: string | null = null;
 
 /** Whether a native init has been started (successfully or not). */
 export function isNativeAdsInitStarted(): boolean {
@@ -138,14 +135,28 @@ export async function initNativeAds(config?: AethoraAdsConfig): Promise<boolean>
       try {
         const result = await AethoraAds.initialize(config ?? {});
         console.log("[aethora-ads] LevelPlay initialized, SDK version:", result.version);
+        lastInitError = null;
         return true;
       } catch (err) {
+        lastInitError = err instanceof Error ? err.message : String(err);
         console.error("[aethora-ads] LevelPlay init failed:", err);
         initPromise = null; // allow retry on the next ad call
         return false;
       }
     })();
   }
+  return initPromise;
+}
+
+/** Returns the last init failure reason, if any (null if init succeeded or hasn't run). */
+export function getNativeAdsInitError(): string | null {
+  return lastInitError;
+}
+
+/** Whether native ad initialization has completed successfully. */
+export async function isNativeAdsInitialized(): Promise<boolean> {
+  if (!isNativeAds()) return false;
+  if (!initPromise) return false;
   return initPromise;
 }
 
