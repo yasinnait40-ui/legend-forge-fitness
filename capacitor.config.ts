@@ -11,7 +11,7 @@ const config: CapacitorConfig = {
     AethoraAds: {
       appKey: "27d91be0d",
       rewardedAdUnitId: "Rewarded_Android",
-      interstitialAdUnitId: "Interstitial_Android",
+      interstitialAdUnitId: 
       bannerAdUnitId: "",
       testMode: true,
     },
