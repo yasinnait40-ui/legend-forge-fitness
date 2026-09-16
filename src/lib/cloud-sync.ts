@@ -121,26 +121,27 @@ function statsRow(userId: string, s: GameState) {
 async function pushStats(userId: string) {
   const s = getGameState();
   const row = statsRow(userId, s);
-  // Write to character_stats (individual stat columns).
+  // character_stats keeps its own grants, so the individual stat columns are
+  // still a direct upsert.
   const { error } = await supabase
     .from("character_stats")
     .upsert(row as never, { onConflict: "user_id" });
   if (error) console.error("[cloud-sync] stats push failed", error.message);
-  // Also keep game_states.xp/streak in sync so pullAndMerge reads
-  // the latest values regardless of which table it hits.
-  const { error: gsErr } = await supabase
-    .from("game_states")
-    .upsert(
-      {
-        user_id: userId,
-        xp: s.xp,
-        streak: s.streak,
-        best_streak: s.bestStreak,
-        last_active_date: s.lastActiveDate,
-        updated_at: new Date().toISOString(),
-      } as never,
-      { onConflict: "user_id" },
-    );
+  // game_states is NOT writable from the browser: 20260904000000 revoked
+  // INSERT/UPDATE/DELETE so a tampered client cannot mint coins or gems. The
+  // progression mirror therefore goes through sync_progress(), which runs as
+  // the definer, addresses the caller's own row via auth.uid(), and cannot
+  // touch the wallet or the authoritative completion counters.
+  const { error: gsErr } = await supabase.rpc(
+    "sync_progress" as never,
+    {
+      p_xp: s.xp,
+      p_streak: s.streak,
+      p_best_streak: s.bestStreak,
+      p_last_active_date: s.lastActiveDate,
+      p_stats: s.stats,
+    } as never,
+  );
   if (gsErr) console.error("[cloud-sync] game_states sync failed", gsErr.message);
 }
 
@@ -152,17 +153,15 @@ function schedulePush(userId: string) {
 }
 
 /**
- * Persist the discovered-regions list to the player's game_states row. RLS
- * still enforces owner-only writes; this only ever merges region ids upward,
- * so replaying it can never lose progression.
+ * Persist the discovered-regions list to the player's game_states row via
+ * sync_progress(). The union happens server-side, so replaying this can never
+ * lose progression, and the client keeps no direct write access to the table.
  */
-async function pushDiscoveredRegions(userId: string) {
-  const { error } = await supabase
-    .from("game_states")
-    .upsert({ user_id: userId, discovered_regions: getGameState().discoveredRegions } as never, {
-      onConflict: "user_id",
-      ignoreDuplicates: false,
-    });
+async function pushDiscoveredRegions() {
+  const { error } = await supabase.rpc(
+    "sync_progress" as never,
+    { p_discovered_regions: getGameState().discoveredRegions } as never,
+  );
   if (error) console.error("[cloud-sync] regions push failed", error.message);
 }
 
@@ -170,7 +169,7 @@ async function pushDiscoveredRegions(userId: string) {
 export function notifyRegionsChanged(): void {
   if (!currentUserId) return;
   schedulePush(currentUserId);
-  void pushDiscoveredRegions(currentUserId);
+  void pushDiscoveredRegions();
 }
 
 /**
@@ -198,7 +197,9 @@ async function pullAndMerge(userId: string) {
       .maybeSingle(),
     supabase
       .from("character_stats")
-      .select("xp, streak, best_streak, last_active_date, strength, endurance, agility, vitality, recovery")
+      .select(
+        "xp, streak, best_streak, last_active_date, strength, endurance, agility, vitality, recovery",
+      )
       .eq("user_id", userId)
       .maybeSingle(),
     supabase

@@ -336,6 +336,17 @@ export type Database = {
         Args: { p_item_id: string };
         Returns: Json;
       };
+      sync_progress: {
+        Args: {
+          p_best_streak?: number;
+          p_discovered_regions?: Json;
+          p_last_active_date?: string;
+          p_stats?: Json;
+          p_streak?: number;
+          p_xp?: number;
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       [_ in never]: never;
