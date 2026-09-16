@@ -50,4 +50,10 @@ jobs:
 
       - name: Push to hub
         if: steps.check.outputs.configured == 'true'
-        run: git push --force "https://yasinnait40-ui:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" main
+        run: |
+          if git push --force "https://yasinnait40-ui:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" main; then
+            echo "::notice title=Hugging Face sync complete::Pushed main to ${HF_SPACE}."
+          else
+            echo "::error title=Hugging Face sync failed::Could not push to ${HF_SPACE}. Hugging Face replies 'Repository not found' BOTH when the Space does not exist AND when the token cannot write to it, so check in this order: (1) the Space ${HF_SPACE} exists and is owned by the same account as HF_TOKEN; (2) HF_TOKEN was created with WRITE access and, for a private Space, access to it; (3) otherwise set the HF_SPACE repository variable to the correct Space, or delete this workflow if the mirror is not wanted."
+            exit 1
+          fi
