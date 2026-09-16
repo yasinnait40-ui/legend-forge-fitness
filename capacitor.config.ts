@@ -1,18 +1,29 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
- * Capacitor configuration for AETHORA Android build.
+ * Capacitor configuration for the AETHORA Android build.
  *
  * webDir: points to the client-only SPA output from `vite build --config vite.config.android.ts`.
  * server.url: REMOVED — the production Android app bundles assets locally.
  *
- * Ads plugin config is read from environment variables at build/sync time.
- * Set these before `bunx cap sync android`:
- *   UNITY_LEVELPLAY_APP_KEY    — Unity LevelPlay app key (required)
- *   UNITY_REWARDED_AD_UNIT_ID  — Rewarded ad unit ID (required for ads)
- *   UNITY_INTERSTITIAL_AD_UNIT_ID — Interstitial ad unit ID (optional)
- *   UNITY_BANNER_AD_UNIT_ID    — Banner ad unit ID (optional)
- *   UNITY_ADS_TEST_MODE        — "true" or "false" (default: true)
+ * ---------------------------------------------------------------------------
+ * Unity LevelPlay (Ads Mediation) — production configuration
+ * ---------------------------------------------------------------------------
+ * The App Key and ad unit IDs below are the real production values synced into
+ * the APK by `bunx cap sync android` (they end up in
+ * android/app/src/main/assets/capacitor.config.json and are read by
+ * AethoraAdsPlugin.java). Ad identifiers are public client-side values — they
+ * ship inside every APK — so they live in source control rather than in CI
+ * variables. Never put a Unity *secret* here.
+ *
+ * Only two ad formats are used:
+ *   - Rewarded (`rewardedAdUnitId`)     → unlocks premium perks (Free Boost).
+ *   - Interstitial (`interstitialAdUnitId`) → shown only at natural transitions
+ *     (trial / boss victory). There is deliberately NO banner ad unit: the
+ *     plugin no longer implements banners, so nothing can pin an ad to the UI.
+ *
+ * testMode is hard-disabled in source. Test mode must only ever be enabled by
+ * passing `{ testMode: true }` to `AethoraAds.initialize()` from a debug build.
  */
 const config: CapacitorConfig = {
   appId: "com.aethora.app",
@@ -23,11 +34,13 @@ const config: CapacitorConfig = {
   },
   plugins: {
     AethoraAds: {
-      appKey: process.env.UNITY_LEVELPLAY_APP_KEY ?? "27d91be0d",
-      rewardedAdUnitId: process.env.UNITY_REWARDED_AD_UNIT_ID ?? "Rewarded_Android",
-      interstitialAdUnitId: process.env.UNITY_INTERSTITIAL_AD_UNIT_ID ?? "Interstitial_Android",
-      bannerAdUnitId: "",
-      testMode: process.env.UNITY_ADS_TEST_MODE !== "false",
+      // LevelPlay App Key — levelplay.unity.com → Apps → App Key.
+      appKey: "28280b85d",
+      // LevelPlay ad unit IDs (Rewarded + Interstitial only).
+      rewardedAdUnitId: "btgfo2fi6m24q9vd",
+      interstitialAdUnitId: "f879o6uemgg4d59z",
+      // Production: test mode OFF.
+      testMode: false,
     },
   },
 };

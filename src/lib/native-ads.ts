@@ -4,6 +4,9 @@
  * On native (Android/iOS): uses the Capacitor bridge to call the Kotlin/Java plugin.
  * On web: provides no-op stubs so existing code can call these without crashes.
  *
+ * Only two formats exist — rewarded (premium perk unlocks) and interstitial
+ * (natural transitions). Banners are intentionally unsupported.
+ *
  * Configuration comes from capacitor.config.ts → `plugins.AethoraAds` →
  * which the native plugin reads at runtime. JS overrides are also accepted
  * in the `initialize()` call.
@@ -18,7 +21,6 @@ export interface AethoraAdsConfig {
   appKey?: string;
   rewardedAdUnitId?: string;
   interstitialAdUnitId?: string;
-  bannerAdUnitId?: string;
   testMode?: boolean;
 }
 
@@ -34,12 +36,6 @@ export interface NativeAdPlugin {
   showRewarded(options: { adUnitId?: string }): Promise<RewardResult>;
   loadRewarded(options: { adUnitId?: string }): Promise<{ loaded: boolean }>;
   isRewardedReady(): Promise<{ ready: boolean }>;
-  showBanner(options: {
-    adUnitId?: string;
-    position?: "top" | "bottom";
-  }): Promise<{ shown: boolean }>;
-  hideBanner(): Promise<void>;
-  destroyBanner(): Promise<void>;
   launchTestSuite(): Promise<void>;
 }
 
@@ -63,11 +59,6 @@ const WebAdPlugin: NativeAdPlugin = {
   async isRewardedReady() {
     return { ready: false };
   },
-  async showBanner() {
-    return { shown: false };
-  },
-  async hideBanner() {},
-  async destroyBanner() {},
   async launchTestSuite() {},
 };
 
@@ -75,10 +66,9 @@ const WebAdPlugin: NativeAdPlugin = {
 /*  Plugin registration                                               */
 /* ------------------------------------------------------------------ */
 
-const AethoraAds: NativeAdPlugin =
-  Capacitor.isNativePlatform()
-    ? registerPlugin<NativeAdPlugin>("AethoraAds")
-    : WebAdPlugin;
+const AethoraAds: NativeAdPlugin = Capacitor.isNativePlatform()
+  ? registerPlugin<NativeAdPlugin>("AethoraAds")
+  : WebAdPlugin;
 
 /** Whether running on a native platform (Android/iOS via Capacitor). */
 export function isNativeAds(): boolean {
@@ -105,7 +95,7 @@ export function isNativeAdsInitStarted(): boolean {
 
 /**
  * Resolve once LevelPlay init has finished (or the timeout expired).
- * `true` = safe to call show*/load* methods. Auto-starts init when no
+ * `true` = safe to call the show / load methods. Auto-starts init when no
  * entry-point call has happened yet, so ad calls can never race it.
  */
 export function waitForNativeAdsInit(timeoutMs = 10_000): Promise<boolean> {
@@ -185,32 +175,7 @@ export async function showNativeInterstitial(adUnitId?: string): Promise<{ shown
   return AethoraAds.showInterstitial(adUnitId ? { adUnitId } : {});
 }
 
-/**
- * Show a banner ad. On web, this is a no-op.
- */
-export async function showNativeBanner(
-  adUnitId?: string,
-  position: "top" | "bottom" = "bottom",
-): Promise<{ shown: boolean }> {
-  if (!isNativeAds()) return { shown: false };
-  const opts: { adUnitId?: string; position: "top" | "bottom" } = { position };
-  if (adUnitId) opts.adUnitId = adUnitId;
-  return AethoraAds.showBanner(opts);
-}
-
-/** Hide the current banner ad. */
-export async function hideNativeBanner(): Promise<void> {
-  if (!isNativeAds()) return;
-  await AethoraAds.hideBanner();
-}
-
-/** Destroy and remove the banner view. */
-export async function destroyNativeBanner(): Promise<void> {
-  if (!isNativeAds()) return;
-  await AethoraAds.destroyBanner();
-}
-
-/** Launch the LevelPlay test suite (for development). */
+/** Launch the LevelPlay test suite (a diagnostic tool only — it does not turn on test-mode ads). */
 export async function launchTestSuite(): Promise<void> {
   if (!isNativeAds()) return;
   await AethoraAds.launchTestSuite();

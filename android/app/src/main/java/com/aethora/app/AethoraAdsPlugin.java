@@ -2,10 +2,6 @@ package com.aethora.app;
 
 import android.app.Activity;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,13 +15,10 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.unity3d.mediation.LevelPlay;
 import com.unity3d.mediation.LevelPlayAdInfo;
 import com.unity3d.mediation.LevelPlayAdError;
-import com.unity3d.mediation.LevelPlayAdSize;
 import com.unity3d.mediation.LevelPlayConfiguration;
 import com.unity3d.mediation.LevelPlayInitError;
 import com.unity3d.mediation.LevelPlayInitListener;
 import com.unity3d.mediation.LevelPlayInitRequest;
-import com.unity3d.mediation.banner.LevelPlayBannerAdView;
-import com.unity3d.mediation.banner.LevelPlayBannerAdViewListener;
 import com.unity3d.mediation.interstitial.LevelPlayInterstitialAd;
 import com.unity3d.mediation.interstitial.LevelPlayInterstitialAdListener;
 import com.unity3d.mediation.rewarded.LevelPlayReward;
@@ -37,6 +30,10 @@ import com.unity3d.mediation.rewarded.LevelPlayRewardedAdListener;
  *
  * Bridge methods mirror the JS API in src/lib/native-ads.ts.
  * Configuration is read from capacitor.config.json → plugins.AethoraAds.
+ *
+ * Only two formats are implemented: rewarded (premium perk unlocks) and
+ * interstitial (natural transitions). Banner support was removed on purpose —
+ * no ad may be permanently attached to the app chrome.
  */
 @CapacitorPlugin(name = "AethoraAds")
 public class AethoraAdsPlugin extends Plugin {
@@ -46,10 +43,6 @@ public class AethoraAdsPlugin extends Plugin {
     // LevelPlay ad objects
     @Nullable private LevelPlayRewardedAd rewardedAd;
     @Nullable private LevelPlayInterstitialAd interstitialAd;
-    @Nullable private LevelPlayBannerAdView bannerAdView;
-
-    // Banner container added to the activity
-    @Nullable private FrameLayout bannerContainer;
 
     // State
     private boolean initialized = false;
@@ -59,7 +52,6 @@ public class AethoraAdsPlugin extends Plugin {
     // Ad unit IDs from config
     private String rewardedAdUnitId = "";
     private String interstitialAdUnitId = "";
-    private String bannerAdUnitId = "";
 
     /* ------------------------------------------------------------------ */
     /*  Lifecycle                                                         */
@@ -72,16 +64,6 @@ public class AethoraAdsPlugin extends Plugin {
         // this plugin's own config section, so values are read directly.
         rewardedAdUnitId = getConfig().getString("rewardedAdUnitId", "");
         interstitialAdUnitId = getConfig().getString("interstitialAdUnitId", "");
-        bannerAdUnitId = getConfig().getString("bannerAdUnitId", "");
-    }
-
-    @Override
-    public void handleOnDestroy() {
-        if (bannerAdView != null) {
-            bannerAdView.destroy();
-            bannerAdView = null;
-        }
-        super.handleOnDestroy();
     }
 
     /* ------------------------------------------------------------------ */
@@ -96,10 +78,13 @@ public class AethoraAdsPlugin extends Plugin {
         }
 
         String appKey = call.getString("appKey", getConfig().getString("appKey", ""));
-        boolean testMode = call.getBoolean("testMode", getConfig().getBoolean("testMode", true));
+        // PRODUCTION DEFAULT IS FALSE. Test mode is only enabled when a caller
+        // explicitly passes { testMode: true } — never by default, never from
+        // the synced capacitor.config.json.
+        boolean testMode = call.getBoolean("testMode", getConfig().getBoolean("testMode", false));
 
         if (appKey.isEmpty()) {
-            call.reject("LevelPlay app key is not configured. Set UNITY_LEVELPLAY_APP_KEY in capacitor.config.ts.");
+            call.reject("LevelPlay app key is not configured. Set plugins.AethoraAds.appKey in capacitor.config.ts, then re-run `npx cap sync android`.");
             return;
         }
 
@@ -108,8 +93,6 @@ public class AethoraAdsPlugin extends Plugin {
         if (rId != null && !rId.isEmpty()) rewardedAdUnitId = rId;
         String iId = call.getString("interstitialAdUnitId", null);
         if (iId != null && !iId.isEmpty()) interstitialAdUnitId = iId;
-        String bId = call.getString("bannerAdUnitId", null);
-        if (bId != null && !bId.isEmpty()) bannerAdUnitId = bId;
 
         Activity activity = getActivity();
         if (activity == null) {
@@ -320,101 +303,7 @@ public class AethoraAdsPlugin extends Plugin {
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Banner ads                                                        */
-    /* ------------------------------------------------------------------ */
-
-    @PluginMethod
-    public void showBanner(PluginCall call) {
-        String unitId = getAdUnitId(call, "adUnitId", bannerAdUnitId);
-        if (unitId.isEmpty()) { call.reject("Banner ad unit ID not configured."); return; }
-
-        String position = call.getString("position", "bottom");
-        Activity activity = getActivity();
-        if (activity == null) { call.reject("Activity not available"); return; }
-
-        // Remove existing banner
-        destroyBannerView();
-
-        activity.runOnUiThread(() -> {
-            LevelPlayAdSize adSize = LevelPlayAdSize.BANNER;
-            LevelPlayBannerAdView.Config config = new LevelPlayBannerAdView.Config(adSize, null, null);
-            bannerAdView = new LevelPlayBannerAdView(activity, unitId, config);
-
-            bannerAdView.setBannerListener(new LevelPlayBannerAdViewListener() {
-                @Override public void onAdLoaded(@NonNull LevelPlayAdInfo adInfo) {
-                    JSObject res = new JSObject();
-                    res.put("shown", true);
-                    call.resolve(res);
-                }
-                @Override public void onAdLoadFailed(@NonNull LevelPlayAdError error) {
-                    call.reject("Banner load failed: " + error.getErrorMessage());
-                }
-                @Override public void onAdDisplayed(@NonNull LevelPlayAdInfo adInfo) {}
-                // NOTE: the banner listener's displayFailed signature reverses
-                // the argument order used by the rewarded/interstitial listeners.
-                @Override public void onAdDisplayFailed(@NonNull LevelPlayAdInfo adInfo, @NonNull LevelPlayAdError error) {}
-                @Override public void onAdClicked(@NonNull LevelPlayAdInfo adInfo) {}
-                @Override public void onAdCollapsed(@NonNull LevelPlayAdInfo adInfo) {}
-                @Override public void onAdExpanded(@NonNull LevelPlayAdInfo adInfo) {}
-                @Override public void onAdLeftApplication(@NonNull LevelPlayAdInfo adInfo) {}
-            });
-
-            // Add banner to a FrameLayout overlay
-            bannerContainer = new FrameLayout(activity);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            params.gravity = "top".equals(position) ? Gravity.TOP : Gravity.BOTTOM;
-            bannerContainer.addView(bannerAdView, new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
-
-            // Add to activity's content view
-            FrameLayout activityContent = activity.findViewById(android.R.id.content);
-            if (activityContent != null) {
-                activityContent.addView(bannerContainer, params);
-            }
-
-            bannerAdView.loadAd();
-        });
-    }
-
-    @PluginMethod
-    public void hideBanner(PluginCall call) {
-        Activity activity = getActivity();
-        if (activity == null) { call.resolve(); return; }
-        activity.runOnUiThread(() -> {
-            if (bannerContainer != null) {
-                bannerContainer.setVisibility(View.GONE);
-            }
-        });
-        call.resolve();
-    }
-
-    @PluginMethod
-    public void destroyBanner(PluginCall call) {
-        Activity activity = getActivity();
-        if (activity == null) { destroyBannerView(); call.resolve(); return; }
-        activity.runOnUiThread(this::destroyBannerView);
-        call.resolve();
-    }
-
-    private void destroyBannerView() {
-        if (bannerAdView != null) {
-            bannerAdView.destroy();
-            bannerAdView = null;
-        }
-        if (bannerContainer != null) {
-            ViewGroup parent = (ViewGroup) bannerContainer.getParent();
-            if (parent != null) parent.removeView(bannerContainer);
-            bannerContainer = null;
-        }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /*  Test suite                                                        */
+    /*  Test suite (diagnostics only — does not enable test-mode ads)      */
     /* ------------------------------------------------------------------ */
 
     @PluginMethod

@@ -65,34 +65,58 @@ Generate the base64 value:
 base64 -w 0 release.keystore
 ```
 
-### Required GitHub Variables (for ad configuration)
+### Ad configuration
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `UNITY_LEVELPLAY_APP_KEY` | Unity LevelPlay app key from your dashboard | `2228794` |
-| `UNITY_REWARDED_AD_UNIT_ID` | Rewarded ad unit ID | `YOUR_REWARDED_ID` |
-| `UNITY_INTERSTITIAL_AD_UNIT_ID` | Interstitial ad unit ID (optional) | `YOUR_INTERSTITIAL_ID` |
-| `UNITY_BANNER_AD_UNIT_ID` | Banner ad unit ID (optional) | `YOUR_BANNER_ID` |
-| `UNITY_ADS_TEST_MODE` | `"true"` for development, `"false"` for production | `true` |
+There are **no** GitHub variables for ads. The production Unity LevelPlay App
+Key and ad unit IDs are committed in `capacitor.config.ts` under
+`plugins.AethoraAds`, and `npx cap sync android` copies them into
+`android/app/src/main/assets/capacitor.config.json`, where
+`AethoraAdsPlugin.java` reads them at runtime.
 
-Set these in your repository: **Settings → Secrets and variables → Actions → Variables**.
+Ad identifiers are public client-side values — they ship inside every APK — so
+they belong in source control, not in CI variables. Keeping them out of CI also
+means a stale repository variable can never override the production config.
+
+Only two formats are wired up:
+
+| Format | Config key | Used for |
+|--------|------------|----------|
+| Rewarded | `rewardedAdUnitId` | Unlocking the premium perk (Free Boost → bonus treasure chest) |
+| Interstitial | `interstitialAdUnitId` | Natural transitions only (trial / boss victory), rate-limited |
+
+There is no `bannerAdUnitId`: banner support was removed from both the plugin and
+the JS bridge, so no ad can be pinned to the app chrome.
 
 ## Unity LevelPlay Setup
 
 1. Create a Unity LevelPlay account at https://dashboard.unity.com
 2. Create a new app in the LevelPlay dashboard
-3. Add ad units (Rewarded, Interstitial, Banner)
+3. Add ad units (Rewarded and Interstitial — banners are not used)
 4. Copy your **App Key** and **Ad Unit IDs**
 5. For testing: register test devices in the LevelPlay dashboard
 6. For production: configure your monetization waterfall/placement
 
 ### Test Mode
 
-When `UNITY_ADS_TEST_MODE` is `true` (default), the plugin calls:
+**Test mode is OFF in production and must stay that way.** `capacitor.config.ts`
+sets `testMode: false`, and `AethoraAdsPlugin.java` defaults to `false` when the
+key is absent. The plugin only applies test behaviour when a caller explicitly
+passes `testMode: true`:
+
+```ts
+await initNativeAds({ testMode: true }); // debug builds only
+```
+
+which makes the plugin call:
 - `LevelPlay.setMetaData("is_test_mode", "true")`
 - `LevelPlay.setAdaptersDebug(true)`
 
-These enable test ad behavior. For full control, use the **LevelPlay Integration Test Suite** — it's accessible via `AethoraAds.launchTestSuite()` from the JavaScript bridge.
+Never hardcode `testMode: true` in `capacitor.config.ts` — real ads (and real
+revenue) would be replaced by test ads in production builds.
+
+For ad verification without enabling test mode, use the **LevelPlay Integration
+Test Suite** via `AethoraAds.launchTestSuite()` from the JavaScript bridge, or
+register your device as a test device in the LevelPlay dashboard.
 
 ### App Key vs Game ID — they are DIFFERENT identifiers
 
@@ -103,7 +127,7 @@ These enable test ad behavior. For full control, use the **LevelPlay Integration
 
 Passing the Game ID to `LevelPlay.init()` fails with **error 2110 "Bad Request - 400"** — this is the most common cause of that error. `800370118` is a Game ID, so init with it as the LevelPlay App Key will always fail with 2110.
 
-Ad unit placement names (`Rewarded_Android`, `Interstitial_Android`) are only checked after a successful init, so they cannot be the cause of a 2110.
+Ad unit IDs are only checked after a successful init, so they cannot be the cause of a 2110.
 
 ### Init diagnostics
 
@@ -156,5 +180,5 @@ android/app/.../AethoraAdsPlugin.java → Native LevelPlay integration
 ## Troubleshooting
 
 - **Blank screen**: Ensure `bunx vite build --config vite.config.android.ts` produced `dist/index.html`
-- **Ad not showing**: Check `UNITY_LEVELPLAY_APP_KEY` is set; verify device is registered as test in LevelPlay dashboard
+- **Ad not showing**: Confirm `plugins.AethoraAds.appKey` is set in `capacitor.config.ts` and re-run `npx cap sync android`; verify the device is registered as a test device in the LevelPlay dashboard
 - **Build fails**: Run `bunx cap sync android` first — it copies web assets and generates the Capacitor config

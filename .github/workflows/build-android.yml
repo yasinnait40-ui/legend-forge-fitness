@@ -53,14 +53,12 @@ jobs:
           java-version: '17'
 
       - name: Build mobile SPA (with cache busting)
+        # Unity LevelPlay identifiers are committed in capacitor.config.ts, so
+        # no UNITY_* variables are needed here — that removes any chance of a
+        # stale CI variable overriding the production ad configuration.
         run: bun run build:mobile
         env:
           NEW_API_KEY: ${{ secrets.NEW_API_KEY }}
-          UNITY_LEVELPLAY_APP_KEY: ${{ vars.UNITY_LEVELPLAY_APP_KEY }}
-          UNITY_REWARDED_AD_UNIT_ID: ${{ vars.UNITY_REWARDED_AD_UNIT_ID }}
-          UNITY_INTERSTITIAL_AD_UNIT_ID: ${{ vars.UNITY_INTERSTITIAL_AD_UNIT_ID }}
-          UNITY_BANNER_AD_UNIT_ID: ${{ vars.UNITY_BANNER_AD_UNIT_ID }}
-          UNITY_ADS_TEST_MODE: ${{ vars.UNITY_ADS_TEST_MODE || 'true' }}
 
       - name: Verify build output
         run: |
@@ -90,12 +88,6 @@ jobs:
       - name: Sync Capacitor Android
         run: |
           npx cap sync android
-        env:
-          UNITY_LEVELPLAY_APP_KEY: ${{ vars.UNITY_LEVELPLAY_APP_KEY }}
-          UNITY_REWARDED_AD_UNIT_ID: ${{ vars.UNITY_REWARDED_AD_UNIT_ID }}
-          UNITY_INTERSTITIAL_AD_UNIT_ID: ${{ vars.UNITY_INTERSTITIAL_AD_UNIT_ID }}
-          UNITY_BANNER_AD_UNIT_ID: ${{ vars.UNITY_BANNER_AD_UNIT_ID }}
-          UNITY_ADS_TEST_MODE: ${{ vars.UNITY_ADS_TEST_MODE || 'true' }}
 
       - name: Decode keystore (release builds only)
         if: ${{ vars.ANDROID_KEYSTORE_BASE64 != '' }}
