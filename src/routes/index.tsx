@@ -5,6 +5,7 @@ import { ChevronRight, Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide
 import homeKingdom from "@/assets/home-kingdom.webp";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
+import { EconomyBar } from "@/components/EconomyBar";
 import { FreeBoostButton } from "@/components/NativeAds";
 import { TreasureChest } from "@/components/TreasureChest";
 import { RunePanel, RuneHeading } from "@/components/RunePanel";
@@ -85,6 +86,9 @@ function HomePage() {
           {t("home.subtitle")}
         </p>
       </header>
+
+      {/* Wallet + daily reward + way into the shop, at the top of the kingdom. */}
+      <EconomyBar />
 
       {/*
        * CINEMATIC KING — the throne room audience.

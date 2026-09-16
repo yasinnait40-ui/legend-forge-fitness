@@ -12,9 +12,12 @@ export type Database = {
         Row: {
           achievements: Json;
           best_streak: number;
+          coins: number;
           discovered_regions: Json | null;
           equipment: Json;
+          gems: number;
           last_active_date: string | null;
+          last_daily_claim_at: string | null;
           level: number;
           stats: Json;
           streak: number;
@@ -27,9 +30,12 @@ export type Database = {
         Insert: {
           achievements?: Json;
           best_streak?: number;
+          coins?: number;
           discovered_regions?: Json | null;
           equipment?: Json;
+          gems?: number;
           last_active_date?: string | null;
+          last_daily_claim_at?: string | null;
           level?: number;
           stats?: Json;
           streak?: number;
@@ -289,13 +295,45 @@ export type Database = {
         };
         Relationships: [];
       };
+      shop_items: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          item_id: string;
+          name: string;
+          price_coins: number;
+          price_gems: number;
+          slot: string;
+          sort_order: number;
+        };
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          item_id: string;
+          name: string;
+          price_coins: number;
+          price_gems?: number;
+          slot: string;
+          sort_order?: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["shop_items"]["Insert"]>;
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
+      claim_daily_reward: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
       complete_activity: {
         Args: { p_activity_id: string; p_kind: string };
+        Returns: Json;
+      };
+      purchase_shop_item: {
+        Args: { p_item_id: string };
         Returns: Json;
       };
     };

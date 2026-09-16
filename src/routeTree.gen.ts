@@ -22,8 +22,10 @@ import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as QuestsRouteImport } from './routes/quests'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrialsRouteImport } from './routes/trials'
+import { Route as ApiGuideRouteImport } from './routes/api/guide'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as BossBossIdRouteImport } from './routes/boss.$bossId'
 import { Route as ChatFriendIdRouteImport } from './routes/chat.$friendId'
@@ -93,6 +95,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -101,6 +108,11 @@ const TermsRoute = TermsRouteImport.update({
 const TrialsRoute = TrialsRouteImport.update({
   id: '/trials',
   path: '/trials',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGuideRoute = ApiGuideRouteImport.update({
+  id: '/api/guide',
+  path: '/api/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
@@ -133,8 +145,10 @@ export interface FileRoutesByFullPath {
   '/quests': typeof QuestsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
+  '/api/guide': typeof ApiGuideRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/boss/$bossId': typeof BossBossIdRoute
   '/chat/$friendId': typeof ChatFriendIdRoute
@@ -153,8 +167,10 @@ export interface FileRoutesByTo {
   '/quests': typeof QuestsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
+  '/api/guide': typeof ApiGuideRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/boss/$bossId': typeof BossBossIdRoute
   '/chat/$friendId': typeof ChatFriendIdRoute
@@ -174,8 +190,10 @@ export interface FileRoutesById {
   '/quests': typeof QuestsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
   '/trials': typeof TrialsRoute
+  '/api/guide': typeof ApiGuideRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/boss/$bossId': typeof BossBossIdRoute
   '/chat/$friendId': typeof ChatFriendIdRoute
@@ -196,8 +214,10 @@ export interface FileRouteTypes {
     | '/quests'
     | '/reset-password'
     | '/settings'
+    | '/shop'
     | '/terms'
     | '/trials'
+    | '/api/guide'
     | '/auth/callback'
     | '/boss/$bossId'
     | '/chat/$friendId'
@@ -216,8 +236,10 @@ export interface FileRouteTypes {
     | '/quests'
     | '/reset-password'
     | '/settings'
+    | '/shop'
     | '/terms'
     | '/trials'
+    | '/api/guide'
     | '/auth/callback'
     | '/boss/$bossId'
     | '/chat/$friendId'
@@ -236,8 +258,10 @@ export interface FileRouteTypes {
     | '/quests'
     | '/reset-password'
     | '/settings'
+    | '/shop'
     | '/terms'
     | '/trials'
+    | '/api/guide'
     | '/auth/callback'
     | '/boss/$bossId'
     | '/chat/$friendId'
@@ -257,8 +281,10 @@ export interface RootRouteChildren {
   QuestsRoute: typeof QuestsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
+  ShopRoute: typeof ShopRoute
   TermsRoute: typeof TermsRoute
   TrialsRoute: typeof TrialsRoute
+  ApiGuideRoute: typeof ApiGuideRoute
   BossBossIdRoute: typeof BossBossIdRoute
   ChatFriendIdRoute: typeof ChatFriendIdRoute
 }
@@ -356,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -368,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/trials'
       fullPath: '/trials'
       preLoaderRoute: typeof TrialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/guide': {
+      id: '/api/guide'
+      path: '/api/guide'
+      fullPath: '/api/guide'
+      preLoaderRoute: typeof ApiGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/callback': {
@@ -418,8 +458,10 @@ const rootRouteChildren: RootRouteChildren = {
   QuestsRoute: QuestsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
+  ShopRoute: ShopRoute,
   TermsRoute: TermsRoute,
   TrialsRoute: TrialsRoute,
+  ApiGuideRoute: ApiGuideRoute,
   BossBossIdRoute: BossBossIdRoute,
   ChatFriendIdRoute: ChatFriendIdRoute,
 }

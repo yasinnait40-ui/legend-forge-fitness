@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { pullEconomy } from "@/lib/economy";
 import { STAT_ORDER, type StatKey } from "@/lib/game-data";
 import {
   getGameState,
@@ -289,7 +290,11 @@ export function startCloudSync(userId: string) {
   currentUserId = userId;
 
   loadQueue();
-  void replayPendingActivities().then(() => pullAndMerge(userId));
+  void replayPendingActivities()
+    .then(() => pullAndMerge(userId))
+    // Wallet + inventory are server-owned and read-only for the client, so a
+    // plain pull is enough (all writes go through the economy RPCs).
+    .then(() => pullEconomy());
 
   // Completion writes happen in the authoritative transaction; cached commits are
   // not uploaded. The observer stays null — see queueActivity/replay instead.

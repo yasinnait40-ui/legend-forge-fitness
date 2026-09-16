@@ -44,6 +44,15 @@ export interface GameState {
   totalTrials: number;
   /** World-map regions the player has entered (discovered). */
   discoveredRegions: string[];
+  /**
+   * Wallet mirror, read from the server (see lib/economy.ts). DISPLAY ONLY —
+   * spending always happens inside a SECURITY DEFINER RPC that re-reads the
+   * real balance, so a tampered local value can never buy anything.
+   */
+  coins: number;
+  gems: number;
+  /** Epoch ms when the next daily reward may be claimed (0 = ready now). */
+  dailyReadyAt: number;
 }
 
 const DEFAULT_STATE: GameState = {
@@ -63,6 +72,9 @@ const DEFAULT_STATE: GameState = {
   totalQuests: 0,
   totalTrials: 0,
   discoveredRegions: [],
+  coins: 0,
+  gems: 0,
+  dailyReadyAt: 0,
 };
 
 const STORAGE_KEY = "aethora-legend-v1";

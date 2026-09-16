@@ -453,6 +453,31 @@
     "watchChest": "Watch an ad for a bonus chest",
     "chestLevelUp": "The chest's power surges through you — Level {{level}}!"
   },
+  "economy": {
+    "coins": "Coins",
+    "gems": "Gems",
+    "daily": "Daily",
+    "claiming": "…",
+    "claimed": "Daily tribute claimed",
+    "claimedDetail": "+{{amount}} coins",
+    "alreadyClaimed": "You have already claimed today's tribute.",
+    "claimFailed": "The treasury is sealed — try again shortly.",
+    "shop": "Shop",
+    "shopKicker": "The Merchant's Hall",
+    "shopTitle": "Armory of Aethora",
+    "shopSubtitle": "Coins earned in the realm, traded for real steel. The treasury verifies every purchase.",
+    "signInToTrade": "Your purse lives in the cloud, traveler. Sign in to earn and spend coins.",
+    "loadingStock": "The merchant unpacks the crates…",
+    "emptyStock": "The shelves are bare. Return when the caravan arrives.",
+    "buy": "Buy",
+    "buying": "Trading…",
+    "owned": "In your armory",
+    "purchased": "{{name}} acquired",
+    "purchasedDetail": "-{{price}} coins · added to your armory",
+    "insufficient": "Not enough coins for this trade.",
+    "alreadyOwned": "You already own this item.",
+    "purchaseFailed": "The merchant could not complete the trade."
+  },
   "notifications": {
     "permissionPrompt": "The kingdom awaits your return. Allow daily reminders?",
     "dailyReminder": "The kingdom awaits your return."
