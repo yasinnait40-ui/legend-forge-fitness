@@ -1,12 +1,14 @@
 {
   "nav": {
     "home": "Home",
+    "map": "Map",
     "quests": "Quests",
     "trials": "Trials",
     "legend": "Legend",
     "guide": "Guide",
     "hero": "Hero",
     "friends": "Allies",
+    "shop": "Shop",
     "settings": "Settings"
   },
   "home": {
@@ -477,6 +479,37 @@
     "insufficient": "Not enough coins for this trade.",
     "alreadyOwned": "You already own this item.",
     "purchaseFailed": "The merchant could not complete the trade."
+  },
+  "rail": {
+    "rewards": "Rewards",
+    "mail": "Mail",
+    "daily": "Daily"
+  },
+  "mail": {
+    "title": "Raven Post",
+    "signIn": "Swear your oath at the Oath Stone to open your raven post.",
+    "loading": "Unsealing the scrolls…",
+    "empty": "No ravens yet — complete a quest and the ledger will speak.",
+    "giftTitle": "Welcome gift",
+    "giftBody": "+25 coins, sealed for you alone. One time only.",
+    "giftClaim": "Claim",
+    "giftClaimed": "Welcome gift claimed",
+    "giftAlready": "The welcome gift was already unsealed.",
+    "giftFailed": "The gift seal would not break — try again.",
+    "item": "item",
+    "balance": "Treasury",
+    "label.gift": "A gift from the realm",
+    "label.daily": "Daily tribute",
+    "label.shop": "Merchant's Hall",
+    "label.quest": "Quest reward",
+    "label.trial": "Trial glory",
+    "label.misc": "Realm bounty"
+  },
+  "daily": {
+    "title": "Daily tribute",
+    "body": "+{{amount}} coins every day, sealed by the realm's clock — not yours.",
+    "claim": "Claim +{{amount}}",
+    "readyIn": "Ready in {{time}}"
   },
   "notifications": {
     "permissionPrompt": "The kingdom awaits your return. Allow daily reminders?",

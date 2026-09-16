@@ -328,6 +328,10 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: Json;
       };
+      claim_welcome_gift: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
       complete_activity: {
         Args: { p_activity_id: string; p_kind: string };
         Returns: Json;

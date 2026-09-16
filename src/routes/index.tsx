@@ -1,19 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, Flame, LogIn, ScrollText, Sparkles, Swords } from "lucide-react";
+import { ChevronRight, Swords } from "lucide-react";
 import homeKingdom from "@/assets/home-kingdom.webp";
 import { RealmScreen } from "@/components/RealmScreen";
 import { CharacterWelcome } from "@/components/FantasyCharacter";
-import { EconomyBar } from "@/components/EconomyBar";
+import { TopHud } from "@/components/TopHud";
+import { SideRail } from "@/components/SideRail";
+import { EconomyPanels, type RailPanel } from "@/components/EconomyPanels";
 import { FreeBoostButton } from "@/components/NativeAds";
 import { TreasureChest } from "@/components/TreasureChest";
-import { RunePanel, RuneHeading } from "@/components/RunePanel";
-import { StatBar } from "@/components/StatBar";
-import { IronGolem } from "@/components/IronGolem";
-import { questsDoneToday, todayKey, useGame } from "@/lib/game-store";
-import { levelProgress, QUESTS, STAT_ORDER } from "@/lib/game-data";
-import { cn } from "@/lib/utils";
+import { pullEconomy } from "@/lib/economy";
+import { questsDoneToday, useGame } from "@/lib/game-store";
+import { QUESTS } from "@/lib/game-data";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
@@ -53,14 +52,20 @@ function HomePage() {
   const { t } = useTranslation();
   const game = useGame();
   const { user, loading } = useAuth();
+  const [panel, setPanel] = useState<RailPanel>(null);
   const [treasure, setTreasure] =
     useState<import("@/lib/game-store").AwardResult["treasure"]>(null);
-  const { level, intoLevel, needed, ratio } = levelProgress(game.xp);
-  const doneCount = QUESTS.filter((q) => questsDoneToday(game).includes(q.id)).length;
-  const yesterday = todayKey(new Date(Date.now() - 86400000));
-  const streakInterrupted = Boolean(
-    game.lastActiveDate && game.lastActiveDate !== todayKey() && game.lastActiveDate !== yesterday,
-  );
+
+  // Keep the server-owned wallet mirror fresh while the realm is open.
+  useEffect(() => {
+    if (!user) return;
+    void pullEconomy();
+  }, [user]);
+
+  // The "current quest" card: first not-yet-done quest of today, else a call
+  // to /quests. Pure display — completion itself stays on the quests screen.
+  const doneToday = new Set(questsDoneToday(game));
+  const currentQuest = QUESTS.find((q) => !doneToday.has(q.id)) ?? QUESTS[0]!;
 
   return (
     <RealmScreen
@@ -70,38 +75,26 @@ function HomePage() {
       veil="soft"
       eager
     >
-      <header className="pt-14 text-center">
-        {!loading && !user && (
-          <Link to="/auth" className="btn-rune-ghost mx-auto mb-6 !w-auto px-5 py-2 text-[0.65rem]">
-            <LogIn className="h-4 w-4" /> {t("auth.signIn")} / {t("auth.create")}
-          </Link>
-        )}
-        <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-primary/90">
-          {t("home.realmOf")}
-        </p>
-        <h1 className="text-glow-gold font-display mt-2 text-[3.2rem] font-black leading-none tracking-[0.1em] text-primary">
+      {/* The mockup's top bar: avatar/level/XP · coins/gems with "+" · settings */}
+      <TopHud onPanel={setPanel} />
+
+      {/* REWARDS · MAIL · DAILY rail with live red-dot badges */}
+      <SideRail signedIn={Boolean(user)} onPanel={setPanel} />
+
+      {/* AETHORA — Forge Your Legend */}
+      <header className="relative z-10 mt-6 text-center [text-shadow:0_2px_18px_rgb(0_0_0/0.85)]">
+        <h1 className="text-glow-gold font-display text-[3.4rem] font-black leading-none tracking-[0.08em] text-primary">
           {t("home.title")}
         </h1>
-        <p className="font-display mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.42em] text-foreground/90">
-          {t("home.subtitle")}
+        <p className="font-display mt-2 text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-foreground/90">
+          — {t("home.subtitle")} —
         </p>
       </header>
 
-      {/* Wallet + daily reward + way into the shop, at the top of the kingdom. */}
-      <EconomyBar />
-
-      {/*
-       * CINEMATIC KING — the throne room audience.
-       * A darkened stage behind the King, a light shaft from above, ember
-       * motes drifting at his feet, and a formal dais shadow under him:
-       * he stands IN the kingdom, not in front of a screenshot of it.
-       */}
+      {/* The King stands in the kingdom, lit from above, embers at his feet */}
       <div className="king-stage relative">
-        {/* Darkened proscenium so the King reads as inside the scene */}
         <div className="king-stage-shade" aria-hidden="true" />
-        {/* Light shaft from the throne-room windows */}
         <div className="king-stage-light" aria-hidden="true" />
-        {/* Slow ember motes rising at ground level */}
         <div className="king-stage-motes" aria-hidden="true">
           <i />
           <i />
@@ -110,110 +103,65 @@ function HomePage() {
           <i />
         </div>
         <CharacterWelcome kind="king" />
-        <div className="h-[22dvh]" aria-hidden="true" />
+        <div className="h-[16dvh]" aria-hidden="true" />
       </div>
 
-      {/* Hero status: level & XP at a glance */}
-      <RunePanel className="mt-4">
-        <div className="flex items-end justify-between gap-3">
-          <div>
-            <p className="font-display text-[0.6rem] uppercase tracking-[0.28em] text-muted-foreground">
-              {t("home.level")} {level}
+      {/* CURRENT QUEST — the mockup's framed quest card */}
+      <Link
+        to="/quests"
+        className="relative z-10 mt-2 block rounded-xl border border-primary/35 bg-background/75 p-4 shadow-[0_10px_36px_-14px_rgb(0_0_0/0.9)] backdrop-blur-md transition-colors hover:border-primary/60"
+      >
+        <div className="flex items-center gap-2">
+          <Swords className="h-4 w-4 text-primary" aria-hidden="true" />
+          <p className="font-display text-[0.6rem] font-bold uppercase tracking-[0.3em] text-primary">
+            {t("home.currentQuest", "Current quest")}
+          </p>
+        </div>
+        <div className="mt-1.5 flex items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-display truncate text-base font-bold text-foreground">
+              {currentQuest.name}
             </p>
-            <p className="text-glow-gold font-display mt-0.5 text-4xl font-black leading-none text-primary">
-              {level}
+            <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
+              {currentQuest.description}
             </p>
           </div>
-          <div className="min-w-0 flex-1 pb-1 text-right">
-            <p className="font-display text-[0.6rem] uppercase tracking-[0.28em] text-muted-foreground">
-              {t("home.experience")}
-            </p>
-            <p className="font-display text-sm font-bold text-foreground">
-              {intoLevel.toLocaleString()}{" "}
-              <span className="text-muted-foreground">/ {needed.toLocaleString()} XP</span>
-            </p>
-          </div>
+          <ChevronRight className="h-5 w-5 shrink-0 text-primary rtl:-scale-x-100" />
         </div>
-        <div className="bar-track mt-3 !h-2.5">
-          <div
-            className="bar-fill"
-            style={{
-              width: `${Math.max(2, ratio * 100)}%`,
-              background:
-                "linear-gradient(90deg, color-mix(in oklab, var(--primary) 55%, white 10%), var(--primary))",
-              boxShadow: "0 0 14px color-mix(in oklab, var(--primary) 55%, transparent)",
-            }}
-          />
-        </div>
-      </RunePanel>
+      </Link>
 
-      <div className="mt-4 grid grid-cols-2 gap-4">
-        <RunePanel className="text-center">
-          <Flame
-            className={cn(
-              "mx-auto h-7 w-7",
-              game.streak > 0
-                ? "text-stat-strength drop-shadow-[0_0_10px_color-mix(in_oklab,var(--stat-strength)_55%,transparent)]"
-                : "text-muted-foreground",
-            )}
-          />
-          <p className="font-display mt-1 text-2xl font-black">{game.streak}</p>
-          <p className="text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
-            {t("home.dayFlame")}
-          </p>
-          <p className="mt-2 text-[0.58rem] text-muted-foreground">
-            {t("home.longestStreak", { count: game.bestStreak })}
-          </p>
-          {streakInterrupted && (
-            <p className="mt-1 text-[0.58rem] italic text-accent">{t("home.streakRestart")}</p>
-          )}
-        </RunePanel>
-        <Link to="/quests" className="block">
-          <RunePanel className="h-full text-center transition-shadow hover:shadow-[0_10px_30px_-12px_color-mix(in_oklab,var(--primary)_45%,transparent)]">
-            <ScrollText className="mx-auto h-7 w-7 text-primary" />
-            <p className="font-display mt-1 text-2xl font-black">
-              {doneCount}
-              <span className="text-sm text-muted-foreground">/{QUESTS.length}</span>
-            </p>
-            <p className="text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
-              {t("home.dailyQuests")}
-            </p>
-            <span className="mt-2 inline-flex items-center gap-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-primary">
-              {t("nav.quests")} <ChevronRight className="h-3 w-3 rtl:-scale-x-100" />
-            </span>
-          </RunePanel>
+      {/* START YOUR JOURNEY — the ornate gold CTA */}
+      <div className="relative z-10 mt-5">
+        <Link
+          to="/trials"
+          className="btn-gold block !py-4 text-center font-display text-sm font-black uppercase tracking-[0.3em]"
+        >
+          <Swords className="h-4 w-4" />
+          {t("home.startJourney", "Start your journey")}
         </Link>
+        <p className="mt-2 text-center text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground">
+          {game.streak > 0
+            ? t("home.streakAlive", "{{count}}-day flame burning", { count: game.streak })
+            : t("home.streakCold", "The flame waits to be lit")}
+        </p>
       </div>
 
-      <RunePanel className="mt-4">
-        <RuneHeading>{t("home.attributes")}</RuneHeading>
-        <div className="mt-3 space-y-3">
-          {STAT_ORDER.map((s) => (
-            <StatBar key={s} stat={s} value={game.stats[s]} />
-          ))}
-        </div>
-      </RunePanel>
+      {!loading && !user && (
+        <p className="relative z-10 mt-4 text-center text-xs text-muted-foreground">
+          {t("home.signedOutHint", "Playing unbound — progress stays on this device.")}{" "}
+          <Link to="/auth" className="text-primary underline-offset-4 hover:underline">
+            {t("auth.signIn", "Sign in")}
+          </Link>
+        </p>
+      )}
 
-      {/* P1.2: the abstract boss sentinel guarding the mountain pass. */}
-      <div className="mt-4">
-        <IronGolem />
+      {/* Ad-supported treasure boost (LevelPlay rewarded on Android) */}
+      <div className="relative z-10 mt-4">
+        <FreeBoostButton onReward={(r) => r && setTreasure(r)} />
+        {treasure && <TreasureChest reward={treasure} onClose={() => setTreasure(null)} />}
       </div>
 
-      <div className="mt-5 space-y-3">
-        <Link to="/trials" className="block">
-          <span className="btn-gold">
-            <Swords className="h-4 w-4" /> {t("home.beginTrials")}
-          </span>
-        </Link>
-        <Link to="/guide" className="block">
-          <span className="btn-rune-ghost">
-            <Sparkles className="h-4 w-4" /> {t("home.consultGuide")}
-          </span>
-        </Link>
-      </div>
-
-      <FreeBoostButton onReward={(r) => r && setTreasure(r)} />
-      {treasure && <TreasureChest reward={treasure} onClose={() => setTreasure(null)} />}
+      <EconomyPanels panel={panel} onClose={() => setPanel(null)} signedIn={Boolean(user)} />
     </RealmScreen>
   );
 }

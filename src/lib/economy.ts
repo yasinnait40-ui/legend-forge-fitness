@@ -48,6 +48,24 @@ export interface DailyClaimResult {
 
 export type PurchaseFailure = "unknown_item" | "owned" | "insufficient_funds";
 
+export interface WelcomeGiftResult {
+  claimed: boolean;
+  reason?: "already";
+  amount?: number;
+  coins: number;
+  gems: number;
+}
+
+export interface RewardLedgerEntry {
+  id: string;
+  sourceType: string;
+  sourceId: string;
+  rewardType: string;
+  amount: number | null;
+  itemId: string | null;
+  createdAt: string;
+}
+
 export interface PurchaseResult {
   ok: boolean;
   reason?: PurchaseFailure;
@@ -165,6 +183,49 @@ export async function claimDailyReward(): Promise<DailyClaimResult | null> {
   const readyAt = result.nextClaimAt ? Date.parse(result.nextClaimAt) : undefined;
   mirrorWallet(result.coins, result.gems, readyAt);
   return { ...result, gems: result.gems ?? 0 };
+}
+
+/**
+ * Claim the one-time 25-coin welcome gift. The once-forever guard is the
+ * gift ledger row inside the same locked transaction — replaying can never
+ * pay twice.
+ */
+export async function claimWelcomeGift(): Promise<WelcomeGiftResult | null> {
+  const { data, error } = await supabase.rpc("claim_welcome_gift", {});
+  if (error) {
+    console.error("[economy] welcome gift failed", error.message);
+    return null;
+  }
+  const result = data as unknown as WelcomeGiftResult | null;
+  if (!result || typeof result.coins !== "number") return null;
+  mirrorWallet(result.coins, result.gems ?? 0);
+  return { ...result, gems: result.gems ?? 0 };
+}
+
+/**
+ * The signed-in player's reward ledger, newest first. This is the honest,
+ * server-side history that powers the Mail panel — every coin earned or
+ * spent through the RPCs appears here.
+ */
+export async function fetchRewardHistory(limit = 30): Promise<RewardLedgerEntry[]> {
+  const { data, error } = await supabase
+    .from("reward_history")
+    .select("id, source_type, source_id, reward_type, amount, item_id, created_at")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) {
+    console.error("[economy] reward history fetch failed", error.message);
+    return [];
+  }
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    sourceType: row.source_type,
+    sourceId: row.source_id,
+    rewardType: row.reward_type,
+    amount: row.amount,
+    itemId: row.item_id,
+    createdAt: row.created_at,
+  }));
 }
 
 /**

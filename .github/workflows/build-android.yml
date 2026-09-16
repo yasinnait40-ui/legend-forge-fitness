@@ -56,9 +56,15 @@ jobs:
         # Unity LevelPlay identifiers are committed in capacitor.config.ts, so
         # no UNITY_* variables are needed here — that removes any chance of a
         # stale CI variable overriding the production ad configuration.
+        #
+        # Supabase env vars ARE required: without them the APK ships with an
+        # unconfigured client ("Supabase is not configured in this preview.")
+        # and sign-in can never work on device.
         run: bun run build:mobile
         env:
           NEW_API_KEY: ${{ secrets.NEW_API_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Verify build output
         run: |

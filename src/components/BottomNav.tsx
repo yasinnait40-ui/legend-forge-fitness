@@ -9,6 +9,7 @@ import {
   UserRound,
   WandSparkles,
   Map as MapIcon,
+  Store,
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,7 @@ const ITEMS = [
   { to: "/trials", labelKey: "nav.trials", icon: Swords, exact: false },
   { to: "/progress", labelKey: "nav.legend", icon: Telescope, exact: false },
   { to: "/friends", labelKey: "nav.friends", icon: Users, exact: false },
+  { to: "/shop", labelKey: "nav.shop", icon: Store, exact: false },
   { to: "/character", labelKey: "nav.hero", icon: UserRound, exact: false },
   { to: "/guide", labelKey: "nav.guide", icon: WandSparkles, exact: false },
 ] as const;
