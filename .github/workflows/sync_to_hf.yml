@@ -1,4 +1,24 @@
 name: Sync to Hugging Face hub
+
+# OPTIONAL mirror of this repository into a Hugging Face Space.
+#
+# It is inert until configured. In Settings -> Secrets and variables -> Actions:
+#   * Secrets   -> HF_TOKEN : a Hugging Face token WITH WRITE access to the Space
+#   * Variables -> HF_SPACE : "<owner>/<space>"  (falls back to the value below)
+#
+# Why the guard exists: this job used to run unconditionally. With no HF_TOKEN
+# the push went out unauthenticated and GitHub reported
+#
+#     remote: Repository not found
+#     fatal: repository '.../pforge-fitness/' not found
+#
+# which reads like a code failure while the real cause is configuration. Now the
+# job reports a notice and exits green instead, so a genuine code problem in the
+# other workflows stays visible.
+#
+# Note: secrets cannot be referenced directly in a job-level `if:`, so the token
+# is exposed as a job env var and checked in a step (the documented workaround).
+
 on:
   push:
     branches: [main]
@@ -7,13 +27,27 @@ on:
 jobs:
   sync-to-hub:
     runs-on: ubuntu-latest
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_SPACE: ${{ vars.HF_SPACE || 'yasinnait40-ui/pforge-fitness' }}
     steps:
+      - name: Check configuration
+        id: check
+        run: |
+          if [ -z "${HF_TOKEN}" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Hugging Face sync skipped::HF_TOKEN is not set. Add it under Settings -> Secrets and variables -> Actions, or delete .github/workflows/sync_to_hf.yml if this mirror is not needed."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "Target Space: ${HF_SPACE}"
+          fi
+
       - uses: actions/checkout@v3
+        if: steps.check.outputs.configured == 'true'
         with:
           fetch-depth: 0
           lfs: true
 
       - name: Push to hub
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://yasinnait40-ui:$HF_TOKEN@huggingface.co/spaces/yasinnait40-ui/pforge-fitness main
+        if: steps.check.outputs.configured == 'true'
+        run: git push --force "https://yasinnait40-ui:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" main
