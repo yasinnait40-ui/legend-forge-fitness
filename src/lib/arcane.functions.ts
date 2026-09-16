@@ -29,7 +29,15 @@ export interface ArcaneMessage {
 /* ---- Build version marker (injected by vite.config.android.ts) ---- */
 declare const __BUILD_SHA__: string | undefined;
 
-const BUILD_SHA: string = __BUILD_SHA__ ?? "dev";
+/**
+ * `__BUILD_SHA__` is only injected by vite.config.android.ts. In the web build
+ * (and in the dev server) the identifier does not exist at all, so a bare
+ * reference throws `ReferenceError: __BUILD_SHA__ is not defined` while this
+ * module is being evaluated — which crashed the /guide route during SSR.
+ * `typeof` never evaluates the identifier, so it is safe in both builds, and
+ * when the value IS injected (Android) the SHA is still returned verbatim.
+ */
+const BUILD_SHA: string = typeof __BUILD_SHA__ === "undefined" ? "dev" : __BUILD_SHA__;
 
 /** Returns the short git SHA of the build that produced this bundle. */
 export function getBuildSha(): string {
@@ -50,9 +58,7 @@ async function isNative(): Promise<boolean> {
   }
 }
 
-export async function consultArcaneGuide(
-  messages: ArcaneMessage[],
-): Promise<{ reply: string }> {
+export async function consultArcaneGuide(messages: ArcaneMessage[]): Promise<{ reply: string }> {
   try {
     if (await isNative()) {
       let res: Response;
